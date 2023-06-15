@@ -55,6 +55,14 @@ import Input from '~/componets/UI/Input.vue';
 import { useFormValidation } from '~/hooks/useFormValidation';
 import { RegisterScheme } from '~/utils/validation';
 import { Api } from '~/api';
+import { useUserStore } from '~/stores/UserStore';
+
+/**
+ * Системные переменные ----------------
+ */
+const token = useCookie('token'); // Токен из куки
+const userStore = useUserStore(); // Хранилище данных пользователя
+const router = useRouter(); // Роутер
 
 /**
  * Пользовательские переменные ----------------
@@ -88,7 +96,12 @@ const onRegister = async () => {
   await validateForm(dto, RegisterScheme, async () => {
     // Регистрация пользователя
     const { data } = await Api().account.register(dto);
-    console.log(data);
+    // Устанавливаем токен в куки
+    token.value = data.token;
+    // Устанавливаем данные пользователя в хранилище
+    userStore.setUser(data.user);
+    // Перенаправляем пользователя на страницу создания компании
+    await router.push('/create_company');
   });
 };
 </script>

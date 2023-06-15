@@ -162,6 +162,15 @@ a.btn {
       text-decoration: underline;
     }
   }
+  .errors {
+    margin-top: -20px;
+    margin-bottom: 35px;
+    span {
+      display: block;
+      color: $red;
+      font-size: 13px;
+    }
+  }
 }
 
 .popup {
