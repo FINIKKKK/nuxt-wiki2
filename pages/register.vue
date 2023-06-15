@@ -9,8 +9,13 @@
 
       <Input
         label="Имя"
-        v-model="nameValue"
-        :errors="errorsValidate['name'] || []"
+        v-model="firstNameValue"
+        :errors="errorsValidate['first_name'] || []"
+      />
+      <Input
+        label="Фамилия"
+        v-model="lastNameValue"
+        :errors="errorsValidate['last_name'] || []"
       />
       <Input
         label="Электронная почта"
@@ -49,11 +54,13 @@
 import Input from '~/componets/UI/Input.vue';
 import { useFormValidation } from '~/hooks/useFormValidation';
 import { RegisterScheme } from '~/utils/validation';
+import { Api } from '~/api';
 
 /**
  * Пользовательские переменные ----------------
  */
-const nameValue = ref(''); // Значение имени
+const firstNameValue = ref(''); // Значение имени
+const lastNameValue = ref(''); // Значение фамилии
 const emailValue = ref(''); // Значение email
 const phoneValue = ref(''); // Значение телефона
 const passwordValue = ref(''); // Значение пароля
@@ -70,7 +77,8 @@ const { errorsValidate, errors, isLoading, validateForm } = useFormValidation();
 const onRegister = async () => {
   // Объект с данными
   const dto = {
-    name: nameValue.value,
+    first_name: firstNameValue.value,
+    last_name: lastNameValue.value,
     email: emailValue.value,
     phone: phoneValue.value,
     password: passwordValue.value,
@@ -79,7 +87,8 @@ const onRegister = async () => {
   // Вызываем хук для валидации форм
   await validateForm(dto, RegisterScheme, async () => {
     // Регистрация пользователя
-    // const { data } = await Api().auth.register(dto);
+    const { data } = await Api().account.register(dto);
+    console.log(data);
   });
 };
 </script>

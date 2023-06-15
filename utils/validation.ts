@@ -9,7 +9,8 @@ export const LoginScheme = yup.object().shape({
 });
 
 export const RegisterScheme = yup.object().shape({
-  name: yup.string().required('Поле является обязательным'),
+  first_name: yup.string().required('Поле является обязательным'),
+  last_name: yup.string().required('Поле является обязательным'),
   email: yup
     .string()
     .required('Поле является обязательным')
@@ -17,7 +18,10 @@ export const RegisterScheme = yup.object().shape({
   phone: yup
     .string()
     .required('Поле является обязательным')
-    .email('Некорректный номер телефона'),
+    .matches(
+      /^\+?\d{1,3}-?\d{3}-?\d{3}-?\d{2}-?\d{2}$/,
+      'Некорректный номер телефона',
+    ),
   password: yup
     .string()
     .required('Поле является обязательным')
