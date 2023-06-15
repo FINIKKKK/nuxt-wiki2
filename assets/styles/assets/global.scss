@@ -86,99 +86,6 @@ a.btn {
   }
 }
 
-.btn.btn2 {
-  background-color: $blue5;
-  color: $blue;
-  &:hover {
-    background-color: $blue4;
-  }
-}
-
-.btn.btn3 {
-  padding: 10px 16px;
-}
-
-.btn-inline {
-  position: relative;
-  font-size: 15px;
-  line-height: 18px;
-  color: $blue;
-  cursor: pointer;
-  &:hover {
-    text-decoration: underline;
-  }
-  &.disabled {
-    opacity: 0.5;
-    pointer-events: none;
-  }
-}
-
-// ---- Forms ----
-.form {
-  width: 529px;
-  .text {
-    font-size: 13px;
-    line-height: 20px;
-    margin-bottom: 40px;
-  }
-  .link {
-    font-size: 11px;
-    line-height: 18px;
-    color: $gray;
-    margin-bottom: 40px;
-    a {
-      color: $gray;
-      text-decoration: underline;
-    }
-  }
-}
-
-.error {
-  font-size: 12px;
-  color: $red;
-}
-
-.popup {
-  background-color: $white;
-  border-radius: 2px;
-  box-shadow: 0 0 30px rgba(0, 0, 0, 0.08);
-  color: $black;
-  font-size: 13px;
-  line-height: 18px;
-  padding: 18px 20px;
-  position: absolute;
-  transition: 0.25s;
-  width: 200px;
-  top: 150%;
-}
-
-// ---- Tables ----
-.table {
-  width: 100%;
-  display: table;
-  vertical-align: middle;
-  td,
-  th {
-    padding-left: 10px;
-  }
-  thead {
-    color: $gray;
-    text-align: left;
-    border-bottom: 1px solid $gray2;
-    font-size: 13px;
-    td,
-    th {
-      padding-bottom: 10px;
-    }
-  }
-  tbody {
-    td,
-    th {
-      padding-top: 19px;
-    }
-  }
-}
-
 // ---- Inputs ----
 .input {
   .inner {
@@ -218,26 +125,102 @@ a.btn {
       color: $blue;
     }
   }
+  &.error {
+    label {
+      color: $red2 !important;
+    }
+    input,
+    textarea {
+      border-color: $red2 !important;
+    }
+  }
+  .error {
+    font-size: 12px;
+    color: $red;
+  }
 }
 
+// ---- Forms ----
+.form {
+  width: 325px;
+  h1 {
+    font-size: 24px;
+    line-height: 32px;
+    margin-bottom: 8px;
+  }
+  p {
+    margin-bottom: 36px;
+  }
+  .btn {
+    width: 100%;
+    margin-bottom: 24px;
+  }
+  small {
+    font-size: 12px;
+    line-height: 16px;
+    a {
+      text-decoration: underline;
+    }
+  }
+}
+
+.popup {
+  background-color: $white;
+  border-radius: 2px;
+  box-shadow: 0 0 30px rgba(0, 0, 0, 0.08);
+  color: $black;
+  font-size: 13px;
+  line-height: 18px;
+  padding: 18px 20px;
+  position: absolute;
+  transition: 0.25s;
+  width: 200px;
+  top: 150%;
+}
+
+// ---- Tables ----
+//.table {
+//  width: 100%;
+//  display: table;
+//  vertical-align: middle;
+//  td,
+//  th {
+//    padding-left: 10px;
+//  }
+//  thead {
+//    color: $gray;
+//    text-align: left;
+//    border-bottom: 1px solid $gray2;
+//    font-size: 13px;
+//    td,
+//    th {
+//      padding-bottom: 10px;
+//    }
+//  }
+//  tbody {
+//    td,
+//    th {
+//      padding-top: 19px;
+//    }
+//  }
+//}
 // ---- Blocks ----
-.block {
-  width: 490px;
-  &:not(:last-child) {
-    margin-bottom: 51px;
-  }
-  .title {
-    font-size: 20px;
-    line-height: 23px;
-    margin-bottom: 42px;
-  }
-  .input {
-    input {
-      font-size: 16px;
-    }
-    &:not(:last-child) {
-      margin-bottom: 40px;
-    }
-  }
-}
-
+//.block {
+//  width: 490px;
+//  &:not(:last-child) {
+//    margin-bottom: 51px;
+//  }
+//  .title {
+//    font-size: 20px;
+//    line-height: 23px;
+//    margin-bottom: 42px;
+//  }
+//  .input {
+//    input {
+//      font-size: 16px;
+//    }
+//    &:not(:last-child) {
+//      margin-bottom: 40px;
+//    }
+//  }
+//}

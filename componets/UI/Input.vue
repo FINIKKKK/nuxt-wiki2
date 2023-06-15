@@ -1,30 +1,31 @@
 <template>
   <div
-      class="input"
-      :class="{
+    class="input"
+    :class="{
       password: props.type === 'password',
-      focus: isFocus
+      focus: isFocus || model,
+      error: props.errors.length,
     }"
   >
     <div class="inner">
       <!-- Поле ввода -->
       <label>{{ props.label }}</label>
       <input
-          :type="
+        :type="
           props.type === 'password' && !isShowPassword ? 'password' : 'text'
         "
-          v-model="model"
-          maxlength="200"
-          @focus="isFocus = true"
-          @blur="isFocus = false"
+        v-model="model"
+        maxlength="200"
+        @focus="isFocus = true"
+        @blur="isFocus = false"
       />
 
       <!-- Кнопка для показа или скрытия пароля -->
       <div v-if="props.type === 'password'" class="showPassword">
         <svg-icon
-            :name="isShowPassword ? 'noeye' : 'eye'"
-            v-if="model"
-            @click="isShowPassword = !isShowPassword"
+          :name="isShowPassword ? 'noeye' : 'eye'"
+          v-if="model"
+          @click="isShowPassword = !isShowPassword"
         />
       </div>
     </div>
@@ -36,7 +37,6 @@
 <!-- ----------------------------------------------------- -->
 
 <script lang="ts" setup>
-
 /**
  * Пропсы ----------------
  */
@@ -44,7 +44,7 @@ const props = defineProps<{
   label: string;
   modelValue: string;
   errors: string[];
-  type?: string
+  type?: string;
 }>();
 
 /**
@@ -55,6 +55,12 @@ const emits = defineEmits(['update:modelValue']);
 /**
  * Системные переменные ----------------
  */
+const isShowPassword = ref(false); // Показывать пароль?
+const isFocus = ref(false); // В фокусе input?
+
+/**
+ * Вычисляемые значения ----------------
+ */
 // Значения поля ввода
 const model = computed({
   get() {
@@ -64,8 +70,6 @@ const model = computed({
     emits('update:modelValue', val);
   },
 });
-const isShowPassword = ref(false); // Показывать пароль?
-const isFocus = ref(false); // В фокусе input?
 
 /**
  * Методы ----------------
@@ -82,13 +86,13 @@ const isFocus = ref(false); // В фокусе input?
   }
   &.password {
     input {
-      padding-right: 60px;
+      padding-right: 45px;
     }
   }
   .showPassword {
     position: absolute;
-    bottom: 8px;
-    right: 11px;
+    bottom: 10px;
+    right: 15px;
     cursor: pointer;
     opacity: 0.5;
     transition: 0.3s;
@@ -100,6 +104,9 @@ const isFocus = ref(false); // В фокусе input?
     &:hover {
       opacity: 1;
     }
+  }
+  .error {
+    display: block;
   }
 }
 </style>
