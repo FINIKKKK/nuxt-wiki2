@@ -19,10 +19,10 @@ body {
   min-width: 320px;
   font-family: $font;
   font-weight: 400;
-  font-size: 14px;
-  line-height: 20px;
+  font-size: 16px;
+  line-height: 24px;
   color: $black;
-  background: $white;
+  background: $bg;
 }
 
 a {
@@ -64,20 +64,19 @@ svg {
 
 // ---- Buttons ----
 .btn {
-  background-color: $blue;
-  padding: 16px 30px;
+  background-color: $yellow;
+  padding: 17px;
   border-radius: 2px;
-  color: $white;
   transition: 0.3s;
   &:hover {
-    background-color: darken($blue, 10%);
+    background-color: darken($yellow, 15%);
   }
   &.disabled {
     pointer-events: none;
     opacity: 0.5;
   }
   &:focus {
-    background-color: darken($blue, 10%);
+    background-color: darken($yellow, 15%);
   }
 }
 
@@ -184,22 +183,39 @@ a.btn {
 .input {
   .inner {
     position: relative;
-    color: $black;
+    label {
+      display: inline-block;
+      pointer-events: none;
+      color: $blue2;
+      font-size: 16px;
+      position: absolute;
+      left: 15px;
+      top: 15px;
+      background-color: $white;
+      padding: 0 5px;
+      transition: 0.3s;
+    }
     input,
     textarea {
-      font-size: 20px;
-      line-height: 23px;
-      padding: 10px 13px;
       width: 100%;
-      border-bottom: 1px solid $gray2;
+      padding: 16px 24px;
+      border: 1px solid $blue2;
       transition: 0.3s;
-      &::placeholder {
-        color: $gray;
-      }
+      border-radius: 2px;
       &:hover,
       &:focus {
-        border-color: $black;
+        border-color: $blue;
+        label {
+          color: $blue;
+        }
       }
+    }
+  }
+  &.focus {
+    label {
+      top: -10px;
+      font-size: 14px;
+      color: $blue;
     }
   }
 }

@@ -3,10 +3,10 @@ $font: Roboto;
 
 // ---- Colors ----
 $blue: #0E65DD;
-$blue2: #0B55BB;
+$blue2: rgba($blue, 0.2);
 $blue3: #F1F6FD;
 $blue4: #E1ECFC;
-$blue5: rgba($blue, 0.04);
+$blue5: rgba($blue, 0.2);
 $blue6: rgba($blue, 0.35);
 
 $white: #FFFFFF;
