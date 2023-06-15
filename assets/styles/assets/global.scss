@@ -1,0 +1,227 @@
+// Tags
+html {
+  overflow-x: hidden;
+  box-sizing: border-box;
+  &.fixed {
+    overflow-y: hidden;
+  }
+}
+
+*,
+*::after,
+*::before {
+  box-sizing: inherit;
+}
+
+body {
+  position: relative;
+  overflow: hidden;
+  min-width: 320px;
+  font-family: $font;
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 20px;
+  color: $black;
+  background: $white;
+}
+
+a {
+  color: $blue;
+  transition: 0.2s;
+  &:hover {
+    text-decoration: underline;
+  }
+}
+
+svg {
+  fill: $blue;
+  transition: 0.2s;
+  height: auto;
+}
+
+// ScrollBar
+::-webkit-scrollbar {
+  width: 5px;
+  height: 7px;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: $blue;
+}
+
+::-webkit-scrollbar-track {
+  background-color: $white;
+}
+
+// Selection
+::selection {
+  background: rgba($blue, 0.2);
+}
+
+.disabled {
+  pointer-events: none;
+}
+
+// ---- Buttons ----
+.btn {
+  background-color: $blue;
+  padding: 16px 30px;
+  border-radius: 2px;
+  color: $white;
+  transition: 0.3s;
+  &:hover {
+    background-color: darken($blue, 10%);
+  }
+  &.disabled {
+    pointer-events: none;
+    opacity: 0.5;
+  }
+  &:focus {
+    background-color: darken($blue, 10%);
+  }
+}
+
+a.btn {
+  &:hover {
+    text-decoration: none;
+  }
+}
+
+.btn.btn2 {
+  background-color: $blue5;
+  color: $blue;
+  &:hover {
+    background-color: $blue4;
+  }
+}
+
+.btn.btn3 {
+  padding: 10px 16px;
+}
+
+.btn-inline {
+  position: relative;
+  font-size: 15px;
+  line-height: 18px;
+  color: $blue;
+  cursor: pointer;
+  &:hover {
+    text-decoration: underline;
+  }
+  &.disabled {
+    opacity: 0.5;
+    pointer-events: none;
+  }
+}
+
+// ---- Forms ----
+.form {
+  width: 529px;
+  .text {
+    font-size: 13px;
+    line-height: 20px;
+    margin-bottom: 40px;
+  }
+  .link {
+    font-size: 11px;
+    line-height: 18px;
+    color: $gray;
+    margin-bottom: 40px;
+    a {
+      color: $gray;
+      text-decoration: underline;
+    }
+  }
+}
+
+.error {
+  font-size: 12px;
+  color: $red;
+}
+
+.popup {
+  background-color: $white;
+  border-radius: 2px;
+  box-shadow: 0 0 30px rgba(0, 0, 0, 0.08);
+  color: $black;
+  font-size: 13px;
+  line-height: 18px;
+  padding: 18px 20px;
+  position: absolute;
+  transition: 0.25s;
+  width: 200px;
+  top: 150%;
+}
+
+// ---- Tables ----
+.table {
+  width: 100%;
+  display: table;
+  vertical-align: middle;
+  td,
+  th {
+    padding-left: 10px;
+  }
+  thead {
+    color: $gray;
+    text-align: left;
+    border-bottom: 1px solid $gray2;
+    font-size: 13px;
+    td,
+    th {
+      padding-bottom: 10px;
+    }
+  }
+  tbody {
+    td,
+    th {
+      padding-top: 19px;
+    }
+  }
+}
+
+// ---- Inputs ----
+.input {
+  .inner {
+    position: relative;
+    color: $black;
+    input,
+    textarea {
+      font-size: 20px;
+      line-height: 23px;
+      padding: 10px 13px;
+      width: 100%;
+      border-bottom: 1px solid $gray2;
+      transition: 0.3s;
+      &::placeholder {
+        color: $gray;
+      }
+      &:hover,
+      &:focus {
+        border-color: $black;
+      }
+    }
+  }
+}
+
+// ---- Blocks ----
+.block {
+  width: 490px;
+  &:not(:last-child) {
+    margin-bottom: 51px;
+  }
+  .title {
+    font-size: 20px;
+    line-height: 23px;
+    margin-bottom: 42px;
+  }
+  .input {
+    input {
+      font-size: 16px;
+    }
+    &:not(:last-child) {
+      margin-bottom: 40px;
+    }
+  }
+}
+
