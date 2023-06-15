@@ -1,6 +1,6 @@
 <template>
   <NuxtLayout name="auth">
-    <form class="form" @submit.prevent="onRegister">
+    <form class="form-auth" @submit.prevent="onRegister">
       <h1>Регистрация</h1>
       <p>
         У вас уже есть аккаунт?

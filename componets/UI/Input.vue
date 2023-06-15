@@ -5,6 +5,7 @@
       password: props.type === 'password',
       focus: isFocus || model,
       error: props.errors.length,
+      address: props.type === 'address',
     }"
   >
     <div class="inner">
@@ -28,6 +29,8 @@
           @click="isShowPassword = !isShowPassword"
         />
       </div>
+      <!-- Url адресс -->
+      <div v-if="type === 'address'" class="url">itl.wiki</div>
     </div>
     <span class="error" v-for="error in props.errors"> {{ error }} </span>
   </div>
@@ -84,11 +87,6 @@ const model = computed({
   &:not(:last-child) {
     margin-bottom: 32px;
   }
-  &.password {
-    input {
-      padding-right: 45px;
-    }
-  }
   .showPassword {
     position: absolute;
     bottom: 10px;
@@ -103,6 +101,20 @@ const model = computed({
     }
     &:hover {
       opacity: 1;
+    }
+  }
+  &.password {
+    input {
+      padding-right: 45px;
+    }
+  }
+  &.address {
+    .inner {
+      display: flex;
+      align-items: center;
+    }
+    input {
+      margin-right: 8px;
     }
   }
   .error {

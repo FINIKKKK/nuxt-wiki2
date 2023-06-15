@@ -65,7 +65,7 @@ svg {
 // ---- Buttons ----
 .btn {
   background-color: $yellow;
-  padding: 17px;
+  padding: 17px 32px;
   border-radius: 2px;
   transition: 0.3s;
   &:hover {
@@ -142,6 +142,19 @@ a.btn {
 
 // ---- Forms ----
 .form {
+  width: 960px;
+  .title {
+    margin-bottom: 24px;
+  }
+  .content {
+    background-color: $white;
+    padding: 40px 32px;
+    border-radius: 2px;
+    margin-bottom: 80px;
+  }
+}
+
+.form-auth {
   width: 325px;
   h1 {
     font-size: 24px;
@@ -171,6 +184,11 @@ a.btn {
       font-size: 13px;
     }
   }
+}
+
+.title {
+  font-size: 24px;
+  line-height: 32px;
 }
 
 .popup {

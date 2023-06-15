@@ -5,8 +5,8 @@
       <nav class="nav">
         <!-- Главный сайдбар -->
         <SidebarMain
-            :activeItem="activeItem as string | null"
-            @setActiveItem="setActiveItem"
+          :activeItem="activeItem as string | null"
+          @setActiveItem="setActiveItem"
         />
 
         <!-- Внутрениий сайдбар -->
@@ -19,9 +19,9 @@
 
     <!-- Остальной контент на странице -->
     <div
-        id="scroll"
-        class="content"
-        :class="{
+      id="scroll"
+      class="content"
+      :class="{
         miniTitle: props.isMiniTitle, // Если заголовок маленький
       }"
     >
@@ -36,14 +36,14 @@
       </h1>
 
       <!-- Слот шаблона -->
-      <slot/>
+      <slot />
     </div>
   </main>
 </template>
 
 <script lang="ts" setup>
-import {useOutsideClick} from '~/hooks/useOutsideClick';
-import SidebarMain from "~/componets/Sidebar/SidebarMain.vue";
+import { useOutsideClick } from '~/hooks/useOutsideClick';
+import SidebarMain from '~/componets/Sidebar/SidebarMain.vue';
 
 /**
  * Пропсы ----------------
@@ -103,12 +103,6 @@ const setActiveItem = (item: string) => {
 main {
   position: relative;
   display: flex;
-  &.home {
-    background-color: $blue3;
-    .title {
-      margin-bottom: 36px;
-    }
-  }
 }
 
 .sidebar {
@@ -126,29 +120,13 @@ main {
   position: relative;
   width: 100%;
   height: 100vh;
-  padding: 46px 50px;
+  padding: 46px 36px;
   overflow: auto;
-  .pretitle {
-    font-size: 13px;
-    color: $gray;
-    margin-bottom: 32px;
-  }
-}
-
-.content.miniTitle {
-  .title {
-    font-size: 14px;
-    margin-bottom: 40px;
-    span {
-      color: $gray !important;
-    }
-  }
 }
 
 .title {
   font-size: 24px;
   margin-bottom: 60px;
-  color: $gray2;
   span:nth-child(1) {
     color: $black;
   }
@@ -157,7 +135,7 @@ main {
     padding-right: 32px;
     margin-right: 20px;
     &::after {
-      content: url('~/assets/img/arrow.svg');
+      //content: url('~/assets/img/arrow.svg');
       position: absolute;
       transform: translateY(-50%);
       top: 50%;

@@ -27,3 +27,8 @@ export const RegisterScheme = yup.object().shape({
     .required('Поле является обязательным')
     .min(6, 'Пароль должен состоять минимум из 6 символов'),
 });
+
+export const TeamScheme = yup.object().shape({
+  name: yup.string().required('Поле является обязательным'),
+  code: yup.string().required('Поле является обязательным'),
+});
