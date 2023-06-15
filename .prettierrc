@@ -1,0 +1,12 @@
+{
+  "singleQuote": true,
+  "trailingComma": "all",
+  "importOrder": [
+    "antd/(.*)",
+    "<THIRD_PARTY_MODULES>",
+    "@/(.*)",
+    "^[./]"
+  ],
+  "importOrderSeparation": true,
+  "endOfLine": "auto"
+}
