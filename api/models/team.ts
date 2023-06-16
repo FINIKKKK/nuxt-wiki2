@@ -55,4 +55,13 @@ export const TeamApi = (instance: AxiosInstance) => ({
     );
     return data;
   },
+
+  // Загрузить файл
+  async upload(dto: any) {
+    const { data } = await instance.post<any, { data: any }>(
+      `/team/store/add`,
+        dto
+    );
+    return data;
+  },
 });
