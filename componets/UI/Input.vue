@@ -10,7 +10,10 @@
   >
     <div class="inner">
       <!-- Поле ввода -->
-      <label>{{ props.label }}</label>
+      <label>
+        {{ props.label }}
+        <svg-icon v-if="props.type === 'address'" name="tooltip" />
+      </label>
       <input
         :type="
           props.type === 'password' && !isShowPassword ? 'password' : 'text'
@@ -87,6 +90,16 @@ const model = computed({
   &:not(:last-child) {
     margin-bottom: 32px;
   }
+  label {
+    display: flex;
+    align-items: center;
+    svg {
+      margin-left: 5px;
+      width: 15px;
+      height: 15px;
+      fill: $blue2;
+    }
+  }
   .showPassword {
     position: absolute;
     bottom: 10px;
@@ -117,8 +130,21 @@ const model = computed({
       margin-right: 8px;
     }
   }
+  .url {
+    position: absolute;
+    top: 7px;
+    right: 15px;
+    padding: 8px 24px;
+    border-radius: 2px;
+    background-color: $blue2;
+  }
   .error {
     display: block;
+  }
+  &.focus {
+    label svg {
+      fill: $blue;
+    }
   }
 }
 </style>

@@ -30,5 +30,8 @@ export const RegisterScheme = yup.object().shape({
 
 export const TeamScheme = yup.object().shape({
   name: yup.string().required('Поле является обязательным'),
-  code: yup.string().required('Поле является обязательным'),
+  code: yup
+    .string()
+    .min(6, 'Адресс должен состоять минимум из 6 символов')
+    .required('Поле является обязательным'),
 });

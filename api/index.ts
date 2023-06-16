@@ -1,9 +1,11 @@
 import axios from 'axios';
 import { AccountApi } from '~/api/models/account';
+import { TeamApi } from '~/api/models/team';
 
 // Определение типа возвращаемых значений
 export type ApiReturnTypes = {
   account: ReturnType<typeof AccountApi>;
+  team: ReturnType<typeof TeamApi>;
 };
 
 // Функция Api
@@ -18,8 +20,9 @@ export const Api = (): ApiReturnTypes => {
     },
   });
 
-  // Возвращаемые модели с своими методами
+  // Возвращаемые модели со своими методами
   return {
     account: AccountApi(instance),
+    team: TeamApi(instance),
   };
 };
