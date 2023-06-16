@@ -12,7 +12,7 @@
 
       <!-- Команды -->
       <li class="team" v-for="team in teams" :key="team.id">
-        <NuxtLink to="/" class="title">{{ team.name }}</NuxtLink>
+        <NuxtLink :to="`/companies/${team.id}`" class="title">{{ team.name }}</NuxtLink>
         <ul class="info">
           <li class="info__item"><span>План:</span> {{ team.plan.name }}</li>
           <li class="info__item">
@@ -23,8 +23,8 @@
           </li>
         </ul>
         <span class="notices" v-if="team.unread_notification">{{
-          team.unread_notification
-        }}</span>
+            team.unread_notification
+          }}</span>
       </li>
     </ul>
   </NuxtLayout>
@@ -34,8 +34,8 @@
 <!-- ----------------------------------------------------- -->
 
 <script lang="ts" setup>
-import { useUserStore } from '~/stores/UserStore';
-import { Api } from '~/api';
+import {useUserStore} from '~/stores/UserStore';
+import {Api} from '~/api';
 
 /**
  * Системные переменные ----------------
@@ -46,8 +46,8 @@ const userStore = useUserStore(); // Хранилище данных польз�
  * Получение данных ----------------
  */
 // Команды пользователя
-const { data: teams } = await useAsyncData(async () => {
-  const { data } = await Api().account.me();
+const {data: teams} = await useAsyncData(async () => {
+  const {data} = await Api().account.me();
   userStore.setTeams(data.teams);
   return data.teams;
 });

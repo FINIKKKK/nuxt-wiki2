@@ -21,12 +21,12 @@
           class="item"
           :class="{
             active: props.activeItem === item, // Если это активный элемент
-            link: isTooltip(item), // Если это ссылка
+            link: item === 'tooltip' || item === 'bell', // Если это ссылка
           }"
           :key="index"
           @click="setActiveItem(item)"
         >
-          <!-- Если это tooltip, то показывать ссылку -->
+          <!-- Если tooltip -->
           <a
             v-if="item === 'tooltip'"
             href="https://help.itl.wiki/public/section/30"
@@ -34,6 +34,11 @@
           >
             <svg-icon :name="item" />
           </a>
+
+          <!-- Если уведомления -->
+          <NuxtLink v-else-if="item === 'bell'" to="/notices">
+            <svg-icon :name="item" />
+          </NuxtLink>
 
           <!-- Иначе просто иконку -->
           <svg-icon v-else :name="item" />
@@ -60,12 +65,6 @@ const props = defineProps<{
 const emits = defineEmits(['setActiveItem']);
 
 /**
- * Системные переменные ----------------
- */
-const config = useRuntimeConfig(); // Конфиг
-const route = useRoute(); // Роут
-
-/**
  * Пользовательские переменные ----------------
  */
 // Массив элементов сайдбара
@@ -73,12 +72,6 @@ const items = [
   ['home', 'add', 'search'],
   ['settings', 'bell', 'tooltip', 'user'],
 ];
-
-/**
- * Вычисляемые значения ----------------
- */
-// Если элемент это tooltip
-const isTooltip = computed(() => (item: string) => item === 'tooltip');
 
 /**
  * Методы ----------------
@@ -127,6 +120,7 @@ const setActiveItem = (item: string) => {
   justify-content: center;
   width: 100%;
   padding: 24px;
+  transition: 0.2s;
   &.link {
     padding: 0;
     a {
@@ -142,10 +136,10 @@ const setActiveItem = (item: string) => {
     fill: $white;
   }
   &:hover {
-    background-color: $blue2;
+    background-color: darken($blue, 7%);
   }
   &.active {
-    background-color: $blue2;
+    background-color: darken($blue, 7%);
   }
 }
 </style>

@@ -18,7 +18,7 @@ export const useUserStore = defineStore('userStore', () => {
    * Методы ----------------
    */
   // Сохранить пользователя
-  const setUser = (obj: TUser) => {
+  const setUser = (obj: TUser | null) => {
     user.value = obj;
   };
   // Сохранить  команды

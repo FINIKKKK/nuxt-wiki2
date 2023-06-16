@@ -1,6 +1,7 @@
 import { AxiosInstance } from 'axios';
 import { TBase } from '~/api/types';
 import { TUser } from '~/api/models/account';
+import { TRole } from '~/api/models/role';
 
 /**
  * Типы ----------------
@@ -29,6 +30,10 @@ export type TTeam = TBase & {
   unread_notification: number;
   user_id: number;
 };
+export type TActiveTeam = {
+  role: TRole;
+  team: TTeam;
+};
 
 /**
  * Модель (Команды) ----------------
@@ -39,6 +44,14 @@ export const TeamApi = (instance: AxiosInstance) => ({
     const { data } = await instance.post<TeamDto, { data: number }>(
       '/team/add',
       dto,
+    );
+    return data;
+  },
+
+  // Получить данные о команде
+  async getOne(id: string) {
+    const { data } = await instance.get<{ data: TActiveTeam }>(
+      `/team?team_id=${id}`,
     );
     return data;
   },

@@ -2,8 +2,8 @@
   <div
     class="sidebar__popup"
     :class="{
-      active: isShow && activeItem, // Если sidebar открыт
-      search: activeItem === 'search', // Если открыт поиск
+      active: props.isShow && props.activeItem, // Если sidebar открыт
+      search: props.activeItem === 'search', // Если открыт поиск
     }"
   >
     <div class="inner">
@@ -13,22 +13,22 @@
       <div
         class="main"
         v-if="
-          activeItem !== 'home' ||
+          props.activeItem !== 'home' ||
           (!route.path.includes('/sections') && !route.path.includes('/posts'))
         "
       >
         <h3 class="title">
-          {{ innerItems.find((obj) => obj.name === activeItem)?.title }}
+          {{ innerItems.find((obj) => obj.name === props.activeItem)?.title }}
         </h3>
         <ul
           v-if="
-            activeItem !== 'search' &&
-            innerItems.find((obj) => obj.name === activeItem)?.items
+            props.activeItem !== 'search' &&
+            innerItems.find((obj) => obj.name === props.activeItem)?.items
           "
         >
           <template
             v-for="(item, index) in innerItems.find(
-              (obj) => obj.name === activeItem,
+              (obj) => obj.name === props.activeItem,
             ).items"
             :key="index"
           >
@@ -39,7 +39,7 @@
         <!--------------------------------------
         Поиск
         ---------------------------------------->
-        <SidebarSearch :activeItem="activeItem" />
+        <SidebarSearch :activeItem="props.activeItem" />
       </div>
 
       <!--------------------------------------
@@ -56,6 +56,8 @@ import { useUserStore } from '~/stores/UserStore';
 import Input from '~/components/UI/Input.vue';
 import SidebarSearch from '~/componets/Sidebar/SidebarSearch.vue';
 import SidebarItem from '~/componets/Sidebar/SidebarItem.vue';
+import { useHandleErrors } from '~/hooks/useHandleErrors';
+import { useTeamStore } from '~/stores/TeamStore';
 
 /**
  * Пропсы ----------------
@@ -68,11 +70,10 @@ const props = defineProps<{
 /**
  * Системные переменные ----------------
  */
-const config = useRuntimeConfig(); // Конфиг
 const route = useRoute(); // Роут
 const router = useRouter(); // Роутер
 const userStore = useUserStore(); // Хранилище пользователя
-// const companyStore = useCompanyStore(); // Хранилище активной компании
+const teamStore = useTeamStore(); // Хранилище активной компании
 
 /**
  * Пользовательские переменные ----------------
@@ -83,7 +84,7 @@ const token = useCookie('token'); // Достаем токен из куки
  * Хуки ----------------
  */
 // Для обработки ошибок
-// const { handleSubmit } = useHandleErrors();
+const { handleSubmit } = useHandleErrors();
 
 /**
  * Методы ----------------
@@ -91,15 +92,17 @@ const token = useCookie('token'); // Достаем токен из куки
 // Выход из аккаунта
 const onLogout = async () => {
   // Вызываем хук для обработки ошибок
-  // handleSubmit(async () => {
-  //   await Api().auth.logout(); // Выходим с аккаунта
-  //   token.value = ''; // Обнуляем токен
-  //   // Удаляем информацию из хранилища
-  //   userStore.user = null;
-  //   userStore.companies = [];
-  //   // Перенаправляем пользователя на страницу авторизации
-  //   await router.push('/login');
-  // });
+  handleSubmit(async () => {
+    // Выходим с аккаунта
+    await Api().account.logout();
+    // Обнуляем токен
+    token.value = '';
+    // Удаляем информацию из хранилища
+    userStore.user = null;
+    userStore.teams = [];
+    // Перенаправляем пользователя на страницу авторизации
+    await router.push('/login');
+  });
 };
 
 /**
@@ -113,18 +116,18 @@ const innerItems = [
       {
         icon: 'activation',
         label: 'Активность',
-        // link: `${companyStore.activeCompanySlug}`,
+        link: `${teamStore.activeTeamId}`,
       },
       {
         icon: 'document',
         label: 'Ваши работы',
-        // link: `${companyStore.activeCompanySlug}/my_works`,
+        link: `${teamStore.activeTeamId}/my_works`,
       },
       {
         icon: 'glasses',
         label: 'На модерации',
-        // link: `${companyStore.activeCompanySlug}/moderation`,
-        // isShow: companyStore.activeCompany?.pivot.role_id === 1,
+        link: `${teamStore.activeTeamId}/moderation`,
+        // isShow: teamStore.activeTeam?.pivot.role_id === 1,
       },
       {
         icon: 'favorite',
@@ -140,18 +143,18 @@ const innerItems = [
       {
         icon: 'folder',
         label: 'Раздел',
-        // link: `${companyStore.activeCompanySlug}/sections/create`,
+        link: `${teamStore.activeTeamId}/sections/create`,
       },
       {
         icon: 'document',
         label: 'Статью',
-        // link: `${companyStore.activeCompanySlug}/posts/create`,
+        link: `${teamStore.activeTeamId}/posts/create`,
       },
     ],
   },
   {
     name: 'search',
-    // title: `Поиск по ${companyStore.activeCompany?.name}.itl.wiki`,
+    title: `Поиск по ${teamStore.activeTeam?.name}.itl.wiki`,
   },
   {
     name: 'settings',
@@ -160,12 +163,17 @@ const innerItems = [
       {
         icon: 'settings',
         label: 'Общие',
-        // link: `${companyStore.activeCompanySlug}/settings/general`,
+        link: `${teamStore.activeTeamId}/settings/general`,
       },
       {
         icon: 'user',
         label: 'Соотрудники',
-        // link: `${companyStore.activeCompanySlug}/settings/employees`,
+        link: `${teamStore.activeTeamId}/settings/employees`,
+      },
+      {
+        icon: 'group',
+        label: 'Группы',
+        link: `${teamStore.activeTeamId}/settings/employees`,
       },
     ],
   },
@@ -173,7 +181,6 @@ const innerItems = [
     name: 'user',
     title: 'Профиль',
     items: [
-      { icon: 'favorite', label: 'Закладки', link: '/account/favorites' },
       { icon: 'edit', label: 'Редактировать', link: '/account/profile' },
       {
         icon: 'change',

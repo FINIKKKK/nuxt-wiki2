@@ -18,10 +18,7 @@
     </aside>
 
     <!-- Остальной контент на странице -->
-    <div
-      id="scroll"
-      class="content"
-    >
+    <div id="scroll" class="content">
       <!-- Заголовок -->
       <h1 class="title" v-if="props.title">{{ props.title }}</h1>
 

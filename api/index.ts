@@ -1,11 +1,13 @@
 import axios from 'axios';
 import { AccountApi } from '~/api/models/account';
 import { TeamApi } from '~/api/models/team';
+import { RoleApi } from '~/api/models/role';
 
 // Определение типа возвращаемых значений
 export type ApiReturnTypes = {
   account: ReturnType<typeof AccountApi>;
   team: ReturnType<typeof TeamApi>;
+  role: ReturnType<typeof RoleApi>;
 };
 
 // Функция Api
@@ -24,5 +26,6 @@ export const Api = (): ApiReturnTypes => {
   return {
     account: AccountApi(instance),
     team: TeamApi(instance),
+    role: RoleApi(instance),
   };
 };

@@ -72,9 +72,9 @@ const props = defineProps<{
 
 <style lang="scss" scoped>
 .item {
-  transition: 0.3s;
   margin-left: -16px;
   cursor: pointer;
+  transition: 0.3s;
   &:not(:last-child) {
     margin-bottom: 8px;
   }
@@ -101,7 +101,7 @@ const props = defineProps<{
     transition: 0.3s;
   }
   &:hover {
-    background-color: $blue;
+    background-color: $blue2;
     a {
       text-decoration: none;
     }
