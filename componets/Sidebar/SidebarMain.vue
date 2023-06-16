@@ -2,7 +2,7 @@
   <div class="main">
     <!-- Logo -->
     <NuxtLink to="/" class="logo">
-      <img src="~/assets/img/svg/logo.svg" alt="logo"/>
+      <img src="~/assets/img/svg/logo.svg" alt="logo" />
     </NuxtLink>
 
     <!-- Список навигации -->
@@ -11,36 +11,32 @@
         Верхний и нижний список
         + Если пользователь вошел
        -->
-      <ul
-          class="list"
-          v-for="(itemsList, index) in items"
-          :key="index"
-      >
+      <ul class="list" v-for="(itemsList, index) in items" :key="index">
         <!--
           Элемент навигации в списке
           + В зависимости от условия, показывать или скрывать
          -->
         <li
-            v-for="(item, index) in itemsList"
-            class="item"
-            :class="{
+          v-for="(item, index) in itemsList"
+          class="item"
+          :class="{
             active: props.activeItem === item, // Если это активный элемент
             link: isTooltip(item), // Если это ссылка
           }"
-            :key="index"
-            @click="setActiveItem(item)"
+          :key="index"
+          @click="setActiveItem(item)"
         >
           <!-- Если это tooltip, то показывать ссылку -->
           <a
-              v-if="isTooltip(item)"
-              href="https://help.itl.wiki/public/section/30"
-              target="_blank"
+            v-if="item === 'tooltip'"
+            href="https://help.itl.wiki/public/section/30"
+            target="_blank"
           >
-            <svg-icon :name="item"/>
+            <svg-icon :name="item" />
           </a>
 
           <!-- Иначе просто иконку -->
-          <svg-icon v-else :name="item"/>
+          <svg-icon v-else :name="item" />
         </li>
       </ul>
     </div>
@@ -51,7 +47,6 @@
 <!-- ----------------------------------------------------- -->
 
 <script lang="ts" setup>
-
 /**
  * Пропсы ----------------
  */
@@ -76,16 +71,14 @@ const route = useRoute(); // Роут
 // Массив элементов сайдбара
 const items = [
   ['home', 'add', 'search'],
-  ['settings', 'bell', 'tooltip', 'user']
-]
+  ['settings', 'bell', 'tooltip', 'user'],
+];
 
 /**
  * Вычисляемые значения ----------------
  */
 // Если элемент это tooltip
-const isTooltip = computed(
-    () => (item: string) => item === 'tooltip',
-);
+const isTooltip = computed(() => (item: string) => item === 'tooltip');
 
 /**
  * Методы ----------------

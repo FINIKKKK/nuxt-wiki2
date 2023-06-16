@@ -10,10 +10,10 @@
         />
 
         <!-- Внутрениий сайдбар -->
-        <!--        <SidebarPopup-->
-        <!--            :isShow="isShowPopup as boolean"-->
-        <!--            :activeItem="activeItem as string | null"-->
-        <!--        />-->
+        <SidebarPopup
+          :isShow="isShowPopup as boolean"
+          :activeItem="activeItem as string | null"
+        />
       </nav>
     </aside>
 
@@ -21,19 +21,9 @@
     <div
       id="scroll"
       class="content"
-      :class="{
-        miniTitle: props.isMiniTitle, // Если заголовок маленький
-      }"
     >
       <!-- Заголовок -->
-      <!-- Либо маленький -->
-      <h4 class="pretitle" v-if="props.isMiniTitle">{{ props.title }}</h4>
-      <!-- Либо большой -->
-      <h1 class="title" v-else>
-        <span>{{ props.title }}</span>
-        <span v-if="title2">{{ props.title2 }}</span>
-        <span v-if="title3">{{ props.title3 }}</span>
-      </h1>
+      <h1 class="title" v-if="props.title">{{ props.title }}</h1>
 
       <!-- Слот шаблона -->
       <slot />
@@ -44,15 +34,13 @@
 <script lang="ts" setup>
 import { useOutsideClick } from '~/hooks/useOutsideClick';
 import SidebarMain from '~/componets/Sidebar/SidebarMain.vue';
+import SidebarPopup from '~/componets/Sidebar/SidebarPopup.vue';
 
 /**
  * Пропсы ----------------
  */
 const props = defineProps<{
   title?: string;
-  title2?: string;
-  title3?: string;
-  isMiniTitle?: string;
 }>();
 
 /**
@@ -69,7 +57,7 @@ const route = useRoute(); // Роут
  * Пользовательские переменные ----------------
  */
 const popupRef = ref(null); // Ref-ссылка на элемент попапа
-const isShowPopup = ref<boolean>(route.path.includes('/companies/') || true); // Показывать попап сайдара или нет
+const isShowPopup = ref<boolean>(route.path.includes('/companies/') || true); // Показывать попап сайдара или нет?
 const activeItem = ref<string | null>(null); // Активный элемент в сайдаре
 
 /**
