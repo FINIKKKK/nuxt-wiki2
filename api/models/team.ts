@@ -1,5 +1,6 @@
 import { AxiosInstance } from 'axios';
-import { TBase, TMessage } from '~/api/types';
+import { TBase } from '~/api/types';
+import { TUser } from '~/api/models/account';
 
 /**
  * Типы ----------------
@@ -11,6 +12,22 @@ export type TeamDto = {
 export type TTeam = TBase & {
   name: string;
   code: string;
+  active: string;
+  balance: number;
+  debiting_at: string;
+  deleted_at: any;
+  description: any;
+  employees_count: number;
+  groups: any;
+  owner: TUser;
+  plan: any;
+  plan_id: number;
+  role: any;
+  roles: any;
+  subscribed_at: string;
+  trial: string;
+  unread_notification: number;
+  user_id: number;
 };
 
 /**

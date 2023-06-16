@@ -81,6 +81,8 @@ svg {
 }
 
 a.btn {
+  color: $black;
+  text-align: center;
   &:hover {
     text-decoration: none;
   }
