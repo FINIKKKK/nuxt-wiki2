@@ -34,6 +34,9 @@ export type TActiveTeam = {
   role: TRole;
   team: TTeam;
 };
+export type TeamEditDto = TeamDto & {
+  team_id: string;
+};
 
 /**
  * Модель (Команды) ----------------
@@ -56,11 +59,20 @@ export const TeamApi = (instance: AxiosInstance) => ({
     return data;
   },
 
+  // Изменить данные команды
+  async edit(dto: TeamEditDto) {
+    const { data } = await instance.post<TeamEditDto, { data: any }>(
+      '/team/edit',
+      dto,
+    );
+    return data;
+  },
+
   // Загрузить файл
   async upload(dto: any) {
     const { data } = await instance.post<any, { data: any }>(
       `/team/store/add`,
-        dto
+      dto,
     );
     return data;
   },

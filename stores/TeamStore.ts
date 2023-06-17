@@ -1,4 +1,4 @@
-import { TActiveTeam, TTeam } from '~/api/models/team';
+import { TActiveTeam, TeamEditDto, TTeam } from '~/api/models/team';
 import { defineStore } from 'pinia';
 
 /**
@@ -19,6 +19,13 @@ export const useTeamStore = defineStore('teamStore', () => {
   const setActiveTeam = (obj: TActiveTeam | null) => {
     activeTeam.value = obj;
   };
+  // Изменить данные команды
+  const editActiveTeam = (obj: TeamEditDto) => {
+    if (activeTeam.value) {
+      activeTeam.value.team.name = obj.name;
+      activeTeam.value.team.code = obj.code;
+    }
+  };
 
   /**
    * Вычисляемые значения ----------------
@@ -33,5 +40,6 @@ export const useTeamStore = defineStore('teamStore', () => {
     activeTeam,
     activeTeamId,
     setActiveTeam,
+    editActiveTeam,
   };
 });

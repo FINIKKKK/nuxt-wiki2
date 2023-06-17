@@ -163,7 +163,7 @@ const innerItems = [
       {
         icon: 'settings',
         label: 'Общие',
-        link: `${teamStore.activeTeamId}/settings/general`,
+        link: `${teamStore.activeTeamId}/settings`,
       },
       {
         icon: 'user',
