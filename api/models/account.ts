@@ -35,6 +35,15 @@ export type TUserData = {
   user: TUser;
   teams: TTeam[];
 };
+export type UserDataDto = {
+  first_name: string;
+  last_name: string;
+  email: string;
+};
+export type UserPasswordDto = {
+  password: string;
+  new_password: string;
+};
 
 /**
  * Модель, связанная с аккаунтом пользователя ----------------
@@ -61,6 +70,24 @@ export const AccountApi = (instance: AxiosInstance) => ({
   // Получение информация о пользователе
   async me() {
     const { data } = await instance.get<{ data: TUserData }>('/account');
+    return data;
+  },
+
+  // Изменение данных пользователя
+  async edit(dto: UserDataDto) {
+    const { data } = await instance.post<UserDataDto, any>(
+      '/account/common/edit',
+      dto,
+    );
+    return data;
+  },
+
+  // Изменение пароля пользователя
+  async password(dto: UserPasswordDto) {
+    const { data } = await instance.post<UserPasswordDto, any>(
+      '/account/password/change',
+      dto,
+    );
     return data;
   },
 

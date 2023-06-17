@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia';
-import { TUser } from '~/api/models/account';
+import { TUser, UserDataDto } from '~/api/models/account';
 import { TTeam } from '~/api/models/team';
 
 /**
@@ -21,6 +21,15 @@ export const useUserStore = defineStore('userStore', () => {
   const setUser = (obj: TUser | null) => {
     user.value = obj;
   };
+  // Обновить данные
+  const updateUserData = (obj: UserDataDto) => {
+    user.value = {
+      ...user.value,
+      first_name: obj.first_name,
+      last_name: obj.last_name,
+      email: obj.email,
+    };
+  };
   // Сохранить  команды
   const setTeams = (obj: TTeam[]) => {
     teams.value = obj;
@@ -32,5 +41,6 @@ export const useUserStore = defineStore('userStore', () => {
     teams,
     setUser,
     setTeams,
+    updateUserData,
   };
 });

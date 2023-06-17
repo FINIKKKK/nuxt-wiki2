@@ -18,9 +18,7 @@
         :errors="errorsValidate['email'] || []"
       />
     </div>
-    <button class="btn" :class="{ disabled: isLoading }">
-      Сохранить
-    </button>
+    <button class="btn" :class="{ disabled: isLoading }">Сохранить</button>
   </form>
 </template>
 
@@ -37,7 +35,7 @@ import { useUserStore } from '~/stores/UserStore';
 /**
  * События ----------------
  */
-const emits = defineEmits(['showWarning', 'showWarningSuccess']);
+const emits = defineEmits(['showWarningErrors', 'showWarningMessages']);
 
 /**
  * Системные переменные ----------------
@@ -63,7 +61,7 @@ const { errorsValidate, errors, isLoading, validateForm } = useFormValidation();
 // Следить за errors
 watch(errors, () => {
   // Показать warning c ошибками
-  emits('showWarning', errors.value);
+  emits('showWarningErrors', errors.value);
 });
 
 /**
@@ -72,8 +70,8 @@ watch(errors, () => {
 // Изменить данные пользователя
 const onChangeUserData = async () => {
   // Убираем warning
-  emits('showWarning', []);
-  emits('showWarningSuccess', '');
+  emits('showWarningErrors', []);
+  emits('showWarningMessages', '');
   // Данные объекта
   const dto = {
     first_name: firstNameValue.value,
@@ -83,11 +81,11 @@ const onChangeUserData = async () => {
   // Вызываем хук для валидации формы
   await validateForm(dto, UserDataScheme, async () => {
     // Обновляем данные пользователя
-    const { data } = await Api().account.edit(dto);
-    // Обновляем в хранилище
-    userStore.setUser(data);
+    await Api().account.edit(dto);
+    // Обновляем данные в хранилище
+    userStore.updateUserData(dto);
     // Отображаем сообщение об успешном изменении
-    emits('showWarningSuccess', 'Данные успешно изменены');
+    emits('showWarningMessages', 'Данные успешно измененны');
   });
 };
 </script>

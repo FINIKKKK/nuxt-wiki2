@@ -1,13 +1,13 @@
 <template>
-  <div class="errors" :class="{ success: props.successMessage }">
+  <div class="errors" :class="{ success: props.messages }">
     <svg-icon name="warning" />
     <div class="items">
       <!-- Либо отображать ошибки -->
-      <span v-if="!props.successMessage" v-for="error in props.errors">{{
+      <span v-if="!props.messages" v-for="error in props.errors">{{
         error
       }}</span>
       <!-- Либо отображать сообщение об успешном действии -->
-      <span v-else>{{ props.successMessage }}</span>
+      <span v-else>{{ props.messages }}</span>
     </div>
   </div>
 </template>
@@ -21,7 +21,7 @@
  */
 const props = defineProps<{
   errors?: string[];
-  successMessage?: string;
+  messages?: string;
 }>();
 </script>
 
@@ -30,7 +30,7 @@ const props = defineProps<{
 
 <style lang="scss" scoped>
 .errors {
-  background-color: $red2;
+  background-color: rgba($red, 0.1);
   display: flex;
   align-items: center;
   padding: 21px 50px;

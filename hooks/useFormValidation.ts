@@ -36,7 +36,12 @@ export const useFormValidation = () => {
         });
       }
       // Обрабатываем ошибки колбека
-      errors.value = err.response.data.messages.credentials_incorrect;
+      for (const key in err.response.data.messages) {
+        if (err.response.data.messages.hasOwnProperty(key)) {
+          const messageArray = err.response.data.messages[key];
+          errors.value.push(...messageArray);
+        }
+      }
       console.log(err);
     } finally {
       isLoading.value = false; // Убираем загрузку

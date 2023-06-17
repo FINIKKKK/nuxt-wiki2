@@ -5,14 +5,14 @@
       <Input
         label="Текущий пароль"
         type="password"
-        v-model="oldPasswordValue"
-        :errors="errorsValidate['old_password'] || []"
+        v-model="passwordValue"
+        :errors="errorsValidate['password'] || []"
       />
       <Input
         label="Новый пароль"
         type="password"
         v-model="newPasswordValue"
-        :errors="errorsValidate['password'] || []"
+        :errors="errorsValidate['new_password'] || []"
       />
       <Input
         label="Повторить пароль"
@@ -38,12 +38,12 @@ import Input from '~/componets/UI/Input.vue';
 /**
  * События ----------------
  */
-const emits = defineEmits(['showWarning', 'showWarningSuccess']);
+const emits = defineEmits(['showWarningErrors', 'showWarningMessages']);
 
 /**
  * Пользоватеьские переменные ----------------
  */
-const oldPasswordValue = ref(''); // Значение старого пароля
+const passwordValue = ref(''); // Значение текущего пароля
 const newPasswordValue = ref(''); // Значение нового пароля
 const passwordConfirmValue = ref(''); // Значение подтвежденного пароля
 
@@ -59,7 +59,7 @@ const { errorsValidate, errors, isLoading, validateForm } = useFormValidation();
 // Следить за значением ошибок
 watch(errors, () => {
   // Показать warning c ошибками
-  emits('showWarning', errors.value);
+  emits('showWarningErrors', errors.value);
 });
 
 /**
@@ -67,19 +67,21 @@ watch(errors, () => {
  */
 // Изменение пароля пользователя
 const onChangePassword = async () => {
-  emits('showWarning', []); // Убираем warning
+  // Убираем warning
+  emits('showWarningErrors', []);
+  emits('showWarningMessages', '');
   // Объект с данными
   const dto = {
-    old_password: oldPasswordValue.value,
-    password: newPasswordValue.value,
+    password: passwordValue.value,
+    new_password: newPasswordValue.value,
     password_confirmation: passwordConfirmValue.value,
   };
-  // Вызываем хук для валидации формы
+  // Вызываем хук для валидации формы÷
   await validateForm(dto, PasswordScheme, async () => {
     // Обновляем пароль
-    await Api().user.updatePassword(dto);
+    await Api().account.password(dto);
     // Отображаем сообщение об успешном изменении
-    emits('showWarningSuccess', 'Пароль успешно изменен');
+    emits('showWarningMessages', 'Пароль успешно изменен');
     // Перемещаем пользователя на вверх
     const block = document.getElementById('scroll');
     if (block && typeof block.scrollTo === 'function') {
