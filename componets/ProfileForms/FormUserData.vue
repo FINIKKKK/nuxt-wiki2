@@ -85,7 +85,7 @@ const onChangeUserData = async () => {
     // Обновляем данные в хранилище
     userStore.updateUserData(dto);
     // Отображаем сообщение об успешном изменении
-    emits('showWarningMessages', 'Данные успешно измененны');
+    emits('showWarningMessages', 'Данные успешно изменены');
   });
 };
 </script>

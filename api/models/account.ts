@@ -91,6 +91,17 @@ export const AccountApi = (instance: AxiosInstance) => ({
     return data;
   },
 
+  // Изменение аватарки пользователя
+  async avatar(image: any) {
+    const formData = new FormData();
+    formData.append('image', image);
+
+    const { data } = await instance.post(`/account/picture/change`, formData, {
+      headers: { 'Content-Type': 'multipart/form-data' },
+    });
+    return data;
+  },
+
   // Выход из аккаунта
   async logout() {
     const { data } = await instance.post<TMessage>('/account/logout');

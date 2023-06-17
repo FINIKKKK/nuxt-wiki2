@@ -21,9 +21,7 @@
         :errors="errorsValidate['password_confirmation'] || []"
       />
     </div>
-    <button class="btn" :class="{ disabled: isLoading }">
-      Сохранить
-    </button>
+    <button class="btn" :class="{ disabled: isLoading }">Сохранить</button>
   </form>
 </template>
 
@@ -34,6 +32,7 @@
 import { Api } from '~/api';
 import { useFormValidation } from '~/hooks/useFormValidation';
 import Input from '~/componets/UI/Input.vue';
+import { PasswordScheme } from '~/utils/validation';
 
 /**
  * События ----------------

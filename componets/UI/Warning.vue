@@ -34,7 +34,7 @@ const props = defineProps<{
   display: flex;
   align-items: center;
   padding: 21px 50px;
-  margin: 0 -50px 35px;
+  margin: 0 -36px 35px;
   svg {
     width: 23px;
     height: 23px;

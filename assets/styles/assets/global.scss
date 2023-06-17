@@ -88,6 +88,14 @@ a.btn {
   }
 }
 
+.btn-inline {
+  color: $blue;
+  cursor: pointer;
+  &:hover {
+    text-decoration: underline;
+  }
+}
+
 // ---- Inputs ----
 .input {
   .inner {

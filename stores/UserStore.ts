@@ -23,12 +23,17 @@ export const useUserStore = defineStore('userStore', () => {
   };
   // Обновить данные
   const updateUserData = (obj: UserDataDto) => {
-    user.value = {
-      ...user.value,
-      first_name: obj.first_name,
-      last_name: obj.last_name,
-      email: obj.email,
-    };
+    if (user.value) {
+      user.value.first_name = obj.first_name;
+      user.value.last_name = obj.last_name;
+      user.value.email = obj.email;
+    }
+  };
+  // Обновить аватарку
+  const updateUserAvatar = (obj: string) => {
+    if (user.value) {
+      user.value.picture = obj;
+    }
   };
   // Сохранить  команды
   const setTeams = (obj: TTeam[]) => {
@@ -42,5 +47,6 @@ export const useUserStore = defineStore('userStore', () => {
     setUser,
     setTeams,
     updateUserData,
+    updateUserAvatar
   };
 });
