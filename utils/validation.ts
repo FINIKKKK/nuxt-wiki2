@@ -35,3 +35,24 @@ export const TeamScheme = yup.object().shape({
     .min(6, 'Адресс должен состоять минимум из 6 символов')
     .required('Поле является обязательным'),
 });
+
+export const UserDataScheme = yup.object().shape({
+  first_name: yup.string().required('Поле является обязательным'),
+  last_name: yup.string().required('Поле является обязательным'),
+  email: yup
+    .string()
+    .required('Поле является обязательным')
+    .email('Некорректный email'),
+});
+
+export const PasswordScheme = yup.object().shape({
+  old_password: yup.string().required('Поле является обязательным'),
+  password: yup
+    .string()
+    .required('Поле является обязательным')
+    .min(6, 'Пароль должен состоять минимум из 6 символов'),
+  password_confirmation: yup
+    .string()
+    .required('Поле является обязательным')
+    .oneOf([yup.ref('password')], 'Пароли должны совпадать'),
+});
