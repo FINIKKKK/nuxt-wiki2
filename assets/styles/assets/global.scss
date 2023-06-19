@@ -90,6 +90,14 @@ a.btn {
   }
 }
 
+.btn2 {
+  color: $blue !important;
+  background-color: $blue2;
+  &:hover {
+    background-color: rgba($blue, 0.25);
+  }
+}
+
 .btn-inline {
   color: $blue;
   cursor: pointer;
