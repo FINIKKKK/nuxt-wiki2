@@ -51,7 +51,7 @@
 <!-- ----------------------------------------------------- -->
 
 <script lang="ts" setup>
-import Input from '~/componets/UI/Input.vue';
+import Input from '~/components/UI/Input.vue';
 import { useFormValidation } from '~/hooks/useFormValidation';
 import { RegisterScheme } from '~/utils/validation';
 import { Api } from '~/api';

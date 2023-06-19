@@ -12,7 +12,7 @@
 <!-- ----------------------------------------------------- -->
 
 <script lang="ts" setup>
-import Input from '~/componets/UI/Input.vue';
+import Input from '~/components/UI/Input.vue';
 
 /**
  * Пропсы ----------------

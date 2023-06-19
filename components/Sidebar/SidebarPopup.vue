@@ -54,8 +54,8 @@
 import { Api } from '~/api';
 import { useUserStore } from '~/stores/UserStore';
 import Input from '~/components/UI/Input.vue';
-import SidebarSearch from '~/componets/Sidebar/SidebarSearch.vue';
-import SidebarItem from '~/componets/Sidebar/SidebarItem.vue';
+import SidebarSearch from '~/components/Sidebar/SidebarSearch.vue';
+import SidebarItem from '~/components/Sidebar/SidebarItem.vue';
 import { useHandleErrors } from '~/hooks/useHandleErrors';
 import { useTeamStore } from '~/stores/TeamStore';
 

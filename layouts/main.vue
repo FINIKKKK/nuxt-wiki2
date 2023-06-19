@@ -30,8 +30,8 @@
 
 <script lang="ts" setup>
 import { useOutsideClick } from '~/hooks/useOutsideClick';
-import SidebarMain from '~/componets/Sidebar/SidebarMain.vue';
-import SidebarPopup from '~/componets/Sidebar/SidebarPopup.vue';
+import SidebarMain from '~/components/Sidebar/SidebarMain.vue';
+import SidebarPopup from '~/components/Sidebar/SidebarPopup.vue';
 
 /**
  * Пропсы ----------------

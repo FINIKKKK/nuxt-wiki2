@@ -35,10 +35,10 @@
 <!-- ----------------------------------------------------- -->
 
 <script lang="ts" setup>
-import FormUserData from '~/componets/ProfileForms/FormUserData.vue';
-import FormUserPassword from '~/componets/ProfileForms/FormUserPassword.vue';
-import Warning from '~/componets/UI/Warning.vue';
-import UserAvatar from '~/componets/ProfileForms/UserAvatar.vue';
+import FormUserData from '~/components/ProfileForms/FormUserData.vue';
+import FormUserPassword from '~/components/ProfileForms/FormUserPassword.vue';
+import Warning from '~/components/UI/Warning.vue';
+import UserAvatar from '~/components/ProfileForms/UserAvatar.vue';
 
 /**
  * Пользовательские переменные ----------------

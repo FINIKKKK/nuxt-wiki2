@@ -56,3 +56,10 @@ export const PasswordScheme = yup.object().shape({
     .required('Поле является обязательным')
     .oneOf([yup.ref('new_password')], 'Пароли должны совпадать'),
 });
+
+export const SectionScheme = yup.object().shape({
+  name: yup
+    .string()
+    .min(5, 'Заголовок должен быть как минимум из 5 символов')
+    .required('Вы не ввели название раздела'),
+});

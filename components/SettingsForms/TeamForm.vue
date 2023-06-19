@@ -29,11 +29,11 @@
 <!-- ----------------------------------------------------- -->
 
 <script lang="ts" setup>
-import Input from '~/componets/UI/Input.vue';
-import {useFormValidation} from '~/hooks/useFormValidation';
-import {Api} from '~/api';
-import {useTeamStore} from '~/stores/TeamStore';
-import {TeamScheme} from '~/utils/validation';
+import Input from '~/components/UI/Input.vue';
+import { useFormValidation } from '~/hooks/useFormValidation';
+import { Api } from '~/api';
+import { useTeamStore } from '~/stores/TeamStore';
+import { TeamScheme } from '~/utils/validation';
 
 /**
  * События ----------------
@@ -55,7 +55,7 @@ const codeValue = ref(teamStore.activeTeam?.team.code); // Значене фам
  * Хуки ----------------
  */
 // Для обработки формы
-const {errorsValidate, errors, isLoading, validateForm} = useFormValidation();
+const { errorsValidate, errors, isLoading, validateForm } = useFormValidation();
 
 /**
  * Отслеживание переменных ----------------

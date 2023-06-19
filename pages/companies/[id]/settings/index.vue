@@ -19,8 +19,8 @@
 <!-- ----------------------------------------------------- -->
 
 <script lang="ts" setup>
-import TeamForm from '~/componets/SettingsForms/TeamForm.vue';
-import Warning from '~/componets/UI/Warning.vue';
+import TeamForm from '~/components/SettingsForms/TeamForm.vue';
+import Warning from '~/components/UI/Warning.vue';
 
 /**
  * Пользовательские переменные ----------------

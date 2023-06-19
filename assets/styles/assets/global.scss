@@ -68,6 +68,8 @@ svg {
   padding: 17px 32px;
   border-radius: 2px;
   transition: 0.3s;
+  font-size: 16px !important;
+  line-height: 24px !important;
   &:hover {
     background-color: darken($yellow, 15%);
   }
