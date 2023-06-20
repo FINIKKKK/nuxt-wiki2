@@ -5,7 +5,7 @@ import { OutputBlockData } from '@editorjs/editorjs';
 /**
  * Типы ----------------
  */
-export type SectionDto = {
+export type SectionDto = TBase & {
   team_id: string;
   name: string;
   description: OutputBlockData[];
@@ -14,6 +14,10 @@ export type SectionDto = {
 export type TSection = TBase & {
   name: string;
   blocks: OutputBlockData[];
+};
+export type SectionOneDto = {
+  team_id: string;
+  section_id: string;
 };
 
 /**
@@ -33,6 +37,23 @@ export const SectionApi = (instance: AxiosInstance) => ({
   async getAll(team_id: string) {
     const { data } = await instance.get<{ data: TSection[] }>(
       `team/section/sections?team_id=${team_id}`,
+    );
+    return data;
+  },
+
+  // Получить раздел
+  async getOne(dto: SectionOneDto) {
+    const { data } = await instance.get<{ data: TSection }>(
+      `team/section?section_id=${dto.section_id}&team_id=${dto.team_id}`,
+    );
+    return data;
+  },
+
+  // Удалить раздел
+  async delete(dto: SectionOneDto) {
+    const { data } = await instance.post<{ data: any }>(
+      `team/section/delete`,
+      dto,
     );
     return data;
   },

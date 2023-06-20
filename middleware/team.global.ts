@@ -19,8 +19,9 @@ export default defineNuxtRouteMiddleware(async (to, from) => {
   if (to.fullPath.includes('/companies/')) {
     // Если нет активной команды
     if (!teamStore.activeTeam) {
+      const id = to.fullPath.split('/')[2];
       // Получаем данные текущей команды
-      const { data } = await Api().team.getOne(to.params.id);
+      const { data } = await Api().team.getOne(id);
       // Сохраняем в хранилище данные команды
       teamStore.setActiveTeam(data);
     }

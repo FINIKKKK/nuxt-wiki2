@@ -2,7 +2,7 @@ import axios from 'axios';
 import { AccountApi } from '~/api/models/account';
 import { TeamApi } from '~/api/models/team';
 import { RoleApi } from '~/api/models/role';
-import {SectionApi} from "~/api/models/section";
+import { SectionApi } from '~/api/models/section';
 
 // Определение типа возвращаемых значений
 export type ApiReturnTypes = {

@@ -44,11 +44,7 @@
   ---------------------------------------->
   <div class="form">
     <!-- Селект элемента -->
-    <Select
-      :options="sections"
-      v-model="selectValue"
-      class="select"
-    />
+    <Select :options="sections" v-model="selectValue" class="select" />
     <!-- Заголовок элемента -->
     <div class="input">
       <input
@@ -152,9 +148,8 @@ const onSubmit = async () => {
   validateForm(dto, SectionScheme, async () => {
     // Создаем раздел
     const { data } = await Api().section.add(dto);
-    console.log(data);
     // Перенапрвляем пользователя на страницу раздела
-    // await router.push(`${teamStore.activeTeamId}/sections/${data.id}`);
+    await router.push(`${teamStore.activeTeamId}/sections/${data.id}`);
   });
 };
 </script>
