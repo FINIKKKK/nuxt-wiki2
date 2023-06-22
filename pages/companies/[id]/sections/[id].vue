@@ -48,7 +48,7 @@
       <!--------------------------------------
       Тело элемента
       ---------------------------------------->
-      <!--      <Body class="body" :data="section.body" />-->
+      <Body class="body" :data="section.blocks" />
     </div>
   </NuxtLayout>
 </template>

@@ -74,7 +74,7 @@ import { useTeamStore } from '~/stores/TeamStore';
 import Select from '~/components/UI/Select.vue';
 import Warning from '~/components/UI/Warning.vue';
 import { useFormValidation } from '~/hooks/useFormValidation';
-import Editor from '~/components/Editor.vue';
+import Editor from '~/components/Editor/index.vue';
 import { TSection } from '~/api/models/section';
 
 /**
