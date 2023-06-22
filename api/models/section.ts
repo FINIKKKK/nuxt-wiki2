@@ -8,12 +8,12 @@ import { OutputBlockData } from '@editorjs/editorjs';
 export type SectionDto = TBase & {
   team_id: string;
   name: string;
-  description: OutputBlockData[];
+  description: string;
   section_id?: string;
 };
 export type TSection = TBase & {
   name: string;
-  blocks: OutputBlockData[];
+  description: string;
 };
 export type SectionOneDto = {
   team_id: string;

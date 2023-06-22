@@ -141,7 +141,7 @@ const onSubmit = async () => {
   const dto = {
     team_id: teamStore.activeTeam?.team.id,
     name: titleValue.value,
-    description: bodyValue.value,
+    description: JSON.stringify(bodyValue.value),
     ...(selectValue.value && { section_id: selectValue.value.id }),
   };
   // Вызываем хук для обрабоки формы
