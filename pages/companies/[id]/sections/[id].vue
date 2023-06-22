@@ -15,8 +15,6 @@
         </NuxtLink>
         <!-- Доступ -->
         <svg-icon class="control" name="lock" />
-        <!-- Поделиться -->
-        <svg-icon class="control" name="share" />
         <!-- Удалить -->
         <svg-icon class="control" name="remove" @click="onDelete" />
       </div>
@@ -49,11 +47,10 @@
       ---------------------------------------->
       <Body class="body" :data="section.blocks" />
 
-
       <!--------------------------------------
       Дополнительные элементы
       ---------------------------------------->
-      <Item v-for="item in section.child" :data="item" :key="item.id"/>
+      <Item v-for="item in section.child" :data="item" :key="item.id" />
     </div>
   </NuxtLayout>
 </template>
@@ -123,7 +120,7 @@ const onDelete = async () => {
       // Удаляем элемент
       await Api().section.delete(dto);
       // Перенапрвляем пользователя
-      await router.push('/sections');
+      await router.push(`${teamStore.activeTeamId}`);
     });
   }
 };
@@ -159,6 +156,7 @@ const onDelete = async () => {
 }
 
 .elem__header {
+  margin-top: 75px;
   display: flex;
   align-items: center;
   margin-bottom: 12px;

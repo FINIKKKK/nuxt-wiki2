@@ -14,6 +14,7 @@ export type SectionDto = TBase & {
 export type TSection = TBase & {
   name: string;
   description: string;
+  perent: TSection;
 };
 export type SectionOneDto = {
   team_id: string;
@@ -45,6 +46,23 @@ export const SectionApi = (instance: AxiosInstance) => ({
   async getOne(dto: SectionOneDto) {
     const { data } = await instance.get<{ data: TSection }>(
       `team/section?section_id=${dto.section_id}&team_id=${dto.team_id}`,
+    );
+    return data;
+  },
+
+  // Получить данные раздела для редактирования
+  async editGet(dto: SectionOneDto) {
+    const { data } = await instance.get<{ data: TSection }>(
+      `team/section/edit?section_id=${dto.section_id}&team_id=${dto.team_id}`,
+    );
+    return data;
+  },
+
+  // Получить данные раздела для редактирования
+  async edit(dto: SectionDto) {
+    const { data } = await instance.post<SectionDto, { data: TSection }>(
+      `team/section/edit`,
+      dto,
     );
     return data;
   },

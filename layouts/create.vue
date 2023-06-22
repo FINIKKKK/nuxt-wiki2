@@ -11,7 +11,7 @@
         <p>Доступ</p>
       </li>
       <!-- Тэги -->
-      <li class="extra__item" v-if="props.type === 'post'">
+      <li class="extra__item" v-if="props.type === 'article'">
         <svg-icon name="tag" />
         <p>Тэги</p>
       </li>
@@ -21,7 +21,7 @@
     <div class="btns">
       <!-- Кнопка отпраки -->
       <button @click="onSubmit" class="btn" :class="{ disabled: isLoading }">
-        Опубликовать
+        {{ labelBtn }}
       </button>
       <!-- Кнопка отмены -->
       <NuxtLink :to="`${teamStore.activeTeamId}`" class="btn btn2"
@@ -90,8 +90,9 @@ const id = Number(route.params.id); // Id для элемента
  * Пропсы ----------------
  */
 const props = defineProps<{
-  type: 'post' | 'section';
+  type: 'article' | 'section';
   isEdit?: boolean;
+  data?: TSection;
 }>();
 
 /**
@@ -106,9 +107,21 @@ const { data: sections } = useAsyncData(async () => {
 /**
  * Пользовательские переменные ----------------
  */
-const titleValue = ref(''); // Заголовок элемента
+const titleValue = ref(props.data.name || ''); // Заголовок элемента
+const selectValue = ref<TSection | null>(props.data.parent || null); // Селект элемента
 const bodyValue = ref<OutputBlockData[]>([]); // Тело элемента
-const selectValue = ref<TSection | null>(null); // Селект элемента
+
+/**
+ * Вычисляемые значения ----------------
+ */
+// Label кнопки
+const labelBtn = computed(() => {
+  if (props.isEdit) {
+    return 'Изменить';
+  } else {
+    return 'Опубликовать';
+  }
+});
 
 /**
  * Хуки ----------------
@@ -117,7 +130,7 @@ const selectValue = ref<TSection | null>(null); // Селект элемента
 const { errorsValidate, isLoading, validateForm } = useFormValidation();
 // Предупреждение прежде чем покинуть страницу
 onBeforeRouteLeave((to, from, next) => {
-  if (to.path.includes('/posts/') || to.path.includes('/sections/')) {
+  if (to.path.includes('/articles/') || to.path.includes('/sections/')) {
     next();
   } else {
     if (confirm('Вы уверены, что хотите покинуть эту страницу?')) {
@@ -137,20 +150,41 @@ const setBodyValue = (value: OutputBlockData[]) => {
 };
 // Метод создания или редактирования элемента
 const onSubmit = async () => {
-  // Объект с данными
-  const dto = {
-    team_id: teamStore.activeTeam?.team.id,
-    name: titleValue.value,
-    description: JSON.stringify(bodyValue.value),
-    ...(selectValue.value && { section_id: selectValue.value.id }),
-  };
-  // Вызываем хук для обрабоки формы
-  validateForm(dto, SectionScheme, async () => {
-    // Создаем раздел
-    const { data } = await Api().section.add(dto);
-    // Перенапрвляем пользователя на страницу раздела
-    await router.push(`${teamStore.activeTeamId}/sections/${data.id}`);
-  });
+  // Изменяем или создаем раздел
+  if (props.isEdit) {
+    // Объект с данными
+    const dto = {
+      team_id: teamStore.activeTeam?.team.id,
+      section_id: id,
+      name: titleValue.value,
+      description: JSON.stringify(bodyValue.value),
+      ...(selectValue.value && { parent_id: selectValue.value.id }),
+    };
+
+    // Вызываем хук для обрабоки формы
+    validateForm(dto, SectionScheme, async () => {
+      // Изменяем раздел
+      const { data } = await Api().section.edit(dto);
+      // Перенапрвляем пользователя на страницу раздела
+      // await router.push(`${teamStore.activeTeamId}/sections/${id}`);
+    });
+  } else {
+    // Объект с данными
+    const dto = {
+      team_id: teamStore.activeTeam?.team.id,
+      name: titleValue.value,
+      description: JSON.stringify(bodyValue.value),
+      ...(selectValue.value && { section_id: selectValue.value.id }),
+    };
+
+    // Вызываем хук для обрабоки формы
+    validateForm(dto, SectionScheme, async () => {
+      // Создаем раздел
+      const { data } = await Api().section.add(dto);
+      // Перенапрвляем пользователя на страницу раздела
+      await router.push(`${teamStore.activeTeamId}/sections/${data.id}`);
+    });
+  }
 };
 </script>
 
