@@ -1,8 +1,6 @@
 <template>
   <template v-if="!props.type">
-    <li
-      class="item"
-    >
+    <li class="item">
       <NuxtLink v-if="props.data.link" :to="props.data.link">
         <svg-icon :name="props.data.icon" />
         <p>{{ props.data.label }}</p>
@@ -14,14 +12,14 @@
     </li>
   </template>
 
-<!--  <template v-if="props.type">-->
-<!--    <li class="item" :class="{ post: props.type === 'post' }">-->
-<!--      <NuxtLink :to="itemLink">-->
-<!--        <svg-icon v-if="props.type === 'section'" name="folder" />-->
-<!--        <p>{{ props.data.title }}</p>-->
-<!--      </NuxtLink>-->
-<!--    </li>-->
-<!--  </template>-->
+  <template v-if="props.type">
+    <li class="item" :class="{ post: props.type === 'post' }">
+      <NuxtLink :to="itemLink">
+        <svg-icon :name="props.type === 'section' ? 'folder' : 'document'" />
+        <p>{{ props.data.name }}</p>
+      </NuxtLink>
+    </li>
+  </template>
 </template>
 
 <!-- ----------------------------------------------------- -->
@@ -32,6 +30,9 @@
 // import { TSection } from '~/api/models/section/types';
 // import { TPost } from '~/api/models/post/types';
 
+import { TSection } from '~/api/models/section';
+import { useTeamStore } from '~/stores/TeamStore';
+
 /**
  * Типы ----------------
  */
@@ -41,6 +42,8 @@ export type TItem = {
   link?: string;
   method?: void;
   isShow?: boolean;
+  id?: number;
+  name?: string;
 };
 
 /**
@@ -54,17 +57,17 @@ const props = defineProps<{
 /**
  * Системные переменные ----------------
  */
-// const companyStore = useCompanyStore(); // Хранилище активной компании
+const teamStore = useTeamStore(); // Хранилище активной команды
 
 /**
  * Вычисляемые значения ----------------
  */
 // Ссылка на элемент
-// const itemLink = computed(() => {
-//   return `${companyStore.activeCompanySlug}/${
-//     props.type === 'section' ? 'sections' : 'posts'
-//   }/${props.data.id}`;
-// });
+const itemLink = computed(() => {
+  return `${teamStore.activeTeamId}/${
+    props.type === 'section' ? 'sections' : 'posts'
+  }/${props.data.id}`;
+});
 </script>
 
 <!-- ----------------------------------------------------- -->

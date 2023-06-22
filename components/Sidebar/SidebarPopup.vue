@@ -32,7 +32,10 @@
             ).items"
             :key="index"
           >
-            <SidebarItem :data="item" />
+            <SidebarItem
+              v-if="item.hasOwnProperty('isShow') ? item.isShow : true"
+              :data="item"
+            />
           </template>
         </ul>
 
@@ -45,7 +48,7 @@
       <!--------------------------------------
       Дополнительные элементы
       ---------------------------------------->
-      <!--      <SidebarItems v-if="activeItem === 'home'" />-->
+      <SidebarItems v-if="activeItem === 'home'" />
     </div>
   </div>
 </template>
@@ -58,6 +61,7 @@ import SidebarSearch from '~/components/Sidebar/SidebarSearch.vue';
 import SidebarItem from '~/components/Sidebar/SidebarItem.vue';
 import { useHandleErrors } from '~/hooks/useHandleErrors';
 import { useTeamStore } from '~/stores/TeamStore';
+import { useSectionsStore } from '~/stores/SectionStore';
 
 /**
  * Пропсы ----------------
@@ -74,6 +78,7 @@ const route = useRoute(); // Роут
 const router = useRouter(); // Роутер
 const userStore = useUserStore(); // Хранилище пользователя
 const teamStore = useTeamStore(); // Хранилище активной компании
+const sectionsStore = useSectionsStore(); // Хранилище
 
 /**
  * Пользовательские переменные ----------------
@@ -127,7 +132,9 @@ const innerItems = [
         icon: 'glasses',
         label: 'На модерации',
         link: `${teamStore.activeTeamId}/moderation`,
-        // isShow: teamStore.activeTeam?.pivot.role_id === 1,
+        isShow:
+          teamStore.activeTeam?.role.name === 'owner' ||
+          teamStore.activeTeam?.role.name === 'moderator',
       },
       {
         icon: 'favorite',
@@ -196,6 +203,7 @@ const innerItems = [
 
 <style lang="scss" scoped>
 .sidebar__popup {
+  position: relative;
   user-select: none;
   white-space: nowrap;
   z-index: 30;

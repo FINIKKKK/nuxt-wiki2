@@ -10,7 +10,8 @@
       <!-- Дата -->
       <div
         class="date"
-      >{{ date}}</div>
+        v-html="useDateString(props.data.created_at, props.data.updated_at)"
+      ></div>
     </div>
   </div>
 </template>
@@ -24,6 +25,7 @@ import { useUserStore } from '~/stores/UserStore';
 import { useTeamStore } from '~/stores/TeamStore';
 import { TSection } from '~/api/models/section';
 import { useFormatDate } from '~/hooks/useFormatData';
+import { useDateString } from '~/hooks/useDateString';
 
 /**
  * Пропсы ----------------
@@ -44,17 +46,6 @@ const userStore = useUserStore(); // Хранилище данных польз�
  */
 // Для обработки ошибок
 const { isLoading, handleSubmit } = useHandleErrors();
-
-/**
- * Вычисляемые значения ----------------
- */
-const date = computed(() => {
-  if (props.data.created_at !== props.data.updated_at) {
-    return `${useFormatDate(props.data.updated_at)} (Изменено)`;
-  } else {
-    return useFormatDate(props.data.updated_at);
-  }
-});
 </script>
 
 <!-- ----------------------------------------------------- -->

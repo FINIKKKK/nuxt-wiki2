@@ -1,6 +1,5 @@
 import { AxiosInstance } from 'axios';
 import { TBase } from '~/api/types';
-import { OutputBlockData } from '@editorjs/editorjs';
 
 /**
  * Типы ----------------
@@ -15,6 +14,7 @@ export type TSection = TBase & {
   name: string;
   description: string;
   perent: TSection;
+  child: TSection[];
 };
 export type SectionOneDto = {
   team_id: string;

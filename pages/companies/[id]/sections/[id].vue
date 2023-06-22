@@ -39,7 +39,10 @@
           }}</span>
         </li>
         <!-- Время -->
-        <li class="elem__info-item">{{ date }}</li>
+        <li
+          class="elem__info-item"
+          v-html="useDateString(section?.created_at, section?.updated_at)"
+        ></li>
       </ul>
 
       <!--------------------------------------
@@ -64,6 +67,8 @@ import { useUserStore } from '~/stores/UserStore';
 import { useHandleErrors } from '~/hooks/useHandleErrors';
 import { useTeamStore } from '~/stores/TeamStore';
 import { useFormatDate } from '~/hooks/useFormatData';
+import { useSectionsStore } from '~/stores/SectionStore';
+import { useDateString } from '../../../../hooks/useDateString';
 
 /**
  * Системные переменные ----------------
@@ -72,6 +77,7 @@ const route = useRoute(); // Роут
 const router = useRouter(); // Роутер
 const teamStore = useTeamStore(); // Хранилище активной команды
 const userStore = useUserStore(); // Хранилище пользователя
+const sectionsStore = useSectionsStore(); // Хранилище разделов
 
 /**
  * Пользовательские переменные ----------------
@@ -85,8 +91,7 @@ const dto = {
 /**
  * Хуки ----------------
  */
-// Для оработки ошибок
-const { isLoading, handleSubmit } = useHandleErrors();
+const { isLoading, handleSubmit } = useHandleErrors(); // Для оработки ошибок
 
 /**
  * Получение данных ----------------
@@ -94,18 +99,8 @@ const { isLoading, handleSubmit } = useHandleErrors();
 // Данные раздела
 const { data: section } = useAsyncData(async () => {
   const { data } = await Api().section.getOne(dto);
+  sectionsStore.setSection(data.section);
   return data.section;
-});
-
-/**
- * Вычисляемые значения ----------------
- */
-const date = computed(() => {
-  if (section.value.created_at !== section.value.updated_at) {
-    return `${useFormatDate(section.value.updated_at)} (Изменено)`;
-  } else {
-    return useFormatDate(section.value.updated_at);
-  }
 });
 
 /**

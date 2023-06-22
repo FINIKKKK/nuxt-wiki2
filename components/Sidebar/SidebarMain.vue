@@ -6,7 +6,7 @@
     </NuxtLink>
 
     <!-- Список навигации -->
-    <div class="lists">
+    <div class="lists" v-if="userStore.user">
       <!--
         Верхний и нижний список
         + Если пользователь вошел
@@ -18,6 +18,7 @@
          -->
         <li
           v-for="(item, index) in itemsList"
+          v-show="isShowItem(item)"
           class="item"
           :class="{
             active: props.activeItem === item, // Если это активный элемент
@@ -52,6 +53,9 @@
 <!-- ----------------------------------------------------- -->
 
 <script lang="ts" setup>
+import { useTeamStore } from '~/stores/TeamStore';
+import { useUserStore } from '~/stores/UserStore';
+
 /**
  * Пропсы ----------------
  */
@@ -65,6 +69,12 @@ const props = defineProps<{
 const emits = defineEmits(['setActiveItem']);
 
 /**
+ * Системные переменные ----------------
+ */
+const userStore = useUserStore(); // Хранилище данных пользователя
+const teamStore = useTeamStore(); // Хранилище активной команды
+
+/**
  * Пользовательские переменные ----------------
  */
 // Массив элементов сайдбара
@@ -73,6 +83,31 @@ const items = [
   ['settings', 'bell', 'tooltip', 'user'],
 ];
 
+/**
+ * Вычисляемые значения ----------------
+ */
+// Показываеть элемент сайдбара
+const isShowItem = computed(() => (item: string) => {
+  // Получаем роль пользователя в компании
+  const role = teamStore.activeTeam?.role.name;
+
+  // Если есть активная компания, то показываем только tooltip и профиль
+  if (
+    teamStore.activeTeam ||
+    item === 'tooltip' ||
+    item === 'user' ||
+    item === 'bell'
+  ) {
+    // Если роль - модератор
+    if (role === 'owner') {
+      // Показываем всё
+      return true;
+    }
+    // Иначе
+    // Не показываем только настройки
+    else return item !== 'settings';
+  }
+});
 /**
  * Методы ----------------
  */
