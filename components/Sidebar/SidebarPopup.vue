@@ -155,7 +155,7 @@ const innerItems = [
       {
         icon: 'document',
         label: 'Статью',
-        link: `${teamStore.activeTeamId}/posts/create`,
+        link: `${teamStore.activeTeamId}/articles/create`,
       },
     ],
   },
