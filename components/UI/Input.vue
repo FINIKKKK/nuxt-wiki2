@@ -35,7 +35,7 @@
       <!-- Url адресс -->
       <div v-if="type === 'address'" class="url">itl.wiki</div>
     </div>
-    <span class="error" v-for="error in props.errors"> {{ error }} </span>
+    <span class="error" v-if="errors" v-for="error in props.errors"> {{ error }} </span>
   </div>
 </template>
 
@@ -49,7 +49,7 @@
 const props = defineProps<{
   label: string;
   modelValue: string;
-  errors: string[];
+  errors?: string[];
   type?: string;
 }>();
 

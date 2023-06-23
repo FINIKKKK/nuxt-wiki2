@@ -7,12 +7,12 @@
     <ul class="extra">
       <!-- Доступ -->
       <li class="extra__item">
-        <svg-icon name="lock"/>
+        <svg-icon name="lock" />
         <p>Доступ</p>
       </li>
       <!-- Тэги -->
       <li class="extra__item" v-if="props.type === 'article'">
-        <svg-icon name="tag"/>
+        <svg-icon name="tag" />
         <p>Тэги</p>
       </li>
     </ul>
@@ -25,7 +25,7 @@
       </button>
       <!-- Кнопка отмены -->
       <NuxtLink :to="`${teamStore.activeTeamId}`" class="btn btn2"
-      >Отменить
+        >Отменить
       </NuxtLink>
     </div>
   </div>
@@ -34,9 +34,9 @@
     Ошибки
   ---------------------------------------->
   <Warning
-      v-if="Object.values(errorsValidate).flat().length"
-      :errors="Object.values(errorsValidate).flat() as string[]"
-      class="warning"
+    v-if="Object.values(errorsValidate).flat().length"
+    :errors="Object.values(errorsValidate).flat() as string[]"
+    class="warning"
   />
 
   <!--------------------------------------
@@ -44,34 +44,46 @@
   ---------------------------------------->
   <div class="form">
     <!-- Селект элемента -->
-    <Select :options="sections" v-model="selectValue" class="select"/>
+    <Select :options="sections" v-model="selectValue" class="select" />
     <!-- Заголовок элемента -->
     <div class="input">
       <input
-          v-model="titleValue"
-          class="title"
-          type="text"
-          placeholder="Заголовок статьи"
+        v-model="titleValue"
+        class="title"
+        type="text"
+        placeholder="Заголовок статьи"
       />
     </div>
 
     <!-- Тело элемента -->
-    <ul class="tabs">
-      <li
-          v-for="(item, index) in 2"
+    <div class="tabs__flex">
+      <div class="field">
+        <input
+          v-model="tabNameValue"
+          type="text"
+          placeholder="Добавить вкладку"
+          @keydown.enter="addTab"
+          maxlength="100"
+        />
+      </div>
+      <ul class="tabs">
+        <li
+          v-for="(tab, index) in tabs"
+          :key="index"
           :class="{ active: activeTab === index }"
           @click="activeTab = index"
-      >
-        {{ `Вкладка ${index + 1}` }}
-      </li>
-    </ul>
+        >
+          {{ tab.name }}
+        </li>
+      </ul>
+    </div>
+
     <div class="body">
-      <div class="input" v-if="activeTab === 0">
-        <Editor @data-change="setBodyValue1" :initialValue="bodyValue1"/>
-      </div>
-      <div class="input" v-if="activeTab === 1">
-        <Editor @data-change="setBodyValue2" :initialValue="bodyValue2"/>
-      </div>
+      <template v-for="(tab, index) in tabs">
+        <div class="input" v-if="activeTab === index">
+          <Editor class="editor" v-model="tab.content" />
+        </div>
+      </template>
     </div>
   </div>
 </template>
@@ -80,16 +92,16 @@
 <!-- ----------------------------------------------------- -->
 
 <script lang="ts" setup>
-import {Api} from '~/api';
-import {OutputBlockData} from '@editorjs/editorjs';
-import {ArticleScheme, SectionScheme} from '~/utils/validation';
-import {useUserStore} from '~/stores/UserStore';
-import {useTeamStore} from '~/stores/TeamStore';
+import { Api } from '~/api';
+import { ArticleScheme, SectionScheme } from '~/utils/validation';
+import { useUserStore } from '~/stores/UserStore';
+import { useTeamStore } from '~/stores/TeamStore';
 import Select from '~/components/UI/Select.vue';
 import Warning from '~/components/UI/Warning.vue';
-import {useFormValidation} from '~/hooks/useFormValidation';
+import { useFormValidation } from '~/hooks/useFormValidation';
 import Editor from '~/components/Editor/index.vue';
-import {TSection} from '~/api/models/section';
+import { TSection } from '~/api/models/section';
+import Input from '~/components/UI/Input.vue';
 
 /**
  * Пропсы ----------------
@@ -113,8 +125,8 @@ const id = Number(route.params.id); // Id для элемента
  * Получение данных ----------------
  */
 // Разделы для списка
-const {data: sections} = useAsyncData(async () => {
-  const {data} = await Api().section.getAll(teamStore.activeTeam?.team.id);
+const { data: sections } = useAsyncData(async () => {
+  const { data } = await Api().section.getAll(teamStore.activeTeam?.team.id);
   return data;
 });
 
@@ -123,9 +135,9 @@ const {data: sections} = useAsyncData(async () => {
  */
 const titleValue = ref(''); // Заголовок элемента
 const selectValue = ref<TSection | null>(null); // Селект элемента
-const bodyValue1 = ref<OutputBlockData[]>([]); // Тело элемента
-const bodyValue2 = ref<OutputBlockData[]>([]); // Тело элемента
 const activeTab = ref(0); //
+const tabNameValue = ref(''); //
+const tabs = ref([]);
 
 /**
  * Вычисляемые значения ----------------
@@ -143,7 +155,7 @@ const labelBtn = computed(() => {
  * Хуки ----------------
  */
 // Для обработки формы
-const {errorsValidate, isLoading, validateForm} = useFormValidation();
+const { errorsValidate, isLoading, validateForm } = useFormValidation();
 // Предупреждение прежде чем покинуть страницу
 onBeforeRouteLeave((to, from, next) => {
   if (to.path.includes('/articles/') || to.path.includes('/sections/')) {
@@ -160,12 +172,11 @@ onBeforeRouteLeave((to, from, next) => {
 /**
  * Методы ----------------
  */
-// Установление значения тела элемента (событие)
-const setBodyValue1 = (value: OutputBlockData[]) => {
-  bodyValue1.value = value;
-};
-const setBodyValue2 = (value: OutputBlockData[]) => {
-  bodyValue2.value = value;
+const addTab = () => {
+  if (tabNameValue.value) {
+    tabs.value.push({ name: tabNameValue.value, content: '' });
+    tabNameValue.value = '';
+  }
 };
 // Метод создания или редактирования элемента
 const onSubmit = async () => {
@@ -177,13 +188,13 @@ const onSubmit = async () => {
       section_id: id,
       name: titleValue.value,
       description: JSON.stringify(bodyValue.value),
-      ...(selectValue.value && {parent_id: selectValue.value.id}),
+      ...(selectValue.value && { parent_id: selectValue.value.id }),
     };
 
     // Вызываем хук для обрабоки формы
     validateForm(dto, SectionScheme, async () => {
       // Изменяем раздел
-      const {data} = await Api().section.edit(dto);
+      const { data } = await Api().section.edit(dto);
       // Перенапрвляем пользователя на страницу раздела
       // await router.push(`${teamStore.activeTeamId}/sections/${id}`);
     });
@@ -192,17 +203,14 @@ const onSubmit = async () => {
     const dto = {
       team_id: teamStore.activeTeam?.team.id,
       name: titleValue.value,
-      tabs: [
-        {name: 'Вкладка', content: JSON.stringify(bodyValue1.value)},
-      ],
-      section_id: selectValue.value.id,
-      action: 3
+      tabs: tabs.value,
+      section_id: selectValue.value?.id,
+      action: 3,
     };
-
     // Вызываем хук для обрабоки формы
     validateForm(dto, ArticleScheme, async () => {
       // Создаем раздел
-      const {data} = await Api().article.add(dto);
+      const { data } = await Api().article.add(dto);
       console.log(data);
       // Перенапрвляем пользователя на страницу раздела
       // await router.push(`${teamStore.activeTeamId}/articles/${data.id}`);
@@ -281,19 +289,64 @@ const onSubmit = async () => {
   padding: 20px 100px;
 }
 
+.tabs__flex {
+  margin-bottom: 40px;
+}
+
 .tabs {
+  width: 100%;
+  overflow: auto;
   display: flex;
   align-items: center;
-  margin-top: -25px;
-  margin-bottom: 25px;
+  margin-top: 25px;
+  &::-webkit-scrollbar {
+    height: 2px;
+  }
   li {
+    border-bottom: 1px solid $gray;
+    text-transform: uppercase;
+    padding: 5px 15px;
+    border-radius: 5px 5px 0 0;
     cursor: pointer;
-    &:not(:last-child) {
-      margin-right: 15px;
-    }
+    font-size: 13px;
+    color: $gray;
     &.active {
       color: $blue;
+      position: relative;
+      &::after {
+        content: '';
+        position: absolute;
+        background-color: $blue;
+        width: 100%;
+        height: 2px;
+        bottom: 0;
+        left: 0;
+      }
     }
+  }
+}
+
+.editor {
+  border-radius: 10px;
+}
+
+.field {
+  position: relative;
+  width: 280px;
+  margin-right: 50px;
+  input {
+    width: 100%;
+    &::placeholder {
+      color: $gray;
+    }
+  }
+  .submit {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    width: 15px;
+    height: 15px;
+    cursor: pointer;
   }
 }
 </style>
