@@ -26,11 +26,6 @@
 <!-- ----------------------------------------------------- -->
 
 <script lang="ts" setup>
-// import { useCompanyStore } from '~/stores/CompanyStore';
-// import { TSection } from '~/api/models/section/types';
-// import { TPost } from '~/api/models/post/types';
-
-import { TSection } from '~/api/models/section';
 import { useTeamStore } from '~/stores/TeamStore';
 
 /**

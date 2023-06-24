@@ -2,8 +2,8 @@
   <div
     class="sidebar__popup"
     :class="{
-      active: props.isShow && props.activeItem, // Если sidebar открыт
-      search: props.activeItem === 'search', // Если открыт поиск
+      active: sidebarController.isOpen, // Если сайдбар открыт
+      search: sidebarController.activeItem === 'search', // Если открыт поиск
     }"
   >
     <div class="inner">
@@ -13,25 +13,17 @@
       <div
         class="main"
         v-if="
-          props.activeItem !== 'home' ||
+          sidebarController.activeItem !== 'home' ||
           (!route.path.includes('/sections') && !route.path.includes('/posts'))
         "
       >
-        <h3 class="title">
-          {{ innerItems.find((obj) => obj.name === props.activeItem)?.title }}
-        </h3>
+        <!-- Заголовок -->
+        <h3 class="title">{{ activeItem?.title }}</h3>
+        <!-- Список элементов -->
         <ul
-          v-if="
-            props.activeItem !== 'search' &&
-            innerItems.find((obj) => obj.name === props.activeItem)?.items
-          "
+          v-if="sidebarController.activeItem !== 'search' && activeItem?.items"
         >
-          <template
-            v-for="(item, index) in innerItems.find(
-              (obj) => obj.name === props.activeItem,
-            ).items"
-            :key="index"
-          >
+          <template v-for="(item, index) in activeItem.items" :key="index">
             <SidebarItem
               v-if="item.hasOwnProperty('isShow') ? item.isShow : true"
               :data="item"
@@ -42,16 +34,19 @@
         <!--------------------------------------
         Поиск
         ---------------------------------------->
-        <SidebarSearch :activeItem="props.activeItem" />
+        <SidebarSearch />
       </div>
 
       <!--------------------------------------
       Дополнительные элементы
       ---------------------------------------->
-      <SidebarItems v-if="activeItem === 'home'" />
+      <SidebarItems v-if="sidebarController.activeItem === 'home'" />
     </div>
   </div>
 </template>
+
+<!-- ----------------------------------------------------- -->
+<!-- ----------------------------------------------------- -->
 
 <script lang="ts" setup>
 import { Api } from '~/api';
@@ -61,15 +56,7 @@ import SidebarSearch from '~/components/Sidebar/SidebarSearch.vue';
 import SidebarItem from '~/components/Sidebar/SidebarItem.vue';
 import { useHandleErrors } from '~/hooks/useHandleErrors';
 import { useTeamStore } from '~/stores/TeamStore';
-import { useSectionsStore } from '~/stores/SectionStore';
-
-/**
- * Пропсы ----------------
- */
-const props = defineProps<{
-  isShow: boolean;
-  activeItem: string | null;
-}>();
+import { useSidebarStore } from '~/stores/SidebarController';
 
 /**
  * Системные переменные ----------------
@@ -78,7 +65,7 @@ const route = useRoute(); // Роут
 const router = useRouter(); // Роутер
 const userStore = useUserStore(); // Хранилище пользователя
 const teamStore = useTeamStore(); // Хранилище активной компании
-const sectionsStore = useSectionsStore(); // Хранилище
+const sidebarController = useSidebarStore(); // Хранилище сайдбара
 
 /**
  * Пользовательские переменные ----------------
@@ -199,7 +186,18 @@ const innerItems = [
     ],
   },
 ];
+
+/**
+ * Вычисляемые значения ----------------
+ */
+// Активный элемент
+const activeItem = computed(() => {
+  return innerItems.find((obj) => obj.name === sidebarController.activeItem);
+});
 </script>
+
+<!-- ----------------------------------------------------- -->
+<!-- ----------------------------------------------------- -->
 
 <style lang="scss" scoped>
 .sidebar__popup {

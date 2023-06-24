@@ -21,11 +21,11 @@
           v-show="isShowItem(item)"
           class="item"
           :class="{
-            active: props.activeItem === item, // Если это активный элемент
+            active: sidebarController.activeItem === item, // Если это активный элемент
             link: item === 'tooltip' || item === 'bell', // Если это ссылка
           }"
           :key="index"
-          @click="setActiveItem(item)"
+          @click="openSidebar(item)"
         >
           <!-- Если tooltip -->
           <a
@@ -55,24 +55,14 @@
 <script lang="ts" setup>
 import { useTeamStore } from '~/stores/TeamStore';
 import { useUserStore } from '~/stores/UserStore';
-
-/**
- * Пропсы ----------------
- */
-const props = defineProps<{
-  activeItem: string | null;
-}>();
-
-/**
- * События ----------------
- */
-const emits = defineEmits(['setActiveItem']);
+import { useSidebarStore } from '~/stores/SidebarController';
 
 /**
  * Системные переменные ----------------
  */
 const userStore = useUserStore(); // Хранилище данных пользователя
 const teamStore = useTeamStore(); // Хранилище активной команды
+const sidebarController = useSidebarStore(); // Хранилище сайдбара
 
 /**
  * Пользовательские переменные ----------------
@@ -111,10 +101,17 @@ const isShowItem = computed(() => (item: string) => {
 /**
  * Методы ----------------
  */
-// Установить активный элемент в сайдбаре
-const setActiveItem = (item: string) => {
+// Открываем сайдбар
+const openSidebar = (item: string) => {
   if (item !== 'tooltip') {
-    emits('setActiveItem', item);
+    // Если он уже активный, то обнуляем его и закрываем попап
+    if (sidebarController.activeItem === item) {
+      sidebarController.close();
+    }
+    // Иначе делаем его активный и открываем попап
+    else {
+      sidebarController.open(item);
+    }
   }
 };
 </script>

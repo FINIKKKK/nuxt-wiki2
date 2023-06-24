@@ -81,11 +81,6 @@ import { useTeamStore } from '~/stores/TeamStore';
 import { useSectionsStore } from '~/stores/SectionStore';
 
 /**
- * События ----------------
- */
-const emits = defineEmits(['setActiveHamburger']);
-
-/**
  * Системные переменные ----------------
  */
 const route = useRoute(); // Роут
