@@ -11,6 +11,7 @@ export const useSidebarStore = defineStore('sidebarController', () => {
    */
   const isOpen: Ref<boolean> = ref(false); //
   const activeItem: Ref<string | null> = ref(null);
+  const currentComponent = shallowRef(null);
 
   /**
    * Методы ----------------
@@ -25,12 +26,18 @@ export const useSidebarStore = defineStore('sidebarController', () => {
     isOpen.value = true;
     activeItem.value = null;
   };
+  // Изменить текущий компонент
+  const changeComponent = (value: any) => {
+    currentComponent.value = value;
+  };
 
   // Возращаем данные
   return {
     isOpen,
     activeItem,
+    currentComponent,
     open,
     close,
+    changeComponent,
   };
 });

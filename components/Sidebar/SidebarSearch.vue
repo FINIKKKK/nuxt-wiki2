@@ -1,6 +1,5 @@
 <template>
   <Input
-    v-if="props.activeItem === 'search'"
     class="input"
     label="Искать статью, раздел или пользователя"
     v-model="searchValue"
@@ -13,17 +12,12 @@
 
 <script lang="ts" setup>
 import Input from '~/components/UI/Input.vue';
-
-/**
- * Пропсы ----------------
- */
-const props = defineProps<{
-  activeItem: string | null;
-}>();
+import { useSidebarStore } from '~/stores/SidebarController';
 
 /**
  * Системные переменные ----------------
  */
+const sidebarController = useSidebarStore(); // Хранилище сайдбара
 
 /**
  * Пользовательские переменные ----------------

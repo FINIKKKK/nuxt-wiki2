@@ -72,6 +72,11 @@ const items = [
   ['home', 'add', 'search'],
   ['settings', 'bell', 'tooltip', 'user'],
 ];
+// Компоненты для resolveComponent
+const components = {
+  SidebarMainItems: resolveComponent('SidebarMainItems'),
+  SidebarSearch: resolveComponent('SidebarSearch'),
+};
 
 /**
  * Вычисляемые значения ----------------
@@ -80,7 +85,6 @@ const items = [
 const isShowItem = computed(() => (item: string) => {
   // Получаем роль пользователя в компании
   const role = teamStore.activeTeam?.role.name;
-
   // Если есть активная компания, то показываем только tooltip и профиль
   if (
     teamStore.activeTeam ||
@@ -98,6 +102,7 @@ const isShowItem = computed(() => (item: string) => {
     else return item !== 'settings';
   }
 });
+
 /**
  * Методы ----------------
  */
@@ -111,6 +116,12 @@ const openSidebar = (item: string) => {
     // Иначе делаем его активный и открываем попап
     else {
       sidebarController.open(item);
+      // Меняем resolveComponent в зависимости от условия
+      if (item !== 'search') {
+        sidebarController.changeComponent(components['SidebarMainItems']);
+      } else {
+        sidebarController.changeComponent(components['SidebarSearch']);
+      }
     }
   }
 };
