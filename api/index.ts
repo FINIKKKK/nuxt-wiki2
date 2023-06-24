@@ -35,3 +35,6 @@ export const Api = (): ApiReturnTypes => {
         article: ArticleApi(instance),
     };
 };
+
+// const instance = Api();
+// export default instance;

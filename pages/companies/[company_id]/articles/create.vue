@@ -83,8 +83,10 @@
         <div class="input" v-if="activeTab === index">
           <Editor class="editor" v-model="tab.content" />
         </div>
+
       </template>
     </div>
+    article{{article}}
   </div>
 </template>
 
@@ -109,6 +111,7 @@ import Input from '~/components/UI/Input.vue';
 const props = defineProps<{
   type: 'article' | 'section';
   isEdit?: boolean;
+
   data?: TSection;
 }>();
 
@@ -127,6 +130,14 @@ const id = Number(route.params.id); // Id для элемента
 // Разделы для списка
 const { data: sections } = useAsyncData(async () => {
   const { data } = await Api().section.getAll(teamStore.activeTeam?.team.id);
+  return data;
+});
+const { data: article } = useAsyncData(async () => {
+  const dto = {
+    team_id: teamStore.activeTeam?.team.id,
+    article_id: route.params.id
+  }
+  const { data } = await Api().article.editGet(dto);
   return data;
 });
 
@@ -185,10 +196,9 @@ const onSubmit = async () => {
     // Объект с данными
     const dto = {
       team_id: teamStore.activeTeam?.team.id,
-      section_id: id,
       name: titleValue.value,
-      description: JSON.stringify(bodyValue.value),
-      ...(selectValue.value && { parent_id: selectValue.value.id }),
+      tabs: tabs.value,
+      section_id: selectValue.value?.id,
     };
 
     // Вызываем хук для обрабоки формы
