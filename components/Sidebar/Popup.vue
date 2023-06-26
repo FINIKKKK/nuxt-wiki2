@@ -64,7 +64,7 @@ const isShowMainItems = computed(() => {
   pointer-events: none;
   box-shadow: 0 0 10px rgba($blue, 0.2);
   .inner {
-    padding: 41px 50px;
+    padding: 41px 30px;
     opacity: 0;
     transition: 0.3s;
   }

@@ -56,8 +56,8 @@ const onLogout = async () => {
     // Обнуляем токен
     token.value = '';
     // Удаляем информацию из хранилища
-    userStore.user = null;
-    userStore.teams = [];
+    userStore.setUser(null);
+    userStore.setTeams([]);
     // Перенаправляем пользователя на страницу авторизации
     await router.push('/login');
   });

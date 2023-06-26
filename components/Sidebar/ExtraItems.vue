@@ -37,28 +37,33 @@
       />
     </div>
 
-    <!-- Разделы -->
-    <div class="items" v-if="!sidebarController.isActiveMap">
-      <h3 class="title">{{ sidebarController.section.name }}</h3>
-      <ul>
-        <template
-          v-for="section in sidebarController.section.child"
-          :key="section.id"
-        >
-          <SidebarItem :data="section" type="section" />
-        </template>
-      </ul>
-    </div>
+    <template v-if="!sidebarController.isActiveMap">
+      <!-- Разделы -->
+      <div class="items">
+        <h3 class="title">{{ sidebarController.section.name }}</h3>
+        <ul>
+          <template
+            v-for="section in sidebarController.section.child"
+            :key="section.id"
+          >
+            <SidebarItem :data="section" type="section" />
+          </template>
+        </ul>
+      </div>
 
-    <!-- Посты -->
-    <!--    <div class="items" v-if="sectionItemsStore.posts?.length">-->
-    <!--      <h3>Статьи</h3>-->
-    <!--      <ul>-->
-    <!--        <template v-for="post in sectionItemsStore.posts" :key="post.id">-->
-    <!--          <SidebarItem :data="post" type="post" />-->
-    <!--        </template>-->
-    <!--      </ul>-->
-    <!--    </div>-->
+      <!-- Посты -->
+      <div class="items" v-if="sidebarController.section.items?.length">
+        <h3>Статьи</h3>
+        <ul>
+          <template
+            v-for="article in sidebarController.section.items"
+            :key="article.id"
+          >
+            <SidebarItem :data="article" type="article" />
+          </template>
+        </ul>
+      </div>
+    </template>
 
     <ul class="map" v-else>
       <li v-for="item in sidebarController.sections" class="item">
@@ -134,7 +139,7 @@ sidebarController.setSections(sections.value);
   align-items: center;
   padding: 15px;
   border-bottom: 1px solid rgba($black, 0.1);
-  margin: -40px -50px 40px;
+  margin: -40px -30px 40px;
   .back {
     display: flex;
     align-items: center;

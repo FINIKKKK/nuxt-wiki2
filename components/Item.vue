@@ -1,10 +1,10 @@
 <template>
   <div class="item">
     <!-- Иконка -->
-    <svg-icon name="folder" />
+    <svg-icon :name="props.type === 'article' ? 'document' : 'folder'" />
     <!-- Заголовок -->
     <div class="item__info">
-      <NuxtLink :to="`/${teamStore.activeTeamId}/sections/${props.data.id}`">
+      <NuxtLink :to="link">
         {{ props.data.name }}
       </NuxtLink>
       <!-- Дата -->
@@ -24,7 +24,6 @@ import { useHandleErrors } from '~/hooks/useHandleErrors';
 import { useUserStore } from '~/stores/UserStore';
 import { useTeamStore } from '~/stores/TeamStore';
 import { TSection } from '~/api/models/section';
-import { useFormatDate } from '~/hooks/useFormatData';
 import { useDateString } from '~/hooks/useDateString';
 
 /**
@@ -32,6 +31,7 @@ import { useDateString } from '~/hooks/useDateString';
  */
 const props = defineProps<{
   data: TSection;
+  type?: 'section' | 'article';
 }>();
 
 /**
@@ -46,6 +46,16 @@ const userStore = useUserStore(); // Хранилище данных польз�
  */
 // Для обработки ошибок
 const { isLoading, handleSubmit } = useHandleErrors();
+
+/**
+ * Вычислительные значения ----------------
+ */
+// Ссылка на элемент
+const link = computed(() => {
+  return `/${teamStore.activeTeamId}/${
+    props.type === 'article' ? 'articles' : 'sections'
+  }/${props.data.id}`;
+});
 </script>
 
 <!-- ----------------------------------------------------- -->

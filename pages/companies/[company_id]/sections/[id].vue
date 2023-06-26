@@ -54,6 +54,7 @@
       Дополнительные элементы
       ---------------------------------------->
       <Item v-for="item in section.child" :data="item" :key="item.id" />
+      <Item v-for="item in section.items" :data="item" type="article" :key="item.id" />
     </div>
   </NuxtLayout>
 </template>

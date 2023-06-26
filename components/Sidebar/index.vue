@@ -18,25 +18,21 @@ import SidebarMain from '~/components/Sidebar/Main.vue';
 import SidebarPopup from '~/components/Sidebar/Popup.vue';
 import { useOutsideClick } from '~/hooks/useOutsideClick';
 import { useSidebarStore } from '~/stores/SidebarController';
-/**
- * Системные переменные ----------------
- */
-const route = useRoute(); // Роут
 
 /**
  * Пользовательские переменные ----------------
  */
 const popupRef = ref(null); // Ref-ссылка на элемент попапа
-const sidebarController = useSidebarStore(); // Хранилище
+const sidebarController = useSidebarStore(); // Хранилище сайдбара
 
 /**
  * Хуки ----------------
  */
 // Скрывать попап, если нажатие было вне его области
 // + Обнулять активный элемент
-// useOutsideClick(popupRef, isShowPopup, () => {
-//   activeItem.value = null;
-// });
+useOutsideClick(popupRef, false, () => {
+  sidebarController.close();
+});
 </script>
 
 <!-- ----------------------------------------------------- -->

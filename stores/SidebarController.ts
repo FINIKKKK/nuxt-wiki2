@@ -1,6 +1,7 @@
 import { defineStore } from 'pinia';
 import { TSection } from '~/api/models/section';
 import { boolean } from 'yup';
+import { validate } from '@babel/types';
 
 /**
  * --------------------------------
@@ -28,8 +29,12 @@ export const useSidebarStore = defineStore('sidebarController', () => {
   };
   // Закрыть попап и убрать активный элемент
   const close = () => {
-    isOpen.value = true;
+    isOpen.value = false;
     activeItem.value = null;
+  };
+  // Установить активный элемент
+  const setActiveItem = (value: string | null) => {
+    activeItem.value = value;
   };
   // Изменить текущий компонент
   const changeComponent = (value: any) => {
@@ -59,6 +64,7 @@ export const useSidebarStore = defineStore('sidebarController', () => {
     open,
     close,
     changeComponent,
+    setActiveItem,
     setSection,
     setSections,
     toggleOpenMap,
