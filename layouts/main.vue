@@ -1,7 +1,7 @@
 <template>
   <main>
     <!-- Сайдбар -->
-    <Sidebar />
+    <Sidebar/>
 
     <!-- Остальной контент на странице -->
     <div id="scroll" class="content">
@@ -9,13 +9,12 @@
       <h1 class="title" v-if="props.title">{{ props.title }}</h1>
 
       <!-- Слот шаблона -->
-      <slot />
+      <slot/>
     </div>
   </main>
 </template>
 
 <script lang="ts" setup>
-import Sidebar from '~/components/Sidebar';
 
 /**
  * Пропсы ----------------

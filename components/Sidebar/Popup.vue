@@ -7,7 +7,6 @@
     }"
   >
     <div class="inner">
-
       <!--------------------------------------
       ResolveComponent (SidebarMainItems, SidebarSearch)
       ---------------------------------------->
@@ -16,7 +15,7 @@
       <!--------------------------------------
       Дополнительные элементы
       ---------------------------------------->
-      <SidebarItems v-if="sidebarController.activeItem === 'home'" />
+      <SidebarExtraItems v-if="sidebarController.activeItem === 'home'" />
     </div>
   </div>
 </template>

@@ -1,25 +1,8 @@
 <template>
-  <template v-if="!props.type">
-    <li class="item">
-      <NuxtLink v-if="props.data.link" :to="props.data.link">
-        <svg-icon :name="props.data.icon" />
-        <p>{{ props.data.label }}</p>
-      </NuxtLink>
-      <a v-else @click="props.data.method">
-        <svg-icon :name="props.data.icon" />
-        <p>{{ props.data.label }}</p>
-      </a>
-    </li>
-  </template>
-
-  <template v-if="props.type">
-    <li class="item" :class="{ post: props.type === 'post' }">
-      <NuxtLink :to="itemLink">
-        <svg-icon :name="props.type === 'section' ? 'folder' : 'document'" />
-        <p>{{ props.data.name }}</p>
-      </NuxtLink>
-    </li>
-  </template>
+  <!--------------------------------------
+  ResolveComponent (SidebarItemMain, SidebarItemElem)
+  ---------------------------------------->
+  <component :is="currentComponent" :data="props.data" :type="props.type" />
 </template>
 
 <!-- ----------------------------------------------------- -->
@@ -27,19 +10,7 @@
 
 <script lang="ts" setup>
 import { useTeamStore } from '~/stores/TeamStore';
-
-/**
- * Типы ----------------
- */
-export type TItem = {
-  icon: string;
-  label: string;
-  link?: string;
-  method?: void;
-  isShow?: boolean;
-  id?: number;
-  name?: string;
-};
+import { TItem } from '~/utils/types/sidebar';
 
 /**
  * Пропсы ----------------
@@ -55,21 +26,31 @@ const props = defineProps<{
 const teamStore = useTeamStore(); // Хранилище активной команды
 
 /**
+ * Пользовательские переменные ----------------
+ */
+// Компоненты для resolveComponent
+const components = {
+  SidebarItemMain: resolveComponent('SidebarItemMain'),
+  SidebarItemElem: resolveComponent('SidebarItemElem'),
+};
+// Текущий компонент
+const currentComponent = shallowRef(components['SidebarItemMain']);
+
+/**
  * Вычисляемые значения ----------------
  */
-// Ссылка на элемент
-const itemLink = computed(() => {
-  return `${teamStore.activeTeamId}/${
-    props.type === 'section' ? 'sections' : 'posts'
-  }/${props.data.id}`;
+onMounted(() => {
+  if (props.type) {
+    currentComponent.value = components['SidebarItemElem'];
+  }
 });
 </script>
 
 <!-- ----------------------------------------------------- -->
 <!-- ----------------------------------------------------- -->
 
-<style lang="scss" scoped>
-.item {
+<style lang="scss">
+.sidebar__item {
   margin-left: -16px;
   cursor: pointer;
   transition: 0.3s;
@@ -106,13 +87,13 @@ const itemLink = computed(() => {
     p {
       color: $blue;
     }
-    &.post {
+    &.elem {
       a::before {
         background-color: $blue;
       }
     }
   }
-  &.post {
+  &.elem {
     a::before {
       content: '';
       width: 5px;

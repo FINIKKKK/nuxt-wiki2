@@ -18,7 +18,6 @@
 <!-- ----------------------------------------------------- -->
 
 <script lang="ts" setup>
-import SidebarItem from '~/components/Sidebar/SidebarItem.vue';
 import { useSidebarStore } from '~/stores/SidebarController';
 import { useTeamStore } from '~/stores/TeamStore';
 import { useHandleErrors } from '~/hooks/useHandleErrors';

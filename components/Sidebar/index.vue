@@ -14,8 +14,8 @@
 <!-- ----------------------------------------------------- -->
 
 <script lang="ts" setup>
-import SidebarMain from '~/components/Sidebar/SidebarMain.vue';
-import SidebarPopup from '~/components/Sidebar/SidebarPopup.vue';
+import SidebarMain from '~/components/Sidebar/Main.vue';
+import SidebarPopup from '~/components/Sidebar/Popup.vue';
 import { useOutsideClick } from '~/hooks/useOutsideClick';
 import { useSidebarStore } from '~/stores/SidebarController';
 /**
