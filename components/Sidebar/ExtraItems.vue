@@ -81,10 +81,10 @@
 <!-- ----------------------------------------------------- -->
 
 <script lang="ts" setup>
-import { Api } from '~/api';
 import { useTeamStore } from '~/stores/TeamStore';
 import { useSectionsStore } from '~/stores/SectionStore';
 import { useSidebarStore } from '~/stores/SidebarController';
+import { useCustomFetch } from '~/hooks/useCustomFetch';
 
 /**
  * Системные переменные ----------------
@@ -98,13 +98,11 @@ const teamStore = useTeamStore(); // Хранилище активной ком�
  * Получение данных ----------------
  */
 // Список основных разделов
-const { data: sections } = useAsyncData(async () => {
-  if (route.path.includes('/companies') && !sidebarController.sections) {
-    const { data } = await Api().section.getAll(teamStore.activeTeam?.team.id);
-    sidebarController.setSections(data);
-    return data;
-  }
+const { data: sections } = await useCustomFetch(`team/section/sections`, {
+  query: { team_id: teamStore.activeTeam?.team.id },
 });
+// Устанавливаем значения в хранилище
+sidebarController.setSections(sections.value);
 </script>
 
 <!-- ----------------------------------------------------- -->
