@@ -5,7 +5,7 @@
       <p>{{ props.data.label }}</p>
     </NuxtLink>
     <a v-else @click="props.data.method">
-      <svg-icon :name="props.data.icon" />
+      <svg-icon v-if="props.data.method" :name="props.data.icon" />
       <p>{{ props.data.label }}</p>
     </a>
   </li>

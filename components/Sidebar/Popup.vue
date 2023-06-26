@@ -10,7 +10,10 @@
       <!--------------------------------------
       ResolveComponent (SidebarMainItems, SidebarSearch)
       ---------------------------------------->
-      <component :is="sidebarController.currentComponent" />
+      <component
+        :is="sidebarController.currentComponent"
+        v-if="isShowMainItems"
+      />
 
       <!--------------------------------------
       Дополнительные элементы
@@ -29,7 +32,19 @@ import { useSidebarStore } from '~/stores/SidebarController';
 /**
  * Системные переменные ----------------
  */
+const route = useRoute(); // Роут
 const sidebarController = useSidebarStore(); // Хранилище сайдбара
+
+/**
+ * Вычислительные значения ----------------
+ */
+// Показывать ли основные элементы ?
+const isShowMainItems = computed(() => {
+  return (
+    sidebarController.activeItem !== 'home' ||
+    !(route.path.includes('/sections') || route.path.includes('/articles'))
+  );
+});
 </script>
 
 <!-- ----------------------------------------------------- -->

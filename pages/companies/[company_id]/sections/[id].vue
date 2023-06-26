@@ -69,6 +69,7 @@ import { useTeamStore } from '~/stores/TeamStore';
 import { useFormatDate } from '~/hooks/useFormatData';
 import { useSectionsStore } from '~/stores/SectionStore';
 import { useDateString } from '../../../../hooks/useDateString';
+import {useSidebarStore} from "~/stores/SidebarController";
 
 /**
  * Системные переменные ----------------
@@ -78,6 +79,7 @@ const router = useRouter(); // Роутер
 const teamStore = useTeamStore(); // Хранилище активной команды
 const userStore = useUserStore(); // Хранилище пользователя
 const sectionsStore = useSectionsStore(); // Хранилище разделов
+const sidebarController = useSidebarStore(); // Хранилище сайдбара
 
 /**
  * Пользовательские переменные ----------------
@@ -99,7 +101,7 @@ const { isLoading, handleSubmit } = useHandleErrors(); // Для оработк�
 // Данные раздела
 const { data: section } = useAsyncData(async () => {
   const { data } = await Api().section.getOne(dto);
-  sectionsStore.setSection(data.section);
+  sidebarController.setSection(data.section);
   return data.section;
 });
 

@@ -1,14 +1,19 @@
-<template>
+<template v-if="sections">
   <!--------------------------------------
   Основные разделы
   ---------------------------------------->
   <template
-    v-if="!(route.path.includes('/sections') || route.path.includes('/posts'))"
+    v-if="
+      !(route.path.includes('/sections') || route.path.includes('/articles'))
+    "
   >
-    <div class="items" v-if="sections?.length">
+    <div class="items" v-if="sidebarController.sections?.length">
       <h3>Разделы</h3>
       <ul>
-        <template v-for="section in sections" :key="section.id">
+        <template
+          v-for="section in sidebarController.sections"
+          :key="section.id"
+        >
           <SidebarItem :data="section" type="section" />
         </template>
       </ul>
@@ -26,18 +31,18 @@
         <p>Назад</p>
       </div>
       <svg-icon
-        :name="sectionsStore.isActiveHamburger ? 'close' : 'hamburger'"
+        :name="sidebarController.isActiveMap ? 'close' : 'hamburger'"
         class="hamburger"
-        @click="sectionsStore.setActiveHamburger"
+        @click="sidebarController.toggleOpenMap()"
       />
     </div>
 
     <!-- Разделы -->
-    <div class="items" v-if="!sectionsStore.isActiveHamburger">
-      <h3 class="title">{{ sectionsStore.section.name }}</h3>
+    <div class="items" v-if="!sidebarController.isActiveMap">
+      <h3 class="title">{{ sidebarController.section.name }}</h3>
       <ul>
         <template
-          v-for="section in sectionsStore.section.child"
+          v-for="section in sidebarController.section.child"
           :key="section.id"
         >
           <SidebarItem :data="section" type="section" />
@@ -56,7 +61,7 @@
     <!--    </div>-->
 
     <ul class="map" v-else>
-      <li v-for="item in sections" class="item">
+      <li v-for="item in sidebarController.sections" class="item">
         <NuxtLink :to="`${teamStore.activeTeamId}/sections/${item.id}`"
           >{{ item.name }}
         </NuxtLink>
@@ -79,12 +84,14 @@
 import { Api } from '~/api';
 import { useTeamStore } from '~/stores/TeamStore';
 import { useSectionsStore } from '~/stores/SectionStore';
+import { useSidebarStore } from '~/stores/SidebarController';
 
 /**
  * Системные переменные ----------------
  */
 const route = useRoute(); // Роут
 const sectionsStore = useSectionsStore(); // Хранилище разделов активной компании
+const sidebarController = useSidebarStore(); // Хранилище сайдбара
 const teamStore = useTeamStore(); // Хранилище активной команды
 
 /**
@@ -92,9 +99,9 @@ const teamStore = useTeamStore(); // Хранилище активной ком�
  */
 // Список основных разделов
 const { data: sections } = useAsyncData(async () => {
-  if (route.path.includes('/companies')) {
+  if (route.path.includes('/companies') && !sidebarController.sections) {
     const { data } = await Api().section.getAll(teamStore.activeTeam?.team.id);
-    sectionsStore.setSections(data);
+    sidebarController.setSections(data);
     return data;
   }
 });
