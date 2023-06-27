@@ -1,6 +1,6 @@
 <template>
   <!--------------------------------------
-  Элементы управления 
+    Элементы управления
   ---------------------------------------->
   <div class="controls">
     <!-- Дополнительные элементы -->
@@ -228,7 +228,6 @@ const onSubmit = async () => {
         permission: obj.permission.value,
       })),
     };
-    console.log(dto);
 
     // Вызываем хук для обрабоки формы
     await validateForm(dto, SectionScheme);

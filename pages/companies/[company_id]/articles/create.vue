@@ -11,7 +11,7 @@
         <p>Доступ</p>
       </li>
       <!-- Тэги -->
-      <li class="extra__item" v-if="props.type === 'article'">
+      <li class="extra__item" @click="isShowTags = !isShowTags">
         <svg-icon name="tag" />
         <p>Тэги</p>
       </li>
@@ -83,8 +83,22 @@
         <div class="input" v-if="activeTab === index">
           <Editor class="editor" v-model="tab.content" />
         </div>
-
       </template>
+    </div>
+
+    <div class="tags" :class="{ active: isShowTags }">
+      <h2>Метки</h2>
+      <p>
+        itl.wiki создана для совместной работы, делитесь контентом, который вы
+        создаете, с вашей командой.
+      </p>
+      <UIInput
+        label="Введиде название метки"
+        v-model="tagsValue"
+        :errors="[]"
+        @keydown.enter="addTag"
+        @input="searchTag"
+      />
     </div>
   </div>
 </template>
@@ -103,6 +117,7 @@ import { useFormValidation } from '~/hooks/useFormValidation';
 import Editor from '~/components/Editor/index.vue';
 import { TSection } from '~/api/models/section';
 import Input from '~/components/UI/Input.vue';
+import { useCustomFetch } from '~/hooks/useCustomFetch';
 
 /**
  * Пропсы ----------------
@@ -134,8 +149,8 @@ const { data: sections } = useAsyncData(async () => {
 const { data: article } = useAsyncData(async () => {
   const dto = {
     team_id: teamStore.activeTeam?.team.id,
-    article_id: route.params.id
-  }
+    article_id: route.params.id,
+  };
   const { data } = await Api().article.editGet(dto);
   return data;
 });
@@ -148,6 +163,9 @@ const selectValue = ref<TSection | null>(null); // Селект элемента
 const activeTab = ref(0); //
 const tabNameValue = ref(''); //
 const tabs = ref([]);
+const tagsValue = ref(''); //
+const isShowTags = ref(true); //
+const tags = ref([]); //
 
 /**
  * Вычисляемые значения ----------------
@@ -182,6 +200,26 @@ onBeforeRouteLeave((to, from, next) => {
 /**
  * Методы ----------------
  */
+const searchTag = async () => {
+  const dto = {
+    team_id: teamStore.activeTeam.team.id,
+    query: tagsValue.value,
+  };
+  const { data } = await useCustomFetch('team/settings/tags/find', { body: dto, method: 'POST' });
+  console.log(data);
+};
+const addTag = async () => {
+  const dto = {
+    team_id: teamStore.activeTeam.team.id,
+    name: tagsValue.value,
+  };
+  const { data } = await useCustomFetch('team/settings/tags/add', {
+    body: dto,
+    method: 'POST',
+  });
+  tagsValue.value = '';
+  tags.value.push(data);
+};
 const addTab = () => {
   if (tabNameValue.value) {
     tabs.value.push({ name: tabNameValue.value, content: '' });
@@ -356,6 +394,31 @@ const onSubmit = async () => {
     width: 15px;
     height: 15px;
     cursor: pointer;
+  }
+}
+
+.tags {
+  position: fixed;
+  right: 0;
+  top: 0;
+  background-color: $white;
+  padding: 50px 35px;
+  min-height: 100vh;
+  overflow: auto;
+  width: 400px;
+  z-index: 100;
+  box-shadow: 0 0 10px rgba($blue, 0.3);
+  transform: translateX(100%);
+  transition: 0.3s;
+  &.active {
+    transform: translateX(0);
+  }
+  h2 {
+    font-size: 24px;
+    margin-bottom: 25px;
+  }
+  p {
+    margin-bottom: 25px;
   }
 }
 </style>
