@@ -56,6 +56,8 @@
 import { useTeamStore } from '~/stores/TeamStore';
 import { useUserStore } from '~/stores/UserStore';
 import { useSidebarStore } from '~/stores/SidebarController';
+import { ConcreteComponent } from '@vue/runtime-core';
+import { useFoo } from '~/composables/useFoo';
 
 /**
  * Системные переменные ----------------
@@ -63,6 +65,10 @@ import { useSidebarStore } from '~/stores/SidebarController';
 const userStore = useUserStore(); // Хранилище данных пользователя
 const teamStore = useTeamStore(); // Хранилище активной команды
 const sidebarController = useSidebarStore(); // Хранилище сайдбара
+
+interface ComponentItemInterface {
+  [key: string]: ConcreteComponent | string;
+}
 
 /**
  * Пользовательские переменные ----------------
@@ -73,10 +79,13 @@ const items = [
   ['settings', 'bell', 'tooltip', 'user'],
 ];
 // Компоненты для resolveComponent
-const components = {
+const components: ComponentItemInterface = {
   SidebarMainItems: resolveComponent('SidebarMainItems'),
   SidebarSearch: resolveComponent('SidebarSearch'),
+  SidebarMap: resolveComponent('SidebarMap'),
 };
+
+useFoo();
 
 /**
  * Вычисляемые значения ----------------

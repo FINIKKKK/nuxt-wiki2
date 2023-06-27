@@ -2,11 +2,11 @@ import { useFetch } from '#app';
 import { FetchOptions } from 'ofetch';
 
 /**
- * Хук для запросов
+ * Хук для запросов методов GET
  */
-export const useCustomFetch = async (
+export const useGetData = async (
   url: string,
-  options?: FetchOptions & { method?: string },
+  options?: FetchOptions,
 ) => {
   const token = useCookie('token'); // Токен
 
@@ -21,7 +21,7 @@ export const useCustomFetch = async (
       'Content-Type': 'application/json',
       Authorization: `Bearer ${token.value}`, // Установка заголовка авторизации с использованием токена
     },
-    method: (options?.method as 'GET' | 'POST') || 'GET',
+    method: 'GET',
   });
 
   // Возвращаем данные

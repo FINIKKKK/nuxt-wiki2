@@ -7,6 +7,9 @@
     }"
   >
     <div class="inner">
+      <!-- Кнопки в шапке -->
+      <SidebarHeader v-if="isPathElem" />
+
       <!--------------------------------------
       ResolveComponent (SidebarMainItems, SidebarSearch)
       ---------------------------------------->
@@ -18,7 +21,19 @@
       <!--------------------------------------
       Дополнительные элементы
       ---------------------------------------->
-      <SidebarExtraItems v-if="sidebarController.activeItem === 'home'" />
+      <template v-if="!isPathElem">
+        <div class="items" v-if="sidebarController.sections?.length">
+          <h3>Разделы</h3>
+          <ul>
+            <template
+              v-for="section in sidebarController.sections"
+              :key="section.id"
+            >
+              <SidebarItem :data="section" type="section" />
+            </template>
+          </ul>
+        </div>
+      </template>
     </div>
   </div>
 </template>
@@ -28,23 +43,37 @@
 
 <script lang="ts" setup>
 import { useSidebarStore } from '~/stores/SidebarController';
+import { useTeamStore } from '~/stores/TeamStore';
+import { useGetData } from '~/hooks/useGetData';
 
 /**
  * Системные переменные ----------------
  */
 const route = useRoute(); // Роут
 const sidebarController = useSidebarStore(); // Хранилище сайдбара
+const teamStore = useTeamStore(); // Хранилище активной команды
 
 /**
  * Вычислительные значения ----------------
  */
 // Показывать ли основные элементы ?
-const isShowMainItems = computed(() => {
-  return (
-    sidebarController.activeItem !== 'home' ||
-    !(route.path.includes('/sections') || route.path.includes('/articles'))
-  );
+// Страница элемента?
+const isPathElem = computed(() => {
+  return route.path.includes('/sections') || route.path.includes('/articles');
 });
+const isShowMainItems = computed(() => {
+  return sidebarController.activeItem !== 'home' || !isPathElem;
+});
+
+/**
+ * Получение данных ----------------
+ */
+// Список основных разделов
+const { data: sections } = await useGetData(`team/section/sections`, {
+  query: { team_id: teamStore.activeTeam?.team.id },
+});
+// Устанавливаем значения в хранилище
+sidebarController.setSections(sections.value);
 </script>
 
 <!-- ----------------------------------------------------- -->

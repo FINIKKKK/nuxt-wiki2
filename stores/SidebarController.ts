@@ -2,6 +2,7 @@ import { defineStore } from 'pinia';
 import { TSection } from '~/api/models/section';
 import { boolean } from 'yup';
 import { validate } from '@babel/types';
+import {ConcreteComponent} from "@vue/runtime-core";
 
 /**
  * --------------------------------
@@ -37,7 +38,7 @@ export const useSidebarStore = defineStore('sidebarController', () => {
     activeItem.value = value;
   };
   // Изменить текущий компонент
-  const changeComponent = (value: any) => {
+  const changeComponent = (value: ConcreteComponent | string) => {
     currentComponent.value = value;
   };
   // Установить раздел

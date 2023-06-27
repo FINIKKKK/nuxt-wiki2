@@ -1,85 +1,36 @@
-<template v-if="sections">
+<template>
   <!--------------------------------------
-  Основные разделы
+  Разделы и посты внутри раздела
   ---------------------------------------->
-  <template
-    v-if="
-      !(route.path.includes('/sections') || route.path.includes('/articles'))
-    "
-  >
-    <div class="items" v-if="sidebarController.sections?.length">
-      <h3>Разделы</h3>
+  <template v-if="!sidebarController.isActiveMap">
+    <!-- Разделы -->
+    <div class="items">
+      <h3 class="title">{{ sidebarController.section.name }}</h3>
       <ul>
         <template
-          v-for="section in sidebarController.sections"
+          v-for="section in sidebarController.section.child"
           :key="section.id"
         >
           <SidebarItem :data="section" type="section" />
         </template>
       </ul>
     </div>
-  </template>
 
-  <!--------------------------------------
-  Разделы и посты внутри раздела
-  ---------------------------------------->
-  <template v-else>
-    <!-- Кнопки в шапке -->
-    <div class="header">
-      <div class="back">
-        <svg-icon name="back" />
-        <p>Назад</p>
-      </div>
-      <svg-icon
-        :name="sidebarController.isActiveMap ? 'close' : 'hamburger'"
-        class="hamburger"
-        @click="sidebarController.toggleOpenMap()"
-      />
+    <!-- Посты -->
+    <div class="items" v-if="sidebarController.section.items?.length">
+      <h3>Статьи</h3>
+      <ul>
+        <template
+          v-for="article in sidebarController.section.items"
+          :key="article.id"
+        >
+          <SidebarItem :data="article" type="article" />
+        </template>
+      </ul>
     </div>
-
-    <template v-if="!sidebarController.isActiveMap">
-      <!-- Разделы -->
-      <div class="items">
-        <h3 class="title">{{ sidebarController.section.name }}</h3>
-        <ul>
-          <template
-            v-for="section in sidebarController.section.child"
-            :key="section.id"
-          >
-            <SidebarItem :data="section" type="section" />
-          </template>
-        </ul>
-      </div>
-
-      <!-- Посты -->
-      <div class="items" v-if="sidebarController.section.items?.length">
-        <h3>Статьи</h3>
-        <ul>
-          <template
-            v-for="article in sidebarController.section.items"
-            :key="article.id"
-          >
-            <SidebarItem :data="article" type="article" />
-          </template>
-        </ul>
-      </div>
-    </template>
-
-    <ul class="map" v-else>
-      <li v-for="item in sidebarController.sections" class="item">
-        <NuxtLink :to="`${teamStore.activeTeamId}/sections/${item.id}`"
-          >{{ item.name }}
-        </NuxtLink>
-        <ul class="children">
-          <li v-for="child in item.children" class="child">
-            <NuxtLink :to="`${teamStore.activeTeamId}/sections/${item.id}`"
-              >{{ child.name }}
-            </NuxtLink>
-          </li>
-        </ul>
-      </li>
-    </ul>
   </template>
+
+
 </template>
 
 <!-- ----------------------------------------------------- -->
@@ -87,27 +38,13 @@
 
 <script lang="ts" setup>
 import { useTeamStore } from '~/stores/TeamStore';
-import { useSectionsStore } from '~/stores/SectionStore';
 import { useSidebarStore } from '~/stores/SidebarController';
-import { useCustomFetch } from '~/hooks/useCustomFetch';
 
 /**
  * Системные переменные ----------------
  */
-const route = useRoute(); // Роут
-const sectionsStore = useSectionsStore(); // Хранилище разделов активной компании
 const sidebarController = useSidebarStore(); // Хранилище сайдбара
 const teamStore = useTeamStore(); // Хранилище активной команды
-
-/**
- * Получение данных ----------------
- */
-// Список основных разделов
-const { data: sections } = await useCustomFetch(`team/section/sections`, {
-  query: { team_id: teamStore.activeTeam?.team.id },
-});
-// Устанавливаем значения в хранилище
-sidebarController.setSections(sections.value);
 </script>
 
 <!-- ----------------------------------------------------- -->
@@ -130,39 +67,6 @@ sidebarController.setSections(sections.value);
     text-transform: uppercase;
     color: $gray;
     margin-bottom: 18px;
-  }
-}
-
-.header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 15px;
-  border-bottom: 1px solid rgba($black, 0.1);
-  margin: -40px -30px 40px;
-  .back {
-    display: flex;
-    align-items: center;
-  }
-  svg {
-    width: 15px;
-    height: 15px;
-  }
-  .back {
-    cursor: pointer;
-    p {
-      margin-left: 10px;
-      transition: 0.3s;
-      font-size: 14px;
-    }
-    &:hover {
-      p {
-        color: $blue;
-      }
-    }
-  }
-  .hamburger {
-    cursor: pointer;
   }
 }
 

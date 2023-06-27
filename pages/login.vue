@@ -40,6 +40,7 @@ import { useUserStore } from '~/stores/UserStore';
 import { useFormValidation } from '~/hooks/useFormValidation';
 import { Api } from '~/api';
 import { LoginScheme } from '~/utils/validation';
+import { usePostData } from '~/hooks/usePostData';
 
 /**
  * Системные переменные ----------------
@@ -57,7 +58,8 @@ const passwordValue = ref(''); // Значение пароля
 /**
  * Хуки ----------------
  */
-const { errorsValidate, errors, isLoading, validateForm } = useFormValidation(); // Для обработки формы
+const { errorsValidate, validateForm } = useFormValidation(); // Для обработки формы
+const { handleSubmit, errors, isLoading } = await usePostData(); // Для обработки запросов
 
 /**
  * Методы ----------------
@@ -69,15 +71,14 @@ const onLogin = async () => {
     email: emailValue.value,
     password: passwordValue.value,
   };
-
   // Вызываем хук для валидации форм
   await validateForm(dto, LoginScheme, async () => {
     // Регистрация пользователя
-    const { data } = await Api().account.login(dto);
+    const data = await handleSubmit('/account/auth', dto);
     // Устанавливаем токен в куки
-    token.value = data.token;
+    token.value = data.value.token;
     // Устанавливаем данные пользователя в хранилище
-    userStore.setUser(data.user);
+    userStore.setUser(data.value.user);
     // Перенаправляем пользователя на главную
     await router.push('/');
   });
