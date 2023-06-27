@@ -1,5 +1,6 @@
 import { useFetch } from '#app';
 import { FetchOptions } from 'ofetch';
+import { useRequestStore } from '~/stores/RequestController';
 
 /**
  * Хук для запросов
@@ -9,6 +10,7 @@ export const useCustomFetch = async (
   options?: FetchOptions & { method?: string },
 ) => {
   const token = useCookie('token'); // Токен
+  const requestController = useRequestStore(); // Хранилище запроса
 
   // Хук useFetch
   const { data, pending, error } = await useFetch(url, {
@@ -35,6 +37,10 @@ export const useCustomFetch = async (
       }
     }
   }
+
+  // Сохраняем данные в хранилице
+  requestController.addErrors({ [url]: error.value });
+  requestController.addIsLoading({ [url]: pending.value });
 
   // Возвращаем данные
   return {

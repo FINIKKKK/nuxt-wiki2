@@ -4,10 +4,7 @@ import { FetchOptions } from 'ofetch';
 /**
  * Хук для запросов методов GET
  */
-export const useGetData = async (
-  url: string,
-  options?: FetchOptions,
-) => {
+export const useGetData = async (url: string, options?: FetchOptions) => {
   const token = useCookie('token'); // Токен
 
   // Хук useFetch
@@ -23,8 +20,6 @@ export const useGetData = async (
     },
     method: 'GET',
   });
-
-
 
   // Возвращаем данные
   return {

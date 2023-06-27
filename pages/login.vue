@@ -8,15 +8,19 @@
       </p>
 
       <div class="errors">
-        <span v-for="(error, index) in errors" :key="index">{{ error }}</span>
+        <span
+          v-for="(error, index) in requestController.errors['account/auth']"
+          :key="index"
+          >{{ error }}</span
+        >
       </div>
 
-      <Input
+      <UIInput
         label="Электронная почта"
         v-model="emailValue"
         :errors="errorsValidate['email'] || []"
       />
-      <Input
+      <UIInput
         label="Пароль"
         v-model="passwordValue"
         type="password"
@@ -26,7 +30,12 @@
       <p>
         <NuxtLink href="/reset_password">Забыли пароль?</NuxtLink>
       </p>
-      <button class="btn" :class="{ disabled: isLoading }">Войти</button>
+      <button
+        class="btn"
+        :class="{ disabled: requestController.loading['account/auth'] }"
+      >
+        Войти
+      </button>
     </form>
   </NuxtLayout>
 </template>
@@ -35,14 +44,11 @@
 <!-- ----------------------------------------------------- -->
 
 <script lang="ts" setup>
-import Input from '~/components/UI/Input.vue';
 import { useUserStore } from '~/stores/UserStore';
 import { useFormValidation } from '~/hooks/useFormValidation';
-import { Api } from '~/api';
 import { LoginScheme } from '~/utils/validation';
-import { usePostData } from '~/hooks/usePostData';
-import { useGetData } from '~/hooks/useGetData';
 import { useCustomFetch } from '~/hooks/useCustomFetch';
+import { useRequestStore } from '~/stores/RequestController';
 
 /**
  * Системные переменные ----------------
@@ -50,6 +56,7 @@ import { useCustomFetch } from '~/hooks/useCustomFetch';
 const token = useCookie('token'); // Токен из куки
 const userStore = useUserStore(); // Хранилище данных пользователя
 const router = useRouter(); // Роутер
+const requestController = useRequestStore(); // Хранилище запроса
 
 /**
  * Пользовательские переменные ----------------
@@ -61,7 +68,6 @@ const passwordValue = ref(''); // Значение пароля
  * Хуки ----------------
  */
 const { errorsValidate, validateForm } = useFormValidation(); // Для обработки формы
-// const { errors, isLoading, handleSubmit } = await usePostData(); // Для обработки запросов
 
 /**
  * Методы ----------------
@@ -73,12 +79,13 @@ const onLogin = async () => {
     email: emailValue.value,
     password: passwordValue.value,
   };
+
   // Вызываем хук для валидации форм
   const isValid = await validateForm(dto, LoginScheme);
   if (!isValid) return false;
 
   // Регистрация пользователя
-  const { data, errors, isLoading } = await useCustomFetch(`account/auth`, {
+  const { data } = await useCustomFetch(`account/auth`, {
     body: dto,
     method: 'POST',
   });
