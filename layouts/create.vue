@@ -6,7 +6,7 @@
     <!-- Дополнительные элементы -->
     <ul class="extra">
       <!-- Доступ -->
-      <li class="extra__item">
+      <li class="extra__item" @click="isShowAccess = !isShowAccess">
         <svg-icon name="lock" />
         <p>Доступ</p>
       </li>
@@ -59,6 +59,15 @@
     <div class="input">
       <Editor @data-change="setBodyValue" :initialValue="bodyValue" />
     </div>
+
+    <div class="access" :class="{active: isShowAccess}">
+      <h2>Права доступа</h2>
+      <p>
+        itl.wiki создана для совместной работы, делитесь контентом, который вы
+        создаете, с вашей командой.
+      </p>
+      <UIInput label="Сотрудник" v-model="employeeValue" :errors="[]" />
+    </div>
   </div>
 </template>
 
@@ -107,9 +116,11 @@ const { data: sections } = useAsyncData(async () => {
 /**
  * Пользовательские переменные ----------------
  */
-const titleValue = ref(props.data.name || ''); // Заголовок элемента
-const selectValue = ref<TSection | null>(props.data.parent || null); // Селект элемента
+const titleValue = ref(props.data?.name || ''); // Заголовок элемента
+const selectValue = ref<TSection | null>(props.data?.parent || null); // Селект элемента
 const bodyValue = ref<OutputBlockData[]>([]); // Тело элемента
+const isShowAccess = ref(false); //
+const employeeValue = ref(''); // 
 
 /**
  * Вычисляемые значения ----------------
@@ -256,5 +267,29 @@ const onSubmit = async () => {
 
 .warning {
   padding: 20px 100px;
+}
+
+.access {
+  position: fixed;
+  right: 0;
+  top: 0;
+  background-color: $white;
+  padding: 50px 35px;
+  height: 100vh;
+  width: 400px;
+  z-index: 100;
+  box-shadow: 0 0 10px rgba($blue, 0.3);
+  transform: translateX(100%);
+  transition: 0.3s;
+  &.active {
+    transform: translateX(0);
+  }
+  h2 {
+    font-size: 24px;
+    margin-bottom: 25px;
+  }
+  p {
+    margin-bottom: 25px;
+  }
 }
 </style>

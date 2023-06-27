@@ -2,11 +2,11 @@ import { useFetch } from '#app';
 import { FetchOptions } from 'ofetch';
 
 /**
- * Хук для запросов методов GET
+ * Хук для запросов
  */
-export const useGetData = async (
+export const useCustomFetch = async (
   url: string,
-  options?: FetchOptions,
+  options?: FetchOptions & { method?: string },
 ) => {
   const token = useCookie('token'); // Токен
 
@@ -21,15 +21,25 @@ export const useGetData = async (
       'Content-Type': 'application/json',
       Authorization: `Bearer ${token.value}`, // Установка заголовка авторизации с использованием токена
     },
-    method: 'GET',
+    //  Метод
+    method:
+      (options?.method as 'GET' | 'POST' | 'PUT' | 'PATCH' | 'DELETE') || 'GET',
   });
 
-
+  // Конвертируем ошибки
+  if (options?.method === 'POST') {
+    for (const key in error.value?.data.messages) {
+      if (error.value?.data.messages.hasOwnProperty(key)) {
+        const messageArray = error.value?.data.messages[key];
+        error.value = messageArray;
+      }
+    }
+  }
 
   // Возвращаем данные
   return {
     data,
-    error,
-    pending,
+    errors: error,
+    isLoading: pending,
   };
 };

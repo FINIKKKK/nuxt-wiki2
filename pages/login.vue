@@ -41,6 +41,8 @@ import { useFormValidation } from '~/hooks/useFormValidation';
 import { Api } from '~/api';
 import { LoginScheme } from '~/utils/validation';
 import { usePostData } from '~/hooks/usePostData';
+import { useGetData } from '~/hooks/useGetData';
+import { useCustomFetch } from '~/hooks/useCustomFetch';
 
 /**
  * Системные переменные ----------------
@@ -59,7 +61,7 @@ const passwordValue = ref(''); // Значение пароля
  * Хуки ----------------
  */
 const { errorsValidate, validateForm } = useFormValidation(); // Для обработки формы
-const { handleSubmit, errors, isLoading } = await usePostData(); // Для обработки запросов
+// const { errors, isLoading, handleSubmit } = await usePostData(); // Для обработки запросов
 
 /**
  * Методы ----------------
@@ -72,16 +74,21 @@ const onLogin = async () => {
     password: passwordValue.value,
   };
   // Вызываем хук для валидации форм
-  await validateForm(dto, LoginScheme, async () => {
-    // Регистрация пользователя
-    const data = await handleSubmit('/account/auth', dto);
-    // Устанавливаем токен в куки
-    token.value = data.value.token;
-    // Устанавливаем данные пользователя в хранилище
-    userStore.setUser(data.value.user);
-    // Перенаправляем пользователя на главную
-    await router.push('/');
+  const isValid = await validateForm(dto, LoginScheme);
+  if (!isValid) return false;
+
+  // Регистрация пользователя
+  const { data, errors, isLoading } = await useCustomFetch(`account/auth`, {
+    body: dto,
+    method: 'POST',
   });
+
+  // Устанавливаем токен в куки
+  token.value = data.value.token;
+  // Устанавливаем данные пользователя в хранилище
+  userStore.setUser(data.value.user);
+  // Перенаправляем пользователя на главную
+  await router.push('/');
 };
 </script>
 

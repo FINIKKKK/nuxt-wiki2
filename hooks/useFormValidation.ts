@@ -7,51 +7,36 @@ type FormErrors = {
  */
 export const useFormValidation = () => {
   const errorsValidate: Ref<FormErrors> = ref({}); // Ошибки валидации
-  const errors = ref([]); // Ошибки колбека
-  const isLoading = ref(false); // Загрузка
 
-  const validateForm = async (dto?: any, schema?: any, callback?: any) => {
+  // Функция валидации
+  const validateForm = async (dto?: any, schema?: any) => {
     try {
       errorsValidate.value = {}; // Обнуляем ошибки
-      errors.value = []; // Обнуляем ошибки
-      isLoading.value = true; // Ставим загрузку
       // Валидируем данные
       if (schema) {
         await schema.validate(dto, { abortEarly: false });
       }
-      // Выполняем дополнительную логику
-      if (callback) {
-        await callback();
-      }
+      return true;
     } catch (err: any) {
       // Обрабатываем ошибки валидации
       if (err.inner) {
         // Приводим значение к одному виду
         err.inner.forEach((error: any) => {
           const path = error.path;
+          if (!errorsValidate.value) errorsValidate.value = {};
           if (!errorsValidate.value[path]) {
             errorsValidate.value[path] = [];
           }
           errorsValidate.value[path].push(error.message);
         });
       }
-      // Обрабатываем ошибки колбека
-      // for (const key in err.response.data.messages) {
-      //   if (err.response.data.messages.hasOwnProperty(key)) {
-      //     const messageArray = err.response.data.messages[key];
-      //     errors.value.push(...messageArray);
-      //   }
-      // }
-      // console.log(err);
-    } finally {
-      isLoading.value = false; // Убираем загрузку
+      return false;
     }
   };
 
+  // Возвращаем данные
   return {
     errorsValidate,
-    errors,
-    isLoading,
     validateForm,
   };
 };

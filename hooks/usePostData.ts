@@ -1,13 +1,14 @@
 import { useFetch } from '#app';
 import { FetchOptions } from 'ofetch';
 import { FetchError } from 'node-fetch';
+import { Ref } from "@vue/reactivity";
 
 /**
  * Хук для запросов методов POST
  */
 export const usePostData = async () => {
   const token = useCookie('token'); // Токен
-  const errors = ref<any | null>(null); //
+  const errors:Ref<FetchError | null> = ref(null); //
   const isLoading = ref(false); //
 
   // Функция handleSubmit
