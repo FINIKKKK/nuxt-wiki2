@@ -40,3 +40,7 @@ export type UserPasswordDto = {
   password: string;
   new_password: string;
 };
+export type TAbility = {
+  user: TUser;
+  permission: number;
+};

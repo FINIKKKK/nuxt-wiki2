@@ -9,7 +9,7 @@
     <!-- Выбранный элемент -->
     <div class="selected" @click="toggleDropdown">
       <span class="placeholder" v-if="!model">Выберите раздел</span>
-      <span v-else>{{ model.name }}</span>
+      <span v-else>{{ model.name || model.label }}</span>
       <svg-icon class="close" name="close" v-if="model" @click="model = null" />
     </div>
     <!-- Список -->
@@ -17,7 +17,7 @@
       <!-- Элемент списка -->
       <li
         v-for="option in options"
-        :key="option.id"
+        :key="option.id || option.value "
         @click="
           selectOption(option) // Выбирает элемент
         "
@@ -25,7 +25,7 @@
           active: option === model, // Активный элемент
         }"
       >
-        {{ option.name }}
+        {{ option.name || option.label }}
       </li>
     </ul>
   </div>

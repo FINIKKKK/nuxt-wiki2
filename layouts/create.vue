@@ -60,13 +60,30 @@
       <Editor @data-change="setBodyValue" :initialValue="bodyValue" />
     </div>
 
-    <div class="access" :class="{active: isShowAccess}">
+    <div class="access" :class="{ active: isShowAccess }">
       <h2>Права доступа</h2>
       <p>
         itl.wiki создана для совместной работы, делитесь контентом, который вы
         создаете, с вашей командой.
       </p>
-      <UIInput label="Сотрудник" v-model="employeeValue" :errors="[]" />
+      <!--      <UISelect v-model="employeeValue" :options="employees" />-->
+      <ul>
+        <li
+          class="employee"
+          v-for="employee in employees.employees"
+          @click="addEmployeesAccess(employee)"
+        >
+          {{ employee?.fullname }}
+        </li>
+      </ul>
+
+      <ul>
+        <li class="employee__item" v-for="ability in abilities">
+          {{ ability?.user.fullname }}
+          <UISelect :options="accessArr" v-model="ability.permission" />
+        </li>
+      </ul>
+      {{ abilities }}
     </div>
   </div>
 </template>
@@ -85,6 +102,8 @@ import Warning from '~/components/UI/Warning.vue';
 import { useFormValidation } from '~/hooks/useFormValidation';
 import Editor from '~/components/Editor/index.vue';
 import { TSection } from '~/api/models/section';
+import { TAbility, TUser } from '~/utils/types/account';
+import { useCustomFetch } from '~/hooks/useCustomFetch';
 
 /**
  * Системные переменные ----------------
@@ -112,6 +131,9 @@ const { data: sections } = useAsyncData(async () => {
   const { data } = await Api().section.getAll(teamStore.activeTeam?.team.id);
   return data;
 });
+const { data: employees } = await useCustomFetch('team/employees', {
+  query: { team_id: teamStore.activeTeam.team.id },
+});
 
 /**
  * Пользовательские переменные ----------------
@@ -119,8 +141,20 @@ const { data: sections } = useAsyncData(async () => {
 const titleValue = ref(props.data?.name || ''); // Заголовок элемента
 const selectValue = ref<TSection | null>(props.data?.parent || null); // Селект элемента
 const bodyValue = ref<OutputBlockData[]>([]); // Тело элемента
-const isShowAccess = ref(false); //
-const employeeValue = ref(''); // 
+const isShowAccess = ref(true); //
+const employeesAccess = ref<TUser[]>([]); //
+const accessArr = [
+  { value: 1, label: 'Полный доступ' },
+  { value: 2, label: 'чтение и редактирование' },
+  { value: 3, label: 'только чтение' },
+  { value: 4, label: 'без доступа' },
+];
+// const accessUserValue = ref(accessArr[0]); //
+const abilities = ref<any>([]);
+
+// watch(accessUserValue, () => {
+// abilities.value.find(obj => obj.user_id ===)
+// })
 
 /**
  * Вычисляемые значения ----------------
@@ -155,6 +189,10 @@ onBeforeRouteLeave((to, from, next) => {
 /**
  * Методы ----------------
  */
+const addEmployeesAccess = (value: TUser) => {
+  employeesAccess.value.push(value);
+  abilities.value.push({ permission: accessArr[0], user: value });
+};
 // Установление значения тела элемента (событие)
 const setBodyValue = (value: OutputBlockData[]) => {
   bodyValue.value = value;
@@ -184,17 +222,20 @@ const onSubmit = async () => {
     const dto = {
       team_id: teamStore.activeTeam?.team.id,
       name: titleValue.value,
-      description: JSON.stringify(bodyValue.value),
       ...(selectValue.value && { section_id: selectValue.value.id }),
+      abilities: abilities.value.map((obj) => ({
+        user_id: obj.user.id,
+        permission: obj.permission.value,
+      })),
     };
+    console.log(dto);
 
     // Вызываем хук для обрабоки формы
-    validateForm(dto, SectionScheme, async () => {
+    await validateForm(dto, SectionScheme);
       // Создаем раздел
-      const { data } = await Api().section.add(dto);
       // Перенапрвляем пользователя на страницу раздела
-      await router.push(`${teamStore.activeTeamId}/sections/${data.id}`);
-    });
+      // await router.push(`${teamStore.activeTeamId}/sections/${data.id}`);
+      const { data } = await Api().section.add(dto);
   }
 };
 </script>
@@ -251,6 +292,7 @@ const onSubmit = async () => {
 }
 
 .btns {
+  z-index: 250;
   display: flex;
   align-items: center;
   .btn {
@@ -275,7 +317,8 @@ const onSubmit = async () => {
   top: 0;
   background-color: $white;
   padding: 50px 35px;
-  height: 100vh;
+  min-height: 100vh;
+  overflow: auto;
   width: 400px;
   z-index: 100;
   box-shadow: 0 0 10px rgba($blue, 0.3);
@@ -290,6 +333,15 @@ const onSubmit = async () => {
   }
   p {
     margin-bottom: 25px;
+  }
+  .employee {
+    margin-bottom: 55px;
+    cursor: pointer;
+    &:hover {
+      background-color: $blue2;
+    }
+  }
+  .employee__item {
   }
 }
 </style>
