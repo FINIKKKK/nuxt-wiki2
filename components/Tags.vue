@@ -1,5 +1,5 @@
 <template>
-  <div class="tags" ref="tagsRef" :class="{ active: props.active }">
+  <div class="tags aside-popup" ref="tagsRef" :class="{ active: props.active }">
     <h2>Тэги</h2>
     <p>
       itl.wiki создана для совместной работы, делитесь контентом, который вы
@@ -27,12 +27,26 @@ import { useOutsideClick } from '~/hooks/useOutsideClick';
  */
 const props = defineProps<{
   active: boolean;
+  modelValue: number[];
 }>();
 
 /**
  * События ----------------
  */
-const emits = defineEmits(['closeTagsPopup']);
+const emits = defineEmits(['update:modelValue']);
+
+/**
+ * Вычисляемые значения ----------------
+ */
+// Значение доступов
+const model = computed({
+  get() {
+    return props.modelValue;
+  },
+  set(val) {
+    emits('update:modelValue', val);
+  },
+});
 
 /**
  * Системные переменные ----------------
@@ -40,11 +54,11 @@ const emits = defineEmits(['closeTagsPopup']);
 const teamController = useTeamStore(); // Хранилище команд
 
 /**
- * Полльзовательские переменные ----------------
+ * Пользовательские переменные ----------------
  */
 const tagsRef = ref(null); // Ref-ссылка на элемент
 const tagsValue = ref(''); // Значени поля ввода
-const tags = ref([]); // Массив тэгов
+const tags = ref([]); // Список тэгов
 
 /**
  * Хуки ----------------
@@ -87,29 +101,4 @@ const addTag = async () => {
 <!-- ----------------------------------------------------- -->
 <!-- ----------------------------------------------------- -->
 
-<style lang="scss" scoped>
-.tags {
-  position: fixed;
-  right: 0;
-  top: 0;
-  background-color: $white;
-  padding: 50px 35px;
-  min-height: 100vh;
-  overflow: auto;
-  width: 400px;
-  z-index: 100;
-  box-shadow: 0 0 10px rgba($blue, 0.3);
-  transform: translateX(100%);
-  transition: 0.3s;
-  &.active {
-    transform: translateX(0);
-  }
-  h2 {
-    font-size: 24px;
-    margin-bottom: 25px;
-  }
-  p {
-    margin-bottom: 25px;
-  }
-}
-</style>
+<style lang="scss" scoped></style>

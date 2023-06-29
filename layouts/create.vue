@@ -55,7 +55,8 @@
       />
     </div>
 
-    <Access v-model="abilities" :active="isShowAccess"/>
+    <!-- Компонент редактирования доступа -->
+    <Access v-model="abilities" :active="isShowAccess" />
   </div>
 </template>
 
@@ -71,7 +72,6 @@ import { useTeamStore } from '~/stores/TeamContoller';
 import Select from '~/components/UI/Select.vue';
 import Warning from '~/components/UI/Warning.vue';
 import { useFormValidation } from '~/hooks/useFormValidation';
-import Editor from '~/components/Editor/index.vue';
 import { TSection } from '~/api/models/section';
 import { TAbility, TUser } from '~/utils/types/account';
 import { useCustomFetch } from '~/hooks/useCustomFetch';
@@ -112,11 +112,10 @@ const { data: employees } = await useCustomFetch('team/employees', {
 const titleValue = ref(props.data?.name || ''); // Заголовок элемента
 const selectValue = ref<TSection | null>(props.data?.parent || null); // Селект элемента
 const bodyValue = ref<OutputBlockData[]>([]); // Тело элемента
-const isShowAccess = ref(true); //
+const isShowAccess = ref(false); //
 
 // const accessUserValue = ref(accessArr[0]); //
 const abilities = ref<any>([]);
-
 
 // watch(accessUserValue, () => {
 // abilities.value.find(obj => obj.user_id ===)
@@ -150,7 +149,6 @@ onBeforeRouteLeave((to, from, next) => {
       next(false);
     }
   }
-
 });
 
 /**
@@ -195,10 +193,10 @@ const onSubmit = async () => {
 
     // Вызываем хук для обрабоки формы
     await validateForm(dto, SectionScheme);
-      // Создаем раздел
-      // Перенапрвляем пользователя на страницу раздела
-      // await router.push(`${teamStore.activeTeamId}/sections/${data.id}`);
-      const { data } = await Api().section.add(dto);
+    // Создаем раздел
+    // Перенапрвляем пользователя на страницу раздела
+    // await router.push(`${teamStore.activeTeamId}/sections/${data.id}`);
+    const { data } = await Api().section.add(dto);
   }
 };
 </script>
@@ -273,5 +271,4 @@ const onSubmit = async () => {
 .warning {
   padding: 20px 100px;
 }
-
 </style>

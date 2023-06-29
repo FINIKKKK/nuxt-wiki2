@@ -10,7 +10,7 @@
     <!-- Выбранный элемент -->
     <div class="selected" @click="toggleDropdown">
       <span class="placeholder" v-if="!model">Выберите раздел</span>
-      <span v-else>{{ model.name || model.label }}</span>
+      <span v-else>{{ model.label }}</span>
       <svg-icon
         class="close"
         name="close"
@@ -28,7 +28,7 @@
       <!-- Элемент списка -->
       <li
         v-for="option in options"
-        :key="option.id || option.value"
+        :key="option.value || option.value"
         @click="
           selectOption(option) // Выбирает элемент
         "
@@ -36,7 +36,7 @@
           active: option === model, // Активный элемент
         }"
       >
-        {{ option.name || option.label }}
+        {{ option.label || option.label }}
       </li>
     </ul>
   </div>
@@ -50,8 +50,8 @@ import { useOutsideClick } from '~/hooks/useOutsideClick';
 import { TSection } from '~/api/models/section';
 
 export type TSelect = {
-  id: number;
-  name: string;
+  value: number;
+  label: string;
 };
 
 /**
@@ -59,7 +59,7 @@ export type TSelect = {
  */
 const props = defineProps<{
   options: TSelect[];
-  modelValue: TSection | null;
+  modelValue: any;
   type?: 'triangle';
 }>();
 
@@ -124,7 +124,7 @@ const selectOption = (option: any) => {
 
 .select[data-layout='triangle'] {
   .selected {
-    justify-content: flex-end;
+    justify-content: space-between;
   }
 }
 

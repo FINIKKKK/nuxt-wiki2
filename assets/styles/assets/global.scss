@@ -64,6 +64,7 @@ svg {
 
 // ---- Buttons ----
 .btn {
+  user-select: none;
   background-color: $yellow;
   padding: 17px 32px;
   border-radius: 2px;
@@ -251,23 +252,29 @@ a.btn {
 //    }
 //  }
 //}
-// ---- Blocks ----
-//.block {
-//  width: 490px;
-//  &:not(:last-child) {
-//    margin-bottom: 51px;
-//  }
-//  .title {
-//    font-size: 20px;
-//    line-height: 23px;
-//    margin-bottom: 42px;
-//  }
-//  .input {
-//    input {
-//      font-size: 16px;
-//    }
-//    &:not(:last-child) {
-//      margin-bottom: 40px;
-//    }
-//  }
-//}
+
+// Правый всплывающий попап
+.aside-popup {
+  position: fixed;
+  right: 0;
+  top: 0;
+  background-color: $white;
+  padding: 50px 35px;
+  min-height: 100vh;
+  overflow: auto;
+  width: 500px;
+  z-index: 100;
+  box-shadow: 0 0 10px rgba($blue, 0.3);
+  transform: translateX(100%);
+  transition: 0.3s;
+  &.active {
+    transform: translateX(0);
+  }
+  .title {
+    font-size: 24px;
+    margin-bottom: 25px;
+  }
+  .text {
+    margin-bottom: 25px;
+  }
+}

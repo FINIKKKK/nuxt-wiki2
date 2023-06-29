@@ -11,6 +11,7 @@ export const useCustomFetch = async <T>(
 ) => {
   const token = useCookie('token'); // Токен
   const requestController = useRequestStore(); // Хранилище запроса
+  const config = useRuntimeConfig(); // Конфиг
 
   // Хук useFetch
   const { data, pending, error } = (await useFetch(url, {
@@ -18,7 +19,7 @@ export const useCustomFetch = async <T>(
       return data.data;
     },
     ...options, // Дополнительные опции
-    baseURL: 'https://api.wiki.itl.systems/', // Главный URL
+    baseURL: config.public.apiUrl, // Главный URL
     headers: {
       'Content-Type': 'application/json',
       Authorization: `Bearer ${token.value}`, // Установка заголовка авторизации с использованием токена

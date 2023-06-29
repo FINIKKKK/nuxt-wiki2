@@ -20,4 +20,9 @@ export default defineNuxtConfig({
   typescript: {
     // typeCheck: true,
   },
+  runtimeConfig: {
+    public: {
+      apiUrl: 'https://api.wiki.itl.systems/',
+    },
+  },
 });

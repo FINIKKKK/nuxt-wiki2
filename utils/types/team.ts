@@ -37,3 +37,13 @@ export type TEmployees = {
   employees: TUser[];
   invites: TUser[];
 };
+
+export type TAccess = {
+  value: number;
+  label: string;
+};
+
+export type TAbility = {
+  user: TUser;
+  ability: TAccess;
+};
