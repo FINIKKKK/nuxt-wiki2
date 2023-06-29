@@ -27,14 +27,14 @@ export const useRequestStore = defineStore('requestController', () => {
    * Методы ----------------
    */
   // Добавить ошибки
-  const addErrors = (obj: TError) => {
-    const key = Object.keys(obj)[0];
-    errors.value[key] = obj[key];
+  const addErrors = (value: TError) => {
+    const key = Object.keys(value)[0];
+    errors.value[key] = value[key];
   };
   // Добавить значение загрузки
-  const addIsLoading = (obj: TLoading) => {
-    const key = Object.keys(obj)[0];
-    loading.value[key] = obj[key];
+  const addIsLoading = (value: TLoading) => {
+    const key = Object.keys(value)[0];
+    loading.value[key] = value[key];
   };
 
   // Возращаем данные

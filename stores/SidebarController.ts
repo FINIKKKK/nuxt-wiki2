@@ -42,12 +42,12 @@ export const useSidebarStore = defineStore('sidebarController', () => {
     currentComponent.value = value;
   };
   // Установить раздел
-  const setSection = (obj: TSection) => {
-    section.value = obj;
+  const setSection = (value: TSection) => {
+    section.value = value;
   };
   // Установить разделы
-  const setSections = (obj: TSection[]) => {
-    sections.value = obj;
+  const setSections = (value: TSection[]) => {
+    sections.value = value;
   };
   // Открыть или закрыть карту разделов
   const toggleOpenMap = () => {

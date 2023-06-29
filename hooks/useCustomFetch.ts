@@ -1,11 +1,11 @@
-import { useFetch } from '#app';
+import { AsyncData } from '#app';
 import { FetchOptions } from 'ofetch';
 import { useRequestStore } from '~/stores/RequestController';
 
 /**
  * Хук для запросов
  */
-export const useCustomFetch = async (
+export const useCustomFetch = async <T>(
   url: string,
   options?: FetchOptions & { method?: string },
 ) => {
@@ -13,8 +13,8 @@ export const useCustomFetch = async (
   const requestController = useRequestStore(); // Хранилище запроса
 
   // Хук useFetch
-  const { data, pending, error } = await useFetch(url, {
-    transform<T>(data: any) {
+  const { data, pending, error } = (await useFetch(url, {
+    transform(data: { data: T }): T {
       return data.data;
     },
     ...options, // Дополнительные опции
@@ -26,7 +26,7 @@ export const useCustomFetch = async (
     //  Метод
     method:
       (options?.method as 'GET' | 'POST' | 'PUT' | 'PATCH' | 'DELETE') || 'GET',
-  });
+  })) as AsyncData<T, any>;
 
   // Конвертируем ошибки
   if (options?.method === 'POST') {
@@ -43,9 +43,5 @@ export const useCustomFetch = async (
   requestController.addIsLoading({ [url]: pending.value });
 
   // Возвращаем данные
-  return {
-    data,
-    errors: error,
-    isLoading: pending,
-  };
+  return { data };
 };

@@ -31,6 +31,11 @@ export type TUserData = {
   user: TUser;
   teams: TTeam[];
 };
+
+export type TestI = {
+  data: TUserData
+}
+
 export type UserDataDto = {
   first_name: string;
   last_name: string;

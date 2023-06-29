@@ -1,10 +1,12 @@
 <template>
   <main>
     <div class="content">
-      <img class="logo" src="@/assets/img/svg/full_logo.svg" alt="logo">
+      <NuxtLink to="/" class="logo">
+        <img src="@/assets/img/svg/full_logo.svg" alt="logo" />
+      </NuxtLink>
 
       <!-- Слот -->
-      <slot/>
+      <slot />
     </div>
   </main>
 </template>
@@ -12,15 +14,14 @@
 <!-- ----------------------------------------------------- -->
 <!-- ----------------------------------------------------- -->
 
-<script lang="ts" setup>
-</script>
+<script lang="ts" setup></script>
 
 <!-- ----------------------------------------------------- -->
 <!-- ----------------------------------------------------- -->
 
 <style lang="scss" scoped>
 main {
-  background-image: url("@/assets/img/bg.png");
+  background-image: url('@/assets/img/bg.png');
 }
 
 .content {
@@ -34,5 +35,8 @@ main {
 .logo {
   width: 135px;
   margin-bottom: 109px;
+  img {
+    width: 100%;
+  }
 }
 </style>

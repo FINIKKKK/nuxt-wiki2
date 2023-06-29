@@ -2,26 +2,28 @@
   <form class="form" @submit.prevent="onChangePassword">
     <h2 class="title">Безопасность</h2>
     <div class="content">
-      <Input
+      <UIInput
         label="Текущий пароль"
         type="password"
         v-model="passwordValue"
-        :errors="errorsValidate['password'] || []"
+        :errors="errorsValidate['password']"
       />
-      <Input
+      <UIInput
         label="Новый пароль"
         type="password"
         v-model="newPasswordValue"
-        :errors="errorsValidate['new_password'] || []"
+        :errors="errorsValidate['new_password']"
       />
-      <Input
+      <UIInput
         label="Повторить пароль"
         type="password"
         v-model="passwordConfirmValue"
-        :errors="errorsValidate['password_confirmation'] || []"
+        :errors="errorsValidate['password_confirmation']"
       />
     </div>
-    <button class="btn" :class="{ disabled: isLoading }">Сохранить</button>
+    <button class="btn" :class="{ disabled: requestController.loading[url] }">
+      Сохранить
+    </button>
   </form>
 </template>
 
@@ -29,19 +31,22 @@
 <!-- ----------------------------------------------------- -->
 
 <script lang="ts" setup>
-import { Api } from '~/api';
 import { useFormValidation } from '~/hooks/useFormValidation';
-import Input from '~/components/UI/Input.vue';
 import { PasswordScheme } from '~/utils/validation';
+import { useProfileStore } from '~/stores/ProfileController';
+import { useCustomFetch } from '~/hooks/useCustomFetch';
+import { useRequestStore } from '~/stores/RequestController';
 
 /**
- * События ----------------
+ * Системные переменные ----------------
  */
-const emits = defineEmits(['showWarningErrors', 'showWarningMessages']);
+const profileController = useProfileStore(); // Хранилище профиля
+const requestController = useRequestStore(); // Хранилище запроса
 
 /**
  * Пользоватеьские переменные ----------------
  */
+const url = '/account/password/change'; // URL запроса
 const passwordValue = ref(''); // Значение текущего пароля
 const newPasswordValue = ref(''); // Значение нового пароля
 const passwordConfirmValue = ref(''); // Значение подтвежденного пароля
@@ -49,16 +54,14 @@ const passwordConfirmValue = ref(''); // Значение подтвежденн
 /**
  * Хуки ----------------
  */
-// Для обработки формы
-const { errorsValidate, errors, isLoading, validateForm } = useFormValidation();
+const { errorsValidate, validateForm } = useFormValidation(); // Для валидации формы
 
 /**
  * Отслеживание переменных ----------------
  */
-// Следить за значением ошибок
-watch(errors, () => {
-  // Показать warning c ошибками
-  emits('showWarningErrors', errors.value);
+// Показать warning c ошибками
+watch(profileController.errors, () => {
+  profileController.setErrors(profileController.errors);
 });
 
 /**
@@ -67,32 +70,38 @@ watch(errors, () => {
 // Изменение пароля пользователя
 const onChangePassword = async () => {
   // Убираем warning
-  emits('showWarningErrors', []);
-  emits('showWarningMessages', '');
+  profileController.setErrors([]);
+  profileController.setMessage('');
+
   // Объект с данными
   const dto = {
     password: passwordValue.value,
     new_password: newPasswordValue.value,
     password_confirmation: passwordConfirmValue.value,
   };
-  // Вызываем хук для валидации формы÷
-  await validateForm(dto, PasswordScheme, async () => {
-    // Обновляем пароль
-    await Api().account.password(dto);
+
+  // Вызываем хук для валидации форм
+  const isValid = await validateForm(dto, PasswordScheme);
+  if (!isValid) return false;
+
+  // Обновляем пароль пользователя
+  const { data } = await useCustomFetch(url, {
+    body: dto,
+    method: 'POST',
+  });
+
+  if (data) {
     // Отображаем сообщение об успешном изменении
-    emits('showWarningMessages', 'Пароль успешно изменен');
+    profileController.setMessage('Пароль успешно изменен');
     // Перемещаем пользователя на вверх
     const block = document.getElementById('scroll');
-    if (block && typeof block.scrollTo === 'function') {
-      block.scrollTo({ top: 0, behavior: 'smooth' });
-    }
-  });
-  // Если, есть ошибки при отправке формы, то перемещаем пользователя на вверх
-  if (errors.value.length) {
+    block && block.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  // Если, есть ошибки, то перемещаем пользователя на вверх
+  if (profileController.errors.length) {
     const block = document.getElementById('scroll');
-    if (block && typeof block.scrollTo === 'function') {
-      block.scrollTo({ top: 0, behavior: 'smooth' });
-    }
+    block && block.scrollTo({ top: 0, behavior: 'smooth' });
   }
 };
 </script>

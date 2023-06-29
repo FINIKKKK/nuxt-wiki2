@@ -17,18 +17,18 @@ export const useTeamStore = defineStore('teamController', () => {
    * Методы ----------------
    */
   // Установить активную команду
-  const setActiveTeam = (obj: TActiveTeam | null) => {
-    activeTeam.value = obj;
+  const setActiveTeam = (value: TActiveTeam | null) => {
+    activeTeam.value = value;
   };
   // Сохранить  команды
-  const setTeams = (obj: TTeam[]) => {
-    teams.value = obj;
+  const setTeams = (value: TTeam[]) => {
+    teams.value = value;
   };
   // Изменить данные команды
-  const editActiveTeam = (obj: TeamEditDto) => {
+  const editActiveTeam = (value: TeamEditDto) => {
     if (activeTeam.value) {
-      activeTeam.value.team.name = obj.name;
-      activeTeam.value.team.code = obj.code;
+      activeTeam.value.team.name = value.name;
+      activeTeam.value.team.code = value.code;
     }
   };
 

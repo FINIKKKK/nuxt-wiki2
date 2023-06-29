@@ -1,5 +1,8 @@
-import { Api } from '~/api';
 import { useUserStore } from '~/stores/UserController';
+import { useTeamStore } from '~/stores/TeamContoller';
+import { useCustomFetch } from '~/hooks/useCustomFetch';
+import { TestI, TUserData } from '~/utils/types/account';
+import { Ref } from 'vue';
 
 /**
  * ------------------------------------------------------------
@@ -10,7 +13,8 @@ export default defineNuxtRouteMiddleware(async (to, from) => {
   /**
    * Переменные ----------------
    */
-  const userStore = useUserStore(); // Хранилище пользователя
+  const userController = useUserStore(); // Хранилище данных пользователя
+  const teamController = useTeamStore(); // Хранилище команд
   const excludedRoutes = ['/register', '/login']; // Исключенные маршруты
   const token = useCookie('token'); // Токен
 
@@ -25,14 +29,17 @@ export default defineNuxtRouteMiddleware(async (to, from) => {
   // Если есть токен
   else if (token.value) {
     // Если в хранилище нету данных пользователя
-    if (!userStore.user) {
+    if (!userController.user) {
       try {
         // Получаем данные пользователя
-        const { data } = await Api().account.me();
-        // Сохраняем в хранилище данные пользователя
-        userStore.setUser(data.user);
-        // Сохраняем в хранилище команды пользователя
-        userStore.setTeams(data.teams);
+        const { data } = await useCustomFetch<TUserData>(`/account`);
+
+        if (data.value) {
+          // Сохраняем в хранилище данные пользователя
+          userController.setUser(data.value.user);
+          // Сохраняем в хранилище команды пользователя
+          teamController.setTeams(data.value.teams);
+        }
       } catch (err) {
         // Если токен не валидный
         // Обнуляем токен

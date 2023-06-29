@@ -1,5 +1,6 @@
 import { Api } from '~/api';
 import { useTeamStore } from '~/stores/TeamContoller';
+import { useCustomFetch } from '~/hooks/useCustomFetch';
 
 /**
  * ------------------------------------------------------------
@@ -10,7 +11,7 @@ export default defineNuxtRouteMiddleware(async (to, from) => {
   /**
    * Переменные ----------------
    */
-  const teamStore = useTeamStore(); // Хранилище активной команды
+  const teamController = useTeamStore(); // Хранилище команд
 
   /**
    * Проверка команды ----------------
@@ -18,20 +19,25 @@ export default defineNuxtRouteMiddleware(async (to, from) => {
   // Если пользователь находиться на страницах команды
   if (to.fullPath.includes('/companies/')) {
     // Если нет активной команды
-    if (!teamStore.activeTeam) {
+    if (!teamController.activeTeam) {
       const id = to.fullPath.split('/')[2];
       // Получаем данные текущей команды
-      const { data } = await Api().team.getOne(id);
-      // Сохраняем в хранилище данные команды
-      teamStore.setActiveTeam(data);
+      const { data } = await useCustomFetch<any>(`/team`, {
+        query: { team_id: id },
+      });
+
+      if (data.value) {
+        // Сохраняем в хранилище данные команды
+        teamController.setActiveTeam(data.value);
+      }
     }
   }
   // Если пользователь не находиться на страницах команды
   else {
     // Если установлена активная команда
-    if (teamStore.activeTeam) {
+    if (teamController.activeTeam) {
       // Тогда ее обнуляем
-      teamStore.setActiveTeam(null);
+      teamController.setActiveTeam(null);
     }
   }
 });

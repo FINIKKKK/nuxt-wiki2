@@ -17,21 +17,21 @@ export const useUserStore = defineStore('userController', () => {
    * Методы ----------------
    */
   // Сохранить пользователя
-  const setUser = (obj: TUser | null) => {
-    user.value = obj;
+  const setUser = (value: TUser | null) => {
+    user.value = value;
   };
   // Обновить данные
-  const updateUserData = (obj: UserDataDto) => {
+  const updateUserData = (value: UserDataDto) => {
     if (user.value) {
-      user.value.first_name = obj.first_name;
-      user.value.last_name = obj.last_name;
-      user.value.email = obj.email;
+      user.value.first_name = value.first_name;
+      user.value.last_name = value.last_name;
+      user.value.email = value.email;
     }
   };
   // Обновить аватарку
-  const updateUserAvatar = (obj: string) => {
+  const updateUserAvatar = (value: string) => {
     if (user.value) {
-      user.value.picture = obj;
+      user.value.picture = value;
     }
   };
 

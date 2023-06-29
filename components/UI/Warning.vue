@@ -1,13 +1,13 @@
 <template>
-  <div class="errors" :class="{ success: props.messages }">
+  <div class="errors" :class="{ success: props.message }">
     <svg-icon name="warning" />
     <div class="items">
       <!-- Либо отображать ошибки -->
-      <span v-if="!props.messages" v-for="error in props.errors">{{
+      <span v-if="!props.message" v-for="error in props.errors">{{
         error
       }}</span>
       <!-- Либо отображать сообщение об успешном действии -->
-      <span v-else>{{ props.messages }}</span>
+      <span v-else>{{ props.message }}</span>
     </div>
   </div>
 </template>
@@ -21,7 +21,7 @@
  */
 const props = defineProps<{
   errors?: string[];
-  messages?: string;
+  message?: string;
 }>();
 </script>
 

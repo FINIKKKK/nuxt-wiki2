@@ -3,9 +3,12 @@
     <!-- Аватарка -->
     <div class="img">
       <!-- Если, есть аватарка -->
-      <img :src="userStore.user?.picture" alt="avatar" />
+      <img :src="userController.user?.picture" alt="avatar" />
     </div>
-    <div class="btn-inline" :class="{ disabled: isLoading }">
+    <div
+      class="btn-inline"
+      :class="{ disabled: requestController.loading[url] }"
+    >
       <span>Загрузить фото</span>
       <input type="file" v-on:change="onChangeAvatar" />
     </div>
@@ -21,50 +24,52 @@
 
 <script lang="ts" setup>
 import { useUserStore } from '~/stores/UserController';
-import { useFormValidation } from '~/hooks/useFormValidation';
-import { Api } from '~/api';
-
-/**
- * События ----------------
- */
-const emits = defineEmits(['showWarningErrors', 'showWarningMessages']);
+import { useRequestStore } from '~/stores/RequestController';
+import { useCustomFetch } from '~/hooks/useCustomFetch';
+import { useProfileStore } from '~/stores/ProfileController';
 
 /**
  * Системные переменные ----------------
  */
-const userStore = useUserStore(); // Хранилище пользователя
+const userController = useUserStore(); // Хранилище пользователя
+const requestController = useRequestStore(); // Хранилище запроса
+const profileController = useProfileStore(); // Хранилище профиля
 
 /**
- * Хуки ----------------
+ * Полльзовательские переменные ----------------
  */
-// Для обработки ошибок
-const { errors, isLoading, validateForm } = useFormValidation();
+const url = '/account/picture/change'; // URL запроса
 
 /**
  * Отслеживание переменных ----------------
  */
-// Следить за errors
-watch(errors, () => {
-  // Показать warning c ошибками
-  emits('showWarningErrors', errors.value);
+// Показать warning c ошибками
+watch(profileController.errors, () => {
+  profileController.setErrors(profileController.errors);
 });
 
 // Метод изменения аватарки пользователя
 const onChangeAvatar = async (e: any) => {
-  if (e.target.files[0]) {
-    // Убираем warning
-    emits('showWarningErrors', []);
-    emits('showWarningMessages', '');
-    // Вызываем хук для обработки валидации
-    await validateForm(undefined, undefined, async () => {
-      // Обновляем аватарку
-      const { data } = await Api().account.avatar(e.target.files[0]);
-      console.log(data.url);
-      // Обновляем аватарку в хранилище
-      userStore.updateUserAvatar(data.url);
-    });
+  // Убираем warning
+  profileController.setErrors([]);
+  profileController.setMessage('');
+
+  // Объект с данными
+  const dto = {
+    image: e.target.files[0],
+  };
+
+  // Обновляем аватарку
+  const { data } = await useCustomFetch<string>(url, {
+    body: dto,
+    method: 'POST',
+  });
+
+  if (data.value) {
+    // Обновляем аватарку в хранилище
+    userController.updateUserAvatar(data.value.url);
     // Отображаем сообщение об успешном изменении
-    emits('showWarningMessages', 'Аватарка успешно изменена');
+    profileController.setMessage('Аватарка успешно изменена');
   }
 };
 </script>

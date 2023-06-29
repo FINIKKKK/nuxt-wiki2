@@ -1,32 +1,23 @@
 <template>
   <NuxtLayout name="main">
     <!-- Отображение ошибок -->
-    <Warning
-      v-if="errors.length || messages.length"
-      :errors="errors"
-      :messages="messages"
+    <UIWarning
+      v-if="profileController.errors.length || profileController.message"
+      :errors="profileController.errors"
+      :message="profileController.message"
     />
 
     <!-- Формы -->
     <div class="flex">
       <div class="left">
         <!-- Форма для изменения данных пользователя -->
-        <FormUserData
-          @showWarningErrors="setWarningErrors"
-          @showWarningMessages="setWarningMessages"
-        />
+        <ProfileUserData />
         <!-- Форма для изменения пароля пользователя -->
-        <FormUserPassword
-          @showWarningErrors="setWarningErrors"
-          @showWarningMessages="setWarningMessages"
-        />
+        <ProfilePassword />
       </div>
 
       <!-- Изменяем аватарки пользователя -->
-      <UserAvatar
-        @showWarningErrors="setWarningErrors"
-        @showWarningMessages="setWarningMessages"
-      />
+      <ProfileAvatar />
     </div>
   </NuxtLayout>
 </template>
@@ -35,28 +26,12 @@
 <!-- ----------------------------------------------------- -->
 
 <script lang="ts" setup>
-import FormUserData from '~/components/ProfileForms/FormUserData.vue';
-import FormUserPassword from '~/components/ProfileForms/FormUserPassword.vue';
-import Warning from '~/components/UI/Warning.vue';
-import UserAvatar from '~/components/ProfileForms/UserAvatar.vue';
+import { useProfileStore } from '~/stores/ProfileController';
 
 /**
- * Пользовательские переменные ----------------
+ * Системные переменные ----------------
  */
-const errors = ref([]); // Ошибки
-const messages = ref(''); // Сообщения
-
-/**
- * Методы ----------------
- */
-// Установление ошибок (событие)
-const setWarningErrors = (value: string[]) => {
-  errors.value = value;
-};
-// Установление сообщений (событие)
-const setWarningMessages = (value: string) => {
-  messages.value = value;
-};
+const profileController = useProfileStore(); // Хранилище профиля
 </script>
 
 <!-- ----------------------------------------------------- -->
