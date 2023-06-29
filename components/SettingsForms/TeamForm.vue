@@ -32,7 +32,7 @@
 import Input from '~/components/UI/Input.vue';
 import { useFormValidation } from '~/hooks/useFormValidation';
 import { Api } from '~/api';
-import { useTeamStore } from '~/stores/TeamStore';
+import { useTeamStore } from '~/stores/TeamContoller';
 import { TeamScheme } from '~/utils/validation';
 
 /**

@@ -1,18 +1,25 @@
 <template>
   <NuxtLayout name="main" title="">
+    <!-- Отображение ошибок -->
+    <UIWarning
+      v-if="requestController.loading[url]?.length"
+      :errors="requestController.loading[url]"
+    />
+
+    <!-- Форма -->
     <form class="form" @submit.prevent="onAddTeam">
       <h2 class="title">Создать компанию</h2>
 
       <div class="content">
-        <Input
+        <UIInput
           label="Название вашей компании"
           v-model="nameValue"
-          :errors="errorsValidate['name'] || []"
+          :errors="errorsValidate['name']"
         />
-        <Input
+        <UIInput
           label="Адресс вашей компании"
           v-model="addressValue"
-          :errors="errorsValidate['address'] || []"
+          :errors="errorsValidate['address']"
           type="address"
         />
         <p>
@@ -22,7 +29,7 @@
         </p>
       </div>
 
-      <button class="btn" :class="{ disabled: isLoading }">
+      <button class="btn" :class="{ disabled: requestController.loading[url] }">
         Создать компанию
       </button>
     </form>
@@ -33,28 +40,30 @@
 <!-- ----------------------------------------------------- -->
 
 <script lang="ts" setup>
-import Input from '~/components/UI/Input.vue';
-import { Api } from '~/api';
 import { useFormValidation } from '~/hooks/useFormValidation';
-import { useUserStore } from '~/stores/UserStore';
+import { useUserStore } from '~/stores/UserController';
 import { TeamScheme } from '~/utils/validation';
+import { useRequestStore } from '~/stores/RequestController';
+import { useCustomFetch } from '~/hooks/useCustomFetch';
 
 /**
  * Системные переменные ----------------
  */
 const userStore = useUserStore(); // Хранилище данных пользователя
 const router = useRouter(); // Роутер
+const requestController = useRequestStore(); // Хранилище запроса
 
 /**
  * Пользовательские переменные ----------------
  */
+const url = 'team/add'; // URL запроса
 const nameValue = ref(''); // Значение названия
 const addressValue = ref(''); // Значение адресса
 
 /**
  * Хуки ----------------
  */
-const { errorsValidate, errors, isLoading, validateForm } = useFormValidation(); // Для обработки формы
+const { errorsValidate, validateForm } = useFormValidation(); // Для обработки формы
 
 /**
  * Методы ----------------
@@ -68,12 +77,19 @@ const onAddTeam = async () => {
   };
 
   // Вызываем хук для валидации форм
-  await validateForm(dto, TeamScheme, async () => {
-    // Создаем команду
-    const { data } = await Api().team.add(dto);
+  const isValid = await validateForm(dto, TeamScheme);
+  if (!isValid) return false;
+
+  // Создание команды
+  const { data } = await useCustomFetch<number>(url, {
+    body: dto,
+    method: 'POST',
+  });
+
+  if (data.value) {
     // Перенаправляем пользователя на главную
     await router.push('/add_users');
-  });
+  }
 };
 </script>
 

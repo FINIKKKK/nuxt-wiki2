@@ -7,34 +7,42 @@
         <NuxtLink href="/login">Войдите в систему</NuxtLink>
       </p>
 
-      <Input
+      <div class="errors">
+        <span
+          v-for="(error, index) in requestController.errors[url]"
+          :key="index"
+          >{{ error }}</span
+        >
+      </div>
+
+      <UIInput
         label="Имя"
         v-model="firstNameValue"
-        :errors="errorsValidate['first_name'] || []"
+        :errors="errorsValidate['first_name']"
       />
-      <Input
+      <UIInput
         label="Фамилия"
         v-model="lastNameValue"
-        :errors="errorsValidate['last_name'] || []"
+        :errors="errorsValidate['last_name']"
       />
-      <Input
+      <UIInput
         label="Электронная почта"
         v-model="emailValue"
-        :errors="errorsValidate['email'] || []"
+        :errors="errorsValidate['email']"
       />
-      <Input
+      <UIInput
         label="Номер мобильного телефона"
         v-model="phoneValue"
-        :errors="errorsValidate['phone'] || []"
+        :errors="errorsValidate['phone']"
       />
-      <Input
+      <UIInput
         label="Пароль"
         type="password"
         v-model="passwordValue"
-        :errors="errorsValidate['password'] || []"
+        :errors="errorsValidate['password']"
       />
 
-      <button class="btn" :class="{ disabled: isLoading }">
+      <button class="btn" :class="{ disabled: requestController.loading[url] }">
         Зарегистрироваться
       </button>
       <small
@@ -51,22 +59,25 @@
 <!-- ----------------------------------------------------- -->
 
 <script lang="ts" setup>
-import Input from '~/components/UI/Input.vue';
 import { useFormValidation } from '~/hooks/useFormValidation';
 import { RegisterScheme } from '~/utils/validation';
-import { Api } from '~/api';
-import { useUserStore } from '~/stores/UserStore';
+import { useUserStore } from '~/stores/UserController';
+import { useCustomFetch } from '~/hooks/useCustomFetch';
+import { useRequestStore } from '~/stores/RequestController';
+import { TAuthData } from '~/utils/types/account';
 
 /**
  * Системные переменные ----------------
  */
 const token = useCookie('token'); // Токен из куки
-const userStore = useUserStore(); // Хранилище данных пользователя
+const userController = useUserStore(); // Хранилище данных пользователя
+const requestController = useRequestStore(); // Хранилище запроса
 const router = useRouter(); // Роутер
 
 /**
  * Пользовательские переменные ----------------
  */
+const url = 'account/register/secure'; // URL запроса
 const firstNameValue = ref(''); // Значение имени
 const lastNameValue = ref(''); // Значение фамилии
 const emailValue = ref(''); // Значение email
@@ -76,7 +87,7 @@ const passwordValue = ref(''); // Значение пароля
 /**
  * Хуки ----------------
  */
-const { errorsValidate, errors, isLoading, validateForm } = useFormValidation(); // Для обработки формы
+const { errorsValidate, validateForm } = useFormValidation(); // Для валидации формы
 
 /**
  * Методы ----------------
@@ -93,16 +104,23 @@ const onRegister = async () => {
   };
 
   // Вызываем хук для валидации форм
-  await validateForm(dto, RegisterScheme, async () => {
-    // Регистрация пользователя
-    const { data } = await Api().account.register(dto);
+  const isValid = await validateForm(dto, RegisterScheme);
+  if (!isValid) return false;
+
+  // Регистрация пользователя
+  const { data } = await useCustomFetch<TAuthData>(url, {
+    body: dto,
+    method: 'POST',
+  });
+
+  if (data.value) {
     // Устанавливаем токен в куки
-    token.value = data.token;
+    token.value = data.value.token;
     // Устанавливаем данные пользователя в хранилище
-    userStore.setUser(data.user);
+    userController.setUser(data.value.user);
     // Перенаправляем пользователя на страницу создания компании
     await router.push('/create_company');
-  });
+  }
 };
 </script>
 

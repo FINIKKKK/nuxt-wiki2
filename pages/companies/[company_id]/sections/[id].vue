@@ -64,11 +64,11 @@
 
 <script lang="ts" setup>
 import { Api } from '~/api';
-import { useUserStore } from '~/stores/UserStore';
+import { useUserStore } from '~/stores/UserController';
 import { useHandleErrors } from '~/hooks/useHandleErrors';
-import { useTeamStore } from '~/stores/TeamStore';
+import { useTeamStore } from '~/stores/TeamContoller';
 import { useFormatDate } from '~/hooks/useFormatData';
-import { useSectionsStore } from '~/stores/SectionStore';
+import { useSectionsStore } from '~/stores/SectionContoller';
 import { useDateString } from '../../../../hooks/useDateString';
 import {useSidebarStore} from "~/stores/SidebarController";
 

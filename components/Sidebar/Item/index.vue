@@ -9,7 +9,7 @@
 <!-- ----------------------------------------------------- -->
 
 <script lang="ts" setup>
-import { useTeamStore } from '~/stores/TeamStore';
+import { useTeamStore } from '~/stores/TeamContoller';
 import { TItem } from '~/utils/types/sidebar';
 
 /**

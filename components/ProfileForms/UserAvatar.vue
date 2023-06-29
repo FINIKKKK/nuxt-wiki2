@@ -20,7 +20,7 @@
 <!-- ----------------------------------------------------- -->
 
 <script lang="ts" setup>
-import { useUserStore } from '~/stores/UserStore';
+import { useUserStore } from '~/stores/UserController';
 import { useFormValidation } from '~/hooks/useFormValidation';
 import { Api } from '~/api';
 

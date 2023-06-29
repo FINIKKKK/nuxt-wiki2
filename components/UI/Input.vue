@@ -4,7 +4,7 @@
     :class="{
       password: props.type === 'password',
       focus: isFocus || model,
-      error: props.errors.length,
+      error: props.errors?.length,
       address: props.type === 'address',
     }"
   >
@@ -76,10 +76,6 @@ const model = computed({
     emits('update:modelValue', val);
   },
 });
-
-/**
- * Методы ----------------
- */
 </script>
 
 <!-- ----------------------------------------------------- -->

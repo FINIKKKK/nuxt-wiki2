@@ -19,10 +19,10 @@
 
 <script lang="ts" setup>
 import { useSidebarStore } from '~/stores/SidebarController';
-import { useTeamStore } from '~/stores/TeamStore';
+import { useTeamStore } from '~/stores/TeamContoller';
 import { useHandleErrors } from '~/hooks/useHandleErrors';
 import { Api } from '~/api';
-import { useUserStore } from '~/stores/UserStore';
+import { useUserStore } from '~/stores/UserController';
 
 /**
  * Системные переменные ----------------

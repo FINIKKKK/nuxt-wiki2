@@ -7,7 +7,7 @@ import { boolean } from 'yup';
  * Хранилище элементов в сайдбаре
  * --------------------------------
  */
-export const useSectionsStore = defineStore('sectionsStore', () => {
+export const useSectionsStore = defineStore('sectionsController', () => {
   /**
    * Свойства ----------------
    */

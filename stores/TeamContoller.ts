@@ -3,14 +3,15 @@ import { defineStore } from 'pinia';
 
 /**
  * --------------------------------
- * Хранилище
+ * Хранилище команд
  * --------------------------------
  */
-export const useTeamStore = defineStore('teamStore', () => {
+export const useTeamStore = defineStore('teamController', () => {
   /**
    * Свойства ----------------
    */
-  const activeTeam: Ref<TActiveTeam | null> = ref(null); //
+  const teams: Ref<TTeam[]> = ref([]); // Команды
+  const activeTeam: Ref<TActiveTeam | null> = ref(null); // Активная команда
 
   /**
    * Методы ----------------
@@ -18,6 +19,10 @@ export const useTeamStore = defineStore('teamStore', () => {
   // Установить активную команду
   const setActiveTeam = (obj: TActiveTeam | null) => {
     activeTeam.value = obj;
+  };
+  // Сохранить  команды
+  const setTeams = (obj: TTeam[]) => {
+    teams.value = obj;
   };
   // Изменить данные команды
   const editActiveTeam = (obj: TeamEditDto) => {
@@ -38,8 +43,10 @@ export const useTeamStore = defineStore('teamStore', () => {
   // Возращаем данные
   return {
     activeTeam,
+    teams,
     activeTeamId,
     setActiveTeam,
+    setTeams,
     editActiveTeam,
   };
 });

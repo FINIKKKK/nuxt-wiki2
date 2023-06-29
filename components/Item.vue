@@ -21,8 +21,8 @@
 
 <script lang="ts" setup>
 import { useHandleErrors } from '~/hooks/useHandleErrors';
-import { useUserStore } from '~/stores/UserStore';
-import { useTeamStore } from '~/stores/TeamStore';
+import { useUserStore } from '~/stores/UserController';
+import { useTeamStore } from '~/stores/TeamContoller';
 import { TSection } from '~/api/models/section';
 import { useDateString } from '~/hooks/useDateString';
 

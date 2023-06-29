@@ -37,7 +37,7 @@
 <!-- ----------------------------------------------------- -->
 
 <script lang="ts" setup>
-import { useTeamStore } from '~/stores/TeamStore';
+import { useTeamStore } from '~/stores/TeamContoller';
 import { useSidebarStore } from '~/stores/SidebarController';
 
 /**

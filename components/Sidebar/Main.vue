@@ -53,8 +53,8 @@
 <!-- ----------------------------------------------------- -->
 
 <script lang="ts" setup>
-import { useTeamStore } from '~/stores/TeamStore';
-import { useUserStore } from '~/stores/UserStore';
+import { useTeamStore } from '~/stores/TeamContoller';
+import { useUserStore } from '~/stores/UserController';
 import { useSidebarStore } from '~/stores/SidebarController';
 import { ConcreteComponent } from '@vue/runtime-core';
 import { useFoo } from '~/composables/useFoo';

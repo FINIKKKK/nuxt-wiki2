@@ -94,8 +94,8 @@
 <script lang="ts" setup>
 import { Api } from '~/api';
 import { ArticleScheme, SectionScheme } from '~/utils/validation';
-import { useUserStore } from '~/stores/UserStore';
-import { useTeamStore } from '~/stores/TeamStore';
+import { useUserStore } from '~/stores/UserController';
+import { useTeamStore } from '~/stores/TeamContoller';
 import Select from '~/components/UI/Select.vue';
 import Warning from '~/components/UI/Warning.vue';
 import { useFormValidation } from '~/hooks/useFormValidation';

@@ -1,5 +1,5 @@
 import { Api } from '~/api';
-import { useTeamStore } from '~/stores/TeamStore';
+import { useTeamStore } from '~/stores/TeamContoller';
 
 /**
  * ------------------------------------------------------------

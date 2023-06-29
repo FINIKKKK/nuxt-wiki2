@@ -1,5 +1,5 @@
 <template>
-  <NuxtLayout name="main" title="Ваши wiki" v-if="teams">
+  <NuxtLayout name="main" title="Ваши wiki">
     <ul class="teams">
       <!-- Создать команду -->
       <li class="team index">
@@ -11,21 +11,9 @@
       </li>
 
       <!-- Команды -->
-      <li class="team" v-for="team in teams" :key="team.id">
-        <NuxtLink :to="`/companies/${team.id}`" class="title">{{ team.name }}</NuxtLink>
-        <ul class="info">
-          <li class="info__item"><span>План:</span> {{ team.plan.name }}</li>
-          <li class="info__item">
-            <span>Пользователи:</span> {{ team.employees_count }}
-          </li>
-          <li class="info__item">
-            <span>Адресс:</span> {{ team.code }}.wiki.itl.systems
-          </li>
-        </ul>
-        <span class="notices" v-if="team.unread_notification">{{
-            team.unread_notification
-          }}</span>
-      </li>
+      <template v-for="team in data.teams" :key="team.id">
+        <Team :data="team" />
+      </template>
     </ul>
   </NuxtLayout>
 </template>
@@ -34,29 +22,28 @@
 <!-- ----------------------------------------------------- -->
 
 <script lang="ts" setup>
-import {useUserStore} from '~/stores/UserStore';
-import {Api} from '~/api';
+import { useCustomFetch } from '~/hooks/useCustomFetch';
+import { TUserData } from '~/utils/types/account';
+import { useTeamStore } from '~/stores/TeamContoller';
 
 /**
  * Системные переменные ----------------
  */
-const userStore = useUserStore(); // Хранилище данных пользователя
+const teamController = useTeamStore(); // Хранилище команд
 
 /**
  * Получение данных ----------------
  */
 // Команды пользователя
-const {data: teams} = await useAsyncData(async () => {
-  const {data} = await Api().account.me();
-  userStore.setTeams(data.teams);
-  return data.teams;
-});
+const { data } = await useCustomFetch<TUserData>(`/account`);
+// Сохраняем в хранилище
+teamController.setTeams(data.value.teams);
 </script>
 
 <!-- ----------------------------------------------------- -->
 <!-- ----------------------------------------------------- -->
 
-<style lang="scss" scoped>
+<style lang="scss">
 .teams {
   display: flex;
   flex-wrap: wrap;

@@ -43,7 +43,7 @@
 
 <script lang="ts" setup>
 import { useSidebarStore } from '~/stores/SidebarController';
-import { useTeamStore } from '~/stores/TeamStore';
+import { useTeamStore } from '~/stores/TeamContoller';
 import { useGetData } from '~/hooks/useGetData';
 
 /**

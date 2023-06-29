@@ -30,7 +30,7 @@ import Input from '~/components/UI/Input.vue';
 import { useFormValidation } from '~/hooks/useFormValidation';
 import { UserDataScheme } from '~/utils/validation';
 import { Api } from '~/api';
-import { useUserStore } from '~/stores/UserStore';
+import { useUserStore } from '~/stores/UserController';
 
 /**
  * События ----------------

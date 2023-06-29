@@ -9,7 +9,7 @@
 
       <div class="errors">
         <span
-          v-for="(error, index) in requestController.errors['account/auth']"
+          v-for="(error, index) in requestController.errors[url]"
           :key="index"
           >{{ error }}</span
         >
@@ -18,22 +18,19 @@
       <UIInput
         label="Электронная почта"
         v-model="emailValue"
-        :errors="errorsValidate['email'] || []"
+        :errors="errorsValidate['email']"
       />
       <UIInput
         label="Пароль"
         v-model="passwordValue"
         type="password"
-        :errors="errorsValidate['password'] || []"
+        :errors="errorsValidate['password']"
       />
 
       <p>
         <NuxtLink href="/reset_password">Забыли пароль?</NuxtLink>
       </p>
-      <button
-        class="btn"
-        :class="{ disabled: requestController.loading['account/auth'] }"
-      >
+      <button class="btn" :class="{ disabled: requestController.loading[url] }">
         Войти
       </button>
     </form>
@@ -44,30 +41,32 @@
 <!-- ----------------------------------------------------- -->
 
 <script lang="ts" setup>
-import { useUserStore } from '~/stores/UserStore';
+import { useUserStore } from '~/stores/UserController';
 import { useFormValidation } from '~/hooks/useFormValidation';
 import { LoginScheme } from '~/utils/validation';
 import { useCustomFetch } from '~/hooks/useCustomFetch';
 import { useRequestStore } from '~/stores/RequestController';
+import { TAuthData } from '~/utils/types/account';
 
 /**
  * Системные переменные ----------------
  */
 const token = useCookie('token'); // Токен из куки
-const userStore = useUserStore(); // Хранилище данных пользователя
+const userController = useUserStore(); // Хранилище данных пользователя
 const router = useRouter(); // Роутер
 const requestController = useRequestStore(); // Хранилище запроса
 
 /**
  * Пользовательские переменные ----------------
  */
+const url = 'account/auth'; // URL запроса
 const emailValue = ref(''); // Значение email
 const passwordValue = ref(''); // Значение пароля
 
 /**
  * Хуки ----------------
  */
-const { errorsValidate, validateForm } = useFormValidation(); // Для обработки формы
+const { errorsValidate, validateForm } = useFormValidation(); // Для валидации формы
 
 /**
  * Методы ----------------
@@ -84,18 +83,20 @@ const onLogin = async () => {
   const isValid = await validateForm(dto, LoginScheme);
   if (!isValid) return false;
 
-  // Регистрация пользователя
-  const { data } = await useCustomFetch(`account/auth`, {
+  // Авторизация пользователя
+  const { data } = await useCustomFetch<TAuthData>(url, {
     body: dto,
     method: 'POST',
   });
 
-  // Устанавливаем токен в куки
-  token.value = data.value.token;
-  // Устанавливаем данные пользователя в хранилище
-  userStore.setUser(data.value.user);
-  // Перенаправляем пользователя на главную
-  await router.push('/');
+  if (data.value) {
+    // Устанавливаем токен в куки
+    token.value = data.value?.token;
+    // Устанавливаем данные пользователя в хранилище
+    userController.setUser(data.value?.user);
+    // Перенаправляем пользователя на главную
+    await router.push('/');
+  }
 };
 </script>
 
