@@ -11,7 +11,7 @@
         <p>Доступ</p>
       </li>
       <!-- Тэги -->
-      <li class="extra__item" @click="isShowTags = !isShowTags">
+      <li class="extra__item" :ref="tagsBtnRef" @click="isShowTags = !isShowTags">
         <svg-icon name="tag" />
         <p>Тэги</p>
       </li>
@@ -86,20 +86,7 @@
       </template>
     </div>
 
-    <div class="tags" :class="{ active: isShowTags }">
-      <h2>Метки</h2>
-      <p>
-        itl.wiki создана для совместной работы, делитесь контентом, который вы
-        создаете, с вашей командой.
-      </p>
-      <UIInput
-        label="Введиде название метки"
-        v-model="tagsValue"
-        :errors="[]"
-        @keydown.enter="addTag"
-        @input="searchTag"
-      />
-    </div>
+    <Tags :active="isShowTags" @closeTagsPopup="closeTagsPopup"  />
   </div>
 </template>
 
@@ -118,6 +105,7 @@ import Editor from '~/components/Editor/index.vue';
 import { TSection } from '~/api/models/section';
 import Input from '~/components/UI/Input.vue';
 import { useCustomFetch } from '~/hooks/useCustomFetch';
+import { useOutsideClick } from '~/hooks/useOutsideClick';
 
 /**
  * Пропсы ----------------
@@ -163,9 +151,9 @@ const selectValue = ref<TSection | null>(null); // Селект элемента
 const activeTab = ref(0); //
 const tabNameValue = ref(''); //
 const tabs = ref([]);
-const tagsValue = ref(''); //
 const isShowTags = ref(true); //
-const tags = ref([]); //
+const tagsBtnRef = ref(null); //
+const tagsRef = ref(null); // Ref-ссылка на элемент
 
 /**
  * Вычисляемые значения ----------------
@@ -178,6 +166,8 @@ const labelBtn = computed(() => {
     return 'Опубликовать';
   }
 });
+
+// useOutsideClick(tagsRef, isShowTags, () => {});
 
 /**
  * Хуки ----------------
@@ -200,25 +190,8 @@ onBeforeRouteLeave((to, from, next) => {
 /**
  * Методы ----------------
  */
-const searchTag = async () => {
-  const dto = {
-    team_id: teamStore.activeTeam.team.id,
-    query: tagsValue.value,
-  };
-  const { data } = await useCustomFetch('team/settings/tags/find', { body: dto, method: 'POST' });
-  console.log(data);
-};
-const addTag = async () => {
-  const dto = {
-    team_id: teamStore.activeTeam.team.id,
-    name: tagsValue.value,
-  };
-  const { data } = await useCustomFetch('team/settings/tags/add', {
-    body: dto,
-    method: 'POST',
-  });
-  tagsValue.value = '';
-  tags.value.push(data);
+const closeTagsPopup = () => {
+  isShowTags.value = false;
 };
 const addTab = () => {
   if (tabNameValue.value) {
@@ -297,6 +270,7 @@ const onSubmit = async () => {
 }
 
 .extra {
+  user-select: none;
   display: flex;
   align-items: center;
   &__item {
@@ -312,7 +286,7 @@ const onSubmit = async () => {
       margin-right: 14px;
     }
     &:hover {
-      color: $blue2;
+      color: $blue;
     }
   }
 }
@@ -394,31 +368,6 @@ const onSubmit = async () => {
     width: 15px;
     height: 15px;
     cursor: pointer;
-  }
-}
-
-.tags {
-  position: fixed;
-  right: 0;
-  top: 0;
-  background-color: $white;
-  padding: 50px 35px;
-  min-height: 100vh;
-  overflow: auto;
-  width: 400px;
-  z-index: 100;
-  box-shadow: 0 0 10px rgba($blue, 0.3);
-  transform: translateX(100%);
-  transition: 0.3s;
-  &.active {
-    transform: translateX(0);
-  }
-  h2 {
-    font-size: 24px;
-    margin-bottom: 25px;
-  }
-  p {
-    margin-bottom: 25px;
   }
 }
 </style>

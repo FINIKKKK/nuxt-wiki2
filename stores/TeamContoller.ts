@@ -37,6 +37,10 @@ export const useTeamStore = defineStore('teamController', () => {
    */
   // Id активной команды
   const activeTeamId = computed(() => {
+    return activeTeam.value?.team.id;
+  });
+  // Slug активной команды
+  const activeTeamSlug = computed(() => {
     return `/companies/${activeTeam.value?.team.id}`;
   });
 
@@ -45,6 +49,7 @@ export const useTeamStore = defineStore('teamController', () => {
     activeTeam,
     teams,
     activeTeamId,
+    activeTeamSlug,
     setActiveTeam,
     setTeams,
     editActiveTeam,

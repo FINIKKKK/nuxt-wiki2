@@ -56,13 +56,17 @@ const props = defineProps<{
 /**
  * События ----------------
  */
-const emits = defineEmits(['update:modelValue']);
+const emits = defineEmits(['update:modelValue', 'isFocus']);
 
 /**
  * Системные переменные ----------------
  */
 const isShowPassword = ref(false); // Показывать пароль?
 const isFocus = ref(false); // В фокусе input?
+
+watch(isFocus, () => {
+  emits('isFocus', isFocus.value)
+})
 
 /**
  * Вычисляемые значения ----------------

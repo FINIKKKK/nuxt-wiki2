@@ -55,36 +55,7 @@
       />
     </div>
 
-    <!-- Тело элемента -->
-    <div class="input">
-      <Editor @data-change="setBodyValue" :initialValue="bodyValue" />
-    </div>
-
-    <div class="access" :class="{ active: isShowAccess }">
-      <h2>Права доступа</h2>
-      <p>
-        itl.wiki создана для совместной работы, делитесь контентом, который вы
-        создаете, с вашей командой.
-      </p>
-      <!--      <UISelect v-model="employeeValue" :options="employees" />-->
-      <ul>
-        <li
-          class="employee"
-          v-for="employee in employees.employees"
-          @click="addEmployeesAccess(employee)"
-        >
-          {{ employee?.fullname }}
-        </li>
-      </ul>
-
-      <ul>
-        <li class="employee__item" v-for="ability in abilities">
-          {{ ability?.user.fullname }}
-          <UISelect :options="accessArr" v-model="ability.permission" />
-        </li>
-      </ul>
-      {{ abilities }}
-    </div>
+    <Access v-model="abilities" :active="isShowAccess"/>
   </div>
 </template>
 
@@ -142,15 +113,10 @@ const titleValue = ref(props.data?.name || ''); // Заголовок элеме
 const selectValue = ref<TSection | null>(props.data?.parent || null); // Селект элемента
 const bodyValue = ref<OutputBlockData[]>([]); // Тело элемента
 const isShowAccess = ref(true); //
-const employeesAccess = ref<TUser[]>([]); //
-const accessArr = [
-  { value: 1, label: 'Полный доступ' },
-  { value: 2, label: 'чтение и редактирование' },
-  { value: 3, label: 'только чтение' },
-  { value: 4, label: 'без доступа' },
-];
+
 // const accessUserValue = ref(accessArr[0]); //
 const abilities = ref<any>([]);
+
 
 // watch(accessUserValue, () => {
 // abilities.value.find(obj => obj.user_id ===)
@@ -184,15 +150,13 @@ onBeforeRouteLeave((to, from, next) => {
       next(false);
     }
   }
+
 });
 
 /**
  * Методы ----------------
  */
-const addEmployeesAccess = (value: TUser) => {
-  employeesAccess.value.push(value);
-  abilities.value.push({ permission: accessArr[0], user: value });
-};
+
 // Установление значения тела элемента (событие)
 const setBodyValue = (value: OutputBlockData[]) => {
   bodyValue.value = value;
@@ -310,37 +274,4 @@ const onSubmit = async () => {
   padding: 20px 100px;
 }
 
-.access {
-  position: fixed;
-  right: 0;
-  top: 0;
-  background-color: $white;
-  padding: 50px 35px;
-  min-height: 100vh;
-  overflow: auto;
-  width: 400px;
-  z-index: 100;
-  box-shadow: 0 0 10px rgba($blue, 0.3);
-  transform: translateX(100%);
-  transition: 0.3s;
-  &.active {
-    transform: translateX(0);
-  }
-  h2 {
-    font-size: 24px;
-    margin-bottom: 25px;
-  }
-  p {
-    margin-bottom: 25px;
-  }
-  .employee {
-    margin-bottom: 55px;
-    cursor: pointer;
-    &:hover {
-      background-color: $blue2;
-    }
-  }
-  .employee__item {
-  }
-}
 </style>

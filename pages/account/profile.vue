@@ -32,6 +32,16 @@ import { useProfileStore } from '~/stores/ProfileController';
  * Системные переменные ----------------
  */
 const profileController = useProfileStore(); // Хранилище профиля
+
+/**
+ * Хуки ----------------
+ */
+// Убираем warning при переходе на страницу
+onBeforeRouteLeave((to, from, next) => {
+  profileController.setErrors([]);
+  profileController.setMessage('');
+  next();
+});
 </script>
 
 <!-- ----------------------------------------------------- -->

@@ -33,3 +33,7 @@ export type TActiveTeam = {
 export type TeamEditDto = TeamDto & {
   team_id: string;
 };
+export type TEmployees = {
+  employees: TUser[];
+  invites: TUser[];
+};

@@ -5,19 +5,30 @@
     :class="{
       active: isOpen, // Если открыт
     }"
+    :data-layout="props.type"
   >
     <!-- Выбранный элемент -->
     <div class="selected" @click="toggleDropdown">
       <span class="placeholder" v-if="!model">Выберите раздел</span>
       <span v-else>{{ model.name || model.label }}</span>
-      <svg-icon class="close" name="close" v-if="model" @click="model = null" />
+      <svg-icon
+        class="close"
+        name="close"
+        v-if="!props.type && model"
+        @click="model = null"
+      />
+      <svg-icon
+        class="triangle"
+        name="triangle"
+        v-if="props.type === 'triangle'"
+      />
     </div>
     <!-- Список -->
     <ul v-if="isOpen" class="dropdown">
       <!-- Элемент списка -->
       <li
         v-for="option in options"
-        :key="option.id || option.value "
+        :key="option.id || option.value"
         @click="
           selectOption(option) // Выбирает элемент
         "
@@ -49,6 +60,7 @@ export type TSelect = {
 const props = defineProps<{
   options: TSelect[];
   modelValue: TSection | null;
+  type?: 'triangle';
 }>();
 
 /**
@@ -103,13 +115,23 @@ const selectOption = (option: any) => {
   position: relative;
   user-select: none;
   max-width: 300px;
+  &.active {
+    .triangle {
+      transform: rotate(180deg);
+    }
+  }
+}
+
+.select[data-layout='triangle'] {
+  .selected {
+    justify-content: flex-end;
+  }
 }
 
 .selected {
   cursor: pointer;
   display: flex;
   align-items: center;
-  margin-bottom: 20px;
   &:hover {
     .close {
       opacity: 1;
@@ -129,6 +151,10 @@ const selectOption = (option: any) => {
   svg {
     width: 13px;
     height: 13px;
+    flex: 0 0 auto;
+  }
+  .triangle {
+    margin-left: 10px;
   }
   .close {
     margin-left: 15px;
