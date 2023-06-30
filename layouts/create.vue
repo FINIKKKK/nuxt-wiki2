@@ -33,7 +33,7 @@
   <!--------------------------------------
     Ошибки
   ---------------------------------------->
-  <Warning
+  <UIWarning
     v-if="Object.values(errorsValidate).flat().length"
     :errors="Object.values(errorsValidate).flat() as string[]"
     class="warning"
@@ -44,7 +44,7 @@
   ---------------------------------------->
   <div class="form">
     <!-- Селект элемента -->
-    <Select :options="sections" v-model="selectValue" class="select" />
+    <UISelect :options="sections" v-model="selectValue" class="select" />
     <!-- Заголовок элемента -->
     <div class="input">
       <input
@@ -64,26 +64,14 @@
 <!-- ----------------------------------------------------- -->
 
 <script lang="ts" setup>
-import { Api } from '~/api';
 import { OutputBlockData } from '@editorjs/editorjs';
 import { SectionScheme } from '~/utils/validation';
 import { useUserStore } from '~/stores/UserController';
 import { useTeamStore } from '~/stores/TeamContoller';
-import Select from '~/components/UI/Select.vue';
-import Warning from '~/components/UI/Warning.vue';
 import { useFormValidation } from '~/hooks/useFormValidation';
 import { TSection } from '~/api/models/section';
 import { TAbility, TUser } from '~/utils/types/account';
 import { useCustomFetch } from '~/hooks/useCustomFetch';
-
-/**
- * Системные переменные ----------------
- */
-const router = useRouter(); // Роутер
-const route = useRoute(); // Роуте
-const userStore = useUserStore(); // Хранилище пользователя
-const teamStore = useTeamStore(); // Хранилище активной компании
-const id = Number(route.params.id); // Id для элемента
 
 /**
  * Пропсы ----------------
@@ -93,6 +81,17 @@ const props = defineProps<{
   isEdit?: boolean;
   data?: TSection;
 }>();
+
+/**
+ * Системные переменные ----------------
+ */
+const router = useRouter(); // Роутер
+const route = useRoute(); // Роут
+const userController = useUserStore(); // Хранилище пользователя
+const teamStore = useTeamStore(); // Хранилище активной компании
+const id = route.params.id; // Id для элемента
+
+
 
 /**
  * Получение данных ----------------
@@ -155,10 +154,6 @@ onBeforeRouteLeave((to, from, next) => {
  * Методы ----------------
  */
 
-// Установление значения тела элемента (событие)
-const setBodyValue = (value: OutputBlockData[]) => {
-  bodyValue.value = value;
-};
 // Метод создания или редактирования элемента
 const onSubmit = async () => {
   // Изменяем или создаем раздел
@@ -209,6 +204,9 @@ const onSubmit = async () => {
   width: 900px;
   margin: 0 auto;
   padding-top: 60px;
+  .select {
+    margin-bottom: 25px;
+  }
   .input {
     &:not(:last-child) {
       margin-bottom: 36px;

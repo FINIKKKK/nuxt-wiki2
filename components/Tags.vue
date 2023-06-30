@@ -1,7 +1,7 @@
 <template>
   <div class="tags aside-popup" ref="tagsRef" :class="{ active: props.active }">
-    <h2>Тэги</h2>
-    <p>
+    <h2 class="title">Тэги</h2>
+    <p class="text">
       itl.wiki создана для совместной работы, делитесь контентом, который вы
       создаете, с вашей командой.
     </p>

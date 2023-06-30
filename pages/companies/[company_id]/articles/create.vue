@@ -11,7 +11,11 @@
         <p>Доступ</p>
       </li>
       <!-- Тэги -->
-      <li class="extra__item" :ref="tagsBtnRef" @click="isShowTags = !isShowTags">
+      <li
+        class="extra__item"
+        :ref="tagsBtnRef"
+        @click="isShowTags = !isShowTags"
+      >
         <svg-icon name="tag" />
         <p>Тэги</p>
       </li>
@@ -45,6 +49,7 @@
   <div class="form">
     <!-- Селект элемента -->
     <Select :options="sections" v-model="selectValue" class="select" />
+
     <!-- Заголовок элемента -->
     <div class="input">
       <input
@@ -55,38 +60,11 @@
       />
     </div>
 
-    <!-- Тело элемента -->
-    <div class="tabs__flex">
-      <div class="field">
-        <input
-          v-model="tabNameValue"
-          type="text"
-          placeholder="Добавить вкладку"
-          @keydown.enter="addTab"
-          maxlength="100"
-        />
-      </div>
-      <ul class="tabs">
-        <li
-          v-for="(tab, index) in tabs"
-          :key="index"
-          :class="{ active: activeTab === index }"
-          @click="activeTab = index"
-        >
-          {{ tab.name }}
-        </li>
-      </ul>
-    </div>
+    <!-- Табы -->
+    <EditorTabs v-model="tabs" />
 
-    <div class="body">
-      <template v-for="(tab, index) in tabs">
-        <div class="input" v-if="activeTab === index">
-          <Editor class="editor" v-model="tab.content" />
-        </div>
-      </template>
-    </div>
-
-    <Tags :active="isShowTags" @closeTagsPopup="closeTagsPopup"  />
+    <!-- Тэги -->
+    <Tags :active="isShowTags" v-model="tags" />
   </div>
 </template>
 
@@ -106,6 +84,7 @@ import { TSection } from '~/api/models/section';
 import Input from '~/components/UI/Input.vue';
 import { useCustomFetch } from '~/hooks/useCustomFetch';
 import { useOutsideClick } from '~/hooks/useOutsideClick';
+import { TTab } from '~/utils/types/article';
 
 /**
  * Пропсы ----------------
@@ -125,6 +104,7 @@ const route = useRoute(); // Роуте
 const userStore = useUserStore(); // Хранилище пользователя
 const teamStore = useTeamStore(); // Хранилище активной компании
 const id = Number(route.params.id); // Id для элемента
+const tags = ref<number[]>([]); //
 
 /**
  * Получение данных ----------------
@@ -148,12 +128,9 @@ const { data: article } = useAsyncData(async () => {
  */
 const titleValue = ref(''); // Заголовок элемента
 const selectValue = ref<TSection | null>(null); // Селект элемента
-const activeTab = ref(0); //
-const tabNameValue = ref(''); //
-const tabs = ref([]);
-const isShowTags = ref(true); //
-const tagsBtnRef = ref(null); //
-const tagsRef = ref(null); // Ref-ссылка на элемент
+
+const tabs = ref<TTab[]>([]);
+const isShowTags = ref(false); //
 
 /**
  * Вычисляемые значения ----------------
@@ -190,15 +167,6 @@ onBeforeRouteLeave((to, from, next) => {
 /**
  * Методы ----------------
  */
-const closeTagsPopup = () => {
-  isShowTags.value = false;
-};
-const addTab = () => {
-  if (tabNameValue.value) {
-    tabs.value.push({ name: tabNameValue.value, content: '' });
-    tabNameValue.value = '';
-  }
-};
 // Метод создания или редактирования элемента
 const onSubmit = async () => {
   // Изменяем или создаем раздел
@@ -308,66 +276,5 @@ const onSubmit = async () => {
 
 .warning {
   padding: 20px 100px;
-}
-
-.tabs__flex {
-  margin-bottom: 40px;
-}
-
-.tabs {
-  width: 100%;
-  overflow: auto;
-  display: flex;
-  align-items: center;
-  margin-top: 25px;
-  &::-webkit-scrollbar {
-    height: 2px;
-  }
-  li {
-    border-bottom: 1px solid $gray;
-    text-transform: uppercase;
-    padding: 5px 15px;
-    border-radius: 5px 5px 0 0;
-    cursor: pointer;
-    font-size: 13px;
-    color: $gray;
-    &.active {
-      color: $blue;
-      position: relative;
-      &::after {
-        content: '';
-        position: absolute;
-        background-color: $blue;
-        width: 100%;
-        height: 2px;
-        bottom: 0;
-        left: 0;
-      }
-    }
-  }
-}
-
-.editor {
-  border-radius: 10px;
-}
-
-.field {
-  position: relative;
-  width: 280px;
-  margin-right: 50px;
-  input {
-    width: 100%;
-    &::placeholder {
-      color: $gray;
-    }
-  }
-  .submit {
-    position: absolute;
-    top: 10px;
-    right: 10px;
-    width: 15px;
-    height: 15px;
-    cursor: pointer;
-  }
 }
 </style>

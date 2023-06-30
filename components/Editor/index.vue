@@ -3,8 +3,8 @@
 </template>
 
 <script lang="ts" setup>
-import {Api} from '~/api';
-import {OutputBlockData} from '@editorjs/editorjs';
+import { Api } from '~/api';
+import { OutputBlockData } from '@editorjs/editorjs';
 
 const props = defineProps<{
   modelValue: OutputBlockData[];
@@ -24,26 +24,26 @@ const model = computed({
     return props.modelValue;
   },
   set(val) {
-    emits('update:modelValue', JSON.stringify(val));
+    emits('update:modelValue', val);
   },
 });
 
 const refEditor = ref(undefined);
 
 onMounted(async () => {
-  const {default: EditorJS} = await import('@editorjs/editorjs');
-  const {default: Header} = await import('@editorjs/header');
-  const {default: List} = await import('@editorjs/list');
-  const {default: Quote} = await import('@editorjs/quote');
-  const {default: Table} = await import('@editorjs/table');
-  const {default: Embed} = await import('@editorjs/embed');
-  const {default: Image} = await import('@editorjs/image');
-  const {default: CodeBox} = await import('@bomdi/codebox');
-  const {default: Delimiter} = await import('@editorjs/delimiter');
-  const {default: InlineCode} = await import('@editorjs/inline-code');
-  const {default: LinkTool} = await import('@editorjs/link');
-  const {default: SimpleImage} = await import('@editorjs/simple-image');
-  const {default: CheckList} = await import('@editorjs/checklist');
+  const { default: EditorJS } = await import('@editorjs/editorjs');
+  const { default: Header } = await import('@editorjs/header');
+  const { default: List } = await import('@editorjs/list');
+  const { default: Quote } = await import('@editorjs/quote');
+  const { default: Table } = await import('@editorjs/table');
+  const { default: Embed } = await import('@editorjs/embed');
+  const { default: Image } = await import('@editorjs/image');
+  const { default: CodeBox } = await import('@bomdi/codebox');
+  const { default: Delimiter } = await import('@editorjs/delimiter');
+  const { default: InlineCode } = await import('@editorjs/inline-code');
+  const { default: LinkTool } = await import('@editorjs/link');
+  const { default: SimpleImage } = await import('@editorjs/simple-image');
+  const { default: CheckList } = await import('@editorjs/checklist');
 
   const editor = new EditorJS({
     holder: refEditor.value,
@@ -53,7 +53,7 @@ onMounted(async () => {
       blocks: model.value,
     },
     async onChange() {
-      const {blocks} = await editor.save();
+      const { blocks } = await editor.save();
       model.value = blocks;
     },
     tools: {

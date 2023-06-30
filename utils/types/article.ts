@@ -1,5 +1,6 @@
 import { TBase } from '~/utils/types/index';
 import { TSection } from '~/utils/types/secton';
+import {OutputBlockData} from "@editorjs/editorjs";
 
 export type ArticleDto = TBase & {
   team_id: string;
@@ -16,4 +17,9 @@ export type TArticle = TBase & {
 export type ArticleOneDto = {
   team_id: string;
   article_id: string;
+};
+
+export type TTab = {
+  name: string;
+  content: OutputBlockData[];
 };
