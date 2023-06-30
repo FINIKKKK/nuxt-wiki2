@@ -168,8 +168,6 @@ const addEmployeesAccess = (value: TUser) => {
       height: 40px;
       margin-right: 25px;
     }
-    p {
-    }
     &:hover {
       background-color: rgba($blue, 0.1);
     }

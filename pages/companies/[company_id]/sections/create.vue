@@ -1,5 +1,5 @@
 <template>
-  <NuxtLayout name="create" type="section"></NuxtLayout>
+  <NuxtLayout name="create2" type="section"></NuxtLayout>
 </template>
 
 <!-- ----------------------------------------------------- -->

@@ -1,5 +1,9 @@
 <template>
-  <div class="tags aside-popup" ref="tagsRef" :class="{ active: props.active }">
+  <div
+    class="tags aside-popup"
+    ref="tagsRef"
+    :class="{ active: createElemController.isShowTags }"
+  >
     <h2 class="title">Тэги</h2>
     <p class="text">
       itl.wiki создана для совместной работы, делитесь контентом, который вы
@@ -21,12 +25,12 @@
 import { useCustomFetch } from '~/hooks/useCustomFetch';
 import { useTeamStore } from '~/stores/TeamContoller';
 import { useOutsideClick } from '~/hooks/useOutsideClick';
+import { useCreateElemStore } from '~/stores/CreateElemController';
 
 /**
  * Пропсы ----------------
  */
 const props = defineProps<{
-  active: boolean;
   modelValue: number[];
 }>();
 
@@ -52,6 +56,7 @@ const model = computed({
  * Системные переменные ----------------
  */
 const teamController = useTeamStore(); // Хранилище команд
+const createElemController = useCreateElemStore(); // Хранилище страницы создания
 
 /**
  * Пользовательские переменные ----------------

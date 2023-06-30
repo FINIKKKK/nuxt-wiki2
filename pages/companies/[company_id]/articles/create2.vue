@@ -1,17 +1,21 @@
 <template>
   <!--------------------------------------
-    Элементы управления
+  Элементы управления 
   ---------------------------------------->
   <div class="controls">
     <!-- Дополнительные элементы -->
     <ul class="extra">
       <!-- Доступ -->
-      <li class="extra__item" @click="isShowAccess = !isShowAccess">
+      <li class="extra__item">
         <svg-icon name="lock" />
         <p>Доступ</p>
       </li>
       <!-- Тэги -->
-      <li class="extra__item" v-if="props.type === 'article'">
+      <li
+        class="extra__item"
+        :ref="tagsBtnRef"
+        @click="isShowTags = !isShowTags"
+      >
         <svg-icon name="tag" />
         <p>Тэги</p>
       </li>
@@ -33,7 +37,7 @@
   <!--------------------------------------
     Ошибки
   ---------------------------------------->
-  <UIWarning
+  <Warning
     v-if="Object.values(errorsValidate).flat().length"
     :errors="Object.values(errorsValidate).flat() as string[]"
     class="warning"
@@ -44,19 +48,23 @@
   ---------------------------------------->
   <div class="form">
     <!-- Селект элемента -->
-    <UISelect :options="sections" v-model="selectValue" class="select" />
+    <Select :options="sections" v-model="selectValue" class="select" />
+
     <!-- Заголовок элемента -->
     <div class="input">
       <input
         v-model="titleValue"
         class="title"
         type="text"
-        placeholder="Заголовок раздела"
+        placeholder="Заголовок статьи"
       />
     </div>
 
-    <!-- Компонент редактирования доступа -->
-    <Access v-model="abilities" :active="isShowAccess" />
+    <!-- Табы -->
+    <EditorTabs v-model="tabs" />
+
+    <!-- Тэги -->
+    <Tags :active="isShowTags" v-model="tags" />`
   </div>
 </template>
 
@@ -64,14 +72,19 @@
 <!-- ----------------------------------------------------- -->
 
 <script lang="ts" setup>
-import { OutputBlockData } from '@editorjs/editorjs';
-import { SectionScheme } from '~/utils/validation';
+import { Api } from '~/api';
+import { ArticleScheme, SectionScheme } from '~/utils/validation';
 import { useUserStore } from '~/stores/UserController';
 import { useTeamStore } from '~/stores/TeamContoller';
+import Select from '~/components/UI/Select.vue';
+import Warning from '~/components/UI/Warning.vue';
 import { useFormValidation } from '~/hooks/useFormValidation';
+import Editor from '~/components/Editor/index.vue';
 import { TSection } from '~/api/models/section';
-import { TAbility, TUser } from '~/utils/types/account';
+import Input from '~/components/UI/Input.vue';
 import { useCustomFetch } from '~/hooks/useCustomFetch';
+import { useOutsideClick } from '~/hooks/useOutsideClick';
+import { TTab } from '~/utils/types/article';
 
 /**
  * Пропсы ----------------
@@ -79,6 +92,7 @@ import { useCustomFetch } from '~/hooks/useCustomFetch';
 const props = defineProps<{
   type: 'article' | 'section';
   isEdit?: boolean;
+
   data?: TSection;
 }>();
 
@@ -86,12 +100,10 @@ const props = defineProps<{
  * Системные переменные ----------------
  */
 const router = useRouter(); // Роутер
-const route = useRoute(); // Роут
-const userController = useUserStore(); // Хранилище пользователя
+const route = useRoute(); // Роуте
+const userStore = useUserStore(); // Хранилище пользователя
 const teamStore = useTeamStore(); // Хранилище активной компании
-const id = route.params.id; // Id для элемента
-
-
+const id = Number(route.params.id); // Id для элемента
 
 /**
  * Получение данных ----------------
@@ -101,24 +113,21 @@ const { data: sections } = useAsyncData(async () => {
   const { data } = await Api().section.getAll(teamStore.activeTeam?.team.id);
   return data;
 });
-const { data: employees } = await useCustomFetch('team/employees', {
-  query: { team_id: teamStore.activeTeam.team.id },
+const { data: article } = useAsyncData(async () => {
+  const dto = {
+    team_id: teamStore.activeTeam?.team.id,
+    article_id: route.params.id,
+  };
+  const { data } = await Api().article.editGet(dto);
+  return data;
 });
 
 /**
  * Пользовательские переменные ----------------
  */
-const titleValue = ref(props.data?.name || ''); // Заголовок элемента
-const selectValue = ref<TSection | null>(props.data?.parent || null); // Селект элемента
-const bodyValue = ref<OutputBlockData[]>([]); // Тело элемента
-const isShowAccess = ref(false); //
+const titleValue = ref(''); // Заголовок элемента
+const selectValue = ref<TSection | null>(null); // Селект элемента
 
-// const accessUserValue = ref(accessArr[0]); //
-const abilities = ref<any>([]);
-
-// watch(accessUserValue, () => {
-// abilities.value.find(obj => obj.user_id ===)
-// })
 
 /**
  * Вычисляемые значения ----------------
@@ -131,6 +140,8 @@ const labelBtn = computed(() => {
     return 'Опубликовать';
   }
 });
+
+// useOutsideClick(tagsRef, isShowTags, () => {});
 
 /**
  * Хуки ----------------
@@ -153,11 +164,6 @@ onBeforeRouteLeave((to, from, next) => {
 /**
  * Методы ----------------
  */
-
-// Установление значения тела элемента (событие)
-const setBodyValue = (value: OutputBlockData[]) => {
-  bodyValue.value = value;
-};
 // Метод создания или редактирования элемента
 const onSubmit = async () => {
   // Изменяем или создаем раздел
@@ -165,10 +171,9 @@ const onSubmit = async () => {
     // Объект с данными
     const dto = {
       team_id: teamStore.activeTeam?.team.id,
-      section_id: id,
       name: titleValue.value,
-      description: JSON.stringify(bodyValue.value),
-      ...(selectValue.value && { parent_id: selectValue.value.id }),
+      tabs: tabs.value,
+      section_id: selectValue.value?.id,
     };
 
     // Вызываем хук для обрабоки формы
@@ -183,19 +188,18 @@ const onSubmit = async () => {
     const dto = {
       team_id: teamStore.activeTeam?.team.id,
       name: titleValue.value,
-      ...(selectValue.value && { section_id: selectValue.value.id }),
-      abilities: abilities.value.map((obj) => ({
-        user_id: obj.user.id,
-        permission: obj.permission.value,
-      })),
+      tabs: tabs.value,
+      section_id: selectValue.value?.id,
+      action: 3,
     };
-
     // Вызываем хук для обрабоки формы
-    await validateForm(dto, SectionScheme);
-    // Создаем раздел
-    // Перенапрвляем пользователя на страницу раздела
-    // await router.push(`${teamStore.activeTeamId}/sections/${data.id}`);
-    const { data } = await Api().section.add(dto);
+    validateForm(dto, ArticleScheme, async () => {
+      // Создаем раздел
+      const { data } = await Api().article.add(dto);
+      console.log(data);
+      // Перенапрвляем пользователя на страницу раздела
+      // await router.push(`${teamStore.activeTeamId}/articles/${data.id}`);
+    });
   }
 };
 </script>
@@ -208,9 +212,6 @@ const onSubmit = async () => {
   width: 900px;
   margin: 0 auto;
   padding-top: 60px;
-  .select {
-    margin-bottom: 25px;
-  }
   .input {
     &:not(:last-child) {
       margin-bottom: 36px;
@@ -234,6 +235,7 @@ const onSubmit = async () => {
 }
 
 .extra {
+  user-select: none;
   display: flex;
   align-items: center;
   &__item {
@@ -249,13 +251,12 @@ const onSubmit = async () => {
       margin-right: 14px;
     }
     &:hover {
-      color: $blue2;
+      color: $blue;
     }
   }
 }
 
 .btns {
-  z-index: 250;
   display: flex;
   align-items: center;
   .btn {
