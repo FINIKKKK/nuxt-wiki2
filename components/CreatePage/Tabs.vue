@@ -14,7 +14,7 @@
     <!-- Вкладки -->
     <ul class="tabs">
       <li
-        v-for="(tab, index) in model"
+        v-for="(tab, index) in createElemController.tabs"
         :key="index"
         :class="{ active: activeTab === index }"
         @click="activeTab = index"
@@ -26,7 +26,7 @@
 
   <!-- Поля Editor -->
   <div class="body">
-    <template v-for="(tab, index) in model">
+    <template v-for="(tab, index) in createElemController.tabs">
       <div class="input" v-if="activeTab === index">
         <Editor class="editor" v-model="tab.content" />
       </div>
@@ -38,35 +38,18 @@
 <!-- ----------------------------------------------------- -->
 
 <script lang="ts" setup>
-import { TTab } from '~/utils/types/article';
+import { useCreateElemStore } from '~/stores/CreateElemController';
 
 /**
- * Пропсы ----------------
+ * Системные переменные ----------------
  */
-const props = defineProps<{
-  modelValue: TTab[];
-}>();
+const createElemController = useCreateElemStore(); // Хранилище страницы создания
 
 /**
- * События ----------------
- */
-const emits = defineEmits(['update:modelValue']);
-
-/**
- * Полльзовательские переменные ----------------
+ * Пользовательские переменные ----------------
  */
 const activeTab = ref(0); // Активная вкладка
 const tabNameValue = ref(''); // Значение поле ввода
-
-// Значение вкладок
-const model = computed({
-  get() {
-    return props.modelValue;
-  },
-  set(val) {
-    emits('update:modelValue', val);
-  },
-});
 
 /**
  * Полльзовательские переменные ----------------
@@ -74,7 +57,7 @@ const model = computed({
 // Добавить вкладку
 const addTab = () => {
   if (tabNameValue.value) {
-    model.value.push({ name: tabNameValue.value, content: [] });
+    createElemController.addTab({ name: tabNameValue.value, content: [] });
     tabNameValue.value = '';
   }
 };

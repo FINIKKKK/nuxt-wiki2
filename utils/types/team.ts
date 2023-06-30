@@ -45,5 +45,5 @@ export type TAccess = {
 
 export type TAbility = {
   user: TUser;
-  ability: TAccess;
+  permission: TAccess;
 };

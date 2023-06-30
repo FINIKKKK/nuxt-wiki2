@@ -3,7 +3,7 @@
     <!-- Дополнительные элементы -->
     <ul class="extra">
       <!-- Доступ -->
-      <li class="extra__item">
+      <li class="extra__item" @click="createElemController.toggleAccess()">
         <svg-icon name="lock" />
         <p>Доступ</p>
       </li>
@@ -21,11 +21,7 @@
     <!-- Кнопки -->
     <div class="btns">
       <!-- Кнопка отпраки -->
-      <button
-        @click="onSubmit"
-        class="btn"
-        :class="{ disabled: createElemController.isLoading }"
-      >
+      <button @click="onSubmit" class="btn" :class="{ disabled: isLoading }">
         {{ labelBtn }}
       </button>
       <!-- Кнопка отмены -->
@@ -45,6 +41,7 @@ import { useTeamStore } from '~/stores/TeamContoller';
 import { SectionScheme } from '~/utils/validation';
 import { useFormValidation } from '~/hooks/useFormValidation';
 import { useCustomFetch } from '~/hooks/useCustomFetch';
+import { useRequestStore } from '~/stores/RequestController';
 
 /**
  * Пропсы ----------------
@@ -61,6 +58,7 @@ const route = useRoute(); // Роут
 const router = useRouter(); // Роутер
 const teamController = useTeamStore(); // Хранилище активной компании
 const createElemController = useCreateElemStore(); // Хранилище страницы создания
+const requestController = useRequestStore(); // Хранилище запроса
 
 /**
  * Полльзовательские переменные ----------------
@@ -78,11 +76,28 @@ const labelBtn = computed(() => {
     return 'Опубликовать';
   }
 });
+// Значение загрузки
+const isLoading = computed(() => {
+  return (
+    requestController.loading['team/section/add'] &&
+    requestController.loading['team/section/edit'] &&
+    requestController.loading['team/article/add'] &&
+    requestController.loading['team/article/edit']
+  );
+});
 
 /**
  * Хуки ----------------
  */
-const { errorsValidate, validateForm } = useFormValidation(); // Для обработки формы
+const { errorsValidate, validateForm } = useFormValidation(); // Для валидации формы
+
+/**
+ * Слежка за переменными ----------------
+ */
+// Сохранить значение селекта
+watch(errorsValidate, () => {
+  createElemController.setErrors(errorsValidate.value);
+});
 
 /**
  * Методы ----------------
@@ -124,70 +139,69 @@ const onSubmit = async () => {
       if (data.value) {
         await router.push(`${teamController.activeTeamId}/sections/${id}`);
       }
+    }
+    // ------------------------------------
+    // Создаем раздела
+    // ------------------------------------
+    else {
+      const { data } = await useCustomFetch(`team/section/add`, {
+        body: dto,
+        method: 'POST',
+      });
+      if (data.value) {
+        await router.push(`${teamController.activeTeamId}/sections/${id}`);
+      }
+    }
+  }
 
-      // ------------------------------------
-      // Создаем раздела
-      // ------------------------------------
-      else {
-        const { data } = await useCustomFetch(`team/section/add`, {
-          body: dto,
-          method: 'POST',
-        });
-        if (data.value) {
-          await router.push(`${teamController.activeTeamId}/sections/${id}`);
-        }
+  // ------------------------------------
+  // Изменяем или создаем статью
+  // ------------------------------------
+  else if (props.type === 'article') {
+    // Данные
+    const dto = {
+      ...(props.isEdit && {
+        article_id: id,
+      }),
+      team_id: teamController.activeTeam?.team.id,
+      name: createElemController.title,
+      ...(createElemController.select && {
+        parent_id: createElemController.select.id,
+      }),
+      tabs: createElemController.tabs,
+      abilities: createElemController.abilities.map((obj) => ({
+        user_id: obj.user.id,
+        permission: obj.permission.value,
+      })),
+    };
+
+    // Вызываем хук для валидации форм
+    const isValid = await validateForm(dto, ArticleScheme);
+    if (!isValid) return false;
+
+    // ------------------------------------
+    // Редактируем статью
+    // ------------------------------------
+    if (props.isEdit) {
+      const { data } = await useCustomFetch(`team/article/add`, {
+        body: dto,
+        method: 'POST',
+      });
+      if (data.value) {
+        await router.push(`${teamController.activeTeamId}/articles/${id}`);
       }
     }
 
     // ------------------------------------
-    // Изменяем или создаем статью
+    // Создаем статью
     // ------------------------------------
-    else if (props.type === 'article') {
-      // Данные
-      const dto = {
-        ...(props.isEdit && {
-          article_id: id,
-        }),
-        team_id: teamController.activeTeam?.team.id,
-        name: createElemController.title,
-        ...(createElemController.select && {
-          parent_id: createElemController.select.id,
-        }),
-        tabs: createElemController.tabs,
-        abilities: createElemController.abilities.map((obj) => ({
-          user_id: obj.user.id,
-          permission: obj.permission.value,
-        })),
-      };
-
-      // Вызываем хук для валидации форм
-      const isValid = await validateForm(dto, ArticleScheme);
-      if (!isValid) return false;
-
-      // ------------------------------------
-      // Редактируем статью
-      // ------------------------------------
-      if (props.isEdit) {
-        const { data } = await useCustomFetch(`team/article/add`, {
-          body: dto,
-          method: 'POST',
-        });
-        if (data.value) {
-          await router.push(`${teamController.activeTeamId}/articles/${id}`);
-        }
-      }
-
-      // ------------------------------------
-      // Создаем статью
-      // ------------------------------------
-      else {
-        const { data } = await useCustomFetch(`team/article/add`, {
-          body: dto,
-          method: 'POST',
-        });
-        if (data.value) {
-          await router.push(`${teamController.activeTeamId}/articles/${id}`);
-        }
+    else {
+      const { data } = await useCustomFetch(`team/article/add`, {
+        body: dto,
+        method: 'POST',
+      });
+      if (data.value) {
+        await router.push(`${teamController.activeTeamId}/articles/${id}`);
       }
     }
   }

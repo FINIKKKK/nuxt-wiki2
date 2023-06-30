@@ -1,5 +1,8 @@
 <template>
-  <div class="access aside-popup" :class="{ active: props.active }">
+  <div
+    class="access aside-popup"
+    :class="{ active: createElemController.isShowAccess }"
+  >
     <h2 class="title">Права доступа</h2>
     <p class="text">
       itl.wiki создана для совместной работы, делитесь контентом, который вы
@@ -29,7 +32,7 @@
 
     <!-- Список работников для редактирования прав доступа -->
     <ul class="employees">
-      <li class="employee" v-for="ability in model">
+      <li class="employee" v-for="ability in createElemController.abilities">
         <div class="info">
           <p class="name">{{ ability?.user.fullname }}</p>
           <p class="email">{{ ability?.user.email }}</p>
@@ -52,27 +55,16 @@
 import { useCustomFetch } from '~/hooks/useCustomFetch';
 import { useTeamStore } from '~/stores/TeamContoller';
 import { TUser } from '~/utils/types/account';
-import { TAbility, TEmployees } from '~/utils/types/team';
+import { TEmployees } from '~/utils/types/team';
 import { useOutsideClick } from '~/hooks/useOutsideClick';
 import { accessArr } from '~/utils/data';
-
-/**
- * Пропсы ----------------
- */
-const props = defineProps<{
-  modelValue: TAbility[];
-  active: boolean;
-}>();
-
-/**
- * События ----------------
- */
-const emits = defineEmits(['update:modelValue']);
+import { useCreateElemStore } from '~/stores/CreateElemController';
 
 /**
  * Системные переменные ----------------
  */
 const teamController = useTeamStore(); // Хранилище команд
+const createElemController = useCreateElemStore(); // Хранилище страницы создания
 
 /**
  * Получение данных ----------------
@@ -80,19 +72,6 @@ const teamController = useTeamStore(); // Хранилище команд
 // Работники
 const { data } = await useCustomFetch<TEmployees>('team/employees', {
   query: { team_id: teamController.activeTeamId },
-});
-
-/**
- * Вычисляемые значения ----------------
- */
-// Значение доступов
-const model = computed({
-  get() {
-    return props.modelValue;
-  },
-  set(val) {
-    emits('update:modelValue', val);
-  },
 });
 
 /**
@@ -113,7 +92,7 @@ const employeesAccess = ref<TUser[]>([]); // Список работников �
 /**
  * Следить за переменными ----------------
  */
-// Конвертитровать список работников при поиске
+// Сортировать список работников при поиске
 watch(inputValue, () => {
   employees.value = data.value.employees.filter((obj) =>
     obj.fullname.toLowerCase().includes(inputValue.value.toLowerCase()),
@@ -125,12 +104,14 @@ watch(inputValue, () => {
  */
 // Добавить работника в область редактирования доступа
 const addEmployeesAccess = (value: TUser) => {
-  const findUser = model.value.find((obj) => obj.user.id === value.id);
+  const findUser = createElemController.abilities.find(
+    (obj) => obj.user.id === value.id,
+  );
   // Если этого работника нет в массиве
   if (!findUser) {
     employeesAccess.value.push(value);
     // Добавляем в массив
-    model.value.push({ permission: accessArr[0], user: value });
+    createElemController.addAbility({ user: value, permission: accessArr[0] });
     // Закрываем список
     isShowList.value = false;
   } else {

@@ -27,30 +27,6 @@ import { useTeamStore } from '~/stores/TeamContoller';
 import { useOutsideClick } from '~/hooks/useOutsideClick';
 import { useCreateElemStore } from '~/stores/CreateElemController';
 
-/**
- * Пропсы ----------------
- */
-const props = defineProps<{
-  modelValue: number[];
-}>();
-
-/**
- * События ----------------
- */
-const emits = defineEmits(['update:modelValue']);
-
-/**
- * Вычисляемые значения ----------------
- */
-// Значение доступов
-const model = computed({
-  get() {
-    return props.modelValue;
-  },
-  set(val) {
-    emits('update:modelValue', val);
-  },
-});
 
 /**
  * Системные переменные ----------------

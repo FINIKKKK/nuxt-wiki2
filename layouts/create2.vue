@@ -7,23 +7,23 @@
   <!--------------------------------------
     Ошибки
   ---------------------------------------->
-<!--  <UIWarning-->
-<!--    v-if="Object.values(errorsValidate).flat().length"-->
-<!--    :errors="Object.values(errorsValidate).flat() as string[]"-->
-<!--    class="warning"-->
-<!--  />-->
+  <UIWarning
+    v-if="Object.values(createElemController.errors).flat().length"
+    :errors="Object.values(createElemController.errors).flat() as string[]"
+    class="warning"
+  />
 
   <!--------------------------------------
     Форма создания
   ---------------------------------------->
   <div class="form">
     <!-- Селект элемента -->
-    <UISelect :options="sections" v-model="selectValue" class="select" />
+    <UISelect :options="selections" v-model="select" class="select" />
 
     <!-- Заголовок элемента -->
     <div class="input">
       <input
-        v-model="titleValue"
+        v-model="title"
         class="title"
         type="text"
         placeholder="Заголовок статьи"
@@ -32,6 +32,9 @@
 
     <!-- Слот -->
     <slot />
+
+    <!-- Компонент редактирования доступа -->
+    <CreatePageAccess />
   </div>
 </template>
 
@@ -61,8 +64,8 @@ const createElemController = useCreateElemStore(); // Хранилище стр�
 /**
  * Пользовательские переменные ----------------
  */
-const titleValue = ref(''); // Значение заголовка
-const selectValue = ref(null); // Значение селекта
+const title = ref(''); // Значение заголовка
+const select = ref(null); // Значение селекта
 
 /**
  * Получение данных ----------------
@@ -70,6 +73,30 @@ const selectValue = ref(null); // Значение селекта
 // Разделы для списка
 const { data: sections } = await useCustomFetch(`team/section/sections`, {
   query: { team_id: teamController.activeTeamId },
+});
+
+/**
+ * Вычисляемые значения ----------------
+ */
+// Конвертировать массив разделов
+//
+const selections = computed(() => {
+  return sections.value.map((obj) => ({
+    value: obj.id,
+    label: obj.name,
+  }));
+});
+
+/**
+ * Слежка за переменными ----------------
+ */
+// Сохранить значение заголовка
+watch(title, () => {
+  createElemController.setTitle(title.value);
+});
+// Сохранить значение селекта
+watch(select, () => {
+  createElemController.setSelect(select.value);
 });
 
 /**

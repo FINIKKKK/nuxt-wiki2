@@ -56,7 +56,7 @@
     </div>
 
     <!-- Компонент редактирования доступа -->
-    <Access v-model="abilities" :active="isShowAccess" />
+    <CreatePageAccess v-model="abilities"/>
   </div>
 </template>
 
