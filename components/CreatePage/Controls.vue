@@ -213,10 +213,16 @@ const onSubmit = async () => {
 
 <style lang="scss" scoped>
 .controls {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  background-color: $bg;
   padding: 17px 50px;
   display: flex;
   align-items: center;
   justify-content: space-between;
+  z-index: 100;
 }
 
 .extra {

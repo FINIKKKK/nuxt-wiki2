@@ -48,11 +48,7 @@
 <script lang="ts" setup>
 import { useOutsideClick } from '~/hooks/useOutsideClick';
 import { TSection } from '~/api/models/section';
-
-export type TSelect = {
-  value: number;
-  label: string;
-};
+import { TSelect } from '~/utils/types/article';
 
 /**
  * Пропсы ----------------

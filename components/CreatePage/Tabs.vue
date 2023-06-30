@@ -104,6 +104,14 @@ const addTab = () => {
   }
 }
 
+.field {
+  input {
+    &::placeholder {
+      color: $gray;
+    }
+  }
+}
+
 .editor {
   border-radius: 10px;
 }

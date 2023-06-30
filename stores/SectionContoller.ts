@@ -1,6 +1,5 @@
 import { TSection } from '~/api/models/section';
 import { defineStore } from 'pinia';
-import { boolean } from 'yup';
 
 /**
  * --------------------------------
@@ -12,7 +11,7 @@ export const useSectionsStore = defineStore('sectionsController', () => {
    * Свойства ----------------
    */
   const section: Ref<TSection | null> = ref(null); // Текущий раздел
-  const sections: Ref<TSection[] | null> = ref(null); // Разделы
+  const sections: Ref<TSection[] | null> = ref([]); // Разделы
   const isActiveHamburger: Ref<boolean> = ref(false); // Разделы
 
   /**

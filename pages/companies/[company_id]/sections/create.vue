@@ -1,13 +1,11 @@
 <template>
-  <NuxtLayout name="create2" type="section"></NuxtLayout>
+  <NuxtLayout name="create" type="section"></NuxtLayout>
 </template>
 
 <!-- ----------------------------------------------------- -->
 <!-- ----------------------------------------------------- -->
 
-<script lang="ts" setup>
-
-</script>
+<script lang="ts" setup></script>
 
 <!-- ----------------------------------------------------- -->
 <!-- ----------------------------------------------------- -->
