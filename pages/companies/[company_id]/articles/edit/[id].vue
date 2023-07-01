@@ -38,9 +38,10 @@ const { data } = await useCustomFetch<TArticleEdit>(`team/article/edit`, {
  * Вычисляемые значения ----------------
  */
 // Значение селекта
-const section = sectionsController.sections.find(
+const section =
+  sectionsController.sections.find(
     (obj) => obj.id === data.value.article.section_id,
-) || {};
+  ) || {};
 // Значение вкладок
 const tabs = await computed(() => {
   return data.value.article.tabs.map((obj) => ({

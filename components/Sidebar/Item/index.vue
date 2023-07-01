@@ -9,7 +9,6 @@
 <!-- ----------------------------------------------------- -->
 
 <script lang="ts" setup>
-import { useTeamStore } from '~/stores/TeamContoller';
 import { TItem } from '~/utils/types/sidebar';
 
 /**
@@ -19,11 +18,6 @@ const props = defineProps<{
   data: TItem;
   type?: 'post' | 'section';
 }>();
-
-/**
- * Системные переменные ----------------
- */
-const teamStore = useTeamStore(); // Хранилище активной команды
 
 /**
  * Пользовательские переменные ----------------

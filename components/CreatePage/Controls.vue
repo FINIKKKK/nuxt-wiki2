@@ -168,7 +168,10 @@ const onSubmit = async () => {
       ...(createElemController.select && {
         parent_id: createElemController.select.id,
       }),
-      tabs: createElemController.tabs,
+      tabs: createElemController.tabs.map((obj) => ({
+        name: obj.name,
+        content: JSON.stringify(obj.content),
+      })),
       abilities: createElemController.abilities.map((obj) => ({
         user_id: obj.user.id,
         permission: obj.permission.value,

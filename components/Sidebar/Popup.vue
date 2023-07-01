@@ -44,7 +44,8 @@
 <script lang="ts" setup>
 import { useSidebarStore } from '~/stores/SidebarController';
 import { useTeamStore } from '~/stores/TeamContoller';
-import { useGetData } from '~/hooks/useGetData';
+import { useCustomFetch } from '~/hooks/useCustomFetch';
+import { TSection } from '~/utils/types/secton';
 
 /**
  * Системные переменные ----------------
@@ -69,9 +70,12 @@ const isShowMainItems = computed(() => {
  * Получение данных ----------------
  */
 // Список основных разделов
-const { data: sections } = await useGetData(`team/section/sections`, {
-  query: { team_id: teamStore.activeTeam?.team.id },
-});
+const { data: sections } = await useCustomFetch<TSection[]>(
+  `team/section/sections`,
+  {
+    query: { team_id: teamStore.activeTeam?.team.id },
+  },
+);
 // Устанавливаем значения в хранилище
 sidebarController.setSections(sections.value);
 </script>

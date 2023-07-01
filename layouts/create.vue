@@ -28,7 +28,7 @@
       <!-- Заголовок элемента -->
       <div class="input">
         <input
-          v-model="title"
+          v-model="createElemController.title"
           class="title"
           type="text"
           placeholder="Заголовок статьи"
@@ -73,7 +73,6 @@ const sectionsController = useSectionsStore(); // Хранилище разде�
 /**
  * Пользовательские переменные ----------------
  */
-const title = ref(createElemController.title); // Значение заголовка
 
 /**
  * Получение данных ----------------
@@ -85,7 +84,6 @@ const { data: sections } = await useCustomFetch<TSection[]>(
     query: { team_id: teamController.activeTeamId },
   },
 );
-
 // Сохраняем в хранилище
 sectionsController.setSections(sections.value);
 
@@ -98,14 +96,6 @@ const selections = computed(() => {
     value: obj.id,
     label: obj.name,
   }));
-});
-
-/**
- * Слежка за переменными ----------------
- */
-// Сохранить значение заголовка
-watch(title, () => {
-  createElemController.setTitle(title.value);
 });
 
 /**

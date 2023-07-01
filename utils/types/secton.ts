@@ -1,18 +1,18 @@
 import { TBase } from '~/utils/types/index';
+import { TAbility } from '~/utils/types/team';
 
-export type SectionDto = TBase & {
-  team_id: string;
+export interface TSection extends TBase {
   name: string;
   description: string;
-  section_id?: string;
-};
-export type TSection = TBase & {
-  name: string;
-  description: string;
-  perent: TSection;
+  parent_id: number;
   child: TSection[];
-};
-export type SectionOneDto = {
-  team_id: string;
-  section_id: string;
-};
+}
+
+export interface TSectionEdit {
+  section: TSection;
+  abilities: {
+    users: TAbility[];
+  };
+  canEdit: boolean;
+  canShare: boolean;
+}

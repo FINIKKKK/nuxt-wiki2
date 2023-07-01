@@ -1,6 +1,5 @@
 import { defineStore } from 'pinia';
-import { TUser, UserDataDto } from '~/api/models/account';
-import { TTeam } from '~/api/models/team';
+import { TUser, UserDataDto } from '~/utils/types/account';
 
 /**
  * --------------------------------

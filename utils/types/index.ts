@@ -1,11 +1,11 @@
-export type TBase = {
+export interface TBase {
   id: number;
   created_at: string;
   updated_at: string;
-};
+}
 
-export type TMessage = {
+export interface TMessage {
   status: string;
   code: number;
   messages: string[];
-};
+}

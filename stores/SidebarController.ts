@@ -1,8 +1,6 @@
 import { defineStore } from 'pinia';
-import { TSection } from '~/api/models/section';
-import { boolean } from 'yup';
-import { validate } from '@babel/types';
-import {ConcreteComponent} from "@vue/runtime-core";
+import { ConcreteComponent } from '@vue/runtime-core';
+import { TSection } from '~/utils/types/secton';
 
 /**
  * --------------------------------
@@ -15,7 +13,7 @@ export const useSidebarStore = defineStore('sidebarController', () => {
    */
   const isOpen: Ref<boolean> = ref(false); // Открыт ли сайдбар?
   const activeItem: Ref<string | null> = ref(null); // Активный элемент в сайдбаре
-  const currentComponent = shallowRef(null); // Текущий компонент
+  const currentComponent = shallowRef<ConcreteComponent | string>(''); // Текущий компонент
   const section: Ref<TSection | null> = ref(null); // Текущий раздел
   const sections: Ref<TSection[] | null> = ref(null); // Разделы
   const isActiveMap: Ref<boolean> = ref(false); // Разделы

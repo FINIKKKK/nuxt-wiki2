@@ -29,22 +29,18 @@
       </ul>
     </div>
   </template>
-
-
 </template>
 
 <!-- ----------------------------------------------------- -->
 <!-- ----------------------------------------------------- -->
 
 <script lang="ts" setup>
-import { useTeamStore } from '~/stores/TeamContoller';
 import { useSidebarStore } from '~/stores/SidebarController';
 
 /**
  * Системные переменные ----------------
  */
 const sidebarController = useSidebarStore(); // Хранилище сайдбара
-const teamStore = useTeamStore(); // Хранилище активной команды
 </script>
 
 <!-- ----------------------------------------------------- -->

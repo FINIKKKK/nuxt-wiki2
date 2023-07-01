@@ -1,9 +1,13 @@
-export type TItem = {
+export interface TItem {
   icon: string;
   label: string;
   link?: string;
-  method?: void;
+  method?: () => void;
   isShow?: boolean;
-  id?: number;
-  name?: string;
-};
+}
+
+export interface TInnerItem {
+  name: string;
+  title: string;
+  items?: TItem[];
+}

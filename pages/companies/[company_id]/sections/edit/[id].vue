@@ -1,38 +1,44 @@
 <template>
-  <NuxtLayout
-    name="create"
-    type="section"
-    :isEdit="true"
-    :data="section"
-    v-if="section"
-  ></NuxtLayout>
+  <NuxtLayout name="create" type="article" :isEdit="true"></NuxtLayout>
 </template>
 
 <!-- ----------------------------------------------------- -->
 <!-- ----------------------------------------------------- -->
 
 <script lang="ts" setup>
-import { Api } from '~/api';
+import { useCustomFetch } from '~/hooks/useCustomFetch';
 import { useTeamStore } from '~/stores/TeamContoller';
+import { useCreateElemStore } from '~/stores/CreateElemController';
+import { useSectionsStore } from '~/stores/SectionContoller';
+import { TSectionEdit } from '~/utils/types/secton';
 
 /**
  * Системные переменные ----------------
  */
-const teamStore = useTeamStore(); // Хранилище активной команды
 const route = useRoute(); // Роут
+const teamController = useTeamStore(); // Хранилище активной компании
+const createElemController = useCreateElemStore(); // Хранилище страницы создания
+const sectionsController = useSectionsStore(); // Хранилище разделов
 
 /**
  * Получение данных ----------------
  */
 // Данные раздела
-const { data: section } = useAsyncData(async () => {
-  const dto = {
-    team_id: teamStore.activeTeam.team.id,
-    section_id: route.params.id,
-  };
-  const { data } = await Api().section.getOne(dto);
-  return data.section;
+const { data } = await useCustomFetch<TSectionEdit>(`team/section/edit`, {
+  query: { team_id: teamController.activeTeamId, section_id: route.params.id },
 });
+/**
+ * Вычисляемые значения ----------------
+ */
+// Значение селекта
+const section = sectionsController.sections.find(
+  (obj) => obj.id === data.value.section.parent_id,
+);
+// Сохраняем данные в хранилище
+createElemController.setTitle(data.value.section.name);
+createElemController.setSelect(
+  section ? { value: section.id, label: section.name } : null,
+);
 </script>
 
 <!-- ----------------------------------------------------- -->

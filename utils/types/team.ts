@@ -1,12 +1,9 @@
 import { TBase } from '~/utils/types/index';
 import { TUser } from '~/utils/types/account';
 import { TRole } from '~/utils/types/role';
+import { TSelect } from '~/utils/types/base';
 
-export type TeamDto = {
-  name: string;
-  code: string;
-};
-export type TTeam = TBase & {
+export interface TTeam extends TBase {
   name: string;
   code: string;
   active: string;
@@ -25,25 +22,25 @@ export type TTeam = TBase & {
   trial: string;
   unread_notification: number;
   user_id: number;
-};
-export type TActiveTeam = {
+}
+
+export interface TActiveTeam {
   role: TRole;
   team: TTeam;
-};
-export type TeamEditDto = TeamDto & {
+}
+
+export interface TeamEditDto {
   team_id: string;
-};
-export type TEmployees = {
+  name: string;
+  code: string;
+}
+
+export interface TEmployees {
   employees: TUser[];
   invites: TUser[];
-};
+}
 
-export type TAccess = {
-  value: number;
-  label: string;
-};
-
-export type TAbility = {
+export interface TAbility {
   user: TUser;
-  permission: TAccess;
-};
+  permission: TSelect;
+}

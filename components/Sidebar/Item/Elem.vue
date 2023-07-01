@@ -25,14 +25,14 @@ const props = defineProps<{
 /**
  * Системные переменные ----------------
  */
-const teamStore = useTeamStore(); // Хранилище активной команды
+const teamController = useTeamStore(); // Хранилище активной команды
 
 /**
  * Вычисляемые значения ----------------
  */
 // Ссылка на элемент
 const itemLink = computed(() => {
-  return `${teamStore.activeTeamId}/${
+  return `${teamController.activeTeamId}/${
     props.type === 'section' ? 'sections' : 'articles'
   }/${props.data.id}`;
 });

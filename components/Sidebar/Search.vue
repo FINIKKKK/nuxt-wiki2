@@ -1,5 +1,5 @@
 <template>
-  <Input
+  <UIInput
     class="input"
     label="Искать статью, раздел или пользователя"
     v-model="searchValue"
@@ -11,7 +11,6 @@
 <!-- ----------------------------------------------------- -->
 
 <script lang="ts" setup>
-import Input from '~/components/UI/Input.vue';
 import { useSidebarStore } from '~/stores/SidebarController';
 
 /**

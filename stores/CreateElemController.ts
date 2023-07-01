@@ -1,6 +1,7 @@
 import { defineStore } from 'pinia';
 import { TAbility } from '~/utils/types/team';
-import { TSelect, TTab } from '~/utils/types/article';
+import { TTab } from '~/utils/types/article';
+import { TSelect } from '~/utils/types/base';
 
 /**
  * --------------------------------
@@ -29,7 +30,7 @@ export const useCreateElemStore = defineStore('createElemController', () => {
     title.value = value;
   };
   // Установить селект
-  const setSelect = (value: TSelect) => {
+  const setSelect = (value: TSelect | null) => {
     select.value = value;
   };
   // Установить вкладки

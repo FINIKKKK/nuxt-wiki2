@@ -1,5 +1,5 @@
-import { TActiveTeam, TeamEditDto, TTeam } from '~/api/models/team';
 import { defineStore } from 'pinia';
+import { TActiveTeam, TeamEditDto, TTeam } from '~/utils/types/team';
 
 /**
  * --------------------------------

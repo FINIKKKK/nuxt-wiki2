@@ -1,16 +1,7 @@
 import { TBase } from '~/utils/types/index';
 import { TTeam } from '~/utils/types/team';
 
-export type LoginDto = {
-  email: string;
-  password: string;
-};
-export type RegisterDto = LoginDto & {
-  first_name: string;
-  last_name: string;
-  phone: string;
-};
-export type TUser = TBase & {
+export interface TUser extends TBase {
   first_name: string;
   last_name: string;
   email: string;
@@ -22,26 +13,20 @@ export type TUser = TBase & {
   logged_in: string;
   online: boolean;
   picture: string;
-};
-export type TAuthData = {
-  token: string;
-  user: TUser;
-};
-export type TUserData = {
-  user: TUser;
-  teams: TTeam[];
-};
+}
 
-export type UserDataDto = {
+export interface UserDataDto {
   first_name: string;
   last_name: string;
   email: string;
-};
-export type UserPasswordDto = {
-  password: string;
-  new_password: string;
-};
-export type TAbility = {
+}
+
+export interface TAuthData {
+  token: string;
   user: TUser;
-  permission: number;
-};
+}
+
+export interface TUserData {
+  user: TUser;
+  teams: TTeam[];
+}

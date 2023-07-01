@@ -1,5 +1,14 @@
 import * as yup from 'yup';
 
+/**
+ * --------------------------------
+ * Схемы валидации
+ * --------------------------------
+ */
+
+/**
+ * Авторизация
+ */
 export const LoginScheme = yup.object().shape({
   email: yup
     .string()
@@ -8,6 +17,9 @@ export const LoginScheme = yup.object().shape({
   password: yup.string().required('Поле является обязательным'),
 });
 
+/**
+ * Регистрация
+ */
 export const RegisterScheme = yup.object().shape({
   first_name: yup.string().required('Поле является обязательным'),
   last_name: yup.string().required('Поле является обязательным'),
@@ -28,6 +40,9 @@ export const RegisterScheme = yup.object().shape({
     .min(6, 'Пароль должен состоять минимум из 6 символов'),
 });
 
+/**
+ * Создание команды
+ */
 export const TeamScheme = yup.object().shape({
   name: yup.string().required('Поле является обязательным'),
   code: yup
@@ -36,6 +51,9 @@ export const TeamScheme = yup.object().shape({
     .required('Поле является обязательным'),
 });
 
+/**
+ * Редактирование данных пользователя
+ */
 export const UserDataScheme = yup.object().shape({
   first_name: yup.string().required('Поле является обязательным'),
   last_name: yup.string().required('Поле является обязательным'),
@@ -45,6 +63,9 @@ export const UserDataScheme = yup.object().shape({
     .email('Некорректный email'),
 });
 
+/**
+ * Изменения пароля пользователя
+ */
 export const PasswordScheme = yup.object().shape({
   password: yup.string().required('Поле является обязательным'),
   new_password: yup
@@ -57,6 +78,9 @@ export const PasswordScheme = yup.object().shape({
     .oneOf([yup.ref('new_password')], 'Пароли должны совпадать'),
 });
 
+/**
+ * Создание раздела ----------------
+ */
 export const SectionScheme = yup.object().shape({
   name: yup
     .string()
@@ -64,6 +88,9 @@ export const SectionScheme = yup.object().shape({
     .required('Вы не ввели название раздела'),
 });
 
+/**
+ * Создание статьи
+ */
 export const ArticleScheme = yup.object().shape({
   name: yup.string().required('Вы не ввели название статьи'),
   section_id: yup.number().required('Вы не выбрали раздел'),
