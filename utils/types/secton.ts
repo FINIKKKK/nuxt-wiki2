@@ -6,7 +6,8 @@ import { TUser } from '~/utils/types/account';
 export interface TSection extends TBase {
   name: string;
   description: string;
-  parent_id: number;
+  parent_id: number | null;
+  parent: TSection | null;
   creator: TUser;
   child: TSection[];
   children: TSection[];

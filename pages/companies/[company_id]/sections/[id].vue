@@ -1,6 +1,6 @@
 <template>
   <!-- Главный шаблон -->
-  <NuxtLayout name="main">
+  <NuxtLayout name="main" :nav="nav">
     <!--------------------------------------
       Элементы управления
     ---------------------------------------->
@@ -108,6 +108,17 @@ if (!data.value.section.parent_id) {
 } else {
   sectionsController.setIsChild(true);
 }
+// Навигация на странице
+const nav = [
+  {
+    label: data.value.section.parent?.name,
+    link: `${teamController.activeTeamSlug}/sections/${data.value.section.parent?.id}`,
+  },
+  {
+    label: data.value.section.name,
+    link: `${teamController.activeTeamSlug}/sections/${data.value.section.id}`,
+  },
+];
 
 /**
  * Методы ----------------
@@ -160,7 +171,6 @@ const onDelete = async () => {
 }
 
 .elem__header {
-  margin-top: 75px;
   display: flex;
   align-items: center;
   margin-bottom: 12px;

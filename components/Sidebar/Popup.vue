@@ -8,7 +8,7 @@
   >
     <div class="inner">
       <!-- Кнопки в шапке -->
-      <SidebarHeader v-if="isPathElem" />
+      <SidebarHeader v-if="isShowHeader" />
 
       <!--------------------------------------
       ResolveComponent (SidebarMainItems, SidebarSearch, SidebarMap, SidebarExtraItems)
@@ -66,19 +66,22 @@ const components: TComponentItem = {
 /**
  * Вычислительные значения ----------------
  */
-// Страница элемента?
-const isPathElem = computed(
-  () => route.path.includes('/sections') || route.path.includes('/articles'),
-);
 // Показывать ли основные элементы?
 const isShow = computed(() => {
-  if (isPathElem.value) {
+  if (route.path.includes('/sections') || route.path.includes('/articles')) {
     return false;
   } else if (sidebarController.activeItem === 'home') {
     return true;
   } else {
     return false;
   }
+});
+// Показывать ли основные header?
+const isShowHeader = computed(() => {
+  return (
+    (route.path.includes('/sections') || route.path.includes('/articles')) &&
+    sidebarController.activeItem === 'home'
+  );
 });
 // Текущий компонент
 const currentComponent = computed(() => {

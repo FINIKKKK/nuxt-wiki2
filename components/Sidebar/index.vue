@@ -20,10 +20,15 @@ import { useOutsideClick } from '~/hooks/useOutsideClick';
 import { useSidebarStore } from '~/stores/SidebarController';
 
 /**
+ * Системные переменные ----------------
+ */
+const route = useRoute(); // Роут
+const sidebarController = useSidebarStore(); // Хранилище сайдбара
+
+/**
  * Пользовательские переменные ----------------
  */
 const popupRef = ref(null); // Ref-ссылка на элемент попапа
-const sidebarController = useSidebarStore(); // Хранилище сайдбара
 
 /**
  * Хуки ----------------
@@ -31,6 +36,37 @@ const sidebarController = useSidebarStore(); // Хранилище сайдба�
 // Скрывать попап, если нажатие было вне его области
 useOutsideClick(popupRef, null, () => {
   sidebarController.close();
+});
+
+/**
+ * Вычисляемые значения ----------------
+ */
+// Показывать ли элементы?
+const isShow = computed(
+  () =>
+    sidebarController.activeItem === 'home' &&
+    (route.path.includes('/sections') || route.path.includes('/articles')),
+);
+// Какой элемент отображать в сайдбар изначально
+onMounted(() => {
+  const homePages = ['/moderation', '/my_works', '/sections', '/articles'];
+  const settingsPages = ['/settings'];
+
+  if (homePages.some((page) => route.path.includes(page))) {
+    sidebarController.open('home');
+  } else if (settingsPages.some((page) => route.path.includes(page))) {
+    sidebarController.open('settings');
+  } else {
+    sidebarController.close();
+  }
+
+  if (isShow.value) {
+    sidebarController.changeComponent('SidebarExtraItems');
+    sidebarController.closeMap();
+  } else {
+    sidebarController.closeMap();
+    sidebarController.changeComponent('SidebarMainItems');
+  }
 });
 </script>
 

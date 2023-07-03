@@ -1,4 +1,4 @@
-import {ConcreteComponent} from "@vue/runtime-core";
+import { ConcreteComponent } from '@vue/runtime-core';
 
 export interface TSelect {
   value: number;
@@ -7,4 +7,9 @@ export interface TSelect {
 
 export interface TComponentItem {
   [key: string]: ConcreteComponent | string;
+}
+
+export interface TNav {
+  label: string;
+  link: string;
 }
