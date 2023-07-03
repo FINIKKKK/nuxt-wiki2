@@ -46,9 +46,9 @@ const requestController = useRequestStore(); // Хранилище запрос�
  * Пользовательские переменные ----------------
  */
 const url = '/account/common/edit'; // URL запроса
-const firstNameValue = ref(userController.user?.first_name); // Значене имени
-const lastNameValue = ref(userController.user?.last_name); // Значене фамилии
-const emailValue = ref(userController.user?.email); // Значене email
+const firstNameValue = ref(userController.user?.first_name || ''); // Значене имени
+const lastNameValue = ref(userController.user?.last_name || ''); // Значене фамилии
+const emailValue = ref(userController.user?.email || ''); // Значене email
 
 /**
  * Хуки ----------------
@@ -82,16 +82,14 @@ const onChangeUserData = async () => {
   // Вызываем хук для валидации форм
   const isValid = await validateForm(dto, UserDataScheme);
   if (!isValid) return false;
-  
+
   // Обновляем данные пользователя
   const { data } = await useCustomFetch<any>(url, {
     body: dto,
     method: 'POST',
   });
 
-  console.log('1');
-  if (data) {
-    console.log('2');
+  if (data.value) {
     // Обновляем данные в хранилище
     userController.updateUserData(dto);
     // Отображаем сообщение об успешном изменении

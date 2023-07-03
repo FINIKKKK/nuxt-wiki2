@@ -1,5 +1,5 @@
-import { TSection } from '~/api/models/section';
 import { defineStore } from 'pinia';
+import { TSection } from '~/utils/types/secton';
 
 /**
  * --------------------------------
@@ -30,7 +30,7 @@ export const useSectionsStore = defineStore('sectionsController', () => {
     isActiveHamburger.value = !isActiveHamburger.value;
   };
 
-  // Возращаем данные
+  // Возращаем данныеs
   return {
     section,
     sections,

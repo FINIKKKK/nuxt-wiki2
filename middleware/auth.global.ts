@@ -1,8 +1,7 @@
 import { useUserStore } from '~/stores/UserController';
 import { useTeamStore } from '~/stores/TeamContoller';
 import { useCustomFetch } from '~/hooks/useCustomFetch';
-import { TestI, TUserData } from '~/utils/types/account';
-import { Ref } from 'vue';
+import { TUserData } from '~/utils/types/account';
 
 /**
  * ------------------------------------------------------------

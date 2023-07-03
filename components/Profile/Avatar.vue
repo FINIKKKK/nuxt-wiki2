@@ -67,7 +67,7 @@ const onChangeAvatar = async (e: any) => {
 
   if (data.value) {
     // Обновляем аватарку в хранилище
-    userController.updateUserAvatar(data.value.url);
+    userController.updateUserAvatar(data.value);
     // Отображаем сообщение об успешном изменении
     profileController.setMessage('Аватарка успешно изменена');
   }

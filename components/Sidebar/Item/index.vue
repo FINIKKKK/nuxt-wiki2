@@ -10,13 +10,15 @@
 
 <script lang="ts" setup>
 import { TItem } from '~/utils/types/sidebar';
+import { TArticle } from '~/utils/types/article';
+import { TSection } from '~/utils/types/secton';
 
 /**
  * Пропсы ----------------
  */
 const props = defineProps<{
-  data: TItem;
-  type?: 'post' | 'section';
+  data: TItem | TArticle | TSection;
+  type?: 'article' | 'section';
 }>();
 
 /**

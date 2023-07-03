@@ -110,7 +110,7 @@ const innerItems: TInnerItem[] = [
   },
   {
     name: 'search',
-    title: `Поиск по ${teamController.activeTeam?.name}.itl.wiki`,
+    title: `Поиск по ${teamController.activeTeam?.team.name}.itl.wiki`,
   },
   {
     name: 'settings',

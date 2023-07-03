@@ -2,8 +2,8 @@
   <NuxtLayout name="main" title="">
     <!-- Отображение ошибок -->
     <UIWarning
-      v-if="requestController.loading[url]?.length"
-      :errors="requestController.loading[url]"
+      v-if="requestController.loading?.length"
+      :errors="requestController.errors[url]"
     />
 
     <!-- Форма -->

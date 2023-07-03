@@ -1,4 +1,3 @@
-import { Api } from '~/api';
 import { useTeamStore } from '~/stores/TeamContoller';
 import { useCustomFetch } from '~/hooks/useCustomFetch';
 

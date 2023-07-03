@@ -3,7 +3,6 @@
 </template>
 
 <script lang="ts" setup>
-import { Api } from '~/api';
 import { OutputBlockData } from '@editorjs/editorjs';
 
 const props = defineProps<{
@@ -32,17 +31,29 @@ const refEditor = ref(undefined);
 
 onMounted(async () => {
   const { default: EditorJS } = await import('@editorjs/editorjs');
+  // @ts-ignore
   const { default: Header } = await import('@editorjs/header');
+  // @ts-ignore
   const { default: List } = await import('@editorjs/list');
+  // @ts-ignore
   const { default: Quote } = await import('@editorjs/quote');
+  // @ts-ignore
   const { default: Table } = await import('@editorjs/table');
+  // @ts-ignore
   const { default: Embed } = await import('@editorjs/embed');
+  // @ts-ignore
   const { default: Image } = await import('@editorjs/image');
+  // @ts-ignore
   const { default: CodeBox } = await import('@bomdi/codebox');
+  // @ts-ignore
   const { default: Delimiter } = await import('@editorjs/delimiter');
+  // @ts-ignore
   const { default: InlineCode } = await import('@editorjs/inline-code');
+  // @ts-ignore
   const { default: LinkTool } = await import('@editorjs/link');
+  // @ts-ignore
   const { default: SimpleImage } = await import('@editorjs/simple-image');
+  // @ts-ignore
   const { default: CheckList } = await import('@editorjs/checklist');
 
   const editor = new EditorJS({

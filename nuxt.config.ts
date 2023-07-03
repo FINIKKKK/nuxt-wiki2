@@ -18,7 +18,7 @@ export default defineNuxtConfig({
   },
   ssr: true,
   typescript: {
-    // typeCheck: true,
+    typeCheck: true,
   },
   runtimeConfig: {
     public: {

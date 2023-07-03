@@ -39,7 +39,7 @@ const { data } = await useCustomFetch<TArticleEdit>(`team/article/edit`, {
  */
 // Значение селекта
 const section =
-  sectionsController.sections.find(
+  sectionsController.sections?.find(
     (obj) => obj.id === data.value.article.section_id,
   ) || {};
 // Значение вкладок

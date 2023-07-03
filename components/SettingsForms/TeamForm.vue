@@ -14,8 +14,8 @@
       />
       <p>
         Поделитесь ссылкой
-        <NuxtLink :to="`/companies/${teamStore.activeTeam.team.id}`"
-          >{{ teamStore.activeTeam.team.code }}.itl.wiki
+        <NuxtLink :to="`/companies/${teamController.activeTeamId}`"
+          >{{ teamController.activeTeam.team.code }}.itl.wiki
         </NuxtLink>
         чтобы добавить кого-либо с разрешенным доменом электронной почты в ваше
         рабочее пространство.
@@ -30,40 +30,36 @@
 
 <script lang="ts" setup>
 import Input from '~/components/UI/Input.vue';
-import { useFormValidation } from '~/hooks/useFormValidation';
-import { Api } from '~/api';
 import { useTeamStore } from '~/stores/TeamContoller';
 import { TeamScheme } from '~/utils/validation';
-
-/**
- * События ----------------
- */
-const emits = defineEmits(['showWarningErrors', 'showWarningMessages']);
+import { useFormValidation } from '~/hooks/useFormValidation';
+import { useSettingsStore } from '~/stores/SettingsController';
+import { useCustomFetch } from '~/hooks/useCustomFetch';
 
 /**
  * Системные переменные ----------------
  */
-const teamStore = useTeamStore(); // Хранилище пользователя
+const teamController = useTeamStore(); // Хранилище пользователя
+const settingsController = useSettingsStore(); // Хранилище страницы настроек
 
 /**
  * Пользовательские переменные ----------------
  */
-const nameValue = ref(teamStore.activeTeam?.team.name); // Значене имени
-const codeValue = ref(teamStore.activeTeam?.team.code); // Значене фамилии
+const url = '/team/edit'; // URL запроса
+const nameValue = ref(teamController.activeTeam?.team.name || ''); // Значене имени
+const codeValue = ref(teamController.activeTeam?.team.code || ''); // Значене фамилии
 
 /**
  * Хуки ----------------
  */
-// Для обработки формы
-const { errorsValidate, errors, isLoading, validateForm } = useFormValidation();
+const { errorsValidate, validateForm } = useFormValidation(); // Для валидации формы
 
 /**
  * Отслеживание переменных ----------------
  */
-// Следить за errors
-watch(errors, () => {
-  // Показать warning c ошибками
-  emits('showWarningErrors', errors.value);
+// Показать warning c ошибками
+watch(settingsController.errors, () => {
+  settingsController.setErrors(settingsController.errors);
 });
 
 /**
@@ -72,23 +68,32 @@ watch(errors, () => {
 // Изменить данные пользователя
 const onChangeTeamData = async () => {
   // Убираем warning
-  emits('showWarningErrors', []);
-  emits('showWarningMessages', '');
+  settingsController.setErrors([]);
+  settingsController.setMessage('');
+
   // Данные объекта
   const dto = {
-    team_id: teamStore.activeTeam.team.id,
+    team_id: teamController.activeTeamId,
     name: nameValue.value,
     code: codeValue.value,
   };
-  // Вызываем хук для валидации формы
-  await validateForm(dto, TeamScheme, async () => {
-    // Обновляем данные пользователя
-    await Api().team.edit(dto);
-    // Обновляем данные в хранилище
-    teamStore.editActiveTeam(dto);
-    // Отображаем сообщение об успешном изменении
-    emits('showWarningMessages', 'Данные успешно изменены');
+
+  // Вызываем хук для валидации форм
+  const isValid = await validateForm(dto, TeamScheme);
+  if (!isValid) return false;
+
+  // Обновляем данные пользователя
+  const { data } = await useCustomFetch<any>(url, {
+    body: dto,
+    method: 'POST',
   });
+
+  if (data.value) {
+    // Обновляем данные в хранилище
+    teamController.editActiveTeam(dto);
+    // Отображаем сообщение об успешном изменении
+    settingsController.setMessage('Данные успешно изменены');
+  }
 };
 </script>
 

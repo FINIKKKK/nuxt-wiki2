@@ -9,6 +9,7 @@ export interface TSection extends TBase {
   parent_id: number;
   creator: TUser;
   child: TSection[];
+  children: TSection[];
   items: TArticle[];
 }
 
