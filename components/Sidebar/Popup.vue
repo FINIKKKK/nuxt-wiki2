@@ -11,17 +11,14 @@
       <SidebarHeader v-if="isPathElem" />
 
       <!--------------------------------------
-      ResolveComponent (SidebarMainItems, SidebarSearch)
+      ResolveComponent (SidebarMainItems, SidebarSearch, SidebarMap, SidebarExtraItems)
       ---------------------------------------->
-      <component
-        :is="sidebarController.currentComponent"
-        v-if="isShowMainItems"
-      />
+      <component :is="currentComponent" />
 
       <!--------------------------------------
       Дополнительные элементы
       ---------------------------------------->
-      <template v-if="!isPathElem">
+      <template v-if="isShow">
         <div class="items" v-if="sidebarController.sections?.length">
           <h3>Разделы</h3>
           <ul>
@@ -46,6 +43,7 @@ import { useSidebarStore } from '~/stores/SidebarController';
 import { useTeamStore } from '~/stores/TeamContoller';
 import { useCustomFetch } from '~/hooks/useCustomFetch';
 import { TSection } from '~/utils/types/secton';
+import { TComponentItem } from '~/utils/types/base';
 
 /**
  * Системные переменные ----------------
@@ -55,16 +53,58 @@ const sidebarController = useSidebarStore(); // Хранилище сайдба�
 const teamStore = useTeamStore(); // Хранилище активной команды
 
 /**
+ * Полльзовательские переменные ----------------
+ */
+// Компоненты для resolveComponent
+const components: TComponentItem = {
+  SidebarMainItems: resolveComponent('SidebarMainItems'),
+  SidebarSearch: resolveComponent('SidebarSearch'),
+  SidebarExtraItems: resolveComponent('SidebarExtraItems'),
+  SidebarMap: resolveComponent('SidebarMap'),
+};
+
+/**
  * Вычислительные значения ----------------
  */
-// Показывать ли основные элементы ?
 // Страница элемента?
-const isPathElem = computed(() => {
-  return route.path.includes('/sections') || route.path.includes('/articles');
+const isPathElem = computed(
+  () => route.path.includes('/sections') || route.path.includes('/articles'),
+);
+// Показывать ли основные элементы?
+const isShow = computed(() => {
+  if (isPathElem.value) {
+    return false;
+  } else if (sidebarController.activeItem === 'home') {
+    return true;
+  } else {
+    return false;
+  }
 });
-const isShowMainItems = computed(() => {
-  return sidebarController.activeItem !== 'home' || !isPathElem;
+// Текущий компонент
+const currentComponent = computed(() => {
+  return (
+    components[sidebarController.currentComponent] ||
+    components.SidebarMainItems
+  );
 });
+
+// watch(isShow, () => {
+//   if (isShow) {
+//     currentComponent.value === components.SidebarExtraItems;
+//     console.log(isShow.value);
+//     console.log(currentComponent.value);
+//   }
+// });
+
+//
+// const currentComponent = computed(() => {
+//   return components.SidebarExtraItems;
+// });
+onMounted(() => {
+  if(isShow.value) {
+    currentComponent.value === components.SidebarExtraItems;
+  }
+})
 
 /**
  * Получение данных ----------------
@@ -73,7 +113,7 @@ const isShowMainItems = computed(() => {
 const { data: sections } = await useCustomFetch<TSection[]>(
   `team/section/sections`,
   {
-    query: { team_id: teamStore.activeTeam?.team.id },
+    query: { team_id: teamStore.activeTeamId },
   },
 );
 // Устанавливаем значения в хранилище

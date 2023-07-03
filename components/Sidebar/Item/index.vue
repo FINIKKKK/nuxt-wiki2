@@ -28,7 +28,7 @@ const components = {
   SidebarItemElem: resolveComponent('SidebarItemElem'),
 };
 // Текущий компонент
-const currentComponent = shallowRef(components['SidebarItemMain']);
+const currentComponent = shallowRef(components.SidebarItemMain);
 
 /**
  * Вычисляемые значения ----------------

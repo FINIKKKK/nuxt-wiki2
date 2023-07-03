@@ -20,17 +20,17 @@
 <!-- ----------------------------------------------------- -->
 
 <script lang="ts" setup>
-import { useHandleErrors } from '~/hooks/useHandleErrors';
 import { useUserStore } from '~/stores/UserController';
 import { useTeamStore } from '~/stores/TeamContoller';
-import { TSection } from '~/api/models/section';
 import { useDateString } from '~/hooks/useDateString';
+import { TArticle } from '~/utils/types/article';
+import { TSection } from '~/utils/types/secton';
 
 /**
  * Пропсы ----------------
  */
 const props = defineProps<{
-  data: TSection;
+  data: TSection | TArticle;
   type?: 'section' | 'article';
 }>();
 
@@ -38,21 +38,15 @@ const props = defineProps<{
  * Системные переменные ----------------
  */
 const route = useRoute(); // Роут
-const teamStore = useTeamStore(); // Хранилище активной компании
-const userStore = useUserStore(); // Хранилище данных пользователя
-
-/**
- * Хуки ----------------
- */
-// Для обработки ошибок
-const { isLoading, handleSubmit } = useHandleErrors();
+const teamController = useTeamStore(); // Хранилище активной компании
+const userController = useUserStore(); // Хранилище данных пользователя
 
 /**
  * Вычислительные значения ----------------
  */
 // Ссылка на элемент
 const link = computed(() => {
-  return `/${teamStore.activeTeamId}/${
+  return `${teamController.activeTeamSlug}/${
     props.type === 'article' ? 'articles' : 'sections'
   }/${props.data.id}`;
 });

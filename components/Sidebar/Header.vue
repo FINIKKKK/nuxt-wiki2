@@ -7,7 +7,7 @@
     <svg-icon
       :name="sidebarController.isActiveMap ? 'close' : 'hamburger'"
       class="hamburger"
-      @click="sidebarController.toggleOpenMap()"
+      @click="toggleOpen()"
     />
   </div>
 </template>
@@ -21,7 +21,36 @@ import { useSidebarStore } from '~/stores/SidebarController';
 /**
  * Системные переменные ----------------
  */
+const route = useRoute(); // Роут
 const sidebarController = useSidebarStore(); // Хранилище сайдбара
+
+/**
+ * Вычисляемые значения ----------------
+ */
+// Какой именно компонент отображать0
+const isShow = computed(
+  () =>
+    sidebarController.activeItem === 'home' &&
+    (route.path.includes('/sections') || route.path.includes('/articles')),
+);
+
+/**
+ * Методы ----------------
+ */
+// Открыть или закрыть карту разделов
+const toggleOpen = () => {
+  if (sidebarController.isActiveMap) {
+    sidebarController.closeMap();
+    if (isShow.value) {
+      sidebarController.changeComponent('SidebarExtraItems');
+    } else {
+      sidebarController.changeComponent('SidebarMainItems');
+    }
+  } else {
+    sidebarController.openMap();
+    sidebarController.changeComponent('SidebarMap');
+  }
+};
 </script>
 
 <!-- ----------------------------------------------------- -->

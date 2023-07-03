@@ -12,13 +12,14 @@
 
 <script lang="ts" setup>
 import { useTeamStore } from '~/stores/TeamContoller';
-import { TItem } from '~/utils/types/sidebar';
+import { TSection } from '~/utils/types/secton';
+import { TArticle } from '~/utils/types/article';
 
 /**
  * Пропсы ----------------
  */
 const props = defineProps<{
-  data: TItem;
+  data: TSection | TArticle;
   type: 'section' | 'article';
 }>();
 
@@ -32,7 +33,7 @@ const teamController = useTeamStore(); // Хранилище активной к
  */
 // Ссылка на элемент
 const itemLink = computed(() => {
-  return `${teamController.activeTeamId}/${
+  return `${teamController.activeTeamSlug}/${
     props.type === 'section' ? 'sections' : 'articles'
   }/${props.data.id}`;
 });

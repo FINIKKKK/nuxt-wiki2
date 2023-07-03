@@ -1,61 +1,66 @@
 <template>
   <!-- Главный шаблон -->
   <NuxtLayout name="main">
-    <div v-if="section">
-      <!--------------------------------------
-      Элементы управления 
-      ---------------------------------------->
-      <div class="controls">
-        <!-- Редактировать -->
-        <NuxtLink
-          class="control"
-          :to="`${teamStore.activeTeamId}/sections/edit/${section.id}`"
-        >
-          <svg-icon name="edit" />
-        </NuxtLink>
-        <!-- Доступ -->
-        <svg-icon class="control" name="lock" />
-        <!-- Удалить -->
-        <svg-icon class="control" name="remove" @click="onDelete" />
-      </div>
-
-      <!--------------------------------------
-      Шапка элемента
-      ---------------------------------------->
-      <div class="elem__header">
-        <!-- Заголовок -->
-        <h1 class="title">{{ section.name }}</h1>
-      </div>
-
-      <!--------------------------------------
-      Информация об элементе
-      ---------------------------------------->
-      <ul class="elem__info">
-        <!-- Автор -->
-        <li class="elem__info-item">
-          Автор:
-          <span>{{
-            `${section?.creator.first_name} ${section?.creator.last_name}`
-          }}</span>
-        </li>
-        <!-- Время -->
-        <li
-          class="elem__info-item"
-          v-html="useDateString(section?.created_at, section?.updated_at)"
-        ></li>
-      </ul>
-
-      <!--------------------------------------
-      Тело элемента
-      ---------------------------------------->
-      <Body class="body" :data="section.blocks" />
-
-      <!--------------------------------------
-      Дополнительные элементы
-      ---------------------------------------->
-      <Item v-for="item in section.child" :data="item" :key="item.id" />
-      <Item v-for="item in section.items" :data="item" type="article" :key="item.id" />
+    <!--------------------------------------
+      Элементы управления
+    ---------------------------------------->
+    <div class="controls">
+      <!-- Редактировать -->
+      <NuxtLink
+        class="control"
+        :to="`${teamController.activeTeamSlug}/sections/edit/${data.section.id}`"
+      >
+        <svg-icon name="edit" />
+      </NuxtLink>
+      <!-- Доступ -->
+      <svg-icon class="control" name="lock" />
+      <!-- Удалить -->
+      <svg-icon class="control" name="remove" @click="onDelete" />
     </div>
+
+    <!--------------------------------------
+      Шапка элемента
+    ---------------------------------------->
+    <div class="elem__header">
+      <!-- Заголовок -->
+      <h1 class="title">{{ data.section.name }}</h1>
+    </div>
+
+    <!--------------------------------------
+      Информация об элементе
+    ---------------------------------------->
+    <ul class="elem__info">
+      <!-- Автор -->
+      <li class="elem__info-item">
+        Автор:
+        <span>{{
+          `${data.section?.creator.first_name} ${data.section?.creator.last_name}`
+        }}</span>
+      </li>
+      <!-- Время -->
+      <li
+        class="elem__info-item"
+        v-html="
+          useDateString(data.section.created_at, data.section.updated_at)
+        "
+      ></li>
+    </ul>
+
+    <!--------------------------------------
+      Элементы раздела
+    ---------------------------------------->
+    <Item
+      v-for="item in data.section.child"
+      :data="item"
+      type="section"
+      :key="item.id"
+    />
+    <Item
+      v-for="item in data.section.items"
+      :data="item"
+      type="article"
+      :key="item.id"
+    />
   </NuxtLayout>
 </template>
 
@@ -63,23 +68,22 @@
 <!-- ----------------------------------------------------- -->
 
 <script lang="ts" setup>
-import { Api } from '~/api';
 import { useUserStore } from '~/stores/UserController';
-import { useHandleErrors } from '~/hooks/useHandleErrors';
 import { useTeamStore } from '~/stores/TeamContoller';
-import { useFormatDate } from '~/hooks/useFormatData';
 import { useSectionsStore } from '~/stores/SectionContoller';
-import { useDateString } from '../../../../hooks/useDateString';
-import {useSidebarStore} from "~/stores/SidebarController";
+import { useSidebarStore } from '~/stores/SidebarController';
+import { useCustomFetch } from '~/hooks/useCustomFetch';
+import { useDateString } from '~/hooks/useDateString';
+import { TSectionData } from '~/utils/types/secton';
 
 /**
  * Системные переменные ----------------
  */
 const route = useRoute(); // Роут
 const router = useRouter(); // Роутер
-const teamStore = useTeamStore(); // Хранилище активной команды
-const userStore = useUserStore(); // Хранилище пользователя
-const sectionsStore = useSectionsStore(); // Хранилище разделов
+const teamController = useTeamStore(); // Хранилище активной команды
+const userController = useUserStore(); // Хранилище пользователя
+const sectionsController = useSectionsStore(); // Хранилище разделов
 const sidebarController = useSidebarStore(); // Хранилище сайдбара
 
 /**
@@ -87,24 +91,19 @@ const sidebarController = useSidebarStore(); // Хранилище сайдба�
  */
 // Данные для запросов
 const dto = {
-  team_id: teamStore.activeTeam.team.id,
+  team_id: teamController.activeTeamId,
   section_id: route.params.id,
 };
-
-/**
- * Хуки ----------------
- */
-const { isLoading, handleSubmit } = useHandleErrors(); // Для оработки ошибок
 
 /**
  * Получение данных ----------------
  */
 // Данные раздела
-const { data: section } = useAsyncData(async () => {
-  const { data } = await Api().section.getOne(dto);
-  sidebarController.setSection(data.section);
-  return data.section;
+const { data } = await useCustomFetch<TSectionData>(`team/section`, {
+  query: dto,
 });
+// Сохраняем в хранилище
+sectionsController.setSection(data.value.section);
 
 /**
  * Методы ----------------
@@ -113,13 +112,16 @@ const { data: section } = useAsyncData(async () => {
 const onDelete = async () => {
   // Подтверждение удаления
   if (window.confirm('Вы точно хотите удалить раздел?')) {
-    // Хук для обботки ошибок
-    handleSubmit(async () => {
-      // Удаляем элемент
-      await Api().section.delete(dto);
-      // Перенапрвляем пользователя
-      await router.push(`${teamStore.activeTeamId}`);
+    // Удаляем элемент
+    const { data } = await useCustomFetch(`team/section/delete`, {
+      body: dto,
+      method: 'POST',
     });
+
+    if (data.value) {
+      // Перенапрвляем пользователя
+      await router.push(`${teamController.activeTeamId}`);
+    }
   }
 };
 </script>

@@ -56,7 +56,6 @@
 import { useTeamStore } from '~/stores/TeamContoller';
 import { useUserStore } from '~/stores/UserController';
 import { useSidebarStore } from '~/stores/SidebarController';
-import { TComponentItem } from '~/utils/types/base';
 
 /**
  * Системные переменные ----------------
@@ -73,12 +72,6 @@ const items = [
   ['home', 'add', 'search'],
   ['settings', 'bell', 'tooltip', 'user'],
 ];
-// Компоненты для resolveComponent
-const components: TComponentItem = {
-  SidebarMainItems: resolveComponent('SidebarMainItems'),
-  SidebarSearch: resolveComponent('SidebarSearch'),
-  SidebarMap: resolveComponent('SidebarMap'),
-};
 
 /**
  * Вычисляемые значения ----------------
@@ -105,6 +98,14 @@ const isShowItem = computed(() => (item: string) => {
   }
 });
 
+const route = useRoute(); // Роут
+
+const isShow = computed(
+  () =>
+    sidebarController.activeItem === 'home' &&
+    (route.path.includes('/sections') || route.path.includes('/articles')),
+);
+
 /**
  * Методы ----------------
  */
@@ -118,11 +119,15 @@ const openSidebar = (item: string) => {
     // Иначе делаем его активный и открываем попап
     else {
       sidebarController.open(item);
+      sidebarController.closeMap();
       // Меняем resolveComponent в зависимости от условия
-      if (item !== 'search') {
-        sidebarController.changeComponent(components['SidebarMainItems']);
+      console.log(isShow.value);
+      if (isShow.value) {
+        sidebarController.changeComponent('SidebarExtraItems');
+      } else if (item === 'search') {
+        sidebarController.changeComponent('SidebarSearch');
       } else {
-        sidebarController.changeComponent(components['SidebarSearch']);
+        sidebarController.changeComponent('SidebarMainItems');
       }
     }
   }

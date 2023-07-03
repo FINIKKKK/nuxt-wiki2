@@ -1,12 +1,12 @@
 <template>
   <ul class="map">
     <li v-for="item in sidebarController.sections" class="item">
-      <NuxtLink :to="`${teamStore.activeTeamId}/sections/${item.id}`"
+      <NuxtLink :to="`${teamStore.activeTeamSlug}/sections/${item.id}`"
         >{{ item.name }}
       </NuxtLink>
       <ul class="children">
         <li v-for="child in item.children" class="child">
-          <NuxtLink :to="`${teamStore.activeTeamId}/sections/${item.id}`"
+          <NuxtLink :to="`${teamStore.activeTeamSlug}/sections/${item.id}`"
             >{{ child.name }}
           </NuxtLink>
         </li>
@@ -32,4 +32,34 @@ const teamStore = useTeamStore(); // Хранилище активной ком�
 <!-- ----------------------------------------------------- -->
 <!-- ----------------------------------------------------- -->
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+.map {
+  .item,
+  .child {
+    &:not(:last-child) {
+      margin-bottom: 15px;
+    }
+  }
+  .children {
+    margin-top: 15px;
+    padding-left: 25px;
+    position: relative;
+    &::before {
+      content: '';
+      position: absolute;
+      width: 1px;
+      height: 100%;
+      top: 0;
+      left: 7px;
+      background-color: rgba($black, 0.2);
+    }
+  }
+  a {
+    color: $gray;
+    &:hover {
+      text-decoration: none;
+      color: $blue;
+    }
+  }
+}
+</style>

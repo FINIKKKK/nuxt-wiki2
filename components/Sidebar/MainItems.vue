@@ -23,6 +23,7 @@ import { useTeamStore } from '~/stores/TeamContoller';
 import { useUserStore } from '~/stores/UserController';
 import { useCustomFetch } from '~/hooks/useCustomFetch';
 import { TInnerItem } from '~/utils/types/sidebar';
+import { ComputedRef } from 'vue';
 
 /**
  * Системные переменные ----------------
@@ -69,17 +70,17 @@ const innerItems: TInnerItem[] = [
       {
         icon: 'activation',
         label: 'Активность',
-        link: `${teamController.activeTeamId}`,
+        link: `${teamController.activeTeamSlug}`,
       },
       {
         icon: 'document',
         label: 'Ваши работы',
-        link: `${teamController.activeTeamId}/my_works`,
+        link: `${teamController.activeTeamSlug}/my_works`,
       },
       {
         icon: 'glasses',
         label: 'На модерации',
-        link: `${teamController.activeTeamId}/moderation`,
+        link: `${teamController.activeTeamSlug}/moderation`,
         isShow:
           teamController.activeTeam?.role.name === 'owner' ||
           teamController.activeTeam?.role.name === 'moderator',
@@ -98,12 +99,12 @@ const innerItems: TInnerItem[] = [
       {
         icon: 'folder',
         label: 'Раздел',
-        link: `${teamController.activeTeamId}/sections/create`,
+        link: `${teamController.activeTeamSlug}/sections/create`,
       },
       {
         icon: 'document',
         label: 'Статью',
-        link: `${teamController.activeTeamId}/articles/create`,
+        link: `${teamController.activeTeamSlug}/articles/create`,
       },
     ],
   },
@@ -118,17 +119,12 @@ const innerItems: TInnerItem[] = [
       {
         icon: 'settings',
         label: 'Общие',
-        link: `${teamController.activeTeamId}/settings`,
+        link: `${teamController.activeTeamSlug}/settings`,
       },
       {
         icon: 'user',
         label: 'Соотрудники',
-        link: `${teamController.activeTeamId}/settings/employees`,
-      },
-      {
-        icon: 'group',
-        label: 'Группы',
-        link: `${teamController.activeTeamId}/settings/employees`,
+        link: `${teamController.activeTeamSlug}/settings/employees`,
       },
     ],
   },
@@ -151,9 +147,13 @@ const innerItems: TInnerItem[] = [
 /**
  * Вычисляемые значения ----------------
  */
+
 // Активный элемент
-const activeItem: TInnerItem | null =
-  innerItems.find((obj) => obj.name === sidebarController.activeItem) || null;
+const activeItem: ComputedRef<TInnerItem | null> = computed(() => {
+  return (
+    innerItems.find((obj) => obj.name === sidebarController.activeItem) || null
+  );
+});
 </script>
 
 <!-- ----------------------------------------------------- -->
