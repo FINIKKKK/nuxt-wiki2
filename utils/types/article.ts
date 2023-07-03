@@ -2,6 +2,7 @@ import { TBase } from '~/utils/types/index';
 import { TSection } from '~/utils/types/secton';
 import { OutputBlockData } from '@editorjs/editorjs';
 import { TAbility } from '~/utils/types/team';
+import { TUser } from '~/utils/types/account';
 
 export interface TArticle extends TBase {
   name: string;
@@ -10,6 +11,7 @@ export interface TArticle extends TBase {
   section: TSection;
   tags: any[];
   section_id: number;
+  creator: TUser;
 }
 
 export interface TTab {
