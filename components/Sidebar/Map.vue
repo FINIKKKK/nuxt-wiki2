@@ -1,12 +1,16 @@
 <template>
   <ul class="map">
-    <li v-for="item in sidebarController.sections" class="item">
-      <NuxtLink :to="`${teamStore.activeTeamSlug}/sections/${item.id}`"
+    <li
+      v-for="item in sidebarController.sections"
+      class="item"
+      :class="{ active: Number(route.params.id) === item.id }"
+    >
+      <NuxtLink class="link" :to="`${teamStore.activeTeamSlug}/sections/${item.id}`"
         >{{ item.name }}
       </NuxtLink>
       <ul class="children">
-        <li v-for="child in item.children" class="child">
-          <NuxtLink :to="`${teamStore.activeTeamSlug}/sections/${item.id}`"
+        <li v-for="child in item.children" class="child" :class="{ active: Number(route.params.id) === child.id }">
+          <NuxtLink :to="`${teamStore.activeTeamSlug}/sections/${child.id}`"
             >{{ child.name }}
           </NuxtLink>
         </li>
@@ -25,6 +29,7 @@ import { useSidebarStore } from '~/stores/SidebarController';
 /**
  * Системные переменные ----------------
  */
+const route = useRoute(); // Роут
 const sidebarController = useSidebarStore(); // Хранилище сайдбара
 const teamStore = useTeamStore(); // Хранилище активной команды
 </script>
@@ -38,6 +43,14 @@ const teamStore = useTeamStore(); // Хранилище активной ком�
   .child {
     &:not(:last-child) {
       margin-bottom: 15px;
+    }
+    &.active .link {
+      color: $blue;
+    }
+  }
+  .child.active {
+    a {
+      color: $blue;
     }
   }
   .children {

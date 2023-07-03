@@ -1,5 +1,5 @@
 <template>
-  <li class="sidebar__item" :class="{ post: props.type === 'elem' }">
+  <li class="sidebar__item">
     <NuxtLink :to="itemLink">
       <svg-icon :name="props.type === 'section' ? 'folder' : 'document'" />
       <p>{{ props.data.name }}</p>

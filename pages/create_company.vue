@@ -14,12 +14,12 @@
         <UIInput
           label="Название вашей компании"
           v-model="nameValue"
-          :errors="errorsValidate['name']"
+          :errors="errors['name']"
         />
         <UIInput
           label="Адресс вашей компании"
           v-model="addressValue"
-          :errors="errorsValidate['address']"
+          :errors="errors['address']"
           type="address"
         />
         <p>
@@ -63,7 +63,7 @@ const addressValue = ref(''); // Значение адресса
 /**
  * Хуки ----------------
  */
-const { errorsValidate, validateForm } = useFormValidation(); // Для обработки формы
+const { errors, validateForm } = useFormValidation(); // Для обработки формы
 
 /**
  * Методы ----------------

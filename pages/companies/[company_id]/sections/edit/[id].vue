@@ -31,7 +31,7 @@ const { data } = await useCustomFetch<TSectionEdit>(`team/section/edit`, {
  * Вычисляемые значения ----------------
  */
 // Значение селекта
-const section = sectionsController.sections.find(
+const section = sectionsController.sections?.find(
   (obj) => obj.id === data.value.section.parent_id,
 );
 // Сохраняем данные в хранилище

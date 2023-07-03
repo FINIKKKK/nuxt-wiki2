@@ -60,6 +60,7 @@ import { useSidebarStore } from '~/stores/SidebarController';
 /**
  * Системные переменные ----------------
  */
+const route = useRoute(); // Роут
 const userStore = useUserStore(); // Хранилище данных пользователя
 const teamStore = useTeamStore(); // Хранилище активной команды
 const sidebarController = useSidebarStore(); // Хранилище сайдбара
@@ -97,14 +98,22 @@ const isShowItem = computed(() => (item: string) => {
     else return item !== 'settings';
   }
 });
-
-const route = useRoute(); // Роут
-
+// Показывать ли элементы?
 const isShow = computed(
   () =>
     sidebarController.activeItem === 'home' &&
     (route.path.includes('/sections') || route.path.includes('/articles')),
 );
+// Изначальный текущий компонент
+onMounted(() => {
+  if (isShow.value) {
+    sidebarController.changeComponent('SidebarExtraItems');
+    sidebarController.closeMap();
+  } else {
+    sidebarController.closeMap();
+    sidebarController.changeComponent('SidebarMainItems');
+  }
+});
 
 /**
  * Методы ----------------
@@ -121,7 +130,6 @@ const openSidebar = (item: string) => {
       sidebarController.open(item);
       sidebarController.closeMap();
       // Меняем resolveComponent в зависимости от условия
-      console.log(isShow.value);
       if (isShow.value) {
         sidebarController.changeComponent('SidebarExtraItems');
       } else if (item === 'search') {

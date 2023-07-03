@@ -79,9 +79,9 @@ const labelBtn = computed(() => {
 // Значение загрузки
 const isLoading = computed(() => {
   return (
-    requestController.loading['team/section/add'] &&
-    requestController.loading['team/section/edit'] &&
-    requestController.loading['team/article/add'] &&
+    requestController.loading['team/section/add'] ||
+    requestController.loading['team/section/edit'] ||
+    requestController.loading['team/article/add'] ||
     requestController.loading['team/article/edit']
   );
 });
@@ -89,14 +89,14 @@ const isLoading = computed(() => {
 /**
  * Хуки ----------------
  */
-const { errorsValidate, validateForm } = useFormValidation(); // Для валидации формы
+const { errors, validateForm } = useFormValidation(); // Для валидации формы
 
 /**
  * Слежка за переменными ----------------
  */
 // Сохранить значение селекта
-watch(errorsValidate, () => {
-  createElemController.setErrors(errorsValidate.value);
+watch(errors, () => {
+  createElemController.setErrors(Object.values(errors.value).flat());
 });
 
 /**
@@ -116,7 +116,7 @@ const onSubmit = async () => {
       team_id: teamController.activeTeam?.team.id,
       name: createElemController.title,
       ...(createElemController.select && {
-        parent_id: createElemController.select.id,
+        parent_id: createElemController.select.value,
       }),
       abilities: createElemController.abilities.map((obj) => ({
         user_id: obj.user.id,
@@ -166,7 +166,7 @@ const onSubmit = async () => {
       team_id: teamController.activeTeam?.team.id,
       name: createElemController.title,
       ...(createElemController.select && {
-        parent_id: createElemController.select.id,
+        parent_id: createElemController.select.value,
       }),
       tabs: createElemController.tabs.map((obj) => ({
         name: obj.name,

@@ -39,7 +39,7 @@ const createElemController = useCreateElemStore(); // Хранилище стр�
  */
 const tagsRef = ref(null); // Ref-ссылка на элемент
 const tagsValue = ref(''); // Значени поля ввода
-const tags = ref([]); // Список тэгов
+const tags = ref<number[]>([]); // Список тэгов
 
 /**
  * Хуки ----------------
@@ -70,12 +70,12 @@ const addTag = async () => {
     team_id: teamController.activeTeamId,
     name: tagsValue.value,
   };
-  const { data } = await useCustomFetch('team/settings/tags/add', {
+  const { data } = await useCustomFetch<any>('team/settings/tags/add', {
     body: dto,
     method: 'POST',
   });
   tagsValue.value = '';
-  tags.value.push(data);
+  tags.value.push(data.value);
 };
 </script>
 

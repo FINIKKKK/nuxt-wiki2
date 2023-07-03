@@ -11,8 +11,9 @@ export const useSectionsStore = defineStore('sectionsController', () => {
    * Свойства ----------------
    */
   const section: Ref<TSection | null> = ref(null); // Текущий раздел
+  const parentId: Ref<number | null> = ref(null); // ID родительского раздела
+  const isChild: Ref<boolean> = ref(false); // Это ребенок?
   const sections: Ref<TSection[] | null> = ref([]); // Разделы
-  const isActiveHamburger: Ref<boolean> = ref(false); // Разделы
 
   /**
    * Методы ----------------
@@ -21,22 +22,28 @@ export const useSectionsStore = defineStore('sectionsController', () => {
   const setSection = (value: TSection) => {
     section.value = value;
   };
+  // Установить родительский раздел
+  const setParentId = (value: number | null) => {
+    parentId.value = value;
+  };
   // Установить разделы
   const setSections = (value: TSection[]) => {
     sections.value = value;
   };
-  // Установить разделы
-  const setActiveHamburger = () => {
-    isActiveHamburger.value = !isActiveHamburger.value;
+  // Изменить значение ребенка
+  const setIsChild = (value: boolean) => {
+    isChild.value = value;
   };
 
-  // Возращаем данныеs
+  // Возращаем данные
   return {
     section,
+    parentId,
+    isChild,
     sections,
-    isActiveHamburger,
     setSection,
+    setParentId,
     setSections,
-    setActiveHamburger,
+    setIsChild,
   };
 });

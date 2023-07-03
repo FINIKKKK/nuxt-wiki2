@@ -40,9 +40,7 @@
       <!-- Время -->
       <li
         class="elem__info-item"
-        v-html="
-          useDateString(data.section.created_at, data.section.updated_at)
-        "
+        v-html="useDateString(data.section.created_at, data.section.updated_at)"
       ></li>
     </ul>
 
@@ -104,6 +102,12 @@ const { data } = await useCustomFetch<TSectionData>(`team/section`, {
 });
 // Сохраняем в хранилище
 sectionsController.setSection(data.value.section);
+sectionsController.setParentId(data.value.section.parent_id);
+if (!data.value.section.parent_id) {
+  sectionsController.setIsChild(false);
+} else {
+  sectionsController.setIsChild(true);
+}
 
 /**
  * Методы ----------------
@@ -119,7 +123,7 @@ const onDelete = async () => {
     });
 
     if (data.value) {
-      // Перенапрвляем пользователя
+      // Перенаправляем пользователя
       await router.push(`${teamController.activeTeamId}`);
     }
   }

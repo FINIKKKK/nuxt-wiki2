@@ -82,29 +82,15 @@ const isShow = computed(() => {
 });
 // Текущий компонент
 const currentComponent = computed(() => {
-  return (
-    components[sidebarController.currentComponent] ||
-    components.SidebarMainItems
-  );
-});
-
-// watch(isShow, () => {
-//   if (isShow) {
-//     currentComponent.value === components.SidebarExtraItems;
-//     console.log(isShow.value);
-//     console.log(currentComponent.value);
-//   }
-// });
-
-//
-// const currentComponent = computed(() => {
-//   return components.SidebarExtraItems;
-// });
-onMounted(() => {
-  if(isShow.value) {
-    currentComponent.value === components.SidebarExtraItems;
+  if (sidebarController.currentComponent) {
+    return (
+      components[sidebarController.currentComponent] ||
+      components.SidebarMainItems
+    );
+  } else {
+    components.SidebarMainItems;
   }
-})
+});
 
 /**
  * Получение данных ----------------

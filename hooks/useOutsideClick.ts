@@ -3,7 +3,7 @@
  */
 export const useOutsideClick = (
   elementRef: Ref<HTMLElement | null>,
-  event?: Ref<boolean | null>,
+  event?: Ref<boolean | null> | null,
   callback?: () => void,
 ) => {
   const handleClickOutside = (e: MouseEvent) => {

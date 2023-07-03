@@ -5,23 +5,25 @@
       <Input
         label="Название вашей компании"
         v-model="nameValue"
-        :errors="errorsValidate['name'] || []"
+        :errors="errors['name']"
       />
       <Input
         label="Адресс вашей компании"
         v-model="codeValue"
-        :errors="errorsValidate['code'] || []"
+        :errors="errors['code']"
       />
       <p>
         Поделитесь ссылкой
         <NuxtLink :to="`/companies/${teamController.activeTeamId}`"
-          >{{ teamController.activeTeam.team.code }}.itl.wiki
+          >{{ teamController.activeTeam?.team.code }}.itl.wiki
         </NuxtLink>
         чтобы добавить кого-либо с разрешенным доменом электронной почты в ваше
         рабочее пространство.
       </p>
     </div>
-    <button class="btn" :class="{ disabled: isLoading }">Сохранить</button>
+    <button class="btn" :class="{ disabled: requestController.loading[url] }">
+      Сохранить
+    </button>
   </form>
 </template>
 
@@ -35,12 +37,14 @@ import { TeamScheme } from '~/utils/validation';
 import { useFormValidation } from '~/hooks/useFormValidation';
 import { useSettingsStore } from '~/stores/SettingsController';
 import { useCustomFetch } from '~/hooks/useCustomFetch';
+import { useRequestStore } from '~/stores/RequestController';
 
 /**
  * Системные переменные ----------------
  */
 const teamController = useTeamStore(); // Хранилище пользователя
 const settingsController = useSettingsStore(); // Хранилище страницы настроек
+const requestController = useRequestStore(); // Хранилище запроса
 
 /**
  * Пользовательские переменные ----------------
@@ -52,7 +56,7 @@ const codeValue = ref(teamController.activeTeam?.team.code || ''); // Значе
 /**
  * Хуки ----------------
  */
-const { errorsValidate, validateForm } = useFormValidation(); // Для валидации формы
+const { errors, validateForm } = useFormValidation(); // Для валидации формы
 
 /**
  * Отслеживание переменных ----------------

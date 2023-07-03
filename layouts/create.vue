@@ -9,8 +9,8 @@
       Ошибки
     ---------------------------------------->
     <UIWarning
-      v-if="Object.values(createElemController.errors).flat().length"
-      :errors="Object.values(createElemController.errors).flat() as string[]"
+      v-if="createElemController.errors.length"
+      :errors="createElemController.errors"
       class="warning"
     />
 

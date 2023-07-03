@@ -6,19 +6,19 @@
         label="Текущий пароль"
         type="password"
         v-model="passwordValue"
-        :errors="errorsValidate['password']"
+        :errors="errors['password']"
       />
       <UIInput
         label="Новый пароль"
         type="password"
         v-model="newPasswordValue"
-        :errors="errorsValidate['new_password']"
+        :errors="errors['new_password']"
       />
       <UIInput
         label="Повторить пароль"
         type="password"
         v-model="passwordConfirmValue"
-        :errors="errorsValidate['password_confirmation']"
+        :errors="errors['password_confirmation']"
       />
     </div>
     <button class="btn" :class="{ disabled: requestController.loading[url] }">
@@ -54,7 +54,7 @@ const passwordConfirmValue = ref(''); // Значение подтвежденн
 /**
  * Хуки ----------------
  */
-const { errorsValidate, validateForm } = useFormValidation(); // Для валидации формы
+const { errors, validateForm } = useFormValidation(); // Для валидации формы
 
 /**
  * Отслеживание переменных ----------------

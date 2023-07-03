@@ -9,12 +9,12 @@ interface FormErrors {
  * Хук для валидации формы и выполнения дополнительной логики
  */
 export const useFormValidation = () => {
-  const errorsValidate: Ref<FormErrors> = ref({}); // Ошибки валидации
+  const errors: Ref<FormErrors> = ref({}); // Ошибки валидации
 
   // Функция валидации
   const validateForm = async (dto?: any, schema?: any) => {
     try {
-      errorsValidate.value = {}; // Обнуляем ошибки
+      errors.value = {}; // Обнуляем ошибки
       // Валидируем данные
       if (schema) {
         await schema.validate(dto, { abortEarly: false });
@@ -26,11 +26,11 @@ export const useFormValidation = () => {
         // Приводим значение к одному виду
         err.inner.forEach((error: any) => {
           const path = error.path;
-          if (!errorsValidate.value) errorsValidate.value = {};
-          if (!errorsValidate.value[path]) {
-            errorsValidate.value[path] = [];
+          if (!errors.value) errors.value = {};
+          if (!errors.value[path]) {
+            errors.value[path] = [];
           }
-          errorsValidate.value[path].push(error.message);
+          errors.value[path].push(error.message);
         });
       }
       return false;
@@ -39,7 +39,7 @@ export const useFormValidation = () => {
 
   // Возвращаем данные
   return {
-    errorsValidate,
+    errors,
     validateForm,
   };
 };

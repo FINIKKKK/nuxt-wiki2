@@ -5,17 +5,17 @@
       <UIInput
         label="Имя"
         v-model="firstNameValue"
-        :errors="errorsValidate['firstName']"
+        :errors="errors['firstName']"
       />
       <UIInput
         label="Фамилия"
         v-model="lastNameValue"
-        :errors="errorsValidate['lastName']"
+        :errors="errors['lastName']"
       />
       <UIInput
         label="Email"
         v-model="emailValue"
-        :errors="errorsValidate['email']"
+        :errors="errors['email']"
       />
     </div>
     <button class="btn" :class="{ disabled: requestController.loading[url] }">
@@ -53,7 +53,7 @@ const emailValue = ref(userController.user?.email || ''); // Значене emai
 /**
  * Хуки ----------------
  */
-const { errorsValidate, validateForm } = useFormValidation(); // Для валидации формы
+const { errors, validateForm } = useFormValidation(); // Для валидации формы
 
 /**
  * Отслеживание переменных ----------------

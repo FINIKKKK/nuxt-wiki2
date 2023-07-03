@@ -41,7 +41,7 @@ const { data } = await useCustomFetch<TArticleEdit>(`team/article/edit`, {
 const section =
   sectionsController.sections?.find(
     (obj) => obj.id === data.value.article.section_id,
-  ) || {};
+  ) || null;
 // Значение вкладок
 const tabs = await computed(() => {
   return data.value.article.tabs.map((obj) => ({
@@ -51,10 +51,14 @@ const tabs = await computed(() => {
 });
 // Сохраняем данные в хранилище
 createElemController.setTitle(data.value.article.name);
-createElemController.setSelect({
-  value: section.id,
-  label: section.name,
-});
+createElemController.setSelect(
+  section
+    ? {
+        value: section.id,
+        label: section.name,
+      }
+    : null,
+);
 createElemController.setTabs(tabs.value);
 createElemController.setTags(data.value.article.tags);
 </script>

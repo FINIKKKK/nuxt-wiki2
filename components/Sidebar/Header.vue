@@ -1,9 +1,9 @@
 <template>
   <div class="header">
-    <div class="back">
+    <NuxtLink :to="link" class="back">
       <svg-icon name="back" />
       <p>Назад</p>
-    </div>
+    </NuxtLink>
     <svg-icon
       :name="sidebarController.isActiveMap ? 'close' : 'hamburger'"
       class="hamburger"
@@ -17,12 +17,16 @@
 
 <script lang="ts" setup>
 import { useSidebarStore } from '~/stores/SidebarController';
+import { useTeamStore } from '~/stores/TeamContoller';
+import { useSectionsStore } from '~/stores/SectionContoller';
 
 /**
  * Системные переменные ----------------
  */
 const route = useRoute(); // Роут
 const sidebarController = useSidebarStore(); // Хранилище сайдбара
+const sectionsController = useSectionsStore(); // Хранилище разделов
+const teamController = useTeamStore(); // Хранилище команд
 
 /**
  * Вычисляемые значения ----------------
@@ -33,6 +37,14 @@ const isShow = computed(
     sidebarController.activeItem === 'home' &&
     (route.path.includes('/sections') || route.path.includes('/articles')),
 );
+// Ссылка назад
+const link = computed(() => {
+  if (sectionsController.isChild) {
+    return `${teamController.activeTeamSlug}/sections/${sectionsController.parentId}`;
+  } else {
+    return `${teamController.activeTeamSlug}`;
+  }
+});
 
 /**
  * Методы ----------------
@@ -78,8 +90,10 @@ const toggleOpen = () => {
       margin-left: 10px;
       transition: 0.3s;
       font-size: 14px;
+      color: $black;
     }
     &:hover {
+      text-decoration: none;
       p {
         color: $blue;
       }

@@ -18,13 +18,13 @@
       <UIInput
         label="Электронная почта"
         v-model="emailValue"
-        :errors="errorsValidate['email']"
+        :errors="errors['email']"
       />
       <UIInput
         label="Пароль"
         v-model="passwordValue"
         type="password"
-        :errors="errorsValidate['password']"
+        :errors="errors['password']"
       />
 
       <p>
@@ -66,7 +66,7 @@ const passwordValue = ref(''); // Значение пароля
 /**
  * Хуки ----------------
  */
-const { errorsValidate, validateForm } = useFormValidation(); // Для валидации формы
+const { errors, validateForm } = useFormValidation(); // Для валидации формы
 
 /**
  * Методы ----------------

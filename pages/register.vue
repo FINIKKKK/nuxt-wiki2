@@ -18,28 +18,28 @@
       <UIInput
         label="Имя"
         v-model="firstNameValue"
-        :errors="errorsValidate['first_name']"
+        :errors="errors['first_name']"
       />
       <UIInput
         label="Фамилия"
         v-model="lastNameValue"
-        :errors="errorsValidate['last_name']"
+        :errors="errors['last_name']"
       />
       <UIInput
         label="Электронная почта"
         v-model="emailValue"
-        :errors="errorsValidate['email']"
+        :errors="errors['email']"
       />
       <UIInput
         label="Номер мобильного телефона"
         v-model="phoneValue"
-        :errors="errorsValidate['phone']"
+        :errors="errors['phone']"
       />
       <UIInput
         label="Пароль"
         type="password"
         v-model="passwordValue"
-        :errors="errorsValidate['password']"
+        :errors="errors['password']"
       />
 
       <button class="btn" :class="{ disabled: requestController.loading[url] }">
@@ -87,7 +87,7 @@ const passwordValue = ref(''); // Значение пароля
 /**
  * Хуки ----------------
  */
-const { errorsValidate, validateForm } = useFormValidation(); // Для валидации формы
+const { errors, validateForm } = useFormValidation(); // Для валидации формы
 
 /**
  * Методы ----------------

@@ -25,7 +25,7 @@ import Warning from '~/components/UI/Warning.vue';
 /**
  * Пользовательские переменные ----------------
  */
-const errors = ref([]); // Ошибки
+const errors = ref<string[]>([]); // Ошибки
 const messages = ref(''); // Сообщения
 
 /**

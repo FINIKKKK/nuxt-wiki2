@@ -25,12 +25,12 @@ export interface TTeam extends TBase {
 }
 
 export interface TActiveTeam {
-  role: TRole;
   team: TTeam;
+  role: TRole;
 }
 
 export interface TeamEditDto {
-  team_id: string;
+  team_id?: number;
   name: string;
   code: string;
 }

@@ -29,7 +29,7 @@ const sidebarController = useSidebarStore(); // Хранилище сайдба�
  * Хуки ----------------
  */
 // Скрывать попап, если нажатие было вне его области
-useOutsideClick(popupRef, false, () => {
+useOutsideClick(popupRef, null, () => {
   sidebarController.close();
 });
 </script>
