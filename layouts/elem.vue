@@ -67,12 +67,16 @@ const teamController = useTeamStore(); // Хранилище активной к
 // Навигация на странице
 const nav = [
   {
-    label: props.data.parent?.name,
-    link: `${teamController.activeTeamSlug}/sections/${props.data.parent?.id}`,
+    label: props.data.parent?.name || props.data.section?.name,
+    link: `${teamController.activeTeamSlug}/${
+      props.type === 'sections' ? 'sections' : 'articles'
+    }/${props.data.parent ? props.data.parent?.id : props.data.section?.id}`,
   },
   {
     label: props.data.name,
-    link: `${teamController.activeTeamSlug}/sections/${props.data.id}`,
+    link: `${teamController.activeTeamSlug}/${
+      props.type === 'sections' ? 'sections' : 'articles'
+    }/${props.data.id}`,
   },
 ];
 </script>

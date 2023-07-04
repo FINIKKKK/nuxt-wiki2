@@ -1,7 +1,7 @@
 <template>
   <ul class="map">
     <li
-      v-for="item in sidebarController.sections"
+      v-for="item in sectionsController.sections"
       class="item"
       :class="{ active: Number(route.params.id) === item.id }"
     >
@@ -25,12 +25,13 @@
 <script lang="ts" setup>
 import { useTeamStore } from '~/stores/TeamContoller';
 import { useSidebarStore } from '~/stores/SidebarController';
+import {useSectionsStore} from "~/stores/SectionContoller";
 
 /**
  * Системные переменные ----------------
  */
 const route = useRoute(); // Роут
-const sidebarController = useSidebarStore(); // Хранилище сайдбара
+const sectionsController = useSectionsStore(); // Хранилище сайдбара
 const teamStore = useTeamStore(); // Хранилище активной команды
 </script>
 

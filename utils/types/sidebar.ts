@@ -1,3 +1,7 @@
+import { TArticle } from '~/utils/types/article';
+import { TSection } from '~/utils/types/secton';
+import { TUser } from '~/utils/types/account';
+
 export interface TItem {
   icon: string;
   label: string;
@@ -10,4 +14,16 @@ export interface TInnerItem {
   name: string;
   title: string;
   items?: TItem[];
+}
+
+export interface TSearchResults {
+  tags: any[];
+  articles: TArticle[];
+  sections: TSection[];
+  users: TUser[];
+}
+
+export interface TSearchData {
+  results: TSearchResults;
+  total: number;
 }

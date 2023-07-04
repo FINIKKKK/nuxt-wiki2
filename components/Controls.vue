@@ -3,7 +3,9 @@
     <!-- Редактировать -->
     <NuxtLink
       class="control"
-      :to="`${teamController.activeTeamSlug}/sections/edit/${route.params.id}`"
+      :to="`${teamController.activeTeamSlug}/${
+        props.type === 'section' ? 'sections' : 'articles'
+      }/edit/${route.params.id}`"
     >
       <svg-icon name="edit" />
     </NuxtLink>
@@ -43,14 +45,15 @@ const onDelete = async () => {
   // Подтверждение удаления
   if (
     window.confirm(
-      `Вы точно хотите удалить ${props.type ? 'заздел' : 'статью'}?`,
+      `Вы точно хотите удалить ${props.type ? ' раздел' : 'статью'}?`,
     )
   ) {
     // Удаляем элемент
     const { data } = await useCustomFetch(`team/section/delete`, {
       body: {
         team_id: teamController.activeTeamId,
-        section_id: route.params.id,
+        ...(props.type === 'section' && { section_id: route.params.id }),
+        ...(props.type === 'article' && { article_id: route.params.id }),
       },
       method: 'POST',
     });

@@ -19,11 +19,11 @@
       Дополнительные элементы
       ---------------------------------------->
       <template v-if="isShow">
-        <div class="items" v-if="sidebarController.sections?.length">
+        <div class="items" v-if="sectionsController.sections?.length">
           <h3>Разделы</h3>
           <ul>
             <template
-              v-for="section in sidebarController.sections"
+              v-for="section in sectionsController.sections"
               :key="section.id"
             >
               <SidebarItem :data="section" type="section" />
@@ -44,12 +44,14 @@ import { useTeamStore } from '~/stores/TeamContoller';
 import { useCustomFetch } from '~/hooks/useCustomFetch';
 import { TSection } from '~/utils/types/secton';
 import { TComponentItem } from '~/utils/types/base';
+import { useSectionsStore } from '~/stores/SectionContoller';
 
 /**
  * Системные переменные ----------------
  */
 const route = useRoute(); // Роут
 const sidebarController = useSidebarStore(); // Хранилище сайдбара
+const sectionsController = useSectionsStore(); // Хранилище разделов
 const teamStore = useTeamStore(); // Хранилище активной команды
 
 /**
@@ -106,7 +108,7 @@ const { data: sections } = await useCustomFetch<TSection[]>(
   },
 );
 // Устанавливаем значения в хранилище
-sidebarController.setSections(sections.value);
+sectionsController.setSections(sections.value);
 </script>
 
 <!-- ----------------------------------------------------- -->

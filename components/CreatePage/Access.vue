@@ -20,9 +20,9 @@
       <!-- Список работников для выборки -->
       <ul class="list" v-if="isShowList">
         <li
-          class="item"
-          v-for="employee in employees"
-          @click="addEmployeesAccess(employee)"
+            class="item"
+            v-for="employee in employees"
+            @click="addEmployeesAccess(employee)"
         >
           <img :src="employee.picture" alt="avatar" />
           <p>{{ employee?.fullname }}</p>
@@ -139,20 +139,6 @@ const addEmployeesAccess = (value: TUser) => {
   width: 100%;
   left: 0;
   top: 75px;
-  .item {
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    padding: 10px;
-    img {
-      width: 40px;
-      height: 40px;
-      margin-right: 25px;
-    }
-    &:hover {
-      background-color: rgba($blue, 0.1);
-    }
-  }
 }
 
 .employee {

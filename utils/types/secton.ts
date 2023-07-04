@@ -8,6 +8,7 @@ export interface TSection extends TBase {
   description: string;
   parent_id: number | null;
   parent: TSection | null;
+  section?: TSection;
   creator: TUser;
   child: TSection[];
   children: TSection[];

@@ -9,6 +9,7 @@ export interface TArticle extends TBase {
   description: string;
   tabs: TTabParse[];
   section: TSection;
+  parent?: TSection;
   tags: any[];
   section_id: number;
   creator: TUser;
@@ -29,6 +30,12 @@ export interface TArticleEdit {
   abilities: {
     users: TAbility[];
   };
+  canEdit: boolean;
+  canShare: boolean;
+}
+
+export interface TArticleData {
+  article: TArticle;
   canEdit: boolean;
   canShare: boolean;
 }
