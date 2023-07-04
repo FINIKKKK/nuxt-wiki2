@@ -162,11 +162,17 @@ const selectOption = (option: any) => {
   top: 100%;
   left: 0;
   width: 100%;
+  max-height: 250px;
+  overflow: auto;
   background-color: $white;
   border-radius: 2px;
   z-index: 100;
   margin-top: 15px;
   box-shadow: 0 0 3rem 0 rgba(0, 0, 0, 0.08);
+  // ScrollBar
+  &::-webkit-scrollbar {
+    width: 3px;
+  }
 }
 
 .dropdown li {

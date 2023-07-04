@@ -19,14 +19,12 @@
 
       <!-- Список работников для выборки -->
       <ul class="list" v-if="isShowList">
-        <li
-            class="item"
-            v-for="employee in employees"
-            @click="addEmployeesAccess(employee)"
-        >
-          <img :src="employee.picture" alt="avatar" />
-          <p>{{ employee?.fullname }}</p>
-        </li>
+        <User
+          v-for="employee in employees"
+          :key="employee.id"
+          :data="employee"
+          @click="addEmployeesAccess(employee)"
+        />
       </ul>
     </div>
 

@@ -7,6 +7,7 @@
     label="Искать статью, раздел или пользователя"
     v-model="searchValue"
     @input="onSearch"
+    className="label"
   />
 
   <!--------------------------------------
@@ -53,7 +54,7 @@
 <script lang="ts" setup>
 import { useTeamStore } from '~/stores/TeamContoller';
 import { useCustomFetch } from '~/hooks/useCustomFetch';
-import debounce from 'lodash/debounce';
+import debounce from 'lodash.debounce';
 import { TSearchData, TSearchResults } from '~/utils/types/sidebar';
 
 /**

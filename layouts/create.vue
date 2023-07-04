@@ -92,10 +92,29 @@ sectionsController.setSections(sections.value);
  */
 // Конвертировать массив разделов
 const selections = computed(() => {
-  return sections.value.map((obj) => ({
-    value: obj.id,
-    label: obj.name,
-  }));
+  if (props.type === 'article') {
+    function transformSections(sections) {
+      const result = [];
+      sections.forEach((section) => {
+        result.push({
+          value: section.id,
+          label: section.name,
+        });
+        if (section.children.length > 0) {
+          const childrenResult = transformSections(section.children);
+          result.push(...childrenResult);
+        }
+      });
+      return result;
+    }
+
+    return transformSections(sections.value);
+  } else {
+    return sections.value.map((obj) => ({
+      value: obj.id,
+      label: obj.name,
+    }));
+  }
 });
 
 /**
@@ -103,14 +122,13 @@ const selections = computed(() => {
  */
 // Предупреждение прежде чем покинуть страницу
 onBeforeRouteLeave((to, from, next) => {
-  if (to.path.includes('/articles/') || to.path.includes('/sections/')) {
+  if (confirm('Вы уверены, что хотите покинуть эту страницу?')) {
     next();
+    createElemController.setTitle('');
+    createElemController.setSelect(null);
+    createElemController.setTabs([]);
   } else {
-    if (confirm('Вы уверены, что хотите покинуть эту страницу?')) {
-      next();
-    } else {
-      next(false);
-    }
+    next(false);
   }
 });
 </script>

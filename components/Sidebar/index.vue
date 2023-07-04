@@ -35,7 +35,17 @@ const popupRef = ref(null); // Ref-ссылка на элемент попапа
  */
 // Скрывать попап, если нажатие было вне его области
 useOutsideClick(popupRef, null, () => {
-  sidebarController.close();
+  const pages = [
+    '/account',
+    '/settings',
+    '/moderation',
+    '/my_works',
+    '/sections',
+    '/articles',
+  ];
+  if (!pages.some((page) => route.path.includes(page))) {
+    sidebarController.close();
+  }
 });
 
 /**

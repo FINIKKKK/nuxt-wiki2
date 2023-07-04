@@ -69,13 +69,13 @@ const nav = [
   {
     label: props.data.parent?.name || props.data.section?.name,
     link: `${teamController.activeTeamSlug}/${
-      props.type === 'sections' ? 'sections' : 'articles'
+      props.type === 'section' ? 'sections' : 'articles'
     }/${props.data.parent ? props.data.parent?.id : props.data.section?.id}`,
   },
   {
     label: props.data.name,
     link: `${teamController.activeTeamSlug}/${
-      props.type === 'sections' ? 'sections' : 'articles'
+      props.type === 'section' ? 'sections' : 'articles'
     }/${props.data.id}`,
   },
 ];
