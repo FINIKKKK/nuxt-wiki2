@@ -67,7 +67,7 @@ export const useCreateElemStore = defineStore('createElemController', () => {
   };
   // Установить ошибки валидации
   const setErrors = (value: string[]) => {
-    errors.value = value;
+    errors.value = Object.values(value).flat(2);
   };
 
   // Возращаем данные

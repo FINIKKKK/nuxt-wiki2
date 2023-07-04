@@ -34,8 +34,18 @@ export interface TArticleEdit {
   canShare: boolean;
 }
 
-export interface TArticleData {
-  article: TArticle;
+export interface TProperties {
+  bookmark: boolean;
+  like: boolean;
+  marked: boolean;
+  rate: number;
+  subscription: boolean;
   canEdit: boolean;
   canShare: boolean;
+}
+
+export interface TArticleData {
+  article: TArticle;
+  breadcrumbs: TSection[];
+  properties: TProperties;
 }

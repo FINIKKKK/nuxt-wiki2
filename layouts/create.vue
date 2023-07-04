@@ -71,10 +71,6 @@ const createElemController = useCreateElemStore(); // Хранилище стр�
 const sectionsController = useSectionsStore(); // Хранилище разделов
 
 /**
- * Пользовательские переменные ----------------
- */
-
-/**
  * Получение данных ----------------
  */
 // Разделы для списка
@@ -122,13 +118,20 @@ const selections = computed(() => {
  */
 // Предупреждение прежде чем покинуть страницу
 onBeforeRouteLeave((to, from, next) => {
-  if (confirm('Вы уверены, что хотите покинуть эту страницу?')) {
+  if (to.path.includes('/articles/') || to.path.includes('/sections/')) {
     next();
     createElemController.setTitle('');
     createElemController.setSelect(null);
     createElemController.setTabs([]);
   } else {
-    next(false);
+    if (confirm('Вы уверены, что хотите покинуть эту страницу?')) {
+      next();
+      createElemController.setTitle('');
+      createElemController.setSelect(null);
+      createElemController.setTabs([]);
+    } else {
+      next(false);
+    }
   }
 });
 </script>

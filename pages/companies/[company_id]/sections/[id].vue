@@ -46,11 +46,15 @@ const { data } = await useCustomFetch<TSectionData>(`team/section`, {
 });
 // Сохраняем в хранилище
 sectionsController.setSection(data.value.section);
-sectionsController.setParentId(data.value.section.parent_id);
+if (data.value.section.parent_id) {
+  sectionsController.setParent1({ id: data.value.section.parent_id });
+}
 if (!data.value.section.parent_id) {
   sectionsController.setIsChild(false);
 } else {
   sectionsController.setIsChild(true);
+}
+if (sectionsController.isChild && route.path.includes('sections')) {
 }
 </script>
 

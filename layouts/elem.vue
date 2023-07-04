@@ -10,6 +10,11 @@
       Шапка элемента
     ---------------------------------------->
     <div class="elem__header">
+      <svg-icon
+        v-if="props.type === 'article'"
+        :name="isFavorite ? 'favorite2' : 'favorite'"
+        @click="toggleFavorite"
+      />
       <!-- Заголовок -->
       <h1 class="title">{{ props.data.name }}</h1>
     </div>
@@ -45,25 +50,30 @@
 <script lang="ts" setup>
 import { useDateString } from '~/hooks/useDateString';
 import { TSection } from '~/utils/types/secton';
-import { TArticle } from '~/utils/types/article';
+import { TArticle, TProperties } from '~/utils/types/article';
 import { useTeamStore } from '~/stores/TeamContoller';
+import { useCustomFetch } from '~/hooks/useCustomFetch';
+import { TMessage } from '~/utils/types';
 
 /**
  * Пропсы ----------------
  */
 const props = defineProps<{
   data: TSection | TArticle;
+  properties?: TProperties;
   type: 'section' | 'article';
 }>();
 
 /**
  * Системные переменные ----------------
  */
+const route = useRoute(); // Роут
 const teamController = useTeamStore(); // Хранилище активной команды
 
 /**
  * Пользовательские переменные ----------------
  */
+const isFavorite = ref(props.properties?.bookmark || false); // Находиться ли элемент в избранном?
 // Навигация на странице
 const nav = [
   {
@@ -79,6 +89,27 @@ const nav = [
     }/${props.data.id}`,
   },
 ];
+
+/**
+ * Методы ----------------
+ */
+// Добавить или удалить из избранного
+const toggleFavorite = async () => {
+  const dto = { article_id: route.params.id };
+
+  if (!isFavorite.value) {
+    await useCustomFetch<TMessage>(`account/bookmarks/add`, {
+      body: dto,
+      method: 'POST',
+    });
+  } else {
+    await useCustomFetch<TMessage>(`account/bookmarks/remove`, {
+      body: dto,
+      method: 'POST',
+    });
+  }
+  isFavorite.value = !isFavorite.value;
+};
 </script>
 
 <!-- ----------------------------------------------------- -->
@@ -90,6 +121,13 @@ const nav = [
   align-items: center;
   margin-bottom: 12px;
   position: relative;
+  svg {
+    width: 20px;
+    height: 20px;
+    position: absolute;
+    left: -25px;
+    cursor: pointer;
+  }
 }
 
 .title {

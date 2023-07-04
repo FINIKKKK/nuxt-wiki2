@@ -92,14 +92,6 @@ const isLoading = computed(() => {
 const { errors, validateForm } = useFormValidation(); // Для валидации формы
 
 /**
- * Слежка за переменными ----------------
- */
-// Сохранить значение селекта
-watch(errors, () => {
-  createElemController.setErrors(Object.values(errors.value).flat());
-});
-
-/**
  * Методы ----------------
  */
 // Метод создания или редактирования элемента
@@ -122,10 +114,12 @@ const onSubmit = async () => {
         user_id: obj.user.id,
         permission: obj.permission.value,
       })),
+      action: 3,
     };
 
     // Вызываем хук для валидации форм
     const isValid = await validateForm(dto, SectionScheme);
+    createElemController.setErrors(errors.value);
     if (!isValid) return false;
 
     // ------------------------------------
@@ -137,7 +131,7 @@ const onSubmit = async () => {
         method: 'POST',
       });
       if (data.value) {
-        await router.push(`${teamController.activeTeamId}/sections/${id}`);
+        await router.push(`${teamController.activeTeamSlug}/sections/${id}`);
       }
     }
     // ------------------------------------
@@ -149,7 +143,9 @@ const onSubmit = async () => {
         method: 'POST',
       });
       if (data.value) {
-        await router.push(`${teamController.activeTeamId}/sections/${id}`);
+        await router.push(
+          `${teamController.activeTeamSlug}/sections/${data.value.section.id}`,
+        );
       }
     }
   }
@@ -165,9 +161,7 @@ const onSubmit = async () => {
       }),
       team_id: teamController.activeTeam?.team.id,
       name: createElemController.title,
-      ...(createElemController.select && {
-        parent_id: createElemController.select.value,
-      }),
+      section_id: createElemController.select.value,
       tabs: createElemController.tabs.map((obj) => ({
         name: obj.name,
         content: JSON.stringify(obj.content),
@@ -176,10 +170,12 @@ const onSubmit = async () => {
         user_id: obj.user.id,
         permission: obj.permission.value,
       })),
+      action: 3,
     };
 
     // Вызываем хук для валидации форм
     const isValid = await validateForm(dto, ArticleScheme);
+    createElemController.setErrors(errors.value);
     if (!isValid) return false;
 
     // ------------------------------------
@@ -191,7 +187,7 @@ const onSubmit = async () => {
         method: 'POST',
       });
       if (data.value) {
-        await router.push(`${teamController.activeTeamId}/articles/${id}`);
+        await router.push(`${teamController.activeTeamSlug}/articles/${id}`);
       }
     }
 
@@ -204,7 +200,9 @@ const onSubmit = async () => {
         method: 'POST',
       });
       if (data.value) {
-        await router.push(`${teamController.activeTeamId}/articles/${id}`);
+        await router.push(
+          `${teamController.activeTeamSlug}/articles/${data.value.article.id}`,
+        );
       }
     }
   }

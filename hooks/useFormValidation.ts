@@ -1,7 +1,7 @@
 /**
  * Типы ----------------
  */
-interface FormErrors {
+export interface FormErrors {
   [key: string]: string[];
 }
 

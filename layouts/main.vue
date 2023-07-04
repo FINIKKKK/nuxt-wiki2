@@ -43,7 +43,7 @@ main {
   position: relative;
   width: 100%;
   height: 100vh;
-  padding: 46px 36px;
+  padding: 46px 50px;
   overflow: auto;
 }
 

@@ -27,3 +27,9 @@ export interface TSearchData {
   results: TSearchResults;
   total: number;
 }
+
+export interface TParent {
+  id: number;
+  name?: string;
+  type?: 'section' | 'article';
+}

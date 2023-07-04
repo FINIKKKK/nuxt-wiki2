@@ -1,7 +1,10 @@
 <template>
-  <NuxtLayout name="elem" type="article" :data="data.article">
-
-  </NuxtLayout>
+  <NuxtLayout
+    name="elem"
+    type="article"
+    :data="data.article"
+    :properties="data.properties"
+  ></NuxtLayout>
 </template>
 
 <!-- ----------------------------------------------------- -->
@@ -11,7 +14,8 @@
 import { useTeamStore } from '~/stores/TeamContoller';
 import { useSectionsStore } from '~/stores/SectionContoller';
 import { useCustomFetch } from '~/hooks/useCustomFetch';
-import {TArticle, TArticleData} from '~/utils/types/article';
+import { TArticleData } from '~/utils/types/article';
+import { TSectionData } from '~/utils/types/secton';
 
 /**
  * Системные переменные ----------------
@@ -31,14 +35,22 @@ const { data } = await useCustomFetch<TArticleData>(`team/article`, {
   },
 });
 console.log(data.value);
-// Сохраняем в хранилище
-// sectionsController.setSection(data.value.article.section);
-// sectionsController.setParentId(data.value.section.parent_id);
-// if (!data.value.section.parent_id) {
-//   sectionsController.setIsChild(false);
-// } else {
-//   sectionsController.setIsChild(true);
-// }
+if (!sectionsController.section) {
+  // Получаем данные раздела
+  const { data: section } = await useCustomFetch<TSectionData>(`team/section`, {
+    query: {
+      team_id: teamController.activeTeamId,
+      section_id: data.value.article.section.id,
+    },
+  });
+  // Сохраняем в хранилище
+  sectionsController.setSection(section.value.section);
+  sectionsController.setParent1({
+    id: section.value.section.id,
+    name: section.value.section.name,
+  });
+  sectionsController.setIsChild(true);
+}
 </script>
 
 <!-- ----------------------------------------------------- -->

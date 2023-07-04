@@ -1,5 +1,6 @@
 import { defineStore } from 'pinia';
 import { TSection } from '~/utils/types/secton';
+import { TParent } from '~/utils/types/sidebar';
 
 /**
  * --------------------------------
@@ -11,7 +12,8 @@ export const useSectionsStore = defineStore('sectionsController', () => {
    * Свойства ----------------
    */
   const section: Ref<TSection | null> = ref(null); // Текущий раздел
-  const parentId: Ref<number | null> = ref(null); // ID родительского раздела
+  const parent1: Ref<TParent | null> = ref(null); // 1 родительский раздел
+  const parent2: Ref<TParent | null> = ref(null); // 2 родительский раздел
   const isChild: Ref<boolean> = ref(false); // Это ребенок?
   const sections: Ref<TSection[] | null> = ref([]); // Разделы
 
@@ -22,9 +24,13 @@ export const useSectionsStore = defineStore('sectionsController', () => {
   const setSection = (value: TSection) => {
     section.value = value;
   };
-  // Установить родительский раздел
-  const setParentId = (value: number | null) => {
-    parentId.value = value;
+  // Установить 1 родительский раздел
+  const setParent1 = (value: TParent | null) => {
+    parent1.value = value;
+  };
+  // Установить 2 родительский раздел
+  const setParent2 = (value: TParent | null) => {
+    parent2.value = value;
   };
   // Установить разделы
   const setSections = (value: TSection[]) => {
@@ -38,11 +44,13 @@ export const useSectionsStore = defineStore('sectionsController', () => {
   // Возращаем данные
   return {
     section,
-    parentId,
+    parent1,
+    parent2,
     isChild,
     sections,
     setSection,
-    setParentId,
+    setParent1,
+    setParent2,
     setSections,
     setIsChild,
   };

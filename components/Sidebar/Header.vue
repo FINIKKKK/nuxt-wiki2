@@ -40,7 +40,7 @@ const isShow = computed(
 // Ссылка назад
 const link = computed(() => {
   if (sectionsController.isChild) {
-    return `${teamController.activeTeamSlug}/sections/${sectionsController.parentId}`;
+    return `${teamController.activeTeamSlug}/sections/${sectionsController.parent1.id}`;
   } else {
     return `${teamController.activeTeamSlug}`;
   }
