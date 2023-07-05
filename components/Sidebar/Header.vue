@@ -31,7 +31,7 @@ const teamController = useTeamStore(); // Хранилище команд
 /**
  * Вычисляемые значения ----------------
  */
-// Какой именно компонент отображать0
+// Какой именно компонент отображать?
 const isShow = computed(
   () =>
     sidebarController.activeItem === 'home' &&
@@ -39,8 +39,13 @@ const isShow = computed(
 );
 // Ссылка назад
 const link = computed(() => {
-  if (sectionsController.isChild) {
-    return `${teamController.activeTeamSlug}/sections/${sectionsController.parent1.id}`;
+  if (sectionsController.breadCrumbs?.length !== 1) {
+    return `${teamController.activeTeamSlug}/sections/${
+      sectionsController.breadCrumbs[1]?.id === sectionsController.section?.id &&
+      sectionsController.isArticle
+        ? sectionsController.breadCrumbs[1]?.id
+        : sectionsController.breadCrumbs[0]?.id
+    }`;
   } else {
     return `${teamController.activeTeamSlug}`;
   }

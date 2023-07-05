@@ -1,17 +1,53 @@
 <template>
   <ul class="map">
+    <!-- Основные разделы -->
     <li
-      v-for="item in sectionsController.sections"
+      v-for="section in sectionsController.sections"
       class="item"
-      :class="{ active: Number(route.params.id) === item.id }"
+      :class="{ active: Number(route.params.id) === section.id }"
     >
-      <NuxtLink class="link" :to="`${teamStore.activeTeamSlug}/sections/${item.id}`"
-        >{{ item.name }}
+      <NuxtLink
+        class="link"
+        :to="`${teamStore.activeTeamSlug}/sections/${section.id}`"
+        >{{ section.name }}
       </NuxtLink>
+
+      <!-- Дочерние разделы -->
       <ul class="children">
-        <li v-for="child in item.children" class="child" :class="{ active: Number(route.params.id) === child.id }">
-          <NuxtLink :to="`${teamStore.activeTeamSlug}/sections/${child.id}`"
-            >{{ child.name }}
+        <li
+          v-for="childSection in section.children"
+          class="child"
+          :class="{ active: Number(route.params.id) === childSection.id }"
+        >
+          <NuxtLink
+            class="link2"
+            :to="`${teamStore.activeTeamSlug}/sections/${childSection.id}`"
+            >{{ childSection.name }}
+          </NuxtLink>
+
+          <!-- Статьи внутри дочерних разделов -->
+          <ul class="children">
+            <li
+              v-for="childArticle in childSection.items"
+              class="child item2"
+              :class="{ active: Number(route.params.id) === childArticle.id }"
+            >
+              <NuxtLink
+                :to="`${teamStore.activeTeamSlug}/articles/${childArticle.id}`"
+                >{{ childArticle.name }}
+              </NuxtLink>
+            </li>
+          </ul>
+        </li>
+
+        <!-- Статьи внутри основных разделов -->
+        <li
+          v-for="article in section.items"
+          class="child"
+          :class="{ active: Number(route.params.id) === article.id }"
+        >
+          <NuxtLink :to="`${teamStore.activeTeamSlug}/sections/${article.id}`"
+            >{{ article.name }}
           </NuxtLink>
         </li>
       </ul>
@@ -24,8 +60,7 @@
 
 <script lang="ts" setup>
 import { useTeamStore } from '~/stores/TeamContoller';
-import { useSidebarStore } from '~/stores/SidebarController';
-import {useSectionsStore} from "~/stores/SectionContoller";
+import { useSectionsStore } from '~/stores/SectionContoller';
 
 /**
  * Системные переменные ----------------
@@ -50,6 +85,11 @@ const teamStore = useTeamStore(); // Хранилище активной ком�
     }
   }
   .child.active {
+    .link2 {
+      color: $blue;
+    }
+  }
+  .item2.active {
     a {
       color: $blue;
     }

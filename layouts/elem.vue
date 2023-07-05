@@ -54,6 +54,7 @@ import { TArticle, TProperties } from '~/utils/types/article';
 import { useTeamStore } from '~/stores/TeamContoller';
 import { useCustomFetch } from '~/hooks/useCustomFetch';
 import { TMessage } from '~/utils/types';
+import { useSectionsStore } from '~/stores/SectionContoller';
 
 /**
  * Пропсы ----------------
@@ -69,6 +70,7 @@ const props = defineProps<{
  */
 const route = useRoute(); // Роут
 const teamController = useTeamStore(); // Хранилище активной команды
+const sectionsController = useSectionsStore(); // Хранилище
 
 /**
  * Пользовательские переменные ----------------
@@ -77,16 +79,20 @@ const isFavorite = ref(props.properties?.bookmark || false); // Находить
 // Навигация на странице
 const nav = [
   {
-    label: props.data.parent?.name || props.data.section?.name,
-    link: `${teamController.activeTeamSlug}/${
-      props.type === 'section' ? 'sections' : 'articles'
-    }/${props.data.parent ? props.data.parent?.id : props.data.section?.id}`,
+    label: sectionsController.breadCrumbs[0]?.name,
+    link: `${teamController.activeTeamSlug}/sections/${sectionsController.breadCrumbs[0]?.id}`,
   },
   {
-    label: props.data.name,
-    link: `${teamController.activeTeamSlug}/${
-      props.type === 'section' ? 'sections' : 'articles'
-    }/${props.data.id}`,
+    label: sectionsController.breadCrumbs[1]?.name || null,
+    link: `${teamController.activeTeamSlug}/sections/${sectionsController.breadCrumbs[1]?.id}`,
+  },
+  {
+    label:
+      props.data.name !== sectionsController.breadCrumbs[1]?.name &&
+      props.data.name !== sectionsController.breadCrumbs[0]?.name
+        ? props.data.name
+        : null,
+    link: `${teamController.activeTeamSlug}/articles/${props.data.id}`,
   },
 ];
 

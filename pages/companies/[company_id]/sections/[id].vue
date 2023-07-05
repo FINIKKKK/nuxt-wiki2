@@ -44,18 +44,12 @@ const { data } = await useCustomFetch<TSectionData>(`team/section`, {
     section_id: route.params.id,
   },
 });
+console.log(data.value);
+
 // Сохраняем в хранилище
 sectionsController.setSection(data.value.section);
-if (data.value.section.parent_id) {
-  sectionsController.setParent1({ id: data.value.section.parent_id });
-}
-if (!data.value.section.parent_id) {
-  sectionsController.setIsChild(false);
-} else {
-  sectionsController.setIsChild(true);
-}
-if (sectionsController.isChild && route.path.includes('sections')) {
-}
+sectionsController.setBreadCrumbs(data.value.section.breadcrumbs);
+sectionsController.setIsArticle(false);
 </script>
 
 <!-- ----------------------------------------------------- -->

@@ -127,6 +127,10 @@ sectionsController.setSections(sections.value);
   transform: translateX(-100%);
   pointer-events: none;
   box-shadow: 0 0 10px rgba($blue, 0.2);
+  overflow: auto;
+  &::-webkit-scrollbar {
+    display: none;
+  }
   .inner {
     padding: 41px 30px;
     opacity: 0;

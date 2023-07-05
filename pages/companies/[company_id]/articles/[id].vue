@@ -55,6 +55,7 @@ const { data } = await useCustomFetch<TArticleData>(`team/article`, {
     article_id: route.params.id,
   },
 });
+sectionsController.setIsArticle(true);
 if (!sectionsController.section) {
   // Получаем данные раздела
   const { data: section } = await useCustomFetch<TSectionData>(`team/section`, {
@@ -65,11 +66,7 @@ if (!sectionsController.section) {
   });
   // Сохраняем в хранилище
   sectionsController.setSection(section.value.section);
-  sectionsController.setParent1({
-    id: section.value.section.id,
-    name: section.value.section.name,
-  });
-  sectionsController.setIsChild(true);
+  sectionsController.setBreadCrumbs(section.value.section.breadcrumbs);
 }
 </script>
 

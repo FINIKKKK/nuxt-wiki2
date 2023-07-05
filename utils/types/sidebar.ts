@@ -30,6 +30,6 @@ export interface TSearchData {
 
 export interface TParent {
   id: number;
-  name?: string;
-  type?: 'section' | 'article';
+  name: string;
+  level: number;
 }
