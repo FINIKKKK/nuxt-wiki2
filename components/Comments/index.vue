@@ -1,4 +1,5 @@
 <template>
+  <!-- Поле ввода -->
   <div class="field">
     <div class="input">
       <UIInput label="Добавить комментарий" v-model="commentValue" />
@@ -11,6 +12,13 @@
       />
     </div>
   </div>
+
+  <!-- Список комментариев -->
+  <CommentsComment
+    v-for="comment in comments"
+    :key="comment.id"
+    :data="comment"
+  />
 </template>
 
 <!-- ----------------------------------------------------- -->
@@ -21,6 +29,13 @@ import { useRequestStore } from '~/stores/RequestController';
 import { useCustomFetch } from '~/hooks/useCustomFetch';
 import { useTeamStore } from '~/stores/TeamContoller';
 import { TComment } from '~/utils/types/comment';
+
+/**
+ * Пропсы ----------------
+ */
+const props = defineProps<{
+  comments: TComment[];
+}>();
 
 /**
  * Системные переменные ----------------
@@ -34,7 +49,7 @@ const teamController = useTeamStore(); // Хранилище бкоманд
  */
 const url = 'team/comment/add'; // URL запроса
 const commentValue = ref(''); // Значение поля ввода
-const comments = ref([]); // Список комментариев
+const comments = ref(props.comments || []); // Список комментариев
 
 /**
  * Методы ----------------
@@ -65,6 +80,9 @@ const createComment = async () => {
 <!-- ----------------------------------------------------- -->
 
 <style lang="scss" scoped>
+.field {
+  margin-bottom: 35px;
+}
 .input {
   position: relative;
   .submit {

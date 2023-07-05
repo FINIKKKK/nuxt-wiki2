@@ -9,7 +9,7 @@
     <ElemPageTabs :tabs="data.article.tabs" />
 
     <!-- Комментарии -->
-    <Comments />
+    <Comments :comments="data.article.comments" />
   </NuxtLayout>
 </template>
 
@@ -33,13 +33,14 @@ const sectionsController = useSectionsStore(); // Хранилище разде�
 /**
  * Получение данных ----------------
  */
-// Данные раздела
+// Данные статьм
 const { data } = await useCustomFetch<TArticleData>(`team/article`, {
   query: {
     team_id: teamController.activeTeamId,
     article_id: route.params.id,
   },
 });
+console.log(data.value);
 sectionsController.setIsArticle(true);
 if (!sectionsController.section) {
   // Получаем данные раздела
