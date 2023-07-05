@@ -10,12 +10,12 @@
     <!-- Выбранный элемент -->
     <div class="selected" @click="toggleDropdown">
       <span class="placeholder" v-if="!model">Выберите раздел</span>
-      <span v-else>{{ model.label }}</span>
+      <span v-else>{{ model?.label }}</span>
       <svg-icon
         class="close"
         name="close"
         v-if="!props.type && model"
-        @click="model = null"
+        @click="removeActiveSelect"
       />
       <svg-icon
         class="triangle"
@@ -54,7 +54,7 @@ import { TSelect } from '~/utils/types/base';
  */
 const props = defineProps<{
   options: TSelect[];
-  modelValue: any;
+  modelValue: TSelect | null;
   type?: 'triangle';
 }>();
 
@@ -91,12 +91,15 @@ useOutsideClick(selectRef, isOpen);
 /**
  * Методы ----------------
  */
+const removeActiveSelect = () => {
+  model.value = null;
+};
 // Переключение между открытием и закрытием селекта
 const toggleDropdown = () => {
   isOpen.value = !isOpen.value;
 };
 // Выбрать нужный элемент из списка
-const selectOption = (option: any) => {
+const selectOption = (option: TSelect) => {
   model.value = option;
   isOpen.value = false;
 };

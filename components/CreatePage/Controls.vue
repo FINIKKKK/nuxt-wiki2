@@ -107,9 +107,7 @@ const onSubmit = async () => {
       }),
       team_id: teamController.activeTeam?.team.id,
       name: createElemController.title,
-      ...(createElemController.select && {
-        parent_id: createElemController.select.value,
-      }),
+      parent_id: createElemController.select?.value || null,
       abilities: createElemController.abilities.map((obj) => ({
         user_id: obj.user.id,
         permission: obj.permission.value,
@@ -157,11 +155,11 @@ const onSubmit = async () => {
     // Данные
     const dto = {
       ...(props.isEdit && {
-        article_id: id,
+        article_id: Number(id),
       }),
       team_id: teamController.activeTeam?.team.id,
       name: createElemController.title,
-      section_id: createElemController.select.value,
+      section_id: Number(createElemController.select?.value) || null,
       tabs: createElemController.tabs.map((obj) => ({
         name: obj.name,
         content: JSON.stringify(obj.content),
@@ -182,7 +180,7 @@ const onSubmit = async () => {
     // Редактируем статью
     // ------------------------------------
     if (props.isEdit) {
-      const { data } = await useCustomFetch(`team/article/add`, {
+      const { data } = await useCustomFetch(`team/article/edit`, {
         body: dto,
         method: 'POST',
       });

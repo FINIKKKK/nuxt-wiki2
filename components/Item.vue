@@ -1,7 +1,7 @@
 <template>
   <div class="item">
     <!-- Иконка -->
-    <svg-icon :name="props.type === 'article' ? 'document' : 'folder'" />
+    <svg-icon :name="props.type === 'article' ? 'document' : 'folder'"/>
     <!-- Заголовок -->
     <div class="item__info">
       <NuxtLink :to="link">
@@ -9,9 +9,23 @@
       </NuxtLink>
       <!-- Дата -->
       <div
-        class="date"
-        v-html="useDateString(props.data.created_at, props.data.updated_at)"
+          class="date"
+          v-html="useDateString(props.data.created_at, props.data.updated_at)"
       ></div>
+
+      <!--------------------------------------
+       Кнопки
+      ---------------------------------------->
+      <div class="btns" v-if="props.place">
+        <!-- Кнопка удаления из избранного -->
+        <button
+            class="item__btn"
+            v-if="props.place === 'favorite'"
+            @click="removeFromFavorites"
+        >
+          Удалить из избранного
+        </button>
+      </div>
     </div>
   </div>
 </template>
@@ -20,11 +34,11 @@
 <!-- ----------------------------------------------------- -->
 
 <script lang="ts" setup>
-import { useUserStore } from '~/stores/UserController';
-import { useTeamStore } from '~/stores/TeamContoller';
-import { useDateString } from '~/hooks/useDateString';
-import { TArticle } from '~/utils/types/article';
-import { TSection } from '~/utils/types/secton';
+import {useTeamStore} from '~/stores/TeamContoller';
+import {useDateString} from '~/hooks/useDateString';
+import {TArticle} from '~/utils/types/article';
+import {TSection} from '~/utils/types/secton';
+import {useCustomFetch} from '~/hooks/useCustomFetch';
 
 /**
  * Пропсы ----------------
@@ -32,24 +46,48 @@ import { TSection } from '~/utils/types/secton';
 const props = defineProps<{
   data: TSection | TArticle;
   type?: 'section' | 'article';
+  place?: 'favorite' | 'moderation';
 }>();
+
+/**
+ * События ----------------
+ */
+const emits = defineEmits(['removeFromFavorites']);
 
 /**
  * Системные переменные ----------------
  */
 const route = useRoute(); // Роут
 const teamController = useTeamStore(); // Хранилище активной компании
-const userController = useUserStore(); // Хранилище данных пользователя
 
 /**
  * Вычислительные значения ----------------
  */
 // Ссылка на элемент
 const link = computed(() => {
-  return `${teamController.activeTeamSlug}/${
-    props.type === 'article' ? 'articles' : 'sections'
-  }/${props.data.id}`;
+  return `${
+      teamController.activeTeam
+          ? teamController.activeTeamSlug
+          : `/companies/${props.data.team?.id}`
+  }/${props.type === 'article' ? 'articles' : 'sections'}/${props.data.id}`;
 });
+
+/**
+ * Методы ----------------
+ */
+// Удалить из избранного
+const removeFromFavorites = async () => {
+  if (window.confirm('Вы точно хотите удалить из избранного?')) {
+    const data = await useCustomFetch(`account/bookmarks/remove`, {
+      body: {article_id: props.data.id},
+      method: 'POST',
+    });
+
+    if (data) {
+      emits('removeFromFavorites', props.data.id);
+    }
+  }
+};
 </script>
 
 <!-- ----------------------------------------------------- -->
@@ -64,7 +102,10 @@ const link = computed(() => {
   transition: 0.3s;
   border-radius: 3px;
   &:hover {
-    background-color: $blue2;
+    background-color: rgba($blue, 0.1);
+    .btns {
+      opacity: 1;
+    }
   }
   svg {
     width: 32px;
@@ -83,6 +124,26 @@ const link = computed(() => {
     color: $gray;
     span {
       color: $black;
+    }
+  }
+}
+
+.btns {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  right: 12px;
+  opacity: 0;
+  transition: 0.3s;
+  .item__btn {
+    background-color: rgba($blue, 0.15);
+    color: $blue;
+    padding: 5px 10px;
+    font-size: 13px;
+    border-radius: 2px;
+    transition: 0.2s;
+    &:hover {
+      background-color: rgba($blue, 0.2);
     }
   }
 }

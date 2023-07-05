@@ -1,5 +1,5 @@
 import { TBase } from '~/utils/types/index';
-import { TAbility } from '~/utils/types/team';
+import {TAbility, TTeam} from '~/utils/types/team';
 import { TArticle } from '~/utils/types/article';
 import { TUser } from '~/utils/types/account';
 
@@ -13,6 +13,7 @@ export interface TSection extends TBase {
   child: TSection[];
   children: TSection[];
   items: TArticle[];
+  team?: TTeam
 }
 
 export interface TSectionEdit {

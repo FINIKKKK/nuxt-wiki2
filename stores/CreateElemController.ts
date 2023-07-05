@@ -2,6 +2,7 @@ import { defineStore } from 'pinia';
 import { TAbility } from '~/utils/types/team';
 import { TTab } from '~/utils/types/article';
 import { TSelect } from '~/utils/types/base';
+import {FormErrors} from "~/hooks/useFormValidation";
 
 /**
  * --------------------------------
@@ -66,7 +67,7 @@ export const useCreateElemStore = defineStore('createElemController', () => {
     isLoading.value = value;
   };
   // Установить ошибки валидации
-  const setErrors = (value: string[]) => {
+  const setErrors = (value: FormErrors[]) => {
     errors.value = Object.values(value).flat(2);
   };
 

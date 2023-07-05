@@ -33,6 +33,7 @@
     "@nuxtjs/svg-sprite": "^1.0.2",
     "@pinia/nuxt": "^0.4.11",
     "axios": "^1.4.0",
+    "editorjs-html": "^3.4.3",
     "lodash": "^4.17.21",
     "lodash.debounce": "^4.0.8",
     "pinia": "^2.1.4",

@@ -53,6 +53,7 @@ import { useCustomFetch } from '~/hooks/useCustomFetch';
 import { useCreateElemStore } from '~/stores/CreateElemController';
 import { TSection } from '~/utils/types/secton';
 import { useSectionsStore } from '~/stores/SectionContoller';
+import { TSelect } from '~/utils/types/base';
 
 /**
  * Пропсы ----------------
@@ -89,8 +90,8 @@ sectionsController.setSections(sections.value);
 // Конвертировать массив разделов
 const selections = computed(() => {
   if (props.type === 'article') {
-    function transformSections(sections) {
-      const result = [];
+    function transformSections(sections: TSection[]) {
+      const result: TSelect[] = [];
       sections.forEach((section) => {
         result.push({
           value: section.id,
