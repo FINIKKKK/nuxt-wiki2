@@ -115,8 +115,14 @@ const isLoading = computed(() => {
  * Хуки ----------------
  */
 const { errors, validateForm } = useFormValidation(); // Для валидации формы
-useOutsideClick(popupRef, isShowPopup);
+useOutsideClick(popupRef, isShowPopup); // Для закрытия попапа
 
+/**
+ * Слежка за значениями ----------------
+ */
+
+let flag = true;
+// Сохранять данные и показывать надпись
 watch(
   [
     () => createElemController.title,
@@ -124,13 +130,27 @@ watch(
     () => createElemController.select,
   ],
   () => {
+    if (flag) {
+      flag = false;
+      return false;
+    }
+
     setTimeout(() => {
       isSave.value = true;
-    }, 5000);
-    console.log('gg');
+      // Сохранение данных в localStorage
+      localStorage.setItem(
+        'article',
+        JSON.stringify({
+          name: createElemController.title,
+          select: createElemController.select,
+          tabs: createElemController.tabs,
+        }),
+      );
+    }, 2000);
   },
+  { deep: true },
 );
-
+// Убирать надпись
 watch(isSave, () => {
   setTimeout(() => {
     isSave.value = false;
@@ -155,7 +175,6 @@ const onSaveDraft = async () => {
     },
     method: 'POST',
   });
-
   if (data.value) {
     saveDraft.value = true;
     setTimeout(() => {
@@ -203,6 +222,7 @@ const onSubmit = async () => {
       });
       if (data.value) {
         await router.push(`${teamController.activeTeamSlug}/sections/${id}`);
+        localStorage.setItem('article', '');
       }
     }
     // ------------------------------------
@@ -217,6 +237,7 @@ const onSubmit = async () => {
         await router.push(
           `${teamController.activeTeamSlug}/sections/${data.value.section.id}`,
         );
+        localStorage.setItem('article', '');
       }
     }
   }
@@ -259,6 +280,7 @@ const onSubmit = async () => {
       });
       if (data.value) {
         await router.push(`${teamController.activeTeamSlug}/articles/${id}`);
+        localStorage.setItem('article', '');
       }
     }
 
@@ -274,6 +296,7 @@ const onSubmit = async () => {
         await router.push(
           `${teamController.activeTeamSlug}/articles/${data.value.article.id}`,
         );
+        localStorage.setItem('article', '');
       }
     }
   }

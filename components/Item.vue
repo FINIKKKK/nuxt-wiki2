@@ -10,6 +10,7 @@
         </NuxtLink>
         <div class="tags">
           <div class="tag" v-if="props.data.status_id === 1">Черновик</div>
+          <div class="tag" v-if="props.data.status_id === 2">На модерации</div>
         </div>
       </div>
 
@@ -23,9 +24,22 @@
        Кнопки
       ---------------------------------------->
       <div class="btns" v-if="props.place">
+        <!-- Кнопка редактирования -->
+        <NuxtLink
+          :to="`${teamController.activeTeamSlug}/articles/edit/${props.data.id}`"
+          class="btn__item"
+        >
+          <svg-icon name="edit" />
+          <p>Правка</p>
+        </NuxtLink>
+        <!-- Кнопка управления доступом -->
+        <div class="btn__item">
+          <svg-icon name="lock" />
+          <p>Доступ</p>
+        </div>
         <!-- Кнопка удаления из избранного -->
         <button
-          class="item__btn"
+          class="btn__item2"
           v-if="props.place === 'favorite'"
           @click="removeFromFavorites"
         >
@@ -52,7 +66,7 @@ import { useCustomFetch } from '~/hooks/useCustomFetch';
 const props = defineProps<{
   data: TSection | TArticle;
   type?: 'section' | 'article';
-  place?: 'favorite' | 'moderation';
+  place?: 'favorite' | 'moderation' | 'my';
 }>();
 
 /**
@@ -118,23 +132,6 @@ const removeFromFavorites = async () => {
     align-items: center;
     font-size: 16px;
   }
-  .tags {
-    user-select: none;
-    display: flex;
-    align-items: center;
-    margin-left: 15px;
-  }
-  .tag {
-    &:not(:last-child) {
-      margin-right: 5px;
-    }
-    background-color: rgba($gray, 0.3);
-    color: $gray;
-    font-size: 12px;
-    line-height: 10px;
-    padding: 5px 5px !important;
-    border-radius: 2px;
-  }
   svg {
     width: 32px;
     height: 32px;
@@ -156,6 +153,24 @@ const removeFromFavorites = async () => {
   }
 }
 
+.tags {
+  user-select: none;
+  display: flex;
+  align-items: center;
+  margin-left: 15px;
+  .tag {
+    &:not(:last-child) {
+      margin-right: 5px;
+    }
+    background-color: rgba($blue, 0.15);
+    color: $black;
+    font-size: 12px;
+    line-height: 10px;
+    padding: 5px 5px !important;
+    border-radius: 2px;
+  }
+}
+
 .btns {
   position: absolute;
   top: 50%;
@@ -163,7 +178,32 @@ const removeFromFavorites = async () => {
   right: 12px;
   opacity: 0;
   transition: 0.3s;
-  .item__btn {
+  display: flex;
+  align-items: center;
+  .btn__item {
+    &:not(:last-child) {
+      margin-right: 20px;
+    }
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    p {
+      color: $black;
+      font-size: 14px;
+      transition: 0.3s;
+    }
+    svg {
+      width: 17px;
+      height: 17px;
+      margin-right: 7px;
+    }
+    &:hover {
+      p {
+        color: $blue;
+      }
+    }
+  }
+  .btn__item2 {
     background-color: rgba($blue, 0.15);
     color: $blue;
     padding: 5px 10px;

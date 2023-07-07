@@ -113,6 +113,19 @@ const selections = computed(() => {
     }));
   }
 });
+// Получаем сохраненые данные и устанавливаем их÷
+onMounted(() => {
+  const savedArticle = localStorage.getItem('article');
+  const parsedSavedArticle = savedArticle && JSON.parse(savedArticle);
+  if (props.type === 'article' && parsedSavedArticle) {
+    console.log(parsedSavedArticle.name);
+      createElemController.setTitle(parsedSavedArticle.name);
+    parsedSavedArticle.select &&
+      createElemController.setSelect(parsedSavedArticle.select);
+    parsedSavedArticle.tabs &&
+      createElemController.setTabs(parsedSavedArticle.tabs);
+  }
+});
 
 /**
  * Хуки ----------------
