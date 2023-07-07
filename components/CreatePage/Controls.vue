@@ -18,8 +18,18 @@
       </li>
     </ul>
 
-    <!-- Кнопки -->
     <div class="right__controls">
+      <!-- Надписи -->
+      <div class="inscription draft" :class="{ active: saveDraft }">
+        <svg-icon name="check" />
+        <p>Черновик сохранен</p>
+      </div>
+      <div class="inscription" :class="{ active: isSave }">
+        <svg-icon name="check" />
+        <p>Сохранено</p>
+      </div>
+
+      <!-- Кнопки -->
       <div class="btns">
         <!-- Кнопка отпраки -->
         <button @click="onSubmit" class="btn" :class="{ disabled: isLoading }">
@@ -72,11 +82,13 @@ const createElemController = useCreateElemStore(); // Хранилище стр�
 const requestController = useRequestStore(); // Хранилище запроса
 
 /**
- * Полльзовательские переменные ----------------
+ * Пользовательские переменные ----------------
  */
 const id = route.params.id; // ID элемента
 const isShowPopup = ref(false); // Показывать попап?
 const popupRef = ref(null);
+const saveDraft = ref(false); // Показывать надпись "Черновик сохранен"?
+const isSave = ref(false); //  Показывать надпись "Сохранено"?
 
 /**
  * Вычисляемые значения ----------------
@@ -105,17 +117,51 @@ const isLoading = computed(() => {
 const { errors, validateForm } = useFormValidation(); // Для валидации формы
 useOutsideClick(popupRef, isShowPopup);
 
+watch(
+  [
+    () => createElemController.title,
+    () => createElemController.tabs,
+    () => createElemController.select,
+  ],
+  () => {
+    setTimeout(() => {
+      isSave.value = true;
+    }, 5000);
+    console.log('gg');
+  },
+);
+
+watch(isSave, () => {
+  setTimeout(() => {
+    isSave.value = false;
+  }, 3000);
+});
+
 /**
  * Методы ----------------
  */
-const onSaveDraft = () => {
-    //
-    // const { data } = await useCustomFetch(``, {
-    //     body: dto,
-    //     method: 'POST',
-    // });
-    //
-    // if(data.value) {
+const onSaveDraft = async () => {
+  //
+  const { data } = await useCustomFetch(`team/article/add`, {
+    body: {
+      team_id: teamController.activeTeam?.team.id,
+      name: createElemController.title,
+      section_id: Number(createElemController.select?.value) || null,
+      tabs: createElemController.tabs.map((obj) => ({
+        name: obj.name,
+        content: JSON.stringify(obj.content),
+      })),
+      action: 1,
+    },
+    method: 'POST',
+  });
+
+  if (data.value) {
+    saveDraft.value = true;
+    setTimeout(() => {
+      saveDraft.value = false;
+    }, 3000);
+  }
 };
 // Метод создания или редактирования элемента
 const onSubmit = async () => {
@@ -126,11 +172,15 @@ const onSubmit = async () => {
     // Данные
     const dto = {
       ...(props.isEdit && {
-        section_id: id,
+        article_id: Number(id),
       }),
       team_id: teamController.activeTeam?.team.id,
       name: createElemController.title,
-      parent_id: createElemController.select?.value || null,
+      section_id: Number(createElemController.select?.value) || null,
+      tabs: createElemController.tabs.map((obj) => ({
+        name: obj.name,
+        content: JSON.stringify(obj.content),
+      })),
       abilities: createElemController.abilities.map((obj) => ({
         user_id: obj.user.id,
         permission: obj.permission.value,
@@ -284,6 +334,7 @@ const onSubmit = async () => {
   display: flex;
   align-items: center;
   .options {
+    margin-top: 5px;
     margin-left: 15px;
     svg {
       transform: rotate(90deg);
@@ -302,6 +353,31 @@ const onSubmit = async () => {
         }
       }
     }
+  }
+}
+
+.inscription {
+  margin-right: 15px;
+  display: flex;
+  align-items: center;
+  font-size: 14px;
+  transition: 0.3s;
+  opacity: 0;
+  color: $blue;
+  svg {
+    width: 17px;
+    height: 17px;
+    margin-right: 7px;
+  }
+  &.active {
+    opacity: 1;
+  }
+}
+
+.draft {
+  color: $gray;
+  svg {
+    fill: $gray;
   }
 }
 </style>

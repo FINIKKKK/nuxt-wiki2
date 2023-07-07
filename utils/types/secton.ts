@@ -1,8 +1,8 @@
 import { TBase } from '~/utils/types/index';
-import {TAbility, TTeam} from '~/utils/types/team';
+import { TAbility, TTeam } from '~/utils/types/team';
 import { TArticle } from '~/utils/types/article';
 import { TUser } from '~/utils/types/account';
-import {TParent} from "~/utils/types/sidebar";
+import { TParent } from '~/utils/types/sidebar';
 
 export interface TSection extends TBase {
   name: string;
@@ -14,8 +14,9 @@ export interface TSection extends TBase {
   child: TSection[];
   children: TSection[];
   items: TArticle[];
-  team?: TTeam
-  breadcrumbs: TParent[]
+  team?: TTeam;
+  breadcrumbs: TParent[];
+  status_id?: number;
 }
 
 export interface TSectionEdit {

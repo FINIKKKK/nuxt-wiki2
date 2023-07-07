@@ -16,6 +16,11 @@ export interface TArticle extends TBase {
   creator: TUser;
   team?: TTeam;
   comments: TComment[];
+  status_id: number;
+  status: {
+    id: number;
+    code: string;
+  };
 }
 
 export interface TTab {
