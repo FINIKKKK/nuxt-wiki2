@@ -119,6 +119,7 @@ const setEditComment = () => {
 }
 
 .popup {
+  z-index: 100;
   user-select: none;
   width: auto;
   right: 0;

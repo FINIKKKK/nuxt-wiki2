@@ -2,7 +2,7 @@
   <div class="main">
     <!-- Logo -->
     <NuxtLink to="/" class="logo">
-      <img src="~/assets/img/svg/logo.svg" alt="logo" />
+      <img src="~/assets/img/logo.svg" alt="logo" />
     </NuxtLink>
 
     <!-- Список навигации -->

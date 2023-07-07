@@ -49,7 +49,7 @@ main {
 
 .title {
   font-size: 24px;
-  margin-bottom: 60px;
+  margin-bottom: 40px;
 }
 
 .nav {

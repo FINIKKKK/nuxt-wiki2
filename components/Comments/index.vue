@@ -3,37 +3,47 @@
   <div class="field">
     <div class="input">
       <UIInput
-          label="Добавить комментарий"
-          v-model="commentValue"
-          @keydown.enter="createOrEditComment"
+        label="Добавить комментарий"
+        v-model="commentValue"
+        @keydown.enter="createOrEditComment"
       />
       <div class="btns">
         <svg-icon
-            :name="editComment ? 'edit' : 'submit'"
-            class="svg-btn submit"
-            :class="{ disabled: requestController.loading[url] }"
-            v-if="commentValue"
-            @click="createOrEditComment"
-            title="Редактировать комментарий"
+          :name="editComment ? 'edit' : 'submit'"
+          class="svg-btn submit"
+          :class="{ disabled: requestController.loading[url] }"
+          v-if="commentValue"
+          @click="createOrEditComment"
+          title="Редактировать комментарий"
         />
         <svg-icon
-            name="close"
-            class="svg-btn close"
-            v-if="editComment"
-            @click="cancelEdit"
-            title="Отменить редактирование"
+          name="close"
+          class="svg-btn close"
+          v-if="editComment"
+          @click="cancelEdit"
+          title="Отменить редактирование"
         />
       </div>
+    </div>
+
+    <div class="users">
+      <User
+        v-for="user in users.employees"
+        :key="user"
+        :data="user"
+        className="comment"
+        @click="() => selectUser(user)"
+      />
     </div>
   </div>
 
   <!-- Список комментариев -->
   <CommentsComment
-      v-for="comment in comments"
-      :key="comment.id"
-      :data="comment"
-      @removeComment="removeComment"
-      @setEditComment="setEditComment"
+    v-for="comment in comments"
+    :key="comment.id"
+    :data="comment"
+    @removeComment="removeComment"
+    @setEditComment="setEditComment"
   />
 </template>
 
@@ -41,10 +51,11 @@
 <!-- ----------------------------------------------------- -->
 
 <script lang="ts" setup>
-import {useRequestStore} from '~/stores/RequestController';
-import {useCustomFetch} from '~/hooks/useCustomFetch';
-import {useTeamStore} from '~/stores/TeamContoller';
-import {TComment} from '~/utils/types/comment';
+import { useRequestStore } from '~/stores/RequestController';
+import { useCustomFetch } from '~/hooks/useCustomFetch';
+import { useTeamStore } from '~/stores/TeamContoller';
+import { TComment } from '~/utils/types/comment';
+import { TUser } from '~/utils/types/account';
 
 /**
  * Пропсы ----------------
@@ -69,13 +80,21 @@ const comments = ref(props.comments || []); // Список комментари
 const editComment = ref<TComment | null>(null); // Это редактироварние комментария?
 
 /**
+ * Получение данных ----------------
+ */
+// Пользователи
+const { data: users } = await useCustomFetch(`team/employees`, {
+  query: { team_id: teamController.activeTeamId },
+});
+
+/**
  * Методы ----------------
  */
 // Создать комментарий
 const createOrEditComment = async () => {
   // Создание комментария
   if (!editComment.value) {
-    const {data} = await useCustomFetch<TComment>(url, {
+    const { data } = await useCustomFetch<TComment>(url, {
       body: {
         team_id: teamController.activeTeamId,
         entity_type: 'article',
@@ -90,7 +109,7 @@ const createOrEditComment = async () => {
       comments.value.push(data.value);
     }
   } else {
-    const {data} = await useCustomFetch<TComment>('team/comment/edit', {
+    const { data } = await useCustomFetch<TComment>('team/comment/edit', {
       body: {
         team_id: teamController.activeTeamId,
         comment_id: editComment.value?.id,
@@ -103,7 +122,7 @@ const createOrEditComment = async () => {
     if (data.value) {
       commentValue.value = '';
       comments.value = comments.value.map((obj) =>
-          editComment.value === obj.id ? data.value : obj,
+        editComment.value === obj.id ? data.value : obj,
       );
     }
   }
@@ -121,6 +140,10 @@ const setEditComment = (comment: TComment) => {
 const cancelEdit = () => {
   editComment.value = null;
   commentValue.value = '';
+};
+// Выбрать пользователя
+const selectUser = (user: TUser) => {
+  commentValue.value += `${user.fullname} `;
 };
 </script>
 
@@ -154,5 +177,10 @@ const cancelEdit = () => {
   .close {
     margin-left: 8px;
   }
+}
+
+.users {
+  background-color: $bg;
+  max-width: 200px;
 }
 </style>

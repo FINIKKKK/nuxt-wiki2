@@ -1,5 +1,5 @@
 <template>
-  <li class="user">
+  <li class="user" :data-layout="props.className">
     <img :src="props.data.picture" alt="avatar" />
     <p>{{ props.data?.fullname }}</p>
   </li>
@@ -16,6 +16,7 @@ import { TUser } from '~/utils/types/account';
  */
 const props = defineProps<{
   data: TUser;
+  className?: 'comment';
 }>();
 </script>
 
@@ -29,12 +30,26 @@ const props = defineProps<{
   align-items: center;
   padding: 10px;
   img {
-    width: 40px;
-    height: 40px;
-    margin-right: 25px;
+    width: 35px;
+    height: 35px;
+    margin-right: 15px;
+    border-radius: 50%;
   }
   &:hover {
     background-color: rgba($blue, 0.1);
+  }
+}
+
+.user[data-layout='comment'] {
+  img {
+    width: 25px;
+    height: 25px;
+  }
+  p {
+    font-size: 14px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
 }
 </style>

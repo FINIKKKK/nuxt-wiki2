@@ -19,15 +19,25 @@
     </ul>
 
     <!-- Кнопки -->
-    <div class="btns">
-      <!-- Кнопка отпраки -->
-      <button @click="onSubmit" class="btn" :class="{ disabled: isLoading }">
-        {{ labelBtn }}
-      </button>
-      <!-- Кнопка отмены -->
-      <NuxtLink :to="`${teamController.activeTeamSlug}`" class="btn btn2"
-        >Отменить
-      </NuxtLink>
+    <div class="right__controls">
+      <div class="btns">
+        <!-- Кнопка отпраки -->
+        <button @click="onSubmit" class="btn" :class="{ disabled: isLoading }">
+          {{ labelBtn }}
+        </button>
+        <!-- Кнопка отмены -->
+        <NuxtLink :to="`${teamController.activeTeamSlug}`" class="btn btn2"
+          >Отменить
+        </NuxtLink>
+      </div>
+
+      <!-- Дополнительные настройки -->
+      <div class="options" ref="popupRef">
+        <svg-icon name="options" @click="isShowPopup = !isShowPopup" />
+        <ul class="popup" v-if="isShowPopup">
+          <li @click="onSaveDraft">Сохранить черновик</li>
+        </ul>
+      </div>
     </div>
   </div>
 </template>
@@ -42,6 +52,7 @@ import { SectionScheme } from '~/utils/validation';
 import { useFormValidation } from '~/hooks/useFormValidation';
 import { useCustomFetch } from '~/hooks/useCustomFetch';
 import { useRequestStore } from '~/stores/RequestController';
+import { useOutsideClick } from '~/hooks/useOutsideClick';
 
 /**
  * Пропсы ----------------
@@ -64,6 +75,8 @@ const requestController = useRequestStore(); // Хранилище запрос�
  * Полльзовательские переменные ----------------
  */
 const id = route.params.id; // ID элемента
+const isShowPopup = ref(false); // Показывать попап?
+const popupRef = ref(null);
 
 /**
  * Вычисляемые значения ----------------
@@ -90,10 +103,20 @@ const isLoading = computed(() => {
  * Хуки ----------------
  */
 const { errors, validateForm } = useFormValidation(); // Для валидации формы
+useOutsideClick(popupRef, isShowPopup);
 
 /**
  * Методы ----------------
  */
+const onSaveDraft = () => {
+    //
+    // const { data } = await useCustomFetch(``, {
+    //     body: dto,
+    //     method: 'POST',
+    // });
+    //
+    // if(data.value) {
+};
 // Метод создания или редактирования элемента
 const onSubmit = async () => {
   // ------------------------------------
@@ -255,9 +278,30 @@ const onSubmit = async () => {
       margin-right: 10px;
     }
   }
+}
+
+.right__controls {
+  display: flex;
+  align-items: center;
   .options {
-    width: 20px;
-    height: 20px;
+    margin-left: 15px;
+    svg {
+      transform: rotate(90deg);
+      width: 20px;
+      height: 20px;
+      cursor: pointer;
+    }
+    .popup {
+      right: 50px;
+      top: 55px;
+      width: auto;
+      li {
+        cursor: pointer;
+        &:hover {
+          color: $blue;
+        }
+      }
+    }
   }
 }
 </style>
