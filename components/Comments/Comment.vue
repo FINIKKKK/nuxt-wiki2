@@ -19,10 +19,10 @@
 
       <ul class="popup" v-if="isShowPopup">
         <li>
-          <button>Редактировать комментарий</button>
+          <button @click="setEditComment">Редактировать комментарий</button>
         </li>
         <li>
-          <button>Удалить комментарий</button>
+          <button @click="removeComment">Удалить комментарий</button>
         </li>
       </ul>
     </div>
@@ -36,6 +36,8 @@
 import { TComment } from '~/utils/types/comment';
 import { useFormatDate } from '~/hooks/useFormatData';
 import { useOutsideClick } from '~/hooks/useOutsideClick';
+import { useCustomFetch } from '~/hooks/useCustomFetch';
+import { useTeamStore } from '~/stores/TeamContoller';
 
 /**
  * Пропсы ----------------
@@ -45,15 +47,41 @@ const props = defineProps<{
 }>();
 
 /**
+ * События ----------------
+ */
+const emits = defineEmits(['removeComment', 'setEditComment']);
+
+/**
  * Пользовательские переменные ----------------
  */
 const popupRef = ref(null); // Ref-ссылка на попап управления комментария
 const isShowPopup = ref(false); // Показывать попап?
+const teamController = useTeamStore(); // Хранилище команд
 
 /**
  * Хуки ----------------
  */
 useOutsideClick(popupRef, isShowPopup);
+
+/**
+ * Методы ----------------
+ */
+// Удалить комментарий
+const removeComment = async () => {
+  const data = await useCustomFetch(`team/comment/delete`, {
+    body: { team_id: teamController.activeTeamId, comment_id: props.data.id },
+    method: 'POST',
+  });
+  if (data) {
+    emits('removeComment', props.data.id);
+    isShowPopup.value = false;
+  }
+};
+// Редактировать комментарий
+const setEditComment = () => {
+  emits('setEditComment', props.data);
+  isShowPopup.value = false;
+};
 </script>
 
 <!-- ----------------------------------------------------- -->
@@ -85,13 +113,13 @@ useOutsideClick(popupRef, isShowPopup);
   cursor: pointer;
   width: 15px;
   height: 15px;
-  background-color: #0e65dd;
   position: absolute;
   top: 0;
   right: 0;
 }
 
 .popup {
+  user-select: none;
   width: auto;
   right: 0;
   top: 15px;

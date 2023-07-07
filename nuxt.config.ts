@@ -13,7 +13,6 @@ export default defineNuxtConfig({
     },
   },
   svgSprite: {
-    // input: '~/assets/img/svg',
     output: '~/assets/sprite',
   },
   ssr: true,

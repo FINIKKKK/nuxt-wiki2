@@ -40,7 +40,6 @@ const { data } = await useCustomFetch<TArticleData>(`team/article`, {
     article_id: route.params.id,
   },
 });
-console.log(data.value);
 sectionsController.setIsArticle(true);
 if (!sectionsController.section) {
   // Получаем данные раздела
