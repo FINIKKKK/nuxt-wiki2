@@ -130,6 +130,7 @@ const selectOption = (option: TSelect) => {
   cursor: pointer;
   display: flex;
   align-items: center;
+  color: $black;
   &:hover {
     .close {
       opacity: 1;

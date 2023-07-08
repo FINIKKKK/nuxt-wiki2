@@ -63,6 +63,8 @@ import { useFormValidation } from '~/hooks/useFormValidation';
 import { useCustomFetch } from '~/hooks/useCustomFetch';
 import { useRequestStore } from '~/stores/RequestController';
 import { useOutsideClick } from '~/hooks/useOutsideClick';
+import {TArticleData} from "~/utils/types/article";
+import {TSectionData} from "~/utils/types/secton";
 
 /**
  * Пропсы ----------------
@@ -216,7 +218,7 @@ const onSubmit = async () => {
     // Редактируем раздела
     // ------------------------------------
     if (props.isEdit) {
-      const { data } = await useCustomFetch(`team/section/edit`, {
+      const { data } = await useCustomFetch<TSectionData>(`team/section/edit`, {
         body: dto,
         method: 'POST',
       });
@@ -229,7 +231,7 @@ const onSubmit = async () => {
     // Создаем раздела
     // ------------------------------------
     else {
-      const { data } = await useCustomFetch(`team/section/add`, {
+      const { data } = await useCustomFetch<TSectionData>(`team/section/add`, {
         body: dto,
         method: 'POST',
       });
@@ -263,8 +265,8 @@ const onSubmit = async () => {
         permission: obj.permission.value,
       })),
       action:
-        teamController.activeTeam.role.id === 1 ||
-        teamController.activeTeam.role.id === 2
+        teamController.activeTeam?.role.id === 1 ||
+        teamController.activeTeam?.role.id === 2
           ? 3
           : 2,
     };
@@ -278,7 +280,7 @@ const onSubmit = async () => {
     // Редактируем статью
     // ------------------------------------
     if (props.isEdit) {
-      const { data } = await useCustomFetch(`team/article/edit`, {
+      const { data } = await useCustomFetch<TArticleData>(`team/article/edit`, {
         body: dto,
         method: 'POST',
       });
@@ -292,7 +294,7 @@ const onSubmit = async () => {
     // Создаем статью
     // ------------------------------------
     else {
-      const { data } = await useCustomFetch(`team/article/add`, {
+      const { data } = await useCustomFetch<TArticleData>(`team/article/add`, {
         body: dto,
         method: 'POST',
       });

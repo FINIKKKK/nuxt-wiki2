@@ -27,7 +27,7 @@
     <div class="users">
       <User
         v-for="user in users.employees"
-        :key="user"
+        :key="user.id"
         :data="user"
         className="comment"
         @click="() => selectUser(user)"
@@ -46,6 +46,7 @@ import { useCustomFetch } from '~/hooks/useCustomFetch';
 import { TComment } from '~/utils/types/comment';
 import { TUser } from '~/utils/types/account';
 import { useCommentsStore } from '~/stores/CommentsController';
+import {TEmployees} from "~/utils/types/team";
 
 /**
  * Переменные ----------------
@@ -59,7 +60,7 @@ const url = 'team/comment/add';
 /**
  * Получение данных ----------------
  */
-const { data: users } = await useCustomFetch(`team/employees`, {
+const { data: users } = await useCustomFetch<TEmployees>(`team/employees`, {
   query: { team_id: teamController.activeTeamId },
 });
 

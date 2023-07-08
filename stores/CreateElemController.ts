@@ -2,7 +2,7 @@ import { defineStore } from 'pinia';
 import { TAbility } from '~/utils/types/team';
 import { TTab } from '~/utils/types/article';
 import { TSelect } from '~/utils/types/base';
-import {FormErrors} from "~/hooks/useFormValidation";
+import { FormErrors } from '~/hooks/useFormValidation';
 
 /**
  * --------------------------------
@@ -21,7 +21,7 @@ export const useCreateElemStore = defineStore('createElemController', () => {
   const isShowTags: Ref<boolean> = ref(false); // Показывать попап тэгов?
   const isShowAccess: Ref<boolean> = ref(false); // Показывать попап доступа?
   const isLoading: Ref<boolean> = ref(false); // Загрузка
-  const errors: Ref<string[]> = ref([]); // Ошибки валидации
+  const errors: Ref<any> = ref([]); // Ошибки валидации
 
   /**
    * Методы ----------------
@@ -67,7 +67,7 @@ export const useCreateElemStore = defineStore('createElemController', () => {
     isLoading.value = value;
   };
   // Установить ошибки валидации
-  const setErrors = (value: FormErrors[]) => {
+  const setErrors = (value: any) => {
     errors.value = Object.values(value).flat(2);
   };
 

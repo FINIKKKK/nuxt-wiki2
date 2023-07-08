@@ -61,6 +61,7 @@ import { TSelect } from '~/utils/types/base';
 const props = defineProps<{
   type: 'article' | 'section';
   isEdit?: boolean;
+  isDraft?: boolean;
 }>();
 
 /**
@@ -117,9 +118,13 @@ const selections = computed(() => {
 onMounted(() => {
   const savedArticle = localStorage.getItem('article');
   const parsedSavedArticle = savedArticle && JSON.parse(savedArticle);
-  if (props.type === 'article' && parsedSavedArticle) {
-    console.log(parsedSavedArticle.name);
-      createElemController.setTitle(parsedSavedArticle.name);
+  if (
+    props.type === 'article' &&
+    parsedSavedArticle &&
+    !props.isEdit &&
+    !props.isDraft
+  ) {
+    createElemController.setTitle(parsedSavedArticle.name);
     parsedSavedArticle.select &&
       createElemController.setSelect(parsedSavedArticle.select);
     parsedSavedArticle.tabs &&

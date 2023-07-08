@@ -29,6 +29,7 @@ import { useSectionsStore } from '~/stores/SectionContoller';
 import { useCustomFetch } from '~/hooks/useCustomFetch';
 import { TSectionData } from '~/utils/types/secton';
 import { useUserStore } from '~/stores/UserController';
+import {TArticle} from "~/utils/types/article";
 
 /**
  * Переменные ----------------
@@ -55,13 +56,13 @@ sectionsController.setIsArticle(false);
 /**
  * Вычисляемые значения ----------------
  */
-const isShowArticle = computed(() => (item) => {
+const isShowArticle = computed(() => (item: TArticle) => {
   if (item.status_id === 1) {
-    return userController.user.id === item.creator.id;
+    return userController.user?.id === item.creator.id;
   } else if (item.status_id === 2) {
     return (
-      teamController.activeTeam.role.id === 1 ||
-      teamController.activeTeam.role.id === 2
+      teamController.activeTeam?.role.id === 1 ||
+      teamController.activeTeam?.role.id === 2
     );
   } else {
     return true;

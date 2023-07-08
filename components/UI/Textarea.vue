@@ -43,7 +43,7 @@ const emits = defineEmits(['update:modelValue']);
  * Пользовательские переменные ----------------
  */
 const isFocus = ref(false);
-const textareaRef = ref(null);
+const textareaRef = ref<HTMLTextAreaElement | null>(null);
 
 /**
  * Вычисляемые значения ----------------
@@ -60,9 +60,9 @@ const model = computed({
 
 watch(model, () => {
   if (textareaRef.value) {
-    textareaRef.value.style.height = '50px';
-    textareaRef.value.style.height = `${textareaRef.value.scrollHeight}px`;
-    console.log(textareaRef.value.style.height);
+    const textarea = textareaRef.value as HTMLTextAreaElement;
+    textarea.style.height = '50px';
+    textarea.style.height = `${textarea.scrollHeight}px`;
   }
 });
 </script>
