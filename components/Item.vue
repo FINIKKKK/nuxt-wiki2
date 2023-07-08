@@ -1,7 +1,7 @@
 <template>
   <div class="item">
     <!-- Иконка -->
-    <svg-icon :name="props.type === 'article' ? 'document' : 'folder'" />
+    <svg-icon :name="props.type === 'article' ? 'document' : 'folder'"/>
     <!-- Заголовок -->
     <div class="item__info">
       <div class="title">
@@ -16,34 +16,43 @@
 
       <!-- Дата -->
       <div
-        class="date"
-        v-html="useDateString(props.data.created_at, props.data.updated_at)"
+          class="date"
+          v-html="useDateString(props.data.created_at, props.data.updated_at)"
       ></div>
 
       <!--------------------------------------
        Кнопки
       ---------------------------------------->
       <div class="btns" v-if="props.place">
-        <!-- Кнопка редактирования -->
-        <NuxtLink
-          :to="`${teamController.activeTeamSlug}/articles/edit/${props.data.id}`"
-          class="btn__item"
-        >
-          <svg-icon name="edit" />
-          <p>Правка</p>
-        </NuxtLink>
-        <!-- Кнопка управления доступом -->
-        <div class="btn__item">
-          <svg-icon name="lock" />
-          <p>Доступ</p>
-        </div>
+        <template v-if="props.place === 'my'">
+          <!-- Кнопки управления  -->
+          <NuxtLink
+              :to="`${teamController.activeTeamSlug}/articles/edit/${props.data.id}`"
+              class="btn__item"
+          >
+            <svg-icon name="edit"/>
+            <p>Правка</p>
+          </NuxtLink>
+          <div class="btn__item">
+            <svg-icon name="lock"/>
+            <p>Доступ</p>
+          </div>
+        </template>
         <!-- Кнопка удаления из избранного -->
         <button
-          class="btn__item2"
-          v-if="props.place === 'favorite'"
-          @click="removeFromFavorites"
+            class="btn__item2"
+            v-if="props.place === 'favorite'"
+            @click="onRemoveFromFavorites"
         >
           Удалить из избранного
+        </button>
+        <!-- Кнопка публикации -->
+        <button
+            class="btn__item2"
+            v-if="props.place === 'moderation'"
+            @click="onPublicArticle"
+        >
+          Опубликовать
         </button>
       </div>
     </div>
@@ -54,11 +63,11 @@
 <!-- ----------------------------------------------------- -->
 
 <script lang="ts" setup>
-import { useTeamStore } from '~/stores/TeamContoller';
-import { useDateString } from '~/hooks/useDateString';
-import { TArticle } from '~/utils/types/article';
-import { TSection } from '~/utils/types/secton';
-import { useCustomFetch } from '~/hooks/useCustomFetch';
+import {useTeamStore} from '~/stores/TeamContoller';
+import {useDateString} from '~/hooks/useDateString';
+import {TArticle} from '~/utils/types/article';
+import {TSection} from '~/utils/types/secton';
+import {useCustomFetch} from '~/hooks/useCustomFetch';
 
 /**
  * Пропсы ----------------
@@ -72,7 +81,7 @@ const props = defineProps<{
 /**
  * События ----------------
  */
-const emits = defineEmits(['removeFromFavorites']);
+const emits = defineEmits(['removeFromFavorites', 'removeFromModeration']);
 
 /**
  * Системные переменные ----------------
@@ -86,9 +95,9 @@ const teamController = useTeamStore(); // Хранилище активной к
 // Ссылка на элемент
 const link = computed(() => {
   return `${
-    teamController.activeTeam
-      ? teamController.activeTeamSlug
-      : `/companies/${props.data.team?.id}`
+      teamController.activeTeam
+          ? teamController.activeTeamSlug
+          : `/companies/${props.data.team?.id}`
   }/${props.type === 'article' ? 'articles' : 'sections'}/${props.data.id}`;
 });
 
@@ -96,16 +105,28 @@ const link = computed(() => {
  * Методы ----------------
  */
 // Удалить из избранного
-const removeFromFavorites = async () => {
+const onRemoveFromFavorites = async () => {
   if (window.confirm('Вы точно хотите удалить из избранного?')) {
     const data = await useCustomFetch(`account/bookmarks/remove`, {
-      body: { article_id: props.data.id },
+      body: {article_id: props.data.id},
       method: 'POST',
     });
 
     if (data) {
       emits('removeFromFavorites', props.data.id);
     }
+  }
+};
+// Публикация статьи
+const onPublicArticle = async () => {
+  const {data} = await useCustomFetch(`team/article/publish`, {
+    body: {team_id: teamController.activeTeamId, article_id: props.data.id},
+    method: 'POST',
+  });
+  console.log(data.value);
+
+  if (data.value) {
+    emits('removeFromModeration', props.data.id);
   }
 };
 </script>

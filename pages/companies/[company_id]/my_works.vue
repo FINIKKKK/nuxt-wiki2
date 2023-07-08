@@ -1,6 +1,11 @@
 <template>
   <NuxtLayout name="main" title="Мои работы">
-    <Item v-for="article in articles" :key="article.id" :data="article" place="my" />
+    <Item
+      v-for="article in articles"
+      :key="article.id"
+      :data="article"
+      place="my"
+    />
   </NuxtLayout>
 </template>
 

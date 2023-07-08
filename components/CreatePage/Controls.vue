@@ -262,7 +262,7 @@ const onSubmit = async () => {
         user_id: obj.user.id,
         permission: obj.permission.value,
       })),
-      action: 3,
+      action: 2,
     };
 
     // Вызываем хук для валидации форм
