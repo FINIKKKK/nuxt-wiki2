@@ -22,7 +22,7 @@
           <button @click="setEditComment">Редактировать комментарий</button>
         </li>
         <li>
-          <button @click="removeComment">Удалить комментарий</button>
+          <button @click="onRemoveComment">Удалить комментарий</button>
         </li>
       </ul>
     </div>
@@ -38,6 +38,7 @@ import { useFormatDate } from '~/hooks/useFormatData';
 import { useOutsideClick } from '~/hooks/useOutsideClick';
 import { useCustomFetch } from '~/hooks/useCustomFetch';
 import { useTeamStore } from '~/stores/TeamContoller';
+import { useCommentsStore } from '~/stores/CommentsController';
 
 /**
  * Пропсы ----------------
@@ -47,16 +48,12 @@ const props = defineProps<{
 }>();
 
 /**
- * События ----------------
+ * Переменные ----------------
  */
-const emits = defineEmits(['removeComment', 'setEditComment']);
-
-/**
- * Пользовательские переменные ----------------
- */
-const popupRef = ref(null); // Ref-ссылка на попап управления комментария
-const isShowPopup = ref(false); // Показывать попап?
-const teamController = useTeamStore(); // Хранилище команд
+const popupRef = ref(null);
+const isShowPopup = ref(false);
+const teamController = useTeamStore();
+const commentsController = useCommentsStore();
 
 /**
  * Хуки ----------------
@@ -66,20 +63,27 @@ useOutsideClick(popupRef, isShowPopup);
 /**
  * Методы ----------------
  */
-// Удалить комментарий
-const removeComment = async () => {
-  const data = await useCustomFetch(`team/comment/delete`, {
-    body: { team_id: teamController.activeTeamId, comment_id: props.data.id },
-    method: 'POST',
-  });
-  if (data) {
-    emits('removeComment', props.data.id);
-    isShowPopup.value = false;
+const onRemoveComment = async () => {
+  if (window.confirm('Вы действительно хотите удалить комментарий?')) {
+    const data = await useCustomFetch(`team/comment/delete`, {
+      body: { team_id: teamController.activeTeamId, comment_id: props.data.id },
+      method: 'POST',
+    });
+    if (data) {
+      // Удаляем комментарий из массива
+      commentsController.removeComment(props.data.id);
+      // Убраем попап
+      isShowPopup.value = false;
+    }
   }
 };
-// Редактировать комментарий
+
 const setEditComment = () => {
-  emits('setEditComment', props.data);
+  // Вставляем текст комментария в поле ввода
+  commentsController.changeFieldValue(props.data.text);
+  // Изменяем комментарий в массиве
+  commentsController.changeEditComment(props.data);
+  // Убраем попап
   isShowPopup.value = false;
 };
 </script>

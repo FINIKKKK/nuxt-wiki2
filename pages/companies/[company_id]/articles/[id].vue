@@ -22,27 +22,30 @@ import { useSectionsStore } from '~/stores/SectionContoller';
 import { useCustomFetch } from '~/hooks/useCustomFetch';
 import { TArticleData } from '~/utils/types/article';
 import { TSectionData } from '~/utils/types/secton';
+import { useCommentsStore } from '~/stores/CommentsController';
 
 /**
- * Системные переменные ----------------
+ * Переменные ----------------
  */
-const route = useRoute(); // Роут
-const teamController = useTeamStore(); // Хранилище активной команды
-const sectionsController = useSectionsStore(); // Хранилище разделов
+const route = useRoute();
+const teamController = useTeamStore();
+const sectionsController = useSectionsStore();
+const commentsController = useCommentsStore();
 
 /**
  * Получение данных ----------------
  */
-// Данные статьм
 const { data } = await useCustomFetch<TArticleData>(`team/article`, {
   query: {
     team_id: teamController.activeTeamId,
     article_id: route.params.id,
   },
 });
-sectionsController.setIsArticle(true);
+// Сохраняем комментарии в хранилище
+commentsController.setComments(data.value.article.comments);
+
+// Получаем разделы
 if (!sectionsController.section) {
-  // Получаем данные раздела
   const { data: section } = await useCustomFetch<TSectionData>(`team/section`, {
     query: {
       team_id: teamController.activeTeamId,
