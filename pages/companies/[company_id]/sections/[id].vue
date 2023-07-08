@@ -9,12 +9,14 @@
       type="section"
       :key="item.id"
     />
-    <Item
-      v-for="item in data.section.items"
-      :data="item"
-      type="article"
-      :key="item.id"
-    />
+    <template v-for="item in data.section.items">
+      <Item
+        :data="item"
+        type="article"
+        :key="item.id"
+        v-if="isShowArticle(item)"
+      />
+    </template>
   </NuxtLayout>
 </template>
 
@@ -26,30 +28,45 @@ import { useTeamStore } from '~/stores/TeamContoller';
 import { useSectionsStore } from '~/stores/SectionContoller';
 import { useCustomFetch } from '~/hooks/useCustomFetch';
 import { TSectionData } from '~/utils/types/secton';
+import { useUserStore } from '~/stores/UserController';
 
 /**
- * Системные переменные ----------------
+ * Переменные ----------------
  */
-const route = useRoute(); // Роут
-const teamController = useTeamStore(); // Хранилище активной команды
-const sectionsController = useSectionsStore(); // Хранилище разделов
+const route = useRoute();
+const teamController = useTeamStore();
+const userController = useUserStore();
+const sectionsController = useSectionsStore();
 
 /**
  * Получение данных ----------------
  */
-// Данные раздела
 const { data } = await useCustomFetch<TSectionData>(`team/section`, {
   query: {
     team_id: teamController.activeTeamId,
     section_id: route.params.id,
   },
 });
-console.log(data.value);
-
 // Сохраняем в хранилище
 sectionsController.setSection(data.value.section);
 sectionsController.setBreadCrumbs(data.value.section.breadcrumbs);
 sectionsController.setIsArticle(false);
+
+/**
+ * Вычисляемые значения ----------------
+ */
+const isShowArticle = computed(() => (item) => {
+  if (item.status_id === 1) {
+    return userController.user.id === item.creator.id;
+  } else if (item.status_id === 2) {
+    return (
+      teamController.activeTeam.role.id === 1 ||
+      teamController.activeTeam.role.id === 2
+    );
+  } else {
+    return true;
+  }
+});
 </script>
 
 <!-- ----------------------------------------------------- -->

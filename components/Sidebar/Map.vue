@@ -27,29 +27,33 @@
 
           <!-- Статьи внутри дочерних разделов -->
           <ul class="children">
-            <li
-              v-for="childArticle in childSection.items"
-              class="child item2"
-              :class="{ active: Number(route.params.id) === childArticle.id }"
-            >
-              <NuxtLink
-                :to="`${teamStore.activeTeamSlug}/articles/${childArticle.id}`"
-                >{{ childArticle.name }}
-              </NuxtLink>
-            </li>
+            <template v-for="childArticle in childSection.items">
+              <li
+                class="child item2"
+                :class="{ active: Number(route.params.id) === childArticle.id }"
+                v-if="childArticle.status_id === 3"
+              >
+                <NuxtLink
+                  :to="`${teamStore.activeTeamSlug}/articles/${childArticle.id}`"
+                  >{{ childArticle.name }}
+                </NuxtLink>
+              </li>
+            </template>
           </ul>
         </li>
 
         <!-- Статьи внутри основных разделов -->
-        <li
-          v-for="article in section.items"
-          class="child"
-          :class="{ active: Number(route.params.id) === article.id }"
-        >
-          <NuxtLink :to="`${teamStore.activeTeamSlug}/sections/${article.id}`"
-            >{{ article.name }}
-          </NuxtLink>
-        </li>
+        <template v-for="article in section.items">
+          <li
+            class="child"
+            :class="{ active: Number(route.params.id) === article.id }"
+            v-if="article.status_id === 3"
+          >
+            <NuxtLink :to="`${teamStore.activeTeamSlug}/sections/${article.id}`"
+              >{{ article.name }}
+            </NuxtLink>
+          </li>
+        </template>
       </ul>
     </li>
   </ul>

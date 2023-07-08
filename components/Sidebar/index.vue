@@ -42,6 +42,7 @@ useOutsideClick(popupRef, null, () => {
     '/my_works',
     '/sections',
     '/articles',
+    '/companies',
   ];
   if (!pages.some((page) => route.path.includes(page))) {
     sidebarController.close();
@@ -63,6 +64,11 @@ onMounted(() => {
   const settingsPages = ['/settings'];
 
   if (homePages.some((page) => route.path.includes(page))) {
+    sidebarController.open('home');
+  } else if (
+    !homePages.some((page) => route.path.includes(page)) &&
+    route.path.includes('/companies')
+  ) {
     sidebarController.open('home');
   } else if (settingsPages.some((page) => route.path.includes(page))) {
     sidebarController.open('settings');

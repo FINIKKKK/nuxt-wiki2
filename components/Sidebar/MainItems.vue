@@ -47,7 +47,6 @@ const onLogout = async () => {
   const { data } = await useCustomFetch(`account/logout`, {
     method: 'POST',
   });
-
   if (data.value) {
     // Обнуляем токен
     token.value = '';
@@ -147,7 +146,6 @@ const innerItems: TInnerItem[] = [
 /**
  * Вычисляемые значения ----------------
  */
-
 // Активный элемент
 const activeItem: ComputedRef<TInnerItem | null> = computed(() => {
   return (
