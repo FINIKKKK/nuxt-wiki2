@@ -18,10 +18,20 @@ export const useFormatDate = (dateString: string) => {
   ];
 
   const date = new Date(dateString);
+  const today = new Date();
+  const yesterday = new Date(today);
+  yesterday.setDate(yesterday.getDate() - 1);
+
   const day = date.getDate();
   const month = months[date.getMonth()];
   const hours = String(date.getHours()).padStart(2, '0');
   const minutes = String(date.getMinutes()).padStart(2, '0');
 
-  return `${day} ${month} ${hours}:${minutes}`;
+  if (date.toDateString() === today.toDateString()) {
+    return `Сегодня в ${hours}:${minutes}`;
+  } else if (date.toDateString() === yesterday.toDateString()) {
+    return `Вчера в ${hours}:${minutes}`;
+  } else {
+    return `${day} ${month} ${hours}:${minutes}`;
+  }
 };

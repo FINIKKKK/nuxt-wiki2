@@ -230,12 +230,12 @@ a.btn {
     display: flex;
     align-items: center;
     transition: 0.2s;
-    padding: 7px 15px;
+    padding: 10px 15px;
     cursor: pointer;
     svg {
       margin-right: 15px;
-      width: 17px;
-      height: 17px;
+      width: 15px;
+      height: 15px;
     }
     &:hover {
       background-color: $blue3;

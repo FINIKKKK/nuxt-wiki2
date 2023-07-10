@@ -18,11 +18,13 @@
           :key="employee.id"
           :data="employee"
           type="invite"
+          @removeFromInvites="removeFromInvites"
         />
         <EmployessPageItem
           v-for="employee in employees.employees"
           :key="employee.id"
           :data="employee"
+          @removeFromTeam="removeFromTeam"
         />
       </tbody>
     </table>
@@ -56,6 +58,23 @@ const { data: employees } = await useCustomFetch<TEmployees>(`team/employees`, {
   query: { team_id: teamController.activeTeamId },
 });
 console.log(employees.value);
+1;
+
+/**
+ * Методы ----------------
+ */
+// Удалить из списка (событие)
+const removeFromTeam = (id: number) => {
+  employees.value.employees = employees.value.employees.filter(
+    (obj) => obj.id !== id,
+  );
+};
+// Удалить из приглашенных (событие)
+const removeFromInvites = (id: number) => {
+  employees.value.invites = employees.value.invites.filter(
+    (obj) => obj.id !== id,
+  );
+};
 </script>
 
 <!-- ----------------------------------------------------- -->
@@ -64,6 +83,4 @@ console.log(employees.value);
 <style lang="scss" scoped>
 .table {
 }
-
-
 </style>

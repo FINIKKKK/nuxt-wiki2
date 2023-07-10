@@ -17,13 +17,17 @@
         @click="isShowPopup = !isShowPopup"
       />
       <ul class="popup" v-if="isShowPopup">
-        <li>
+        <li class="key">
           <svg-icon name="key" />
           <p>Изменить уровень доступа</p>
         </li>
-        <li>
-          <svg-icon name="close" />
+        <li @click="onRemoveFromTeam" v-if="props.type !== 'invite'">
+          <svg-icon name="cancel" />
           <p>Удалить из компании</p>
+        </li>
+        <li @click="onCancelInvite" v-if="props.type === 'invite'">
+          <svg-icon name="cancel" />
+          <p>Отменить приглашение</p>
         </li>
       </ul>
     </th>
@@ -37,6 +41,8 @@
 import { useFormatDate } from '~/hooks/useFormatData';
 import { TUser } from '~/utils/types/account';
 import { useOutsideClick } from '~/hooks/useOutsideClick';
+import { useCustomFetch } from '~/hooks/useCustomFetch';
+import { useTeamStore } from '~/stores/TeamContoller';
 
 /**
  * Пропсы ----------------
@@ -47,15 +53,51 @@ const props = defineProps<{
 }>();
 
 /**
+ * События ----------------
+ */
+const emits = defineEmits(['removeFromTeam', 'removeFromInvites']);
+
+/**
  * Переменные ----------------
  */
 const isShowPopup = ref(false);
 const refPopup = ref(null);
+const teamController = useTeamStore();
 
 /**
  * Хуки ----------------
  */
 useOutsideClick(refPopup, isShowPopup);
+
+/**
+ * Методы ----------------
+ */
+// Удалить пользователя из команды
+const onRemoveFromTeam = async () => {
+  if (window.confirm('Вы точно хотите удалить пользователя из компании?')) {
+    const { data } = await useCustomFetch(`team/employees/dismiss`, {
+      body: { team_id: teamController.activeTeamId, user_id: props.data.id },
+      method: 'POST',
+    });
+    emits('removeFromTeam', props.data.id);
+    isShowPopup.value = false;
+  } else {
+    isShowPopup.value = false;
+  }
+};
+// Отменить приглашение
+const onCancelInvite = async () => {
+  if (window.confirm('Вы точно хотите отменить приглашение?')) {
+    const { data } = await useCustomFetch(`team/invites/delete`, {
+      body: { team_id: teamController.activeTeamId, invite_id: props.data.id },
+      method: 'POST',
+    });
+    emits('removeFromInvites', props.data.id);
+    isShowPopup.value = false;
+  } else {
+    isShowPopup.value = false;
+  }
+};
 </script>
 
 <!-- ----------------------------------------------------- -->
@@ -72,6 +114,7 @@ useOutsideClick(refPopup, isShowPopup);
     background-color: $white;
   }
 }
+
 .controls {
   position: relative;
   .options {
@@ -87,9 +130,15 @@ useOutsideClick(refPopup, isShowPopup);
     }
   }
   .popup {
-    width: 220px;
+    width: 250px;
     top: 35px;
     right: 10px;
+    .key {
+      svg {
+        width: 17px;
+        height: 17px;
+      }
+    }
   }
 }
 </style>

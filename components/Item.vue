@@ -39,21 +39,23 @@
           </div>
         </template>
         <!-- Кнопка удаления из избранного -->
-        <button
-          class="btn__item2"
+        <div
+          class="btn__item2 btn__item2-remove"
           v-if="props.place === 'favorite'"
           @click="onRemoveFromFavorites"
         >
-          Удалить из избранного
-        </button>
+          <svg-icon name="add2" />
+          <p>Удалить из избранного</p>
+        </div>
         <!-- Кнопка публикации -->
-        <button
+        <div
           class="btn__item2"
           v-if="props.place === 'moderation'"
           @click="onPublicArticle"
         >
-          Опубликовать
-        </button>
+          <svg-icon name="check" />
+          <p>Опубликовать</p>
+        </div>
       </div>
     </div>
   </div>
@@ -233,14 +235,30 @@ const onPublicArticle = async () => {
     }
   }
   .btn__item2 {
-    background-color: rgba($blue, 0.15);
-    color: $blue;
     padding: 5px 10px;
     font-size: 13px;
     border-radius: 2px;
     transition: 0.2s;
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    svg {
+      width: 17px;
+      height: 17px;
+      margin-right: 10px;
+    }
+    p {
+      color: $black;
+    }
     &:hover {
-      background-color: rgba($blue, 0.2);
+      p {
+        color: $blue;
+      }
+    }
+    &.btn__item2-remove {
+      svg {
+        transform: rotate(45deg);
+      }
     }
   }
 }
