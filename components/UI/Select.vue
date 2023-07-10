@@ -4,6 +4,7 @@
     class="select"
     :class="{
       active: isOpen, // Если открыт
+      full: props.type === 'full',
     }"
     :data-layout="props.type"
   >
@@ -20,7 +21,7 @@
       <svg-icon
         class="triangle"
         name="triangle"
-        v-if="props.type === 'triangle'"
+        v-if="props.type === 'triangle' || props.type === 'full'"
       />
     </div>
     <!-- Список -->
@@ -55,7 +56,7 @@ import { TSelect } from '~/utils/types/base';
 const props = defineProps<{
   options: TSelect[];
   modelValue: TSelect | null;
-  type?: 'triangle';
+  type?: 'triangle' | 'full';
 }>();
 
 /**
@@ -188,6 +189,28 @@ const selectOption = (option: TSelect) => {
   }
   &.active {
     color: $blue;
+  }
+}
+
+.full {
+  border: 1px solid $blue2;
+  padding: 14px 24px;
+  transition: 0.3s;
+  border-radius: 2px;
+  width: 100%;
+  max-width: 100%;
+  .selected {
+    width: 100%;
+    justify-content: space-between;
+    span {
+      font-size: 16px !important;
+    }
+  }
+  &:hover {
+    border-color: $blue;
+  }
+  &.active {
+    border-color: $blue;
   }
 }
 </style>

@@ -1,7 +1,7 @@
 import { ConcreteComponent } from '@vue/runtime-core';
 
 export interface TSelect {
-  value: number;
+  value: number | string;
   label: string;
 }
 

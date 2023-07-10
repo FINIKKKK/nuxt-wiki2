@@ -11,3 +11,10 @@ export const accessArr = [
   { value: 3, label: 'Только чтение' },
   { value: 4, label: 'Без доступа' },
 ];
+
+// Список ролей
+export const roles = [
+  { value: 'user', label: 'Пользователь' },
+  { value: 'admin', label: 'Администратор' },
+  { value: 'moderator', label: 'Модератор' },
+];

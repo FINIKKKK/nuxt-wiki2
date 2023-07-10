@@ -33,7 +33,6 @@ const sectionsController = useSectionsStore(); // Хранилище разде�
 const { data } = await useCustomFetch<TArticleEdit>(`team/article/edit`, {
   query: { team_id: teamController.activeTeamId, article_id: route.params.id },
 });
-console.log(data.value);
 
 /**
  * Вычисляемые значения ----------------
