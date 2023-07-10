@@ -215,44 +215,64 @@ a.btn {
 
 .popup {
   background-color: $white;
-  border-radius: 2px;
+  border-radius: 3px;
   box-shadow: 0 0 30px rgba(0, 0, 0, 0.08);
-  color: $black;
-  font-size: 13px;
+  font-size: 14px;
   line-height: 18px;
-  padding: 18px 20px;
+  padding: 12px 0px;
   position: absolute;
   transition: 0.25s;
   width: 200px;
-  top: 150%;
+  z-index: 100;
+  top: 0;
+  right: 0;
+  li {
+    display: flex;
+    align-items: center;
+    transition: 0.2s;
+    padding: 7px 15px;
+    cursor: pointer;
+    svg {
+      margin-right: 15px;
+      width: 17px;
+      height: 17px;
+    }
+    &:hover {
+      background-color: $blue3;
+      svg {
+        fill: $blue;
+      }
+      p {
+        color: $blue;
+      }
+    }
+  }
 }
 
 // ---- Tables ----
-//.table {
-//  width: 100%;
-//  display: table;
-//  vertical-align: middle;
-//  td,
-//  th {
-//    padding-left: 10px;
-//  }
-//  thead {
-//    color: $gray;
-//    text-align: left;
-//    border-bottom: 1px solid $gray2;
-//    font-size: 13px;
-//    td,
-//    th {
-//      padding-bottom: 10px;
-//    }
-//  }
-//  tbody {
-//    td,
-//    th {
-//      padding-top: 19px;
-//    }
-//  }
-//}
+.table {
+  width: 100%;
+  display: table;
+  vertical-align: middle;
+  td,
+  th {
+    text-align: left;
+    padding-left: 10px;
+  }
+  thead {
+    color: $blue;
+    border-bottom: 1px solid $blue;
+    td,
+    th {
+      padding-bottom: 10px;
+    }
+  }
+  tbody {
+    td,
+    th {
+    }
+  }
+}
 
 // Правый всплывающий попап
 .aside-popup {

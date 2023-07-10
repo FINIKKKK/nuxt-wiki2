@@ -10,6 +10,10 @@
     <!-- Форма -->
     <div class="form">
       <div class="content">
+        <p>
+          Основные достоинства itl.wiki раскрываются, когда вы работаете в
+          связке с другими участниками команды и обсуждаете проекты.
+        </p>
         <div class="emails__input">
           <!-- Поле ввода -->
           <UIInput
@@ -36,7 +40,18 @@
         </ul>
 
         <!-- Селект -->
-        <UISelect :options="roles" v-model="selectValue" type="full" />
+        <UISelect
+          :options="roles"
+          v-model="selectValue"
+          type="full"
+          class="select"
+        />
+
+        <small>
+          Нажимая кнопку «Выслать приглашение» вы принимаете
+          <a href="#">Условия обслуживания в отношении продуктов ITL</a> и
+          соглашаетесь с <a href="#">Политикой конфиденциальности</a>
+        </small>
       </div>
 
       <button
@@ -134,6 +149,24 @@ const onRemoveEmail = (email: string) => {
 <!-- ----------------------------------------------------- -->
 
 <style lang="scss" scoped>
+.form {
+  p {
+    margin-bottom: 32px;
+  }
+  .select {
+    margin-bottom: 32px;
+  }
+  small {
+    color: $gray;
+    font-size: 14px;
+    line-height: 16px;
+    a {
+      color: $gray;
+      text-decoration: underline;
+    }
+  }
+}
+
 .warning {
   margin: 0px -50px 50px;
 }
