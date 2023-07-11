@@ -4,19 +4,49 @@
     <div class="control">
       <NuxtLink
         :to="`${teamController.activeTeamSlug}/${
-          'section' ? 'sections' : 'articles'
+          elemController.type === 'section' ? 'sections' : 'articles'
         }/edit/${route.params.id}`"
       >
         <svg-icon name="edit" />
       </NuxtLink>
     </div>
+
+    <!-- Закрепить -->
+    <div class="control" v-if="elemController.type === 'article'">
+      <svg-icon name="attach" />
+    </div>
+
     <!-- Доступ -->
-    <div class="control">
+    <div class="control" @click="elemController.toggleAccessPopup()">
       <svg-icon name="lock" />
     </div>
-    <!-- Удалить -->
-    <div class="control">
-      <svg-icon name="remove" @click="onDelete" />
+
+    <!-- Сгенерировать ссылку -->
+    <div class="control" @click="elemController.toggleLinkPopup()">
+      <svg-icon name="share" />
+    </div>
+
+    <!-- Дополнительные возможности -->
+    <div class="extra" ref="refPopup">
+      <div class="control" @click="isShowPopup = !isShowPopup">
+        <svg-icon name="options" />
+      </div>
+      <ul class="popup" v-if="isShowPopup">
+        <!-- Открыть историю статьи -->
+        <li v-if="elemController.type === 'article'">
+          <svg-icon name="reverse" />
+          <p>Журнал версий</p>
+        </li>
+
+        <!-- Удалить элемент -->
+        <li @click="onDelete">
+          <svg-icon name="remove" />
+          <p>
+            Удалить
+            {{ elemController.type === 'section' ? 'раздел' : 'статью' }}
+          </p>
+        </li>
+      </ul>
     </div>
   </div>
 </template>
@@ -27,13 +57,23 @@
 <script lang="ts" setup>
 import { useCustomFetch } from '~/hooks/useCustomFetch';
 import { useTeamStore } from '~/stores/TeamContoller';
+import { useElemStore } from '~/stores/ElemController';
+import { useOutsideClick } from '~/hooks/useOutsideClick';
 
 /**
- * Системные переменные ----------------
+ * Переменные ----------------
  */
-const route = useRoute(); // Роут
-const router = useRouter(); // Роутер
-const teamController = useTeamStore(); // Хранилище команд
+const route = useRoute();
+const router = useRouter();
+const teamController = useTeamStore();
+const elemController = useElemStore();
+const refPopup = ref(null);
+const isShowPopup = ref(false);
+
+/**
+ * Хуки ----------------
+ */
+useOutsideClick(refPopup, isShowPopup);
 
 /**
  * Методы ----------------
@@ -43,15 +83,21 @@ const onDelete = async () => {
   // Подтверждение удаления
   if (
     window.confirm(
-      `Вы точно хотите удалить ${props.type ? ' раздел' : 'статью'}?`,
+      `Вы точно хотите удалить ${
+        elemController.type === 'section' ? 'раздел' : 'статью'
+      }?`,
     )
   ) {
     // Удаляем элемент
     const { data } = await useCustomFetch(`team/section/delete`, {
       body: {
         team_id: teamController.activeTeamId,
-        ...(props.type === 'section' && { section_id: route.params.id }),
-        ...(props.type === 'article' && { article_id: route.params.id }),
+        ...(elemController.type === 'section' && {
+          section_id: route.params.id,
+        }),
+        ...(elemController.type === 'article' && {
+          article_id: route.params.id,
+        }),
       },
       method: 'POST',
     });
@@ -59,7 +105,12 @@ const onDelete = async () => {
     if (data.value) {
       // Перенаправляем пользователя
       await router.push(`${teamController.activeTeamId}`);
+      // Закрываем попап
+      isShowPopup.value = false;
     }
+  } else {
+    // Закрываем попап
+    isShowPopup.value = false;
   }
 };
 </script>
@@ -90,6 +141,16 @@ const onDelete = async () => {
     width: 20px;
     height: 20px;
     fill: $blue;
+  }
+}
+
+.extra {
+  .control {
+    margin-right: 0 !important;
+  }
+  .popup {
+    top: 50px;
+    right: 50px;
   }
 }
 </style>

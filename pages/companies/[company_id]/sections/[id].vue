@@ -30,6 +30,7 @@ import { useCustomFetch } from '~/hooks/useCustomFetch';
 import { TSectionData } from '~/utils/types/secton';
 import { useUserStore } from '~/stores/UserController';
 import {TArticle} from "~/utils/types/article";
+import {useElemStore} from "~/stores/ElemController";
 
 /**
  * Переменные ----------------
@@ -38,6 +39,7 @@ const route = useRoute();
 const teamController = useTeamStore();
 const userController = useUserStore();
 const sectionsController = useSectionsStore();
+const elemController = useElemStore();
 
 /**
  * Получение данных ----------------
@@ -52,6 +54,7 @@ const { data } = await useCustomFetch<TSectionData>(`team/section`, {
 sectionsController.setSection(data.value.section);
 sectionsController.setBreadCrumbs(data.value.section.breadcrumbs);
 sectionsController.setIsArticle(false);
+elemController.changeTypeElem('section')
 
 /**
  * Вычисляемые значения ----------------

@@ -1,12 +1,12 @@
 <template>
   <NuxtLayout
-      name="elem"
-      type="article"
-      :data="data.article"
-      :properties="data.properties"
+    name="elem"
+    type="article"
+    :data="data.article"
+    :properties="data.properties"
   >
     <!-- Вкладки -->
-    <ElemPageTabs :tabs="data.article.tabs"/>
+    <ElemPageTabs :tabs="data.article.tabs" />
 
     <!-- Дополнительный функционал -->
     <div class="footer">
@@ -14,9 +14,9 @@
       <div class="rate">
         <p>Эта страница была полезной?</p>
         <div class="smiles">
-          <svg-icon name="smile" @click="onChangeRate" class="green"/>
-          <svg-icon name="smile2" @click="onChangeRate" class="orange"/>
-          <svg-icon name="smile3" @click="onChangeRate" class="red"/>
+          <svg-icon name="smile" @click="onChangeRate" class="green" />
+          <svg-icon name="smile2" @click="onChangeRate" class="orange" />
+          <svg-icon name="smile3" @click="onChangeRate" class="red" />
         </div>
       </div>
       <!-- Список тэгов -->
@@ -24,7 +24,7 @@
     </div>
 
     <!-- Комментарии -->
-    <Comments :comments="data.article.comments"/>
+    <Comments :comments="data.article.comments" />
   </NuxtLayout>
 </template>
 
@@ -32,12 +32,13 @@
 <!-- ----------------------------------------------------- -->
 
 <script lang="ts" setup>
-import {useTeamStore} from '~/stores/TeamContoller';
-import {useSectionsStore} from '~/stores/SectionContoller';
-import {useCustomFetch} from '~/hooks/useCustomFetch';
-import {TArticleData} from '~/utils/types/article';
-import {TSectionData} from '~/utils/types/secton';
-import {useCommentsStore} from '~/stores/CommentsController';
+import { useTeamStore } from '~/stores/TeamContoller';
+import { useSectionsStore } from '~/stores/SectionContoller';
+import { useCustomFetch } from '~/hooks/useCustomFetch';
+import { TArticleData } from '~/utils/types/article';
+import { TSectionData } from '~/utils/types/secton';
+import { useCommentsStore } from '~/stores/CommentsController';
+import { useElemStore } from '~/stores/ElemController';
 
 /**
  * Переменные ----------------
@@ -46,12 +47,13 @@ const route = useRoute();
 const teamController = useTeamStore();
 const sectionsController = useSectionsStore();
 const commentsController = useCommentsStore();
+const elemController = useElemStore();
 
 /**
  * Получение данных ----------------
  */
 // Данные статьи
-const {data} = await useCustomFetch<TArticleData>(`team/article`, {
+const { data } = await useCustomFetch<TArticleData>(`team/article`, {
   query: {
     team_id: teamController.activeTeamId,
     article_id: route.params.id,
@@ -60,10 +62,11 @@ const {data} = await useCustomFetch<TArticleData>(`team/article`, {
 console.log(data.value);
 // Сохраняем комментарии в хранилище
 commentsController.setComments(data.value.article.comments);
+elemController.changeTypeElem('article');
 
 // Получаем разделы
 if (!sectionsController.section) {
-  const {data: section} = await useCustomFetch<TSectionData>(`team/section`, {
+  const { data: section } = await useCustomFetch<TSectionData>(`team/section`, {
     query: {
       team_id: teamController.activeTeamId,
       section_id: data.value.article.section.id,
@@ -79,7 +82,7 @@ if (!sectionsController.section) {
  */
 // Изменить рейтинг
 const onChangeRate = async () => {
-  const {data} = await useCustomFetch(`team/mark/add`, {
+  const { data } = await useCustomFetch(`team/mark/add`, {
     body: {
       team_id: teamController.activeTeamId,
       entity_type: 'article',

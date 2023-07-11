@@ -34,6 +34,11 @@
       </ul>
 
       <!--------------------------------------
+        Попап доступа у пользователей
+      ---------------------------------------->
+      <CreatePageAccess class="access" />
+
+      <!--------------------------------------
         Слот
       ---------------------------------------->
       <slot />
@@ -108,22 +113,6 @@ const toggleFavorite = async () => {
   }
   isFavorite.value = !isFavorite.value;
 };
-
-/**
- * Вычисляемые значения ----------------
- */
-onMounted(() => {
-  if (process.client) {
-
-    window.addEventListener('scroll', function () {
-      if (window.scrollTop > 30) {
-        isScrolled.value = true;
-      } else {
-        isScrolled.value = false;
-      }
-    });
-  }
-});
 </script>
 
 <!-- ----------------------------------------------------- -->
@@ -165,5 +154,9 @@ onMounted(() => {
   span {
     color: $black;
   }
+}
+
+.access {
+  margin-top: 70px;
 }
 </style>

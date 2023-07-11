@@ -1,7 +1,9 @@
 <template>
   <div
     class="access aside-popup"
-    :class="{ active: createElemController.isShowAccess }"
+    :class="{
+      active: createElemController.isShowAccess || elemController.isShowAccessPopup,
+    }"
   >
     <h2 class="title">Права доступа</h2>
     <p class="text">
@@ -57,12 +59,14 @@ import { TEmployees } from '~/utils/types/team';
 import { useOutsideClick } from '~/hooks/useOutsideClick';
 import { accessArr } from '~/utils/data';
 import { useCreateElemStore } from '~/stores/CreateElemController';
+import { useElemStore } from '~/stores/ElemController';
 
 /**
- * Системные переменные ----------------
+ * Переменные ----------------
  */
-const teamController = useTeamStore(); // Хранилище команд
-const createElemController = useCreateElemStore(); // Хранилище страницы создания
+const teamController = useTeamStore();
+const createElemController = useCreateElemStore();
+const elemController = useElemStore();
 
 /**
  * Получение данных ----------------

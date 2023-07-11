@@ -41,7 +41,6 @@
 
 <script lang="ts" setup>
 import { TNav } from '~/utils/types/base';
-import { useSidebarStore } from '~/stores/SidebarController';
 
 /**
  * Пропсы ----------------
