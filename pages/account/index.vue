@@ -1,5 +1,5 @@
 <template>
-  <NuxtLayout name="main">
+  <NuxtLayout name="main" :nav="nav">
     <!-- Отображение ошибок -->
     <UIWarning
       v-if="profileController.errors.length || profileController.message"
@@ -29,9 +29,11 @@
 import { useProfileStore } from '~/stores/ProfileController';
 
 /**
- * Системные переменные ----------------
+ * Переменные ----------------
  */
-const profileController = useProfileStore(); // Хранилище профиля
+const profileController = useProfileStore();
+const route = useRoute();
+const nav = [{ label: 'Профиль', link: route.path }];
 
 /**
  * Хуки ----------------
@@ -53,7 +55,12 @@ onBeforeRouteLeave((to, from, next) => {
 }
 
 .flex {
+  width: 100%;
   display: flex;
   justify-content: space-between;
+}
+
+.left {
+  width: 60%;
 }
 </style>

@@ -1,23 +1,17 @@
 <template>
   <form class="form" @submit.prevent="onChangeUserData">
     <h2 class="title">Личные данные</h2>
-    <div class="content">
-      <UIInput
-        label="Имя"
-        v-model="firstNameValue"
-        :errors="errors['firstName']"
-      />
-      <UIInput
-        label="Фамилия"
-        v-model="lastNameValue"
-        :errors="errors['lastName']"
-      />
-      <UIInput
-        label="Email"
-        v-model="emailValue"
-        :errors="errors['email']"
-      />
-    </div>
+    <UIInput
+      label="Имя"
+      v-model="firstNameValue"
+      :errors="errors['firstName']"
+    />
+    <UIInput
+      label="Фамилия"
+      v-model="lastNameValue"
+      :errors="errors['lastName']"
+    />
+    <UIInput label="Email" v-model="emailValue" :errors="errors['email']" />
     <button class="btn" :class="{ disabled: requestController.loading[url] }">
       Сохранить
     </button>
@@ -101,4 +95,8 @@ const onChangeUserData = async () => {
 <!-- ----------------------------------------------------- -->
 <!-- ----------------------------------------------------- -->
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+.form {
+  width: 100%;
+}
+</style>

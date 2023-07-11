@@ -81,7 +81,6 @@ const onChangeAvatar = async (e: any) => {
 .avatar {
   width: 203px;
   text-align: center;
-  margin-right: 50px;
   position: relative;
   .img {
     width: 100px;

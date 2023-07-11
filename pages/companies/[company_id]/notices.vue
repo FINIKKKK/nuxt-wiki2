@@ -1,19 +1,19 @@
 <template>
- <NuxtLayout name="main">
-
- </NuxtLayout>
+  <NuxtLayout name="main" title="Уведомления" :nav="nav"> </NuxtLayout>
 </template>
 
 <!-- ----------------------------------------------------- -->
 <!-- ----------------------------------------------------- -->
 
 <script lang="ts" setup>
-
+/**
+ * Переменные ----------------
+ */
+const route = useRoute();
+const nav = [{ label: 'Уведомления', link: route.path }];
 </script>
 
 <!-- ----------------------------------------------------- -->
 <!-- ----------------------------------------------------- -->
 
-<style lang="scss" scoped>
-
-</style>
+<style lang="scss" scoped></style>

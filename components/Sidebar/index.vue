@@ -1,5 +1,5 @@
 <template>
-  <aside class="sidebar" ref="popupRef">
+  <aside class="sidebar" ref="popupRef" id="sidebar">
     <nav class="nav">
       <!-- Главный сайдбар -->
       <SidebarMain />

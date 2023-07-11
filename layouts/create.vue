@@ -1,5 +1,5 @@
 <template>
-  <div class="main" ref="refScroll">
+  <div class="main" ref="refScroll" @scroll="onChangeHeader">
     <!--------------------------------------
       Элементы управления
     ---------------------------------------->
@@ -137,20 +137,6 @@ onMounted(() => {
       createElemController.setTabs(parsedSavedArticle.tabs);
   }
 });
-// Добавить стили при скролле
-onMounted(() => {
-  if (process.client) {
-    const block = refScroll.value;
-
-    block.addEventListener('scroll', function () {
-      if (block.scrollTop > 30) {
-        isScrolled.value = true;
-      } else {
-        isScrolled.value = false;
-      }
-    });
-  }
-});
 
 /**
  * Хуки ----------------
@@ -173,6 +159,22 @@ onBeforeRouteLeave((to, from, next) => {
     }
   }
 });
+
+/**
+ * Методы ----------------
+ */
+// Изменить стили у header
+const onChangeHeader = () => {
+  const block = refScroll.value;
+
+  block.addEventListener('scroll', function () {
+    if (block.scrollTop > 30) {
+      isScrolled.value = true;
+    } else {
+      isScrolled.value = false;
+    }
+  });
+};
 </script>
 
 <!-- ----------------------------------------------------- -->

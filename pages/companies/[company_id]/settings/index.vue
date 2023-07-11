@@ -1,5 +1,5 @@
 <template>
-  <NuxtLayout name="main">
+  <NuxtLayout name="main" :nav="nav">
     <!-- Отображение ошибок -->
     <UIWarning
       v-if="settingsController.errors?.length || settingsController.message"
@@ -19,9 +19,11 @@
 import { useSettingsStore } from '~/stores/SettingsController';
 
 /**
- * Системные переменные ----------------
+ * Переменные ----------------
  */
-const settingsController = useSettingsStore(); // Хранилище страницы настроек
+const settingsController = useSettingsStore();
+const route = useRoute();
+const nav = [{ label: 'Настройки', link: route.path }];
 </script>
 
 <!-- ----------------------------------------------------- -->

@@ -1,11 +1,17 @@
 <template>
-  <NuxtLayout name="main" title="Активность"></NuxtLayout>
+  <NuxtLayout name="main" title="Активность" :nav="nav"></NuxtLayout>
 </template>
 
 <!-- ----------------------------------------------------- -->
 <!-- ----------------------------------------------------- -->
 
-<script lang="ts" setup></script>
+<script lang="ts" setup>
+/**
+ * Переменные ----------------
+ */
+const route = useRoute();
+const nav = [{ label: 'Активность', link: route.path }];
+</script>
 
 <!-- ----------------------------------------------------- -->
 <!-- ----------------------------------------------------- -->

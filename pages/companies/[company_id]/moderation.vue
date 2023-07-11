@@ -1,5 +1,5 @@
 <template>
-  <NuxtLayout name="main" title="На модерации">
+  <NuxtLayout name="main" title="На модерации" :nav="nav">
     <Item
       v-for="article in articles"
       :key="article.id"
@@ -21,18 +21,17 @@ import { useTeamStore } from '~/stores/TeamContoller';
 /**
  * Системные переменные ----------------
  */
-
 const teamController = useTeamStore();
+const route = useRoute();
+const nav = [{ label: 'На модерации', link: route.path }];
 
 /**
  * Получение данных ----------------
  */
-// Мои статьи
+// Статьи на модерации
 const { data: articles } = await useCustomFetch<TArticle[]>(`team/moderation`, {
   query: { team_id: teamController.activeTeamId },
 });
-
-
 console.log(articles.value);
 
 /**

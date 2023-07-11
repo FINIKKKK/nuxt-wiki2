@@ -4,7 +4,7 @@
     <div class="control">
       <NuxtLink
         :to="`${teamController.activeTeamSlug}/${
-          props.type === 'section' ? 'sections' : 'articles'
+          'section' ? 'sections' : 'articles'
         }/edit/${route.params.id}`"
       >
         <svg-icon name="edit" />
@@ -27,13 +27,6 @@
 <script lang="ts" setup>
 import { useCustomFetch } from '~/hooks/useCustomFetch';
 import { useTeamStore } from '~/stores/TeamContoller';
-
-/**
- * Пропсы ----------------
- */
-const props = defineProps<{
-  type: 'article' | 'section';
-}>();
 
 /**
  * Системные переменные ----------------

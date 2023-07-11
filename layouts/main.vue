@@ -3,8 +3,7 @@
     <!-- Сайдбар -->
     <Sidebar />
 
-    <!-- Остальной контент на странице -->
-    <div id="scroll" class="content" ref="refContent">
+    <div class="content__wrapper">
       <!-- Навигация -->
       <div class="header" v-if="props.nav" :class="{ scrolled: isScrolled }">
         <nav class="nav">
@@ -23,17 +22,26 @@
         />
       </div>
 
-      <!-- Заголовок -->
-      <h1 class="title" v-if="props.title">{{ props.title }}</h1>
+      <!-- Остальной контент на странице -->
+      <div
+        id="scroll"
+        class="content"
+        ref="refContent"
+        @scroll="onChangeHeader"
+      >
+        <!-- Заголовок -->
+        <h1 class="title" v-if="props.title">{{ props.title }}</h1>
 
-      <!-- Слот шаблона -->
-      <slot />
+        <!-- Слот шаблона -->
+        <slot />
+      </div>
     </div>
   </main>
 </template>
 
 <script lang="ts" setup>
 import { TNav } from '~/utils/types/base';
+import { useSidebarStore } from '~/stores/SidebarController';
 
 /**
  * Пропсы ----------------
@@ -51,28 +59,30 @@ const refContent = ref(null);
 const isScrolled = ref(false);
 
 /**
- * Вычисляемые значения ----------------
+ * Методы ----------------
  */
-// Добавить стили при скролле
-onMounted(() => {
-  if (process.client) {
-    const block = refContent.value;
+// Изменить стили у header
+const onChangeHeader = () => {
+  const block = refContent.value;
 
-    block.addEventListener('scroll', function () {
-      if (block.scrollTop > 30) {
-        isScrolled.value = true;
-      } else {
-        isScrolled.value = false;
-      }
-    });
+  if (block.scrollTop > 30) {
+    isScrolled.value = true;
+  } else {
+    isScrolled.value = false;
   }
-});
+};
 </script>
 
 <style lang="scss" scoped>
 main {
   position: relative;
+  background-color: $white;
   display: flex;
+}
+
+.content__wrapper {
+  position: relative;
+  width: 100%;
 }
 
 .content {
@@ -90,15 +100,14 @@ main {
 }
 
 .header {
-  width: calc(100% - 380px);
+  width: 100%;
   border-bottom: 1px solid rgba($blue, 0.1);
-  margin-bottom: 35px;
-  position: fixed;
+  position: absolute;
   background-color: $white;
   z-index: 150;
-  margin: 0 -50px;
   padding: 24px 50px;
   top: 0;
+  left: 0;
   display: flex;
   align-items: center;
   justify-content: space-between;

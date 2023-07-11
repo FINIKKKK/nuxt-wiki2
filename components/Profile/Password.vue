@@ -1,26 +1,24 @@
 <template>
   <form class="form" @submit.prevent="onChangePassword">
     <h2 class="title">Безопасность</h2>
-    <div class="content">
-      <UIInput
-        label="Текущий пароль"
-        type="password"
-        v-model="passwordValue"
-        :errors="errors['password']"
-      />
-      <UIInput
-        label="Новый пароль"
-        type="password"
-        v-model="newPasswordValue"
-        :errors="errors['new_password']"
-      />
-      <UIInput
-        label="Повторить пароль"
-        type="password"
-        v-model="passwordConfirmValue"
-        :errors="errors['password_confirmation']"
-      />
-    </div>
+    <UIInput
+      label="Текущий пароль"
+      type="password"
+      v-model="passwordValue"
+      :errors="errors['password']"
+    />
+    <UIInput
+      label="Новый пароль"
+      type="password"
+      v-model="newPasswordValue"
+      :errors="errors['new_password']"
+    />
+    <UIInput
+      label="Повторить пароль"
+      type="password"
+      v-model="passwordConfirmValue"
+      :errors="errors['password_confirmation']"
+    />
     <button class="btn" :class="{ disabled: requestController.loading[url] }">
       Сохранить
     </button>
@@ -111,6 +109,7 @@ const onChangePassword = async () => {
 
 <style lang="scss" scoped>
 .form {
-  margin-top: 75px;
+  width: 100%;
+  margin-top: 65px;
 }
 </style>

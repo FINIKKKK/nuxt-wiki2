@@ -131,7 +131,7 @@ const innerItems: TInnerItem[] = [
     name: 'user',
     title: 'Профиль',
     items: [
-      { icon: 'edit', label: 'Редактировать', link: '/account/profile' },
+      { icon: 'edit', label: 'Редактировать', link: '/account' },
       {
         icon: 'change',
         label: 'Сменить компанию',

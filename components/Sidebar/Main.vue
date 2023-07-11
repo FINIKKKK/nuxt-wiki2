@@ -6,7 +6,7 @@
     </NuxtLink>
 
     <!-- Список навигации -->
-    <div class="lists" v-if="userStore.user">
+    <div class="lists" v-if="userController.user">
       <!--
         Верхний и нижний список
         + Если пользователь вошел
@@ -37,7 +37,10 @@
           </a>
 
           <!-- Если уведомления -->
-          <NuxtLink v-else-if="item === 'bell'" to="/notices">
+          <NuxtLink
+            v-else-if="item === 'bell'"
+            :to="`${teamController.activeTeamSlug}/notices`"
+          >
             <svg-icon :name="item" />
           </NuxtLink>
 
@@ -58,17 +61,12 @@ import { useUserStore } from '~/stores/UserController';
 import { useSidebarStore } from '~/stores/SidebarController';
 
 /**
- * Системные переменные ----------------
+ * Переменные ----------------
  */
-const route = useRoute(); // Роут
-const userStore = useUserStore(); // Хранилище данных пользователя
-const teamStore = useTeamStore(); // Хранилище активной команды
-const sidebarController = useSidebarStore(); // Хранилище сайдбара
-
-/**
- * Пользовательские переменные ----------------
- */
-// Массив элементов сайдбара
+const route = useRoute();
+const userController = useUserStore();
+const teamController = useTeamStore();
+const sidebarController = useSidebarStore();
 const items = [
   ['home', 'add', 'search'],
   ['settings', 'bell', 'tooltip', 'user'],
@@ -80,13 +78,12 @@ const items = [
 // Показываеть элемент сайдбара
 const isShowItem = computed(() => (item: string) => {
   // Получаем роль пользователя в компании
-  const role = teamStore.activeTeam?.role.name;
+  const role = teamController.activeTeam?.role.name;
   // Если есть активная компания, то показываем только tooltip и профиль
   if (
-    teamStore.activeTeam ||
+    teamController.activeTeam ||
     item === 'tooltip' ||
-    item === 'user' ||
-    item === 'bell'
+    item === 'user'
   ) {
     // Если роль - модератор
     if (role === 'owner') {

@@ -1,26 +1,24 @@
 <template>
   <form class="form" @submit.prevent="onChangeTeamData">
     <h2 class="title">Профиль компании</h2>
-    <div class="content">
-      <Input
-        label="Название вашей компании"
-        v-model="nameValue"
-        :errors="errors['name']"
-      />
-      <Input
-        label="Адресс вашей компании"
-        v-model="codeValue"
-        :errors="errors['code']"
-      />
-      <p>
-        Поделитесь ссылкой
-        <NuxtLink :to="`/companies/${teamController.activeTeamId}`"
-          >{{ teamController.activeTeam?.team.code }}.itl.wiki
-        </NuxtLink>
-        чтобы добавить кого-либо с разрешенным доменом электронной почты в ваше
-        рабочее пространство.
-      </p>
-    </div>
+    <Input
+      label="Название вашей компании"
+      v-model="nameValue"
+      :errors="errors['name']"
+    />
+    <Input
+      label="Адресс вашей компании"
+      v-model="codeValue"
+      :errors="errors['code']"
+    />
+    <p>
+      Поделитесь ссылкой
+      <NuxtLink :to="`/companies/${teamController.activeTeamId}`"
+        >{{ teamController.activeTeam?.team.code }}.itl.wiki
+      </NuxtLink>
+      чтобы добавить кого-либо с разрешенным доменом электронной почты в ваше
+      рабочее пространство.
+    </p>
     <button class="btn" :class="{ disabled: requestController.loading[url] }">
       Сохранить
     </button>

@@ -114,6 +114,10 @@ const teamStore = useTeamStore(); // Хранилище активной ком�
   }
   a {
     color: $gray;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    width: 100%;
     &:hover {
       text-decoration: none;
       color: $blue;

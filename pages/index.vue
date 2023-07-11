@@ -57,6 +57,8 @@ teamController.setTeams(data.value.teams);
   position: relative;
   padding: 32px;
   background-color: $white;
+  box-shadow: 0 0 5px rgba($blue, 0.2);
+  border-radius: 5px;
   .title {
     font-size: 24px;
     line-height: 32px;
