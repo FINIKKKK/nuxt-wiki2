@@ -119,7 +119,6 @@ sectionsController.setSections(sections.value);
   position: relative;
   user-select: none;
   white-space: nowrap;
-  z-index: 30;
   width: 0px;
   opacity: 1;
   background-color: $bg;

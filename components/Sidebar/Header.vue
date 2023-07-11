@@ -78,7 +78,7 @@ const toggleOpen = () => {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 15px;
+  padding: 23.5px 15px;
   border-bottom: 1px solid rgba($black, 0.1);
   margin: -40px -30px 40px;
   .back {

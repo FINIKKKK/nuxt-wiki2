@@ -91,6 +91,8 @@ onMounted(() => {
 
 <style lang="scss" scoped>
 .sidebar {
+  z-index: 200;
+
   height: 100vh;
   display: flex;
   flex-direction: column;

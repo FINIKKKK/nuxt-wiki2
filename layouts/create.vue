@@ -1,9 +1,13 @@
 <template>
-  <div class="main">
+  <div class="main" ref="refScroll">
     <!--------------------------------------
       Элементы управления
     ---------------------------------------->
-    <CreatePageControls :type="props.type" :isEdit="props.isEdit" />
+    <CreatePageControls
+      :type="props.type"
+      :isEdit="props.isEdit"
+      :class="{ scrolled: isScrolled }"
+    />
 
     <!--------------------------------------
       Ошибки
@@ -65,12 +69,14 @@ const props = defineProps<{
 }>();
 
 /**
- * Системные переменные ----------------
+ * Переменные ----------------
  */
-const router = useRouter(); // Роутер
-const teamController = useTeamStore(); // Хранилище активной компании
-const createElemController = useCreateElemStore(); // Хранилище страницы создания
-const sectionsController = useSectionsStore(); // Хранилище разделов
+const router = useRouter();
+const teamController = useTeamStore();
+const createElemController = useCreateElemStore();
+const sectionsController = useSectionsStore();
+const isScrolled = ref(false);
+const refScroll = ref(null);
 
 /**
  * Получение данных ----------------
@@ -131,6 +137,20 @@ onMounted(() => {
       createElemController.setTabs(parsedSavedArticle.tabs);
   }
 });
+// Добавить стили при скролле
+onMounted(() => {
+  if (process.client) {
+    const block = refScroll.value;
+
+    block.addEventListener('scroll', function () {
+      if (block.scrollTop > 30) {
+        isScrolled.value = true;
+      } else {
+        isScrolled.value = false;
+      }
+    });
+  }
+});
 
 /**
  * Хуки ----------------
@@ -160,7 +180,14 @@ onBeforeRouteLeave((to, from, next) => {
 
 <style lang="scss" scoped>
 .main {
-  margin-top: 80px;
+  padding-top: 80px;
+  overflow: auto;
+  height: 100vh;
+}
+
+.scrolled {
+  box-shadow: 0 0 10px rgba($blue, 0.3);
+  background-color: $bg;
 }
 
 .form {

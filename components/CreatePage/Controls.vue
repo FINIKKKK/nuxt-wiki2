@@ -317,8 +317,8 @@ const onSubmit = async () => {
   top: 0;
   left: 0;
   width: 100%;
-  background-color: $bg;
   padding: 17px 50px;
+  background-color: transparent;
   display: flex;
   align-items: center;
   justify-content: space-between;

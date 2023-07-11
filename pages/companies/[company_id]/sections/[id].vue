@@ -17,6 +17,14 @@
         v-if="isShowArticle(item)"
       />
     </template>
+    <template v-for="item in data.section.items">
+      <Item
+          :data="item"
+          type="article"
+          :key="item.id"
+          v-if="isShowArticle(item)"
+      />
+    </template>
   </NuxtLayout>
 </template>
 

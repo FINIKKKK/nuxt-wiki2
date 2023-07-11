@@ -1,18 +1,23 @@
 <template>
   <div class="controls">
     <!-- Редактировать -->
-    <NuxtLink
-      class="control"
-      :to="`${teamController.activeTeamSlug}/${
-        props.type === 'section' ? 'sections' : 'articles'
-      }/edit/${route.params.id}`"
-    >
-      <svg-icon name="edit" />
-    </NuxtLink>
+    <div class="control">
+      <NuxtLink
+        :to="`${teamController.activeTeamSlug}/${
+          props.type === 'section' ? 'sections' : 'articles'
+        }/edit/${route.params.id}`"
+      >
+        <svg-icon name="edit" />
+      </NuxtLink>
+    </div>
     <!-- Доступ -->
-    <svg-icon class="control" name="lock" />
+    <div class="control">
+      <svg-icon name="lock" />
+    </div>
     <!-- Удалить -->
-    <svg-icon class="control" name="remove" @click="onDelete" />
+    <div class="control">
+      <svg-icon name="remove" @click="onDelete" />
+    </div>
   </div>
 </template>
 
@@ -71,27 +76,27 @@ const onDelete = async () => {
 
 <style lang="scss" scoped>
 .controls {
-  position: absolute;
-  right: 50px;
-  top: 46px;
+  display: flex;
+  align-items: center;
+  height: 100%;
+  margin: -24px 0;
   .control {
+    position: relative;
     &:not(:last-child) {
       margin-right: 10px;
     }
-  }
-  svg {
     cursor: pointer;
-    width: 35px;
-    height: 35px;
-    fill: $blue;
-    padding: 7px;
-    border-radius: 5px;
+    padding: 22.5px 9px;
+    height: 100%;
+    transition: 0.2s;
     &:hover {
       background-color: $blue2;
     }
-    &.active {
-      background-color: $blue2;
-    }
+  }
+  svg {
+    width: 20px;
+    height: 20px;
+    fill: $blue;
   }
 }
 </style>

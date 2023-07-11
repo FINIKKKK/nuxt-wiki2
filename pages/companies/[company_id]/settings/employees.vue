@@ -57,6 +57,7 @@ const nav = [
 const { data: employees } = await useCustomFetch<TEmployees>(`team/employees`, {
   query: { team_id: teamController.activeTeamId },
 });
+console.log(employees.value);
 
 /**
  * Методы ----------------

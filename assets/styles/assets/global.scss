@@ -1,6 +1,6 @@
 // Tags
 html {
-  overflow-x: hidden;
+  overflow: hidden;
   box-sizing: border-box;
   &.fixed {
     overflow-y: hidden;
@@ -286,7 +286,7 @@ a.btn {
   width: 500px;
   z-index: 100;
   box-shadow: 0 0 10px rgba($blue, 0.3);
-  transform: translateX(100%);
+  transform: translateX(110%);
   transition: 0.3s;
   &.active {
     transform: translateX(0);

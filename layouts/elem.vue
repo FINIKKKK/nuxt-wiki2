@@ -3,11 +3,6 @@
     <!-- Главный шаблон -->
     <NuxtLayout name="main" :nav="nav">
       <!--------------------------------------
-        Элементы управления
-      ---------------------------------------->
-      <ElemPageControls :type="props.type" />
-
-      <!--------------------------------------
         Шапка элемента
       ---------------------------------------->
       <div class="elem__header">
@@ -68,17 +63,12 @@ const props = defineProps<{
 }>();
 
 /**
- * Системные переменные ----------------
+ * Переменные ----------------
  */
-const route = useRoute(); // Роут
-const teamController = useTeamStore(); // Хранилище активной команды
-const sectionsController = useSectionsStore(); // Хранилище
-
-/**
- * Пользовательские переменные ----------------
- */
-const isFavorite = ref(props.properties?.bookmark || false); // Находиться ли элемент в избранном?
-// Навигация на странице
+const route = useRoute();
+const teamController = useTeamStore();
+const sectionsController = useSectionsStore();
+const isFavorite = ref(props.properties?.bookmark || false);
 const nav = [
   {
     label: sectionsController.breadCrumbs[0]?.name,
@@ -118,6 +108,22 @@ const toggleFavorite = async () => {
   }
   isFavorite.value = !isFavorite.value;
 };
+
+/**
+ * Вычисляемые значения ----------------
+ */
+onMounted(() => {
+  if (process.client) {
+
+    window.addEventListener('scroll', function () {
+      if (window.scrollTop > 30) {
+        isScrolled.value = true;
+      } else {
+        isScrolled.value = false;
+      }
+    });
+  }
+});
 </script>
 
 <!-- ----------------------------------------------------- -->

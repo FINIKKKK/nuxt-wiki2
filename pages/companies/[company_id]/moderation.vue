@@ -21,6 +21,7 @@ import { useTeamStore } from '~/stores/TeamContoller';
 /**
  * Системные переменные ----------------
  */
+
 const teamController = useTeamStore();
 
 /**

@@ -97,6 +97,10 @@ onMounted(async () => {
 }
 
 .codex-editor__redactor {
+  padding-bottom: 100px !important;
+}
+
+.codex-editor__redactor {
   padding-bottom: 100px;
 }
 
