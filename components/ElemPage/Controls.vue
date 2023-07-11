@@ -126,11 +126,19 @@ const onDelete = async () => {
   margin: -24px 0;
   .control {
     position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    a {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
     &:not(:last-child) {
       margin-right: 10px;
     }
     cursor: pointer;
-    padding: 22.5px 9px;
+    padding: 20px 9px;
     height: 100%;
     transition: 0.2s;
     &:hover {

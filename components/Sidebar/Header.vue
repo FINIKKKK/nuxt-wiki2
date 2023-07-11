@@ -4,11 +4,12 @@
       <svg-icon name="back" />
       <p>Назад</p>
     </NuxtLink>
-    <svg-icon
-      :name="sidebarController.isActiveMap ? 'close' : 'hamburger'"
-      class="hamburger"
-      @click="toggleOpen()"
-    />
+    <div class="hamburger">
+      <svg-icon
+        :name="sidebarController.isActiveMap ? 'close' : 'hamburger'"
+        @click="toggleOpen()"
+      />
+    </div>
   </div>
 </template>
 
@@ -41,8 +42,8 @@ const isShow = computed(
 const link = computed(() => {
   if (sectionsController.breadCrumbs?.length !== 1) {
     return `${teamController.activeTeamSlug}/sections/${
-      sectionsController.breadCrumbs[1]?.id === sectionsController.section?.id &&
-      sectionsController.isArticle
+      sectionsController.breadCrumbs[1]?.id ===
+        sectionsController.section?.id && sectionsController.isArticle
         ? sectionsController.breadCrumbs[1]?.id
         : sectionsController.breadCrumbs[0]?.id
     }`;
@@ -78,7 +79,7 @@ const toggleOpen = () => {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 23.5px 15px;
+  padding: 17.5px 15px;
   border-bottom: 1px solid $blue3;
   margin: -40px -30px 40px;
   .back {
@@ -105,7 +106,16 @@ const toggleOpen = () => {
     }
   }
   .hamburger {
-    cursor: pointer;
+    padding: 25px;
+    margin: -17.5px -15px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-left: 1px solid $blue3;
+    svg {
+      cursor: pointer;
+      margin: -20px;
+    }
   }
 }
 </style>

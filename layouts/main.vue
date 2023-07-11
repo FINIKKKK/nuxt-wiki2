@@ -104,7 +104,7 @@ main {
   position: absolute;
   background-color: $white;
   z-index: 150;
-  padding: 24px 50px;
+  padding: 18px 50px;
   top: 0;
   left: 0;
   display: flex;

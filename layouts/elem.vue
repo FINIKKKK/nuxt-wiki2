@@ -157,6 +157,6 @@ const toggleFavorite = async () => {
 }
 
 .access {
-  margin-top: 70px;
+  margin-top: 60px;
 }
 </style>
