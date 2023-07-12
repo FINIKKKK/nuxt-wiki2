@@ -1,5 +1,5 @@
 <template>
-  <ul class="tabs">
+  <ul class="tabs" v-if="props.tabs.length !== 1">
     <li
       class="tab"
       v-for="(tab, index) in props.tabs"
@@ -12,7 +12,7 @@
   </ul>
 
   <div class="content" v-for="(tab, index) in props.tabs">
-  {{tab.content}}
+    {{ tab.content }}
     <EditorBody :key="index" :data="[]" />
   </div>
 </template>
@@ -46,6 +46,7 @@ const activeTab = ref(0); // Активная вкладка
   border: 1px solid rgba($blue, 0.2);
   padding: 0 20px;
   border-radius: 2px;
+  margin-bottom: 45px;
   .tab {
     padding: 12px 15px;
     border-radius: 5px 5px 0 0;

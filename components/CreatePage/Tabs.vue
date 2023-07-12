@@ -76,7 +76,6 @@ const addTab = () => {
   overflow: auto;
   display: flex;
   align-items: center;
-  margin-top: 25px;
   &::-webkit-scrollbar {
     height: 2px;
   }

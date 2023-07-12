@@ -39,19 +39,18 @@
     <div class="history aside-popup">
       <h3 class="title">Журнал версий</h3>
       <ul class="list">
-        <li>
+        <li v-for="item in history">
           <div class="info">
-            <div class="date">Вчера в 17:26</div>
-            <div class="author">Аскарова Асель</div>
+<!--            <div class="date">{{ useFormatDate(item.created_at) }}</div>-->
+<!--            <div class="author">{{ item.creator.fullname }}</div>-->
           </div>
           <div class="btn btn2" v-if="false">
             <p>Текущая версия</p>
-            <svg-icon name="check" />
           </div>
-          <button class="btn btn2">
+          <div class="btn btn2">
             <p>Востановить</p>
             <svg-icon name="reverse" />
-          </button>
+          </div>
         </li>
       </ul>
     </div>
@@ -66,6 +65,7 @@ import { useCustomFetch } from '~/hooks/useCustomFetch';
 import { useTeamStore } from '~/stores/TeamContoller';
 import { TArticleData } from '~/utils/types/article';
 import { useDateString } from '~/hooks/useDateString';
+import { useFormatDate } from '../../../../../hooks/useFormatData';
 
 const teamController = useTeamStore();
 const route = useRoute();
@@ -76,6 +76,15 @@ const { data: article } = await useCustomFetch<TArticleData>(`team/article`, {
     article_id: route.params.id,
   },
 });
+//
+const { data: history } = await useCustomFetch(`team/article/tab/history`, {
+  query: {
+    team_id: teamController.activeTeamId,
+    tab_id: article.value.article.tabs[0].id,
+  },
+});
+console.log(history.value);
+
 // const { data } = await useCustomFetch(`team/article/tab/history`, {
 //   query: { team_id: teamController.activeTeamId, tab_id: 547 },
 // });

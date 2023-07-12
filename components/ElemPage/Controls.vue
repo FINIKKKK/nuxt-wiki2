@@ -1,7 +1,7 @@
 <template>
   <div class="controls">
     <!-- Редактировать -->
-    <div class="control">
+    <div class="control" title="Редактировать">
       <NuxtLink
         :to="`${teamController.activeTeamSlug}/${
           elemController.type === 'section' ? 'sections' : 'articles'
@@ -12,30 +12,47 @@
     </div>
 
     <!-- Закрепить -->
-    <div class="control" v-if="elemController.type === 'article'">
-      <svg-icon name="attach" />
+    <div
+      class="control"
+      v-if="elemController.type === 'article'"
+      @click="onSubscribe"
+      :title="isSubscribed ? 'Отписаться' : 'Подписаться'"
+    >
+      <svg-icon :name="isSubscribed ? 'attach2' : 'attach'" />
     </div>
 
     <!-- Доступ -->
-    <div class="control" @click="elemController.toggleAccessPopup()">
+    <div
+      class="control"
+      @click="elemController.toggleAccessPopup()"
+      title="Изменить доступ"
+    >
       <svg-icon name="lock" />
     </div>
 
     <!-- Сгенерировать ссылку -->
-    <div class="control" @click="elemController.toggleLinkPopup()">
+    <div
+      class="control"
+      @click="elemController.toggleLinkPopup()"
+      title="Поделиться"
+    >
       <svg-icon name="share" />
     </div>
 
     <!-- Дополнительные возможности -->
-    <div class="extra" ref="refPopup">
+    <div class="extra" ref="refPopup" title="Дополнительно">
       <div class="control" @click="isShowPopup = !isShowPopup">
         <svg-icon name="options" />
       </div>
       <ul class="popup" v-if="isShowPopup">
         <!-- Открыть историю статьи -->
         <li v-if="elemController.type === 'article'">
-          <svg-icon name="reverse" />
-          <p>Журнал версий</p>
+          <NuxtLink
+            :to="`${teamController.activeTeamSlug}/articles/history/${elemController.article.article.id}`"
+          >
+            <svg-icon name="reverse" />
+            <p>Журнал версий</p>
+          </NuxtLink>
         </li>
 
         <!-- Удалить элемент -->
@@ -69,6 +86,7 @@ const teamController = useTeamStore();
 const elemController = useElemStore();
 const refPopup = ref(null);
 const isShowPopup = ref(false);
+const isSubscribed = ref(elemController.article.properties.subscription); //
 
 /**
  * Хуки ----------------
@@ -111,6 +129,28 @@ const onDelete = async () => {
   } else {
     // Закрываем попап
     isShowPopup.value = false;
+  }
+};
+
+const subscribe = async () => {
+  const { data } = await useCustomFetch(`subscribe/change`, {
+    body: {
+      team_id: teamController.activeTeamId,
+      article_id: elemController.article.article.id,
+    },
+    method: 'POST',
+  });
+  isSubscribed.value = !isSubscribed.value;
+};
+
+// Подписаться на статью
+const onSubscribe = async () => {
+  if (isSubscribed.value) {
+    if (window.confirm('Вы точно хотите отписаться от статьи?')) {
+      subscribe();
+    }
+  } else {
+    subscribe();
   }
 };
 </script>

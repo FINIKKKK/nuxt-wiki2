@@ -232,6 +232,13 @@ a.btn {
     transition: 0.2s;
     padding: 10px 15px;
     cursor: pointer;
+    a {
+      display: flex;
+      align-items: center;
+      &:hover {
+        text-decoration: none;
+      }
+    }
     svg {
       margin-right: 15px;
       width: 15px;

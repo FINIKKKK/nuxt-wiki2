@@ -100,15 +100,17 @@ const currentComponent = computed(() => {
 /**
  * Получение данных ----------------
  */
-// Список основных разделов
-const { data: sections } = await useCustomFetch<TSection[]>(
-  `team/section/sections`,
-  {
-    query: { team_id: teamStore.activeTeamId },
-  },
-);
-// Устанавливаем значения в хранилище
-sectionsController.setSections(sections.value);
+if (!sectionsController.sections.length || !sidebarController.isOpen) {
+  // Список основных разделов
+  const { data: sections } = await useCustomFetch<TSection[]>(
+    `team/section/sections`,
+    {
+      query: { team_id: teamStore.activeTeamId },
+    },
+  );
+  // Устанавливаем значения в хранилище
+  sectionsController.setSections(sections.value);
+}
 </script>
 
 <!-- ----------------------------------------------------- -->

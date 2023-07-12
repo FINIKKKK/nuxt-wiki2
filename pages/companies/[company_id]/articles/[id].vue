@@ -63,6 +63,7 @@ console.log(data.value);
 // Сохраняем комментарии в хранилище
 commentsController.setComments(data.value.article.comments);
 elemController.changeTypeElem('article');
+elemController.setArticle(data.value);
 
 // Получаем разделы
 if (!sectionsController.section) {

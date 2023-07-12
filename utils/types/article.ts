@@ -29,6 +29,7 @@ export interface TTab {
 }
 
 export interface TTabParse {
+  id: number;
   name: string;
   content: string;
 }

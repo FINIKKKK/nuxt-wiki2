@@ -4,6 +4,7 @@
       v-for="article in articles"
       :key="article.id"
       :data="article"
+      type="article"
       place="my"
     />
   </NuxtLayout>

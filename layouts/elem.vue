@@ -2,46 +2,48 @@
   <div class="main">
     <!-- Главный шаблон -->
     <NuxtLayout name="main" :nav="nav">
-      <!--------------------------------------
-        Шапка элемента
-      ---------------------------------------->
-      <div class="elem__header">
-        <svg-icon
-          v-if="props.type === 'article'"
-          :name="isFavorite ? 'favorite2' : 'favorite'"
-          @click="toggleFavorite"
-        />
-        <!-- Заголовок -->
-        <h1 class="title">{{ props.data.name }}</h1>
+      <div class="content">
+        <!--------------------------------------
+          Шапка элемента
+        ---------------------------------------->
+        <div class="elem__header">
+          <svg-icon
+            v-if="props.type === 'article'"
+            :name="isFavorite ? 'favorite2' : 'favorite'"
+            @click="toggleFavorite"
+          />
+          <!-- Заголовок -->
+          <h1 class="title">{{ props.data.name }}</h1>
+        </div>
+
+        <!--------------------------------------
+          Информация об элементе
+        ---------------------------------------->
+        <ul class="elem__info">
+          <!-- Автор -->
+          <li class="elem__info-item">
+            Автор:
+            <span>{{
+              `${props.data?.creator.first_name} ${props.data?.creator.last_name}`
+            }}</span>
+          </li>
+          <!-- Время -->
+          <li
+            class="elem__info-item"
+            v-html="useDateString(props.data.created_at, props.data.updated_at)"
+          ></li>
+        </ul>
+
+        <!--------------------------------------
+          Попап доступа у пользователей
+        ---------------------------------------->
+        <CreatePageAccess class="access" />
+
+        <!--------------------------------------
+          Слот
+        ---------------------------------------->
+        <slot />
       </div>
-
-      <!--------------------------------------
-        Информация об элементе
-      ---------------------------------------->
-      <ul class="elem__info">
-        <!-- Автор -->
-        <li class="elem__info-item">
-          Автор:
-          <span>{{
-            `${props.data?.creator.first_name} ${props.data?.creator.last_name}`
-          }}</span>
-        </li>
-        <!-- Время -->
-        <li
-          class="elem__info-item"
-          v-html="useDateString(props.data.created_at, props.data.updated_at)"
-        ></li>
-      </ul>
-
-      <!--------------------------------------
-        Попап доступа у пользователей
-      ---------------------------------------->
-      <CreatePageAccess class="access" />
-
-      <!--------------------------------------
-        Слот
-      ---------------------------------------->
-      <slot />
     </NuxtLayout>
   </div>
 </template>
@@ -123,6 +125,12 @@ const toggleFavorite = async () => {
   background-color: $white;
 }
 
+.content {
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
 .elem__header {
   display: flex;
   align-items: center;
@@ -132,7 +140,7 @@ const toggleFavorite = async () => {
     width: 20px;
     height: 20px;
     position: absolute;
-    left: -25px;
+    left: -40px;
     cursor: pointer;
   }
 }

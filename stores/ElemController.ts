@@ -1,4 +1,5 @@
 import { defineStore } from 'pinia';
+import { TArticleData } from '~/utils/types/article';
 
 /**
  * --------------------------------
@@ -12,6 +13,7 @@ export const useElemStore = defineStore('elemController', () => {
   const type: Ref<'section' | 'article'> = ref('section');
   const isShowAccessPopup: Ref<boolean> = ref(false);
   const isShowLinkPopup: Ref<boolean> = ref(false);
+  const article: Ref<TArticleData | null> = ref(null);
 
   /**
    * Методы ----------------
@@ -37,6 +39,9 @@ export const useElemStore = defineStore('elemController', () => {
   const closeLinkPopup = () => {
     isShowLinkPopup.value = false;
   };
+  const setArticle = (value: TArticleData | null) => {
+    article.value = value;
+  };
 
   // Возращаем данные
   return {
@@ -50,5 +55,7 @@ export const useElemStore = defineStore('elemController', () => {
     openLinkPopup,
     closeLinkPopup,
     toggleLinkPopup,
+    article,
+    setArticle,
   };
 });
