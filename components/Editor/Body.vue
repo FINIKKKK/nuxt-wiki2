@@ -72,8 +72,8 @@
       <div v-else-if="obj.type === 'quote'" class="el quote">
         <svg-icon name="document" />
         <div class="quote__content">
-          <h3>{{ obj.data.text }}</h3>
-          <p>{{ obj.data.caption }}</p>
+          <h3 v-html="obj.data.text"></h3>
+          <p v-html="obj.data.caption"></p>
         </div>
       </div>
 
@@ -183,19 +183,19 @@ const props = defineProps<{
   }
   // headers ###############
   .title {
-    font-weight: 700;
+    margin-bottom: 24px;
   }
   h1.title {
     font-size: 45px;
     line-height: 50px;
   }
   h2.title {
-    font-size: 38px;
-    line-height: 42px;
+    font-size: 24px;
+    line-height: 32px;
   }
   h3.title {
-    font-size: 32px;
-    line-height: 36px;
+    font-size: 20px;
+    line-height: 32px;
   }
   h4.title {
     font-size: 26px;

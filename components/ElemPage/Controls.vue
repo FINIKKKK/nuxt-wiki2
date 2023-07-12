@@ -24,7 +24,7 @@
     <!-- Доступ -->
     <div
       class="control"
-      @click="elemController.toggleAccessPopup()"
+      @click="elemController.openAccessPopup()"
       title="Изменить доступ"
     >
       <svg-icon name="lock" />
@@ -86,7 +86,7 @@ const teamController = useTeamStore();
 const elemController = useElemStore();
 const refPopup = ref(null);
 const isShowPopup = ref(false);
-const isSubscribed = ref(elemController.article.properties.subscription); //
+const isSubscribed = ref(elemController.article?.properties.subscription); //
 
 /**
  * Хуки ----------------

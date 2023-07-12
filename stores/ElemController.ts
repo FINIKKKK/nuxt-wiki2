@@ -23,9 +23,11 @@ export const useElemStore = defineStore('elemController', () => {
   };
   const toggleAccessPopup = () => {
     isShowAccessPopup.value = !isShowAccessPopup.value;
+    console.log(isShowAccessPopup.value);
   };
   const openAccessPopup = () => {
     isShowAccessPopup.value = true;
+    console.log(isShowAccessPopup.value);
   };
   const closeAccessPopup = () => {
     isShowAccessPopup.value = false;

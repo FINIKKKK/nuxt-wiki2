@@ -32,14 +32,14 @@ const nav = [{ label: 'На модерации', link: route.path }];
 const { data: articles } = await useCustomFetch<TArticle[]>(`team/moderation`, {
   query: { team_id: teamController.activeTeamId },
 });
-console.log(articles.value);
+console.log(articles);
 
 /**
  * Методы ----------------
  */
 // Удалить элемент из списка
 const removeFromModeration = (id: number) => {
-  articles.value = articles.value.filter((obj) => obj.id !== id);
+  articles = articles.filter((obj) => obj.id !== id);
 };
 </script>
 

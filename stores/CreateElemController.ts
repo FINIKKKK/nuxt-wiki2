@@ -62,6 +62,10 @@ export const useCreateElemStore = defineStore('createElemController', () => {
   const toggleAccess = () => {
     isShowAccess.value = !isShowAccess.value;
   };
+  // Показывать или скрыть попап доступа
+  const closeAccessPopup = () => {
+    isShowAccess.value = false;
+  };
   // Установить загрузку
   const setLoading = (value: boolean) => {
     isLoading.value = value;
@@ -93,5 +97,6 @@ export const useCreateElemStore = defineStore('createElemController', () => {
     toggleAccess,
     setLoading,
     setErrors,
+    closeAccessPopup
   };
 });

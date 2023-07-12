@@ -68,7 +68,12 @@ onMounted(async () => {
       model.value = blocks;
     },
     tools: {
-      header: Header,
+      header: {
+        class: Header,
+        config: {
+          levels: [2, 3],
+        },
+      },
       list: List,
       codeBox: CodeBox,
       linkTool: LinkTool,
@@ -117,5 +122,40 @@ onMounted(async () => {
 
 .cdx-input {
   display: none;
+}
+
+// headers ###############
+.ce-header {
+  margin-bottom: 24px;
+}
+
+h1.ce-header {
+  font-size: 45px;
+  line-height: 50px;
+}
+
+h2.ce-header {
+  font-size: 24px;
+  line-height: 32px;
+}
+
+h3.ce-header {
+  font-size: 20px;
+  line-height: 32px;
+}
+
+h4.ce-header {
+  font-size: 26px;
+  line-height: 32px;
+}
+
+h5.ce-header {
+  font-size: 20px;
+  line-height: 28px;
+}
+
+h6.ce-header {
+  font-size: 16px;
+  line-height: 26px;
 }
 </style>

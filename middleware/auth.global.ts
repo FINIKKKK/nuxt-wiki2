@@ -33,11 +33,11 @@ export default defineNuxtRouteMiddleware(async (to, from) => {
         // Получаем данные пользователя
         const { data } = await useCustomFetch<TUserData>(`/account`);
 
-        if (data.value) {
+        if (data) {
           // Сохраняем в хранилище данные пользователя
-          userController.setUser(data.value.user);
+          userController.setUser(data.user);
           // Сохраняем в хранилище команды пользователя
-          teamController.setTeams(data.value.teams);
+          teamController.setTeams(data.teams);
         }
       } catch (err) {
         // Если токен не валидный

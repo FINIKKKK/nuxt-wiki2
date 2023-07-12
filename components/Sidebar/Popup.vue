@@ -100,7 +100,7 @@ const currentComponent = computed(() => {
 /**
  * Получение данных ----------------
  */
-if (!sectionsController.sections.length || !sidebarController.isOpen) {
+if (!sectionsController.sections?.length || !sidebarController.isOpen) {
   // Список основных разделов
   const { data: sections } = await useCustomFetch<TSection[]>(
     `team/section/sections`,
@@ -109,7 +109,7 @@ if (!sectionsController.sections.length || !sidebarController.isOpen) {
     },
   );
   // Устанавливаем значения в хранилище
-  sectionsController.setSections(sections.value);
+  sectionsController.setSections(sections);
 }
 </script>
 

@@ -25,9 +25,9 @@ export default defineNuxtRouteMiddleware(async (to, from) => {
         query: { team_id: id },
       });
 
-      if (data.value) {
+      if (data) {
         // Сохраняем в хранилище данные команды
-        teamController.setActiveTeam(data.value);
+        teamController.setActiveTeam(data);
       }
     }
   }

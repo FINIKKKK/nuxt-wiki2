@@ -78,12 +78,12 @@ const onChangeUserData = async () => {
   if (!isValid) return false;
 
   // Обновляем данные пользователя
-  const { data } = await useCustomFetch<any>(url, {
+  const { message } = await useCustomFetch<any>(url, {
     body: dto,
     method: 'POST',
   });
 
-  if (data.value) {
+  if (message) {
     // Обновляем данные в хранилище
     userController.updateUserData(dto);
     // Отображаем сообщение об успешном изменении

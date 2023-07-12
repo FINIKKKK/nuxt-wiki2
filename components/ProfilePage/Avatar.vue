@@ -27,18 +27,16 @@ import { useUserStore } from '~/stores/UserController';
 import { useRequestStore } from '~/stores/RequestController';
 import { useCustomFetch } from '~/hooks/useCustomFetch';
 import { useProfileStore } from '~/stores/ProfileController';
+import { AsyncData, useFetch } from '#app';
 
 /**
- * Системные переменные ----------------
+ * Переменные ----------------
  */
-const userController = useUserStore(); // Хранилище пользователя
-const requestController = useRequestStore(); // Хранилище запроса
-const profileController = useProfileStore(); // Хранилище профиля
-
-/**
- * Полльзовательские переменные ----------------
- */
-const url = '/account/picture/change'; // URL запроса
+const userController = useUserStore();
+const requestController = useRequestStore();
+const profileController = useProfileStore();
+const url = '/account/picture/change';
+const config = useRuntimeConfig();
 
 /**
  * Отслеживание переменных ----------------
@@ -60,10 +58,18 @@ const onChangeAvatar = async (e: any) => {
   };
 
   // Обновляем аватарку
-  const { data } = await useCustomFetch<string>(url, {
-    body: dto,
-    method: 'POST',
-  });
+  const { data, pending, error } = await useFetch(
+    url,
+    { body: { image: e.target.files[0] } },
+    {
+      baseURL: config.public.apiUrl,
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token.value}`,
+      },
+      method: 'POST',
+    },
+  );
 
   if (data.value) {
     // Обновляем аватарку в хранилище

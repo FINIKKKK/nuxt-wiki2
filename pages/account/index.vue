@@ -5,19 +5,20 @@
       v-if="profileController.errors.length || profileController.message"
       :errors="profileController.errors"
       :message="profileController.message"
+      class="warning"
     />
 
     <!-- Формы -->
     <div class="flex">
       <div class="left">
         <!-- Форма для изменения данных пользователя -->
-        <ProfileUserData />
+        <ProfilePageUserData />
         <!-- Форма для изменения пароля пользователя -->
-        <ProfilePassword />
+        <ProfilePagePassword />
       </div>
 
       <!-- Изменяем аватарки пользователя -->
-      <ProfileAvatar />
+      <ProfilePageAvatar />
     </div>
   </NuxtLayout>
 </template>

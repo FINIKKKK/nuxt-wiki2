@@ -15,9 +15,9 @@ export const useCustomFetch = async <T>(
 
   // Хук useFetch
   const { data, pending, error } = (await useFetch(url, {
-    transform(data: { data: T }): T {
-      return data.data;
-    },
+    // transform(data: { data: T }): T {
+    //   return data.data;
+    // },
     ...options, // Дополнительные опции
     baseURL: config.public.apiUrl, // Главный URL
     headers: {
@@ -44,5 +44,5 @@ export const useCustomFetch = async <T>(
   requestController.addIsLoading({ [url]: pending.value });
 
   // Возвращаем данные
-  return { data };
+  return { data: data.value?.data, message: data.value?.messages };
 };

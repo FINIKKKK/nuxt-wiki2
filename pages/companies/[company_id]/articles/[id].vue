@@ -2,11 +2,11 @@
   <NuxtLayout
     name="elem"
     type="article"
-    :data="data.article"
-    :properties="data.properties"
+    :data="article.article"
+    :properties="article.properties"
   >
     <!-- Вкладки -->
-    <ElemPageTabs :tabs="data.article.tabs" />
+    <ElemPageTabs :tabs="articleEdit.article.tabs" />
 
     <!-- Дополнительный функционал -->
     <div class="footer">
@@ -24,7 +24,7 @@
     </div>
 
     <!-- Комментарии -->
-    <Comments :comments="data.article.comments" />
+    <!--    <Comments />-->
   </NuxtLayout>
 </template>
 
@@ -53,29 +53,40 @@ const elemController = useElemStore();
  * Получение данных ----------------
  */
 // Данные статьи
-const { data } = await useCustomFetch<TArticleData>(`team/article`, {
+const { data: article } = await useCustomFetch<TArticleData>(`team/article`, {
   query: {
     team_id: teamController.activeTeamId,
     article_id: route.params.id,
   },
 });
-console.log(data.value);
+console.log(article);
 // Сохраняем комментарии в хранилище
-commentsController.setComments(data.value.article.comments);
+commentsController.setComments(article.article.comments);
 elemController.changeTypeElem('article');
-elemController.setArticle(data.value);
+elemController.setArticle(article);
+
+const { data: articleEdit } = await useCustomFetch<TArticleData>(
+  `team/article/edit`,
+  {
+    query: {
+      team_id: teamController.activeTeamId,
+      article_id: route.params.id,
+    },
+  },
+);
+console.log(articleEdit);
 
 // Получаем разделы
 if (!sectionsController.section) {
   const { data: section } = await useCustomFetch<TSectionData>(`team/section`, {
     query: {
       team_id: teamController.activeTeamId,
-      section_id: data.value.article.section.id,
+      section_id: article.article.section.id,
     },
   });
   // Сохраняем в хранилище
-  sectionsController.setSection(section.value.section);
-  sectionsController.setBreadCrumbs(section.value.section.breadcrumbs);
+  sectionsController.setSection(section.section);
+  sectionsController.setBreadCrumbs(section.section.breadcrumbs);
 }
 
 /**
@@ -83,7 +94,7 @@ if (!sectionsController.section) {
  */
 // Изменить рейтинг
 const onChangeRate = async () => {
-  const { data } = await useCustomFetch(`team/mark/add`, {
+  const { message } = await useCustomFetch(`team/mark/add`, {
     body: {
       team_id: teamController.activeTeamId,
       entity_type: 'article',
@@ -92,7 +103,9 @@ const onChangeRate = async () => {
     },
     method: 'POST',
   });
-  console.log('gg', data.value);
+  if (message) {
+    console.log('gg', message);
+  }
 };
 </script>
 

@@ -89,11 +89,11 @@ const onLogin = async () => {
     method: 'POST',
   });
 
-  if (data.value) {
+  if (data) {
     // Устанавливаем токен в куки
-    token.value = data.value?.token;
+    token.value = data.token;
     // Устанавливаем данные пользователя в хранилище
-    userController.setUser(data.value?.user);
+    userController.setUser(data.user);
     // Перенаправляем пользователя на главную
     await router.push('/');
   }

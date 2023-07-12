@@ -84,11 +84,6 @@ const innerItems: TInnerItem[] = [
           teamController.activeTeam?.role.name === 'owner' ||
           teamController.activeTeam?.role.name === 'moderator',
       },
-      {
-        icon: 'favorite',
-        label: 'Закладки',
-        link: `/account/favorites`,
-      },
     ],
   },
   {
@@ -132,6 +127,11 @@ const innerItems: TInnerItem[] = [
     title: 'Профиль',
     items: [
       { icon: 'edit', label: 'Редактировать', link: '/account' },
+      {
+        icon: 'favorite',
+        label: 'Закладки',
+        link: `/account/favorites`,
+      },
       {
         icon: 'change',
         label: 'Сменить компанию',

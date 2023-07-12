@@ -37,7 +37,7 @@
         <!--------------------------------------
           Попап доступа у пользователей
         ---------------------------------------->
-        <CreatePageAccess class="access" />
+<!--        <CreatePageAccess v-model="abilities" />-->
 
         <!--------------------------------------
           Слот
@@ -59,6 +59,7 @@ import { useTeamStore } from '~/stores/TeamContoller';
 import { useCustomFetch } from '~/hooks/useCustomFetch';
 import { TMessage } from '~/utils/types';
 import { useSectionsStore } from '~/stores/SectionContoller';
+import { TAbility } from '~/utils/types/team';
 
 /**
  * Пропсы ----------------
@@ -69,6 +70,11 @@ const props = defineProps<{
   type: 'section' | 'article';
 }>();
 
+//
+// const {data} = await useCustomFetch(`team/abilities`, {
+//   query: {team_id: teamController.activeTeamId, entity_id: route.para},
+// });
+
 /**
  * Переменные ----------------
  */
@@ -76,6 +82,7 @@ const route = useRoute();
 const teamController = useTeamStore();
 const sectionsController = useSectionsStore();
 const isFavorite = ref(props.properties?.bookmark || false);
+const abilities = ref<TAbility[]>([]);
 const nav = [
   {
     label: sectionsController.breadCrumbs[0]?.name,
@@ -103,17 +110,28 @@ const toggleFavorite = async () => {
   const dto = { article_id: route.params.id };
 
   if (!isFavorite.value) {
-    await useCustomFetch<TMessage>(`account/bookmarks/add`, {
-      body: dto,
-      method: 'POST',
-    });
+    const { message } = await useCustomFetch<TMessage>(
+      `account/bookmarks/add`,
+      {
+        body: dto,
+        method: 'POST',
+      },
+    );
+    if (message) {
+      isFavorite.value = !isFavorite.value;
+    }
   } else {
-    await useCustomFetch<TMessage>(`account/bookmarks/remove`, {
-      body: dto,
-      method: 'POST',
-    });
+    const { message } = await useCustomFetch<TMessage>(
+      `account/bookmarks/remove`,
+      {
+        body: dto,
+        method: 'POST',
+      },
+    );
+    if (message) {
+      isFavorite.value = !isFavorite.value;
+    }
   }
-  isFavorite.value = !isFavorite.value;
 };
 </script>
 
@@ -165,6 +183,6 @@ const toggleFavorite = async () => {
 }
 
 .access {
-  margin-top: 60px;
+  margin-top: 50px;
 }
 </style>

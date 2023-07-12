@@ -1,8 +1,8 @@
 <template>
-  <NuxtLayout name="main" title="Мое избранное">
+  <NuxtLayout name="main" title="Мое избранное" :nav="nav">
     <ul class="items">
       <Item
-        v-for="item in favorites"
+        v-for="item in favorites.internal[0]"
         :key="item.id"
         :data="item.article"
         type="article"
@@ -18,26 +18,33 @@
 
 <script lang="ts" setup>
 import { useCustomFetch } from '~/hooks/useCustomFetch';
-import { TFavorite, TFavoriteData } from '~/utils/types/favorites';
+import { TFavoriteData } from '~/utils/types/favorites';
 
 /**
- * Полльзовательские переменные ----------------
+ * Переменные ----------------
  */
-const favorites = ref<TFavorite[]>([]); // Список избранного
+const route = useRoute();
+const nav = [
+  { label: 'Аккаунт', link: `/account` },
+  { label: 'Мое избранное', link: route.path },
+];
 
 /**
  * Получение данных ----------------
  */
 // Список избранного
-const { data } = await useCustomFetch<TFavoriteData>(`account/bookmarks`);
-favorites.value = data.value.internal[0];
+const { data: favorites } = await useCustomFetch<TFavoriteData>(
+  `account/bookmarks`,
+);
 
 /**
  * Методы ----------------
  */
 // Удалить из списка (событие)
 const removeFromFavorites = (id: number) => {
-  favorites.value = favorites.value.filter((obj) => obj.article.id !== id);
+  favorites.internal[0] = favorites.internal[0].filter(
+    (obj) => obj.article.id !== id,
+  );
 };
 </script>
 

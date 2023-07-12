@@ -65,6 +65,7 @@ import { useRequestStore } from '~/stores/RequestController';
 import { useOutsideClick } from '~/hooks/useOutsideClick';
 import {TArticle, TArticleData} from '~/utils/types/article';
 import { TSection, TSectionData } from '~/utils/types/secton';
+import {TMessage} from "~/utils/types";
 
 /**
  * Пропсы ----------------
@@ -222,22 +223,21 @@ const onSubmit = async () => {
         body: dto,
         method: 'POST',
       });
-      if (data.value) {
+      if (data) {
         await router.push(`${teamController.activeTeamSlug}/sections/${id}`);
       }
     }
     // ------------------------------------
-    // Создаем раздела
+    // Создаем раздел
     // ------------------------------------
     else {
       const { data } = await useCustomFetch<TSection>(`team/section/add`, {
         body: dto,
         method: 'POST',
       });
-      console.log(data.value);
-      if (data.value) {
+      if (data) {
         await router.push(
-          `${teamController.activeTeamSlug}/sections/${data.value.id}`,
+          `${teamController.activeTeamSlug}/sections/${data.id}`,
         );
       }
     }
@@ -279,11 +279,11 @@ const onSubmit = async () => {
     // Редактируем статью
     // ------------------------------------
     if (props.isEdit) {
-      const { data } = await useCustomFetch<TArticle>(`team/article/edit`, {
+      const { message } = await useCustomFetch<TMessage>(`team/article/edit`, {
         body: dto,
         method: 'POST',
       });
-      if (data.value) {
+      if (message) {
         await router.push(`${teamController.activeTeamSlug}/articles/${id}`);
         localStorage.setItem('article', '');
       }
@@ -293,13 +293,13 @@ const onSubmit = async () => {
     // Создаем статью
     // ------------------------------------
     else {
-      const { data } = await useCustomFetch<TArticle>(`team/article/add`, {
+      const { data } = await useCustomFetch<TArticleData>(`team/article/add`, {
         body: dto,
         method: 'POST',
       });
-      if (data.value) {
+      if (data) {
         await router.push(
-          `${teamController.activeTeamSlug}/articles/${data.value.id}`,
+          `${teamController.activeTeamSlug}/articles/${data.article.id}`,
         );
         localStorage.setItem('article', '');
       }

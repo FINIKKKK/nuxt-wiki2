@@ -35,7 +35,9 @@
           v-model="createElemController.title"
           class="title"
           type="text"
-          placeholder="Заголовок статьи"
+          :placeholder="`Заголовок ${
+            props.type === 'section' ? 'раздела' : 'статьи'
+          }`"
         />
       </div>
 
@@ -43,7 +45,7 @@
       <slot />
 
       <!-- Компонент редактирования доступа -->
-      <CreatePageAccess />
+      <!--      <CreatePageAccess />-->
     </div>
   </div>
 </template>
@@ -89,7 +91,7 @@ const { data: sections } = await useCustomFetch<TSection[]>(
   },
 );
 // Сохраняем в хранилище
-sectionsController.setSections(sections.value);
+sectionsController.setSections(sections);
 
 /**
  * Вычисляемые значения ----------------
@@ -112,9 +114,9 @@ const selections = computed(() => {
       return result;
     }
 
-    return transformSections(sections.value);
+    return transformSections(sections);
   } else {
-    return sections.value.map((obj) => ({
+    return sections.map((obj) => ({
       value: obj.id,
       label: obj.name,
     }));

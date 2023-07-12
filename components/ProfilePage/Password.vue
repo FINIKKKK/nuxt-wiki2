@@ -83,12 +83,12 @@ const onChangePassword = async () => {
   if (!isValid) return false;
 
   // Обновляем пароль пользователя
-  const { data } = await useCustomFetch(url, {
+  const { message } = await useCustomFetch(url, {
     body: dto,
     method: 'POST',
   });
 
-  if (data) {
+  if (message) {
     // Отображаем сообщение об успешном изменении
     profileController.setMessage('Пароль успешно изменен');
     // Перемещаем пользователя на вверх

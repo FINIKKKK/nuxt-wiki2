@@ -12,8 +12,7 @@
   </ul>
 
   <div class="content" v-for="(tab, index) in props.tabs">
-    {{ tab.content }}
-    <EditorBody :key="index" :data="[]" />
+    <EditorBody :key="index" :data="JSON.parse(tab.content)" v-if="index === activeTab" />
   </div>
 </template>
 

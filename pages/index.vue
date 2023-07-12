@@ -37,7 +37,7 @@ const teamController = useTeamStore(); // Хранилище команд
 // Команды пользователя
 const { data } = await useCustomFetch<TUserData>(`/account`);
 // Сохраняем в хранилище
-teamController.setTeams(data.value.teams);
+teamController.setTeams(data.teams);
 </script>
 
 <!-- ----------------------------------------------------- -->
