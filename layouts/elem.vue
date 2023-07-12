@@ -144,7 +144,7 @@ const toggleFavorite = async () => {
 }
 
 .content {
-  max-width: 960px;
+  max-width: 1200px;
   margin: 0 auto;
   padding: 0 20px;
 }

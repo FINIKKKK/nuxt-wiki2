@@ -26,36 +26,42 @@
       <h6
         v-else-if="obj.type === 'header' && obj.data.level === 6"
         class="title"
+        :id="obj.id"
       >
         {{ obj.data.text }}
       </h6>
       <h5
         v-else-if="obj.type === 'header' && obj.data.level === 5"
         class="title"
+        :id="obj.id"
       >
         {{ obj.data.text }}
       </h5>
       <h4
         v-else-if="obj.type === 'header' && obj.data.level === 4"
         class="title"
+        :id="obj.id"
       >
         {{ obj.data.text }}
       </h4>
       <h3
         v-else-if="obj.type === 'header' && obj.data.level === 3"
         class="title"
+        :id="obj.id"
       >
         {{ obj.data.text }}
       </h3>
       <h2
         v-else-if="obj.type === 'header' && obj.data.level === 2"
         class="title"
+        :id="obj.id"
       >
         {{ obj.data.text }}
       </h2>
       <h1
         v-else-if="obj.type === 'header' && obj.data.level === 1"
         class="title"
+        :id="obj.id"
       >
         {{ obj.data.text }}
       </h1>
@@ -185,10 +191,6 @@ const props = defineProps<{
   .title {
     margin-bottom: 24px;
   }
-  h1.title {
-    font-size: 45px;
-    line-height: 50px;
-  }
   h2.title {
     font-size: 24px;
     line-height: 32px;
@@ -196,6 +198,10 @@ const props = defineProps<{
   h3.title {
     font-size: 20px;
     line-height: 32px;
+  }
+  h1.title {
+    font-size: 45px;
+    line-height: 50px;
   }
   h4.title {
     font-size: 26px;
