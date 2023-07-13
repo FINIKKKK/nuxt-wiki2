@@ -11,7 +11,7 @@
       v-model="codeValue"
       :errors="errors['code']"
     />
-    <p>
+    <p class="text">
       Поделитесь ссылкой
       <NuxtLink :to="`/companies/${teamController.activeTeamId}`"
         >{{ teamController.activeTeam?.team.code }}.itl.wiki
@@ -38,18 +38,14 @@ import { useCustomFetch } from '~/hooks/useCustomFetch';
 import { useRequestStore } from '~/stores/RequestController';
 
 /**
- * Системные переменные ----------------
+ * Переменные ----------------
  */
-const teamController = useTeamStore(); // Хранилище пользователя
-const settingsController = useSettingsStore(); // Хранилище страницы настроек
-const requestController = useRequestStore(); // Хранилище запроса
-
-/**
- * Пользовательские переменные ----------------
- */
+const teamController = useTeamStore();
+const settingsController = useSettingsStore();
+const requestController = useRequestStore();
 const url = '/team/edit'; // URL запроса
-const nameValue = ref(teamController.activeTeam?.team.name || ''); // Значене имени
-const codeValue = ref(teamController.activeTeam?.team.code || ''); // Значене фамилии
+const nameValue = ref(teamController.activeTeam?.team.name || '');
+const codeValue = ref(teamController.activeTeam?.team.code || '');
 
 /**
  * Хуки ----------------
@@ -73,7 +69,7 @@ const onChangeTeamData = async () => {
   settingsController.setErrors([]);
   settingsController.setMessage('');
 
-  // Данные объекта
+  // Данные
   const dto = {
     team_id: teamController.activeTeamId,
     name: nameValue.value,
@@ -85,12 +81,12 @@ const onChangeTeamData = async () => {
   if (!isValid) return false;
 
   // Обновляем данные пользователя
-  const { data } = await useCustomFetch<any>(url, {
+  const { message } = await useCustomFetch(url, {
     body: dto,
     method: 'POST',
   });
 
-  if (data.value) {
+  if (message) {
     // Обновляем данные в хранилище
     teamController.editActiveTeam(dto);
     // Отображаем сообщение об успешном изменении
@@ -102,4 +98,12 @@ const onChangeTeamData = async () => {
 <!-- ----------------------------------------------------- -->
 <!-- ----------------------------------------------------- -->
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+.form {
+  width: 688px;
+  margin-bottom: 65px;
+}
+.text {
+  margin-bottom: 25px;
+}
+</style>

@@ -10,7 +10,7 @@
   >
     <!-- Выбранный элемент -->
     <div class="selected" @click="toggleDropdown">
-      <span class="placeholder" v-if="!model">Выберите раздел</span>
+      <span class="placeholder" v-if="!model">{{ props.label }}</span>
       <span v-else>{{ model?.label }}</span>
       <svg-icon
         class="close"
@@ -54,6 +54,7 @@ import { TSelect } from '~/utils/types/base';
  * Пропсы ----------------
  */
 const props = defineProps<{
+  label: string;
   options: TSelect[];
   modelValue: TSelect | null;
   type?: 'triangle' | 'full';

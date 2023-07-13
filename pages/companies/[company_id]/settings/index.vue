@@ -4,11 +4,15 @@
     <UIWarning
       v-if="settingsController.errors?.length || settingsController.message"
       :errors="settingsController.errors"
-      :messages="settingsController.message"
+      :message="settingsController.message"
+      class="warning-m"
     />
 
-    <!-- Форма изменения фанных компаниии -->
+    <!-- Форма изменения фанных компании -->
     <SettingsPageTeamForm />
+
+    <!-- Форма изменения настроек -->
+    <SettingsPageSettingsForm />
   </NuxtLayout>
 </template>
 

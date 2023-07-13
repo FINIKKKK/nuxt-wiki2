@@ -1,10 +1,11 @@
-import { useUserStore } from '~/stores/UserController';
-
+/**
+ * Хук для перевода страниц
+ */
 export const useTranslate = async (component: string) => {
-  const userController = useUserStore();
+  const langCookie = useCookie('lang'); // Значение языка в куках
+  const lang = langCookie.value || 'ru'; // Значение языка
 
-  const lang = userController.user?.locale || 'ru';
-
+  // Испортируем нужный компонент
   let t;
   try {
     t = await import(`~/utils/lang/${component}.ts`);
@@ -13,5 +14,6 @@ export const useTranslate = async (component: string) => {
     console.error(`Ошибка при импорте модуля ${component}:`, error);
   }
 
+  // Возвращаем нужный объект
   return t?.default?.[lang];
 };

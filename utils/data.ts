@@ -18,3 +18,9 @@ export const roles = [
   { value: 'admin', label: 'Администратор' },
   { value: 'moderator', label: 'Модератор' },
 ];
+
+// Список ролей
+export const languages = [
+  { value: 'ru', label: 'Русский' },
+  { value: 'en', label: 'English' },
+];
