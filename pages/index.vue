@@ -1,13 +1,12 @@
 <template>
-  <NuxtLayout name="main" title="Ваши wiki">
+  <NuxtLayout name="main" :title="$t.title">
     <ul class="teams">
       <!-- Создать команду -->
       <li class="team index">
-        <p>
-          Создайте wiki и Вовлекайте сотрудников в процесс непрерывного обмена
-          знаниями и опытом.
-        </p>
-        <NuxtLink to="/create_company" class="btn">Создать компанию</NuxtLink>
+        <p>{{ $t.createTeam.title }}</p>
+        <NuxtLink to="/create_company" class="btn"
+          >{{ $t.createTeam.button }}
+        </NuxtLink>
       </li>
 
       <!-- Команды -->
@@ -25,11 +24,13 @@
 import { useCustomFetch } from '~/hooks/useCustomFetch';
 import { TUserData } from '~/utils/types/account';
 import { useTeamStore } from '~/stores/TeamContoller';
+import { useTranslate } from '~/hooks/useTranslate';
 
 /**
- * Системные переменные ----------------
+ * Переменные ----------------
  */
-const teamController = useTeamStore(); // Хранилище команд
+const teamController = useTeamStore();
+const $t = await useTranslate('teams');
 
 /**
  * Получение данных ----------------

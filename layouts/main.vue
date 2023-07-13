@@ -3,7 +3,7 @@
     <!-- Сайдбар -->
     <Sidebar />
 
-    <div class="content__wrapper">
+    <div class="content__wrapper" :class="{nonav: !nav}">
       <!-- Навигация -->
       <div class="header" v-if="props.nav" :class="{ scrolled: isScrolled }">
         <nav class="nav">
@@ -82,6 +82,11 @@ main {
 .content__wrapper {
   position: relative;
   width: 100%;
+  &.nonav {
+    .content {
+      padding-top: 50px;
+    }
+  }
 }
 
 .content {

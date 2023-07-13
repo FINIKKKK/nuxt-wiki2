@@ -4,12 +4,15 @@
       >{{ props.data.name }}
     </NuxtLink>
     <ul class="info">
-      <li class="info__item"><span>План:</span> {{ props.data.plan.name }}</li>
       <li class="info__item">
-        <span>Пользователи:</span> {{ props.data.employees_count }}
+        <span>{{ $t.team.plan }}:</span> {{ props.data.plan.name }}
       </li>
       <li class="info__item">
-        <span>Адресс:</span> {{ props.data.code }}.wiki.itl.systems
+        <span>{{ $t.team.users }}:</span> {{ props.data.employees_count }}
+      </li>
+      <li class="info__item">
+        <span>{{ $t.team.address }}:</span>
+        {{ props.data.code }}.wiki.itl.systems
       </li>
     </ul>
     <span class="notices" v-if="props.data.unread_notification">{{
@@ -23,6 +26,9 @@
 
 <script lang="ts" setup>
 import { TTeam } from '~/utils/types/team';
+import { useTranslate } from '~/hooks/useTranslate';
+
+const $t = await useTranslate('teams');
 
 /**
  * Пропсы ----------------
