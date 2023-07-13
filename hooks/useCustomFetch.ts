@@ -8,6 +8,7 @@ import { useRequestStore } from '~/stores/RequestController';
 export const useCustomFetch = async <T>(
   url: string,
   options?: FetchOptions & { method?: string },
+  formData?: FormData,
 ) => {
   const token = useCookie('token'); // Токен
   const requestController = useRequestStore(); // Хранилище запроса
@@ -15,18 +16,15 @@ export const useCustomFetch = async <T>(
 
   // Хук useFetch
   const { data, pending, error } = (await useFetch(url, {
-    // transform(data: { data: T }): T {
-    //   return data.data;
-    // },
     ...options, // Дополнительные опции
     baseURL: config.public.apiUrl, // Главный URL
     headers: {
-      'Content-Type': 'application/json',
       Authorization: `Bearer ${token.value}`, // Установка заголовка авторизации с использованием токена
     },
     //  Метод
     method:
       (options?.method as 'GET' | 'POST' | 'PUT' | 'PATCH' | 'DELETE') || 'GET',
+    body: formData || options?.body, // Устанавливаем formData в теле запроса
   })) as AsyncData<T, any>;
 
   // Конвертируем ошибки

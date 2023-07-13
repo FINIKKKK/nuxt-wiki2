@@ -52,30 +52,23 @@ const onChangeAvatar = async (e: any) => {
   profileController.setErrors([]);
   profileController.setMessage('');
 
-  // Объект с данными
-  const dto = {
-    image: e.target.files[0],
-  };
-
+  // Данные
+  const formData = new FormData();
+  formData.append('image', e.target.files[0]);
   // Обновляем аватарку
-  const { data, pending, error } = await useFetch(
+  const { data } = await useCustomFetch<{ url: string }>(
     url,
-    { body: { image: e.target.files[0] } },
-    {
-      baseURL: config.public.apiUrl,
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${token.value}`,
-      },
-      method: 'POST',
-    },
+    { method: 'POST' },
+    formData,
   );
 
-  if (data.value) {
+  if (data) {
     // Обновляем аватарку в хранилище
-    userController.updateUserAvatar(data.value);
+    userController.updateUserAvatar(data.url);
     // Отображаем сообщение об успешном изменении
     profileController.setMessage('Аватарка успешно изменена');
+  } else {
+    profileController.setErrors(requestController.errors[url]);
   }
 };
 </script>
