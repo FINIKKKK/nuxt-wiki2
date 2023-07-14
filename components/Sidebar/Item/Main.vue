@@ -1,11 +1,14 @@
 <template>
   <li class="sidebar__item">
     <NuxtLink v-if="props.data.link" :to="props.data.link">
-      <svg-icon :name="props.data.icon" />
+      <i :class="`fa-regular fa-${props.data.icon}`"></i>
       <p>{{ props.data.label }}</p>
     </NuxtLink>
     <a v-else @click="props.data.method">
-      <svg-icon v-if="props.data.method" :name="props.data.icon" />
+      <i
+        :class="`fa-regular fa-${props.data.icon}`"
+        v-if="props.data.method"
+      ></i>
       <p>{{ props.data.label }}</p>
     </a>
   </li>

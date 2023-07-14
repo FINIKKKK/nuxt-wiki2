@@ -1,7 +1,11 @@
 <template>
   <li class="sidebar__item">
     <NuxtLink :to="itemLink">
-      <svg-icon :name="props.type === 'section' ? 'folder' : 'document'" />
+      <i
+        :class="`fa-regular fa-${
+          props.type === 'section' ? 'folder' : 'file-alt'
+        }`"
+      ></i>
       <p>{{ props.data.name }}</p>
     </NuxtLink>
   </li>

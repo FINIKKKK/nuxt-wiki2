@@ -59,12 +59,13 @@ onMounted(() => {
     padding: 8px 16px;
     border-radius: 3px;
   }
-  svg {
-    width: 22px;
-    height: 22px;
+  i {
+    width: 25px;
+    font-size: 20px;
     margin-right: 15px;
-    fill: $blue;
-    flex: 0 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
   p {
     font-size: 14px;

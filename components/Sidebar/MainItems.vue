@@ -67,12 +67,12 @@ const innerItems: TInnerItem[] = [
     title: 'Ваша компания',
     items: [
       {
-        icon: 'activation',
+        icon: 'compass',
         label: 'Активность',
         link: `${teamController.activeTeamSlug}`,
       },
       {
-        icon: 'document',
+        icon: 'file-alt',
         label: 'Ваши работы',
         link: `${teamController.activeTeamSlug}/my_works`,
       },
@@ -96,7 +96,7 @@ const innerItems: TInnerItem[] = [
         link: `${teamController.activeTeamSlug}/sections/create`,
       },
       {
-        icon: 'document',
+        icon: 'file-alt',
         label: 'Статью',
         link: `${teamController.activeTeamSlug}/articles/create`,
       },
@@ -107,17 +107,17 @@ const innerItems: TInnerItem[] = [
     title: `Поиск по ${teamController.activeTeam?.team.name}.itl.wiki`,
   },
   {
-    name: 'settings',
-    title: 'Настройки',
+    name: 'cog',
+    title: $t.settings.title,
     items: [
       {
-        icon: 'settings',
-        label: 'Общие',
+        icon: 'cog',
+        label: $t.settings.general,
         link: `${teamController.activeTeamSlug}/settings`,
       },
       {
         icon: 'user',
-        label: 'Соотрудники',
+        label: $t.settings.employees,
         link: `${teamController.activeTeamSlug}/settings/employees`,
       },
     ],
@@ -128,17 +128,17 @@ const innerItems: TInnerItem[] = [
     items: [
       { icon: 'edit', label: $t.profile.edit, link: '/account' },
       {
-        icon: 'favorite',
+        icon: 'bookmark',
         label: $t.profile.favorites,
         link: `/account/favorites`,
       },
       {
-        icon: 'change',
+        icon: 'repeat-alt',
         label: $t.profile.changeTeam,
         link: '/',
         isShow: route.path !== '/',
       },
-      { icon: 'logout', label: $t.profile.logout, method: onLogout },
+      { icon: 'sign-out-alt', label: $t.profile.logout, method: onLogout },
     ],
   },
 ];

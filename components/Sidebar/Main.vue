@@ -69,7 +69,7 @@ const teamController = useTeamStore();
 const sidebarController = useSidebarStore();
 const items = [
   ['home', 'add', 'search'],
-  ['settings', 'bell', 'tooltip', 'user'],
+  ['cog', 'bell', 'tooltip', 'user'],
 ];
 
 /**
@@ -88,7 +88,7 @@ const isShowItem = computed(() => (item: string) => {
     }
     // Иначе
     // Не показываем только настройки
-    else return item !== 'settings';
+    else return item !== 'cog';
   }
 });
 // Показывать ли элементы?

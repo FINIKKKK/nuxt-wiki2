@@ -100,6 +100,10 @@ const model = computed({
       fill: $blue2;
     }
   }
+  input {
+    font-size: 16px;
+    line-height: 20px;
+  }
   .showPassword {
     position: absolute;
     bottom: 10px;

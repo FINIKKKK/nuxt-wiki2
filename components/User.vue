@@ -1,7 +1,16 @@
 <template>
   <li class="user" :data-layout="props.className">
-    <img :src="props.data.picture" alt="avatar" />
-    <p>{{ props.data?.fullname }}</p>
+    <div
+      class="avatar"
+      v-if="
+        props.data.picture ===
+        'https://api.wiki.itl.systems/assets/img/user.jpg'
+      "
+    >
+      {{ `${props.data.first_name[0]}${props.data.last_name[0]}` }}
+    </div>
+    <img :src="props.data.picture" alt="avatar" v-else />
+    <p>{{ props.data.fullname }}</p>
   </li>
 </template>
 
@@ -51,5 +60,20 @@ const props = defineProps<{
     overflow: hidden;
     text-overflow: ellipsis;
   }
+}
+
+.avatar {
+  text-transform: uppercase;
+  font-size: 14px;
+  background-color: $bg;
+  border-radius: 50%;
+  width: 35px;
+  height: 35px;
+  color: $blue;
+  border: 1px solid $blue;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 15px;
 }
 </style>
