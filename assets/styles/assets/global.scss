@@ -34,10 +34,11 @@ a {
   }
 }
 
-svg {
-  fill: $blue;
+.fa-regular {
+  color: $blue;
   transition: 0.2s;
-  height: auto;
+  font-size: 16px;
+  text-decoration: none;
 }
 
 // ScrollBar

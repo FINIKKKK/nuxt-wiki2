@@ -36,8 +36,8 @@
       <!-- Url адресс -->
       <div v-if="type === 'address'" class="url">itl.wiki</div>
     </div>
-    <span class="error" v-if="errors" v-for="error in props.errors">
-      {{ error }}
+    <span class="error" v-if="errors">
+      {{ errors[0] }}
     </span>
   </div>
 </template>

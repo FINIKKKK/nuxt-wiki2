@@ -1,19 +1,23 @@
 <template>
   <form class="form" @submit.prevent="onChangeUserData">
-    <h2 class="title">Личные данные</h2>
+    <h2 class="title">{{ $t.userData.title }}</h2>
     <UIInput
-      label="Имя"
+      :label="$t.userData.inputFirstName"
       v-model="firstNameValue"
       :errors="errors['firstName']"
     />
     <UIInput
-      label="Фамилия"
+      :label="$t.userData.inputLastName"
       v-model="lastNameValue"
       :errors="errors['lastName']"
     />
-    <UIInput label="Email" v-model="emailValue" :errors="errors['email']" />
+    <UIInput
+      :label="$t.userData.inputEmail"
+      v-model="emailValue"
+      :errors="errors['email']"
+    />
     <button class="btn" :class="{ disabled: requestController.loading[url] }">
-      Сохранить
+      {{ $t.userData.btn }}
     </button>
   </form>
 </template>
@@ -28,26 +32,20 @@ import { useUserStore } from '~/stores/UserController';
 import { useProfileStore } from '~/stores/ProfileController';
 import { useRequestStore } from '~/stores/RequestController';
 import { useCustomFetch } from '~/hooks/useCustomFetch';
+import { useTranslate } from '~/hooks/useTranslate';
 
 /**
- * Системные переменные ----------------
+ * Переменные ----------------
  */
-const userController = useUserStore(); // Хранилище пользователя
-const profileController = useProfileStore(); // Хранилище профиля
-const requestController = useRequestStore(); // Хранилище запроса
-
-/**
- * Пользовательские переменные ----------------
- */
-const url = '/account/common/edit'; // URL запроса
-const firstNameValue = ref(userController.user?.first_name || ''); // Значене имени
-const lastNameValue = ref(userController.user?.last_name || ''); // Значене фамилии
-const emailValue = ref(userController.user?.email || ''); // Значене email
-
-/**
- * Хуки ----------------
- */
-const { errors, validateForm } = useFormValidation(); // Для валидации формы
+const url = '/account/common/edit';
+const userController = useUserStore();
+const profileController = useProfileStore();
+const requestController = useRequestStore();
+const firstNameValue = ref(userController.user?.first_name || '');
+const lastNameValue = ref(userController.user?.last_name || '');
+const emailValue = ref(userController.user?.email || '');
+const $t = await useTranslate('account');
+const { errors, validateForm } = useFormValidation();
 
 /**
  * Отслеживание переменных ----------------
@@ -87,7 +85,7 @@ const onChangeUserData = async () => {
     // Обновляем данные в хранилище
     userController.updateUserData(dto);
     // Отображаем сообщение об успешном изменении
-    profileController.setMessage('Данные успешно изменены');
+    profileController.setMessage($t.userData.successMessage);
   }
 };
 </script>

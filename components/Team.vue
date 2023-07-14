@@ -5,7 +5,8 @@
     </NuxtLink>
     <ul class="info">
       <li class="info__item">
-        <span>{{ $t.team.plan }}:</span> {{ props.data.plan.name }}
+        <span>{{ $t.team.plan }}:</span>
+        {{ props.data.plan.name === 'Бесплатный' && $t.team.planTypeFree }}
       </li>
       <li class="info__item">
         <span>{{ $t.team.users }}:</span> {{ props.data.employees_count }}

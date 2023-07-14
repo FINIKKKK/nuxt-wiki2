@@ -24,37 +24,37 @@ import { useUserStore } from '~/stores/UserController';
 import { useCustomFetch } from '~/hooks/useCustomFetch';
 import { TInnerItem } from '~/utils/types/sidebar';
 import { ComputedRef } from 'vue';
+import { useTranslate } from '~/hooks/useTranslate';
 
 /**
- * Системные переменные ----------------
+ * Переменные ----------------
  */
-const route = useRoute(); // Роут
-const router = useRouter(); // Роутер
-const teamController = useTeamStore(); // Хранилище команд
-const userController = useUserStore(); // Хранилище пользователя
-const sidebarController = useSidebarStore(); // Хранилище сайдбара
-
-/**
- * Пользовательские переменные ----------------
- */
-const token = useCookie('token'); // Достаем токен из куки
+const route = useRoute();
+const router = useRouter();
+const teamController = useTeamStore();
+const userController = useUserStore();
+const sidebarController = useSidebarStore();
+const token = useCookie('token');
+const $t = await useTranslate('sidebar');
 
 /**
  * Методы ----------------
  */
 // Выход из аккаунта
 const onLogout = async () => {
-  const { data } = await useCustomFetch(`account/logout`, {
-    method: 'POST',
-  });
-  if (data.value) {
-    // Обнуляем токен
-    token.value = '';
-    // Удаляем информацию из хранилища
-    userController.setUser(null);
-    teamController.setTeams([]);
-    // Перенаправляем пользователя на страницу авторизации
-    await router.push('/login');
+  if (window.confirm($t.profile.logoutConfirm)) {
+    const { message } = await useCustomFetch(`account/logout`, {
+      method: 'POST',
+    });
+    if (message) {
+      // Обнуляем токен
+      token.value = '';
+      // Удаляем информацию из хранилища
+      userController.setUser(null);
+      teamController.setTeams([]);
+      // Перенаправляем пользователя на страницу авторизации
+      await router.push('/login');
+    }
   }
 };
 
@@ -124,21 +124,21 @@ const innerItems: TInnerItem[] = [
   },
   {
     name: 'user',
-    title: 'Профиль',
+    title: $t.profile.title,
     items: [
-      { icon: 'edit', label: 'Редактировать', link: '/account' },
+      { icon: 'edit', label: $t.profile.edit, link: '/account' },
       {
         icon: 'favorite',
-        label: 'Закладки',
+        label: $t.profile.favorites,
         link: `/account/favorites`,
       },
       {
         icon: 'change',
-        label: 'Сменить компанию',
+        label: $t.profile.changeTeam,
         link: '/',
         isShow: route.path !== '/',
       },
-      { icon: 'logout', label: 'Выйти', method: onLogout },
+      { icon: 'logout', label: $t.profile.logout, method: onLogout },
     ],
   },
 ];

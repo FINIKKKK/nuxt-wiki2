@@ -1,12 +1,22 @@
 export default {
   ru: {
-    title: 'Ваши wiki',
-    about: 'О нас',
-    contact: 'Контакты',
+    profile: {
+      title: 'Профиль',
+      edit: 'Редактировать',
+      favorites: 'Закладки',
+      changeTeam: 'Сменить компанию',
+      logout: 'Выйти',
+      logoutConfirm: 'Вы действительно хотите выйти из аккаунта?'
+    },
   },
   en: {
-    title: 'Your wiki',
-    about: 'About',
-    contact: 'Contact',
+    profile: {
+      title: 'Profile',
+      edit: 'Edit',
+      favorites: 'Bookmarks',
+      changeTeam: 'Change company',
+      logout: 'Log out',
+      logoutConfirm: 'Do you really want to log out of your account? '
+    },
   },
 };

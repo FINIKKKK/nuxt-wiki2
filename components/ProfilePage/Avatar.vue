@@ -9,12 +9,11 @@
       class="btn-inline"
       :class="{ disabled: requestController.loading[url] }"
     >
-      <span>Загрузить фото</span>
+      <span>{{ $t.avatar.btn }}</span>
       <input type="file" v-on:change="onChangeAvatar" />
     </div>
     <p class="pretext">
-      Используйте изображение размером не менее 256 на 256 пикселей в формате
-      .jpg или .png
+      {{ $t.avatar.text }}
     </p>
   </div>
 </template>
@@ -27,16 +26,16 @@ import { useUserStore } from '~/stores/UserController';
 import { useRequestStore } from '~/stores/RequestController';
 import { useCustomFetch } from '~/hooks/useCustomFetch';
 import { useProfileStore } from '~/stores/ProfileController';
-import { AsyncData, useFetch } from '#app';
+import { useTranslate } from '~/hooks/useTranslate';
 
 /**
  * Переменные ----------------
  */
+const url = '/account/picture/change';
 const userController = useUserStore();
 const requestController = useRequestStore();
 const profileController = useProfileStore();
-const url = '/account/picture/change';
-const config = useRuntimeConfig();
+const $t = await useTranslate('account');
 
 /**
  * Отслеживание переменных ----------------
@@ -66,7 +65,7 @@ const onChangeAvatar = async (e: any) => {
     // Обновляем аватарку в хранилище
     userController.updateUserAvatar(data.url);
     // Отображаем сообщение об успешном изменении
-    profileController.setMessage('Аватарка успешно изменена');
+    profileController.setMessage($t.avatar.successMessage);
   } else {
     profileController.setErrors(requestController.errors[url]);
   }

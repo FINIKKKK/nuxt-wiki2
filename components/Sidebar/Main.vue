@@ -33,7 +33,7 @@
             href="https://help.itl.wiki/public/section/30"
             target="_blank"
           >
-            <svg-icon :name="item" />
+            <i class="fa-regular fa-question-circle"></i>
           </a>
 
           <!-- Если уведомления -->
@@ -41,11 +41,11 @@
             v-else-if="item === 'bell'"
             :to="`${teamController.activeTeamSlug}/notices`"
           >
-            <svg-icon :name="item" />
+            <i class="fa-regular fa-bell"></i>
           </NuxtLink>
 
           <!-- Иначе просто иконку -->
-          <svg-icon v-else :name="item" />
+          <i v-else :class="`fa-regular fa-${item}`"></i>
         </li>
       </ul>
     </div>
@@ -80,11 +80,7 @@ const isShowItem = computed(() => (item: string) => {
   // Получаем роль пользователя в компании
   const role = teamController.activeTeam?.role.name;
   // Если есть активная компания, то показываем только tooltip и профиль
-  if (
-    teamController.activeTeam ||
-    item === 'tooltip' ||
-    item === 'user'
-  ) {
+  if (teamController.activeTeam || item === 'tooltip' || item === 'user') {
     // Если роль - модератор
     if (role === 'owner') {
       // Показываем всё
@@ -183,12 +179,12 @@ const openSidebar = (item: string) => {
       display: flex;
       align-items: center;
       justify-content: center;
+      text-decoration: none;
     }
   }
-  svg {
-    width: 22px;
-    height: 22px;
-    fill: $white;
+  .fa-regular {
+    font-size: 20px;
+    color: $white;
   }
   &:hover {
     background-color: darken($blue, 7%);

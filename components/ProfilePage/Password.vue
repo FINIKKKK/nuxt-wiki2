@@ -1,26 +1,26 @@
 <template>
   <form class="form" @submit.prevent="onChangePassword">
-    <h2 class="title">Безопасность</h2>
+    <h2 class="title">{{ $t.passwords.title }}</h2>
     <UIInput
-      label="Текущий пароль"
+      :label="$t.passwords.inputPassword"
       type="password"
       v-model="passwordValue"
       :errors="errors['password']"
     />
     <UIInput
-      label="Новый пароль"
+      :label="$t.passwords.inputPasswordNew"
       type="password"
       v-model="newPasswordValue"
       :errors="errors['new_password']"
     />
     <UIInput
-      label="Повторить пароль"
+      :label="$t.passwords.inputPasswordConfirm"
       type="password"
       v-model="passwordConfirmValue"
       :errors="errors['password_confirmation']"
     />
     <button class="btn" :class="{ disabled: requestController.loading[url] }">
-      Сохранить
+      {{ $t.passwords.btn }}
     </button>
   </form>
 </template>
@@ -34,25 +34,19 @@ import { PasswordScheme } from '~/utils/validation';
 import { useProfileStore } from '~/stores/ProfileController';
 import { useCustomFetch } from '~/hooks/useCustomFetch';
 import { useRequestStore } from '~/stores/RequestController';
+import { useTranslate } from '~/hooks/useTranslate';
 
 /**
- * Системные переменные ----------------
+ * Переменные ----------------
  */
-const profileController = useProfileStore(); // Хранилище профиля
-const requestController = useRequestStore(); // Хранилище запроса
-
-/**
- * Пользоватеьские переменные ----------------
- */
-const url = '/account/password/change'; // URL запроса
-const passwordValue = ref(''); // Значение текущего пароля
-const newPasswordValue = ref(''); // Значение нового пароля
-const passwordConfirmValue = ref(''); // Значение подтвежденного пароля
-
-/**
- * Хуки ----------------
- */
-const { errors, validateForm } = useFormValidation(); // Для валидации формы
+const url = '/account/password/change';
+const profileController = useProfileStore();
+const requestController = useRequestStore();
+const passwordValue = ref('');
+const newPasswordValue = ref('');
+const passwordConfirmValue = ref('');
+const $t = await useTranslate('account');
+const { errors, validateForm } = useFormValidation();
 
 /**
  * Отслеживание переменных ----------------
@@ -90,7 +84,7 @@ const onChangePassword = async () => {
 
   if (message) {
     // Отображаем сообщение об успешном изменении
-    profileController.setMessage('Пароль успешно изменен');
+    profileController.setMessage($t.passwords.successMessage);
     // Перемещаем пользователя на вверх
     const block = document.getElementById('scroll');
     block && block.scrollTo({ top: 0, behavior: 'smooth' });

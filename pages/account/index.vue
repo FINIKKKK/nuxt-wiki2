@@ -28,13 +28,15 @@
 
 <script lang="ts" setup>
 import { useProfileStore } from '~/stores/ProfileController';
+import { useTranslate } from '~/hooks/useTranslate';
 
 /**
  * Переменные ----------------
  */
 const profileController = useProfileStore();
 const route = useRoute();
-const nav = [{ label: 'Профиль', link: route.path }];
+const $t = await useTranslate('account');
+const nav = [{ label: $t.title, link: route.path }];
 
 /**
  * Хуки ----------------

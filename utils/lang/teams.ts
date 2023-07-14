@@ -8,6 +8,7 @@ export default {
     },
     team: {
       plan: 'План',
+      planTypeFree: 'Бесплатный',
       users: 'Пользователи',
       address: 'Адрес',
     },
@@ -21,6 +22,7 @@ export default {
     },
     team: {
       plan: 'Plan',
+      planTypeFree: 'Free',
       users: 'Users',
       address: 'Address',
     },
