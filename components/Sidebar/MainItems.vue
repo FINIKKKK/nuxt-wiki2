@@ -64,21 +64,21 @@ const onLogout = async () => {
 const innerItems: TInnerItem[] = [
   {
     name: 'home',
-    title: 'Ваша компания',
+    title: $t.home.title,
     items: [
       {
         icon: 'compass',
-        label: 'Активность',
+        label: $t.home.activity,
         link: `${teamController.activeTeamSlug}`,
       },
       {
         icon: 'file-alt',
-        label: 'Ваши работы',
+        label: $t.home.my,
         link: `${teamController.activeTeamSlug}/my_works`,
       },
       {
         icon: 'glasses',
-        label: 'На модерации',
+        label: $t.home.moderation,
         link: `${teamController.activeTeamSlug}/moderation`,
         isShow:
           teamController.activeTeam?.role.name === 'owner' ||
@@ -88,16 +88,16 @@ const innerItems: TInnerItem[] = [
   },
   {
     name: 'add',
-    title: 'Создать',
+    title: $t.add.title,
     items: [
       {
         icon: 'folder',
-        label: 'Раздел',
+        label: $t.add.section,
         link: `${teamController.activeTeamSlug}/sections/create`,
       },
       {
         icon: 'file-alt',
-        label: 'Статью',
+        label: $t.add.article,
         link: `${teamController.activeTeamSlug}/articles/create`,
       },
     ],

@@ -1,14 +1,16 @@
 <template>
   <div class="header">
     <NuxtLink :to="link" class="back">
-      <svg-icon name="back" />
-      <p>Назад</p>
+      <i class="fa-regular fa-chevron-left"></i>
+      <p>{{ $t.home.back }}</p>
     </NuxtLink>
     <div class="hamburger">
-      <svg-icon
-        :name="sidebarController.isActiveMap ? 'close' : 'hamburger'"
+      <i
+        :class="`fa-regular fa-${
+          sidebarController.isActiveMap ? 'close' : 'align-justify'
+        }`"
         @click="toggleOpen()"
-      />
+      ></i>
     </div>
   </div>
 </template>
@@ -20,14 +22,16 @@
 import { useSidebarStore } from '~/stores/SidebarController';
 import { useTeamStore } from '~/stores/TeamContoller';
 import { useSectionsStore } from '~/stores/SectionContoller';
+import { useTranslate } from '~/hooks/useTranslate';
 
 /**
- * Системные переменные ----------------
+ * Переменные ----------------
  */
-const route = useRoute(); // Роут
-const sidebarController = useSidebarStore(); // Хранилище сайдбара
-const sectionsController = useSectionsStore(); // Хранилище разделов
-const teamController = useTeamStore(); // Хранилище команд
+const route = useRoute();
+const sidebarController = useSidebarStore();
+const sectionsController = useSectionsStore();
+const teamController = useTeamStore();
+const $t = await useTranslate('sidebar');
 
 /**
  * Вычисляемые значения ----------------
@@ -86,9 +90,8 @@ const toggleOpen = () => {
     display: flex;
     align-items: center;
   }
-  svg {
+  i {
     width: 15px;
-    height: 15px;
   }
   .back {
     cursor: pointer;
@@ -112,7 +115,7 @@ const toggleOpen = () => {
     align-items: center;
     justify-content: center;
     border-left: 1px solid $blue3;
-    svg {
+    i {
       cursor: pointer;
       margin: -20px;
     }

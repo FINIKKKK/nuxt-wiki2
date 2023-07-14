@@ -1,5 +1,5 @@
 <template>
-  <NuxtLayout name="main" title="Мое избранное" :nav="nav">
+  <NuxtLayout name="main" :title="$t.profile.favorites" :nav="nav">
     <ul class="items">
       <Item
         v-for="item in favorites.internal[0]"
@@ -19,14 +19,16 @@
 <script lang="ts" setup>
 import { useCustomFetch } from '~/hooks/useCustomFetch';
 import { TFavoriteData } from '~/utils/types/favorites';
+import { useTranslate } from '~/hooks/useTranslate';
 
 /**
  * Переменные ----------------
  */
 const route = useRoute();
+const $t = await useTranslate('sidebar');
 const nav = [
-  { label: 'Аккаунт', link: `/account` },
-  { label: 'Мое избранное', link: route.path },
+  { label: $t.profile.title, link: `/account` },
+  { label: $t.profile.favorites, link: route.path },
 ];
 
 /**

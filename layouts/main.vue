@@ -3,14 +3,14 @@
     <!-- Сайдбар -->
     <Sidebar />
 
-    <div class="content__wrapper" :class="{nonav: !nav}">
+    <div class="content__wrapper" :class="{ nonav: !nav }">
       <!-- Навигация -->
       <div class="header" v-if="props.nav" :class="{ scrolled: isScrolled }">
         <nav class="nav">
           <template v-for="item in nav">
             <div class="nav__item" v-if="item?.label">
               <NuxtLink :to="item.link">{{ item.label }}</NuxtLink>
-              <svg-icon name="arrow" />
+              <i class="fa-regular fa-chevron-right"></i>
             </div>
           </template>
         </nav>
@@ -138,16 +138,16 @@ main {
       }
     }
     &:last-child {
-      svg {
+      i {
         display: none;
       }
     }
   }
-  svg {
-    width: 15px;
-    height: 15px;
+  i {
+    font-size: 15px;
     margin-left: 15px;
-    fill: $blue3;
+    margin-bottom: 3px;
+    color: rgba($black, 0.5);
   }
 }
 </style>

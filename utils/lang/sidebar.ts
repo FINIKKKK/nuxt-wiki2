@@ -1,5 +1,19 @@
 export default {
   ru: {
+    home: {
+      title: 'Ваша компания',
+      active: 'Активность',
+      my: 'Мои работы',
+      moderation: 'На модерации',
+      sections: 'Разделы',
+      articles: 'Статьи',
+      back: 'Назад',
+    },
+    add: {
+      title: 'Создать',
+      section: 'Раздел',
+      article: 'Статью',
+    },
     search: {
       title: 'Поиск по',
       input: 'Искать статью, раздел или пользователя',
@@ -22,6 +36,20 @@ export default {
     },
   },
   en: {
+    home: {
+      title: 'Your company',
+      activity: 'Activity',
+      my: 'My works',
+      moderation: 'On moderation',
+      sections: 'Sections',
+      articles: 'Articles',
+      back: 'Back',
+    },
+    add: {
+      title: 'Create',
+      section: 'Section',
+      article: 'Article',
+    },
     search: {
       title: 'Search by',
       input: 'Search for an article, section, or user',

@@ -14,7 +14,7 @@
 
   <!-- Посты -->
   <div class="items" v-if="sectionsController.section?.items?.length">
-    <h3>Статьи</h3>
+    <h3>{{ $t.home.articles }}</h3>
     <ul>
       <template
         v-for="article in sectionsController.section?.items"
@@ -31,11 +31,13 @@
 
 <script lang="ts" setup>
 import { useSectionsStore } from '~/stores/SectionContoller';
+import { useTranslate } from '~/hooks/useTranslate';
 
 /**
- * Системные переменные ----------------
+ * Переменные ----------------
  */
-const sectionsController = useSectionsStore(); // Хранилище разделов
+const sectionsController = useSectionsStore();
+const $t = await useTranslate('sidebar');
 </script>
 
 <!-- ----------------------------------------------------- -->
@@ -55,9 +57,8 @@ const sectionsController = useSectionsStore(); // Хранилище разде�
     text-overflow: ellipsis;
   }
   h3 {
-    text-transform: uppercase;
     color: $gray;
-    margin-bottom: 18px;
+    margin-bottom: 10px;
   }
 }
 </style>

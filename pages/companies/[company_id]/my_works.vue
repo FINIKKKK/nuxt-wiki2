@@ -1,5 +1,5 @@
 <template>
-  <NuxtLayout name="main" title="Мои работы" :nav="nav">
+  <NuxtLayout name="main" :title="$t.home.my" :nav="nav">
     <Item
       v-for="article in articles"
       :key="article.id"
@@ -16,12 +16,14 @@
 <script lang="ts" setup>
 import { useCustomFetch } from '~/hooks/useCustomFetch';
 import { TArticle } from '~/utils/types/article';
+import { useTranslate } from '~/hooks/useTranslate';
 
 /**
  * Переменные ----------------
  */
 const route = useRoute();
-const nav = [{ label: 'Мои работы', link: route.path }];
+const $t = await useTranslate('sidebar');
+const nav = [{ label: $t.home.my, link: route.path }];
 
 /**
  * Получение данных ----------------

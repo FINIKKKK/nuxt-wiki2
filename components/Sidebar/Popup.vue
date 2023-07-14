@@ -20,7 +20,7 @@
       ---------------------------------------->
       <template v-if="isShow">
         <div class="items" v-if="sectionsController.sections?.length">
-          <h3>Разделы</h3>
+          <h3>{{ $t.home.sections }}</h3>
           <ul>
             <template
               v-for="section in sectionsController.sections"
@@ -45,19 +45,16 @@ import { useCustomFetch } from '~/hooks/useCustomFetch';
 import { TSection } from '~/utils/types/secton';
 import { TComponentItem } from '~/utils/types/base';
 import { useSectionsStore } from '~/stores/SectionContoller';
+import { useTranslate } from '~/hooks/useTranslate';
 
 /**
- * Системные переменные ----------------
+ * Переменные ----------------
  */
-const route = useRoute(); // Роут
-const sidebarController = useSidebarStore(); // Хранилище сайдбара
-const sectionsController = useSectionsStore(); // Хранилище разделов
-const teamStore = useTeamStore(); // Хранилище активной команды
-
-/**
- * Полльзовательские переменные ----------------
- */
-// Компоненты для resolveComponent
+const route = useRoute();
+const sidebarController = useSidebarStore();
+const sectionsController = useSectionsStore();
+const teamStore = useTeamStore();
+const $t = await useTranslate('sidebar');
 const components: TComponentItem = {
   SidebarMainItems: resolveComponent('SidebarMainItems'),
   SidebarSearch: resolveComponent('SidebarSearch'),
@@ -159,9 +156,8 @@ if (!sectionsController.sections?.length || !sidebarController.isOpen) {
 .items {
   margin-bottom: 49px;
   h3 {
-    text-transform: uppercase;
     color: $gray;
-    margin-bottom: 18px;
+    margin-bottom: 10px;
   }
 }
 </style>

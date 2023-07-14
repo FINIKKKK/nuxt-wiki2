@@ -1,7 +1,11 @@
 <template>
   <div class="item">
     <!-- Иконка -->
-    <svg-icon :name="props.type === 'article' ? 'document' : 'folder'" />
+    <i
+      :class="`fa-regular fa-${
+        props.type === 'article' ? 'file-alt' : 'folder'
+      }`"
+    ></i>
     <!-- Заголовок -->
     <div class="item__info">
       <div class="title">
@@ -9,8 +13,12 @@
           {{ props.data.name }}
         </NuxtLink>
         <div class="tags">
-          <div class="tag" v-if="props.data.status_id === 1">Черновик</div>
-          <div class="tag" v-if="props.data.status_id === 2">На модерации</div>
+          <div class="tag" v-if="props.data.status_id === 1">
+            {{ $t.item.draft }}
+          </div>
+          <div class="tag" v-if="props.data.status_id === 2">
+            {{ $t.item.moderation }}
+          </div>
         </div>
       </div>
 
@@ -31,11 +39,11 @@
             class="btn__item"
           >
             <svg-icon name="edit" />
-            <p>Правка</p>
+            <p>{{ $t.item.edit }}</p>
           </NuxtLink>
           <div class="btn__item">
             <svg-icon name="lock" />
-            <p>Доступ</p>
+            <p>{{ $t.item.access }}</p>
           </div>
         </template>
         <!-- Кнопка удаления из избранного -->
@@ -45,7 +53,7 @@
           @click="onRemoveFromFavorites"
         >
           <svg-icon name="add2" />
-          <p>Удалить из избранного</p>
+          <p>{{ $t.item.removeFromFavorites }}</p>
         </div>
         <!-- Кнопка публикации -->
         <div
@@ -54,7 +62,7 @@
           @click="onPublicArticle"
         >
           <svg-icon name="check" />
-          <p>Опубликовать</p>
+          <p>{{ $t.item.publish }}</p>
         </div>
       </div>
     </div>
@@ -70,6 +78,7 @@ import { useDateString } from '~/hooks/useDateString';
 import { TArticle } from '~/utils/types/article';
 import { TSection } from '~/utils/types/secton';
 import { useCustomFetch } from '~/hooks/useCustomFetch';
+import { useTranslate } from '~/hooks/useTranslate';
 
 /**
  * Пропсы ----------------
@@ -86,10 +95,11 @@ const props = defineProps<{
 const emits = defineEmits(['removeFromFavorites', 'removeFromModeration']);
 
 /**
- * Системные переменные ----------------
+ * Переменные ----------------
  */
-const route = useRoute(); // Роут
-const teamController = useTeamStore(); // Хранилище активной компании
+const route = useRoute();
+const teamController = useTeamStore();
+const $t = await useTranslate('elem');
 
 /**
  * Вычислительные значения ----------------
@@ -116,7 +126,7 @@ const link = computed(() => {
  */
 // Удалить из избранного
 const onRemoveFromFavorites = async () => {
-  if (window.confirm('Вы точно хотите удалить из избранного?')) {
+  if (window.confirm($t.item.favoriteConfirm)) {
     const data = await useCustomFetch(`account/bookmarks/remove`, {
       body: { article_id: props.data.id },
       method: 'POST',
@@ -163,13 +173,17 @@ const onPublicArticle = async () => {
     align-items: center;
     font-size: 16px;
   }
-  svg {
+  i {
+    font-size: 28px;
     width: 32px;
     height: 32px;
     margin-right: 15px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
   a {
-    margin-bottom: 0px;
+    line-height: 26px;
     &:hover {
       text-decoration: none;
     }

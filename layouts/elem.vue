@@ -22,10 +22,10 @@
         <ul class="elem__info">
           <!-- Автор -->
           <li class="elem__info-item">
-            Автор:
+            {{ $t.author }}:
             <span>{{
-              `${props.data?.creator.first_name} ${props.data?.creator.last_name}`
-            }}</span>
+                `${props.data?.creator.first_name} ${props.data?.creator.last_name}`
+              }}</span>
           </li>
           <!-- Время -->
           <li
@@ -37,7 +37,7 @@
         <!--------------------------------------
           Попап доступа у пользователей
         ---------------------------------------->
-<!--        <CreatePageAccess v-model="abilities" />-->
+        <!--        <CreatePageAccess v-model="abilities" />-->
 
         <!--------------------------------------
           Слот
@@ -60,6 +60,7 @@ import { useCustomFetch } from '~/hooks/useCustomFetch';
 import { TMessage } from '~/utils/types';
 import { useSectionsStore } from '~/stores/SectionContoller';
 import { TAbility } from '~/utils/types/team';
+import { useTranslate } from '~/hooks/useTranslate';
 
 /**
  * Пропсы ----------------
@@ -83,6 +84,7 @@ const teamController = useTeamStore();
 const sectionsController = useSectionsStore();
 const isFavorite = ref(props.properties?.bookmark || false);
 const abilities = ref<TAbility[]>([]);
+const $t = await useTranslate('elem');
 const nav = [
   {
     label: sectionsController.breadCrumbs[0]?.name,

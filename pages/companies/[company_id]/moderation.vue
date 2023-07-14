@@ -1,5 +1,5 @@
 <template>
-  <NuxtLayout name="main" title="На модерации" :nav="nav">
+  <NuxtLayout name="main" :title="$t.home.moderation" :nav="nav">
     <Item
       v-for="article in articles"
       :key="article.id"
@@ -17,13 +17,15 @@
 import { useCustomFetch } from '~/hooks/useCustomFetch';
 import { TArticle } from '~/utils/types/article';
 import { useTeamStore } from '~/stores/TeamContoller';
+import {useTranslate} from "~/hooks/useTranslate";
 
 /**
  * Системные переменные ----------------
  */
 const teamController = useTeamStore();
 const route = useRoute();
-const nav = [{ label: 'На модерации', link: route.path }];
+const $t = await useTranslate('sidebar');
+const nav = [{ label: $t.home.moderation, link: route.path }];
 
 /**
  * Получение данных ----------------
