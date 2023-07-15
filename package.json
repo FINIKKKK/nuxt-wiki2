@@ -30,18 +30,22 @@
     "@editorjs/quote": "^2.5.0",
     "@editorjs/simple-image": "^1.5.1",
     "@editorjs/table": "^2.2.1",
+    "@nuxtjs/proxy": "^2.1.0",
     "@nuxtjs/svg-sprite": "^1.0.2",
     "@pinia/nuxt": "^0.4.11",
     "axios": "^1.4.0",
     "editorjs-html": "^3.4.3",
+    "install": "^0.13.0",
     "lodash": "^4.17.21",
     "lodash.debounce": "^4.0.8",
+    "npm": "^9.8.0",
     "pinia": "^2.1.4",
     "prettier": "^2.8.8",
     "sass": "^1.63.4",
     "vue-inputmask": "^0.2.1",
     "vue-svg-sprite": "^2.2.1",
     "vue-the-mask": "^0.11.1",
+    "ws": "^8.13.0",
     "yup": "^1.2.0"
   }
 }
