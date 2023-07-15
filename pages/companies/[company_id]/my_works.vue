@@ -29,7 +29,11 @@ const nav = [{ label: $t.home.my, link: route.path }];
  * Получение данных ----------------
  */
 // Мои статьи
-const { data: articles } = await useCustomFetch<TArticle[]>(`account/articles`);
+const { data: articles } = await useCustomFetch<TArticle[]>(
+  `account/articles`,
+  { query: { limit: 10 } },
+);
+console.log(articles);
 </script>
 
 <!-- ----------------------------------------------------- -->

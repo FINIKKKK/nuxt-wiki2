@@ -10,7 +10,7 @@
         </tr>
       </thead>
       <tbody>
-        <tr v-for="notice in notifications.notifications" class="notice">
+        <tr v-for="notice in notificationsList" class="notice">
           <th>
             <User :data="notice.to" class="user" />
           </th>
@@ -35,9 +35,10 @@
 import { useTranslate } from '~/hooks/useTranslate';
 import { useCustomFetch } from '~/hooks/useCustomFetch';
 import { useTeamStore } from '~/stores/TeamContoller';
-import { TNotifications } from '~/utils/types/notice';
+import { TNotice, TNotifications } from '~/utils/types/notice';
 import { useFormatDate } from '~/hooks/useFormatData';
 import { useRequestStore } from '~/stores/RequestController';
+import { useSidebarStore } from '~/stores/SidebarController';
 
 /**
  * Переменные ----------------
@@ -48,12 +49,39 @@ const teamController = useTeamStore();
 const $t = await useTranslate('notices');
 const nav = [{ label: $t.title, link: route.path }];
 const requestController = useRequestStore();
+const sidebarController = useSidebarStore();
+const notificationsList = ref<TNotice[]>([]);
 
 //
 const { data: notifications } = await useCustomFetch<TNotifications>(url, {
-  query: { team_id: teamController.activeTeamId },
+  query: { team_id: teamController.activeTeamId, limit: 15, offset: 0 },
 });
 console.log(notifications);
+notificationsList.value.push(...notifications.notifications);
+
+watch(
+  () => sidebarController.isEndScrollPage,
+  async () => {
+    if (sidebarController.isEndScrollPage) {
+      const { data: newNotifications } = await useCustomFetch<TNotifications>(
+        url,
+        {
+          query: {
+            team_id: teamController.activeTeamId,
+            limit: 15,
+            offset: notificationsList.value.length,
+          },
+        },
+      );
+      notificationsList.value = [
+        ...notificationsList.value,
+        ...newNotifications.notifications,
+      ];
+      console.log(notifications.length);
+      console.log(notificationsList.value);
+    }
+  },
+);
 </script>
 
 <!-- ----------------------------------------------------- -->

@@ -41,6 +41,7 @@
 
 <script lang="ts" setup>
 import { TNav } from '~/utils/types/base';
+import { useSidebarStore } from '~/stores/SidebarController';
 
 /**
  * Пропсы ----------------
@@ -56,6 +57,7 @@ const props = defineProps<{
 const route = useRoute();
 const refContent = ref(null);
 const isScrolled = ref(false);
+const sidebarController = useSidebarStore();
 
 /**
  * Методы ----------------
@@ -68,6 +70,12 @@ const onChangeHeader = () => {
     isScrolled.value = true;
   } else {
     isScrolled.value = false;
+  }
+
+  if (block.scrollHeight - (block.scrollTop + window.innerHeight) < 100) {
+    sidebarController.setEndScrollPage(true);
+  } else {
+    sidebarController.setEndScrollPage(false);
   }
 };
 </script>

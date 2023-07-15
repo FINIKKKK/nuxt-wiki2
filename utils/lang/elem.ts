@@ -20,7 +20,7 @@ export default {
     item: {
       draft: 'Draft',
       moderation: 'On moderation',
-      edit: 'Correction',
+      edit: 'Edit',
       access: 'Access',
       removeFavorite: 'Delete from Favorites',
       favoriteConfirm: 'Are you sure you want to delete from favorites?',

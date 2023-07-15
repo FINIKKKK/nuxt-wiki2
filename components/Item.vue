@@ -38,11 +38,11 @@
             :to="`${teamController.activeTeamSlug}/articles/edit/${props.data.id}`"
             class="btn__item"
           >
-            <svg-icon name="edit" />
+            <i class="fa-regular fa-edit"></i>
             <p>{{ $t.item.edit }}</p>
           </NuxtLink>
           <div class="btn__item">
-            <svg-icon name="lock" />
+            <i class="fa-regular fa-lock"></i>
             <p>{{ $t.item.access }}</p>
           </div>
         </template>
@@ -143,9 +143,9 @@ const onPublicArticle = async () => {
     body: { team_id: teamController.activeTeamId, article_id: props.data.id },
     method: 'POST',
   });
-  console.log(data.value);
+  console.log(data);
 
-  if (data.value) {
+  if (data) {
     emits('removeFromModeration', props.data.id);
   }
 };
@@ -237,7 +237,8 @@ const onPublicArticle = async () => {
       font-size: 14px;
       transition: 0.3s;
     }
-    svg {
+    i {
+      font-size: 14px;
       width: 17px;
       height: 17px;
       margin-right: 7px;
