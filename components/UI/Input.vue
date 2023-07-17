@@ -7,7 +7,6 @@
       error: props.errors?.length,
       address: props.type === 'address',
     }"
-    :data-layout="props.className"
   >
     <div class="inner">
       <!-- Поле ввода -->
@@ -15,16 +14,33 @@
         {{ props.label }}
         <svg-icon v-if="props.type === 'address'" name="tooltip" />
       </label>
-      <input
-        :type="
-          props.type === 'password' && !isShowPassword ? 'password' : 'text'
+
+      <div
+        style="
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
         "
-        v-model="model"
-        maxlength="200"
-        @focus="isFocus = true"
-        @blur="isFocus = false"
-        v-custom-mask="mask"
-      />
+      >
+        <input
+          :type="
+            props.type === 'password' && !isShowPassword ? 'password' : 'text'
+          "
+          v-model="model"
+          maxlength="200"
+          @focus="isFocus = true"
+          @blur="isFocus = false"
+          v-custom-mask="mask"
+        />
+
+        <button
+          @click="emits('btnClick')"
+          v-if="slots.btn"
+          class="btn"
+        >
+          <slot name="btn"></slot>
+        </button>
+      </div>
 
       <!-- Кнопка для показа или скрытия пароля -->
       <div v-if="props.type === 'password'" class="showPassword">
@@ -47,8 +63,6 @@
 <!-- ----------------------------------------------------- -->
 
 <script lang="ts" setup>
-const vCustomMask = vMask();
-
 /**
  * Пропсы ----------------
  */
@@ -57,19 +71,20 @@ const props = defineProps<{
   modelValue: string;
   errors?: string[];
   type?: 'password' | 'address';
-  className?: 'label';
 }>();
 
 /**
  * События ----------------
  */
-const emits = defineEmits(['update:modelValue']);
+const emits = defineEmits(['update:modelValue', 'btnClick']);
 
 /**
- * Системные переменные ----------------
+ * Переменные ----------------
  */
-const isShowPassword = ref(false); // Показывать пароль?
-const isFocus = ref(false); // В фокусе input?
+const vCustomMask = vMask();
+const isShowPassword = ref(false);
+const isFocus = ref(false);
+const slots = useSlots();
 
 /**
  * Вычисляемые значения ----------------
@@ -83,8 +98,7 @@ const model = computed({
     emits('update:modelValue', val);
   },
 });
-
-//
+// Маска
 const mask = computed(() => {
   if (props.type === 'phone') {
     return '+7 (999) 999-99-99';
@@ -99,8 +113,58 @@ const mask = computed(() => {
 
 <style lang="scss" scoped>
 .input {
+  .inner {
+    border: 1px solid $blue2;
+    position: relative;
+    &:hover {
+      border-color: $blue;
+    }
+    label {
+      display: inline-block;
+      pointer-events: none;
+      color: $blue2;
+      font-size: 16px;
+      position: absolute;
+      left: 15px;
+      top: 15px;
+      background-color: $white;
+      padding: 0 5px;
+      transition: 0.3s;
+    }
+    input,
+    textarea {
+      width: 100%;
+      padding: 16px 24px;
+      transition: 0.3s;
+      border-radius: 2px;
+    }
+  }
+  &.focus {
+    border-color: $blue;
+    label {
+      top: -10px;
+      font-size: 14px;
+      color: $blue;
+    }
+  }
+  &.error {
+    border-color: $red2 !important;
+    label {
+      color: $red2 !important;
+    }
+    input,
+    textarea {
+    }
+  }
+  .error {
+    font-size: 12px;
+    color: $red;
+  }
+}
+
+.input {
   &:not(:last-child) {
-    margin-bottom: 32px;
+    margin-bottom: 24px;
   }
   label {
     display: flex;
@@ -146,11 +210,9 @@ const mask = computed(() => {
   }
   &.address {
     .inner {
+      position: relative;
       display: flex;
       align-items: center;
-    }
-    input {
-      margin-right: 8px;
     }
   }
   .url {
@@ -171,9 +233,13 @@ const mask = computed(() => {
   }
 }
 
-.input[data-layout='label'] {
-  label {
-    background-color: $bg;
-  }
+.btn {
+  cursor: pointer;
+  font-size: 14px;
+  padding: 8px 24px;
+  background-color: $blue;
+  color: $white;
+  margin-left: 15px;
+  margin-right: 10px;
 }
 </style>

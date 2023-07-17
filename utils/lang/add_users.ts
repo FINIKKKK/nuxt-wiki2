@@ -1,0 +1,26 @@
+export default {
+  ru: {
+    title: 'Добавление пользователей',
+    text: 'Основные достоинства itl.wiki раскрываются, когда вы работаете в связке с другими участниками команды и обсуждаете проекты',
+    input: 'Введите email адресса через запятую',
+    inputBtn: 'Добавить',
+    select: 'Уровни доступа',
+    smallText1: 'Нажимая кнопку «Создать компанию» вы принимаете',
+    smallLink1: 'Условия обслуживания в отношении продуктов ITL',
+    smallText2: 'и соглашаетесь с',
+    smallLink2: 'Privacy Policy',
+    btn: 'Выслать приглашение',
+  },
+  en: {
+    title: 'Adding Users',
+    text: 'The main advantages of itl.wiki are revealed when you work in conjunction with other team members and discuss projects',
+    input: 'Enter the email address separated by commas',
+    inputBtn: 'Add',
+    select: 'Access levels',
+    smallText1: 'By clicking the "Create a company" button, you accept',
+    smallLink1: 'Terms of Service for ITL products',
+    smallText2: 'and agree with',
+    smallLink2: 'Политикой конфиденциальности',
+    btn: 'Send an invitation',
+  },
+};

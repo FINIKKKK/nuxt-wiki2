@@ -1,5 +1,5 @@
 <template>
-  <NuxtLayout name="main" title="Добавление пользователей">
+  <NuxtLayout name="main" :title="$t.title">
     <!-- Ошибки -->
     <UIWarning
       class="warning"
@@ -9,59 +9,53 @@
 
     <!-- Форма -->
     <div class="form">
-      <div class="content">
-        <p>
-          Основные достоинства itl.wiki раскрываются, когда вы работаете в
-          связке с другими участниками команды и обсуждаете проекты.
-        </p>
-        <div class="emails__input">
-          <!-- Поле ввода -->
-          <UIInput
-            label="Введите email адреса через запятую"
-            v-model="emailUsers"
-            :errors="errors['emails']"
-            @keydown.enter="() => onAddEmail(emailUsers)"
-            @input="onSplitAddEmail"
-          />
-          <div
-            class="btn emails__input-btn"
-            @click="() => onAddEmail(emailUsers)"
-          >
-            Добавить
-          </div>
-        </div>
+      <p class="text">
+        {{ $t.text }}
+      </p>
 
-        <!-- Список emails -->
-        <ul class="emails" v-if="emails.length">
-          <li class="email" v-for="(email, index) in emails" :key="index">
-            <p>{{ email }}</p>
-            <svg-icon name="close" @click="() => onRemoveEmail(email)" />
-          </li>
-        </ul>
-
-        <!-- Селект -->
-        <UISelect
-          :options="roles"
-          v-model="selectValue"
-          type="full"
-          class="select"
-        />
-
-        <small>
-          Нажимая кнопку «Выслать приглашение» вы принимаете
-          <a href="#">Условия обслуживания в отношении продуктов ITL</a> и
-          соглашаетесь с <a href="#">Политикой конфиденциальности</a>
-        </small>
-      </div>
-
-      <button
-        class="btn"
-        :class="requestController.loading[url]"
-        @click="onInviteUsers"
+      <UIInput
+        :label="$t.input"
+        v-model="emailUsers"
+        :errors="errors['emails']"
+        @keydown.enter="() => onAddEmail(emailUsers)"
+        @input="onSplitAddEmail"
+        @btnClick="() => onAddEmail(emailUsers)"
       >
-        Выслать приглашение
-      </button>
+        <template #btn> {{ $t.inputBtn }}</template>
+      </UIInput>
+
+      <!-- Список emails -->
+      <ul class="emails" v-if="emails.length">
+        <li class="email" v-for="(email, index) in emails" :key="index">
+          <p>{{ email }}</p>
+          <svg-icon name="close" @click="() => onRemoveEmail(email)" />
+        </li>
+      </ul>
+
+      <!-- Селект -->
+      <UISelect
+        :options="roles"
+        v-model="selectValue"
+        type="full"
+        class="select"
+        :label="$t.select"
+      />
+
+      <p class="small">
+        {{ $t.smallText1 }}
+        <a href="#">{{ $t.smallLink1 }}</a
+        >{{ $t.smallText2 }}
+        <a href="#">{{ $t.smallLink2 }}</a>
+      </p>
     </div>
+
+    <button
+      class="btn"
+      :class="requestController.loading[url]"
+      @click="onInviteUsers"
+    >
+      {{ $t.btn }}
+    </button>
   </NuxtLayout>
 </template>
 
@@ -75,6 +69,7 @@ import { useTeamStore } from '~/stores/TeamContoller';
 import { useRequestStore } from '~/stores/RequestController';
 import { useFormValidation } from '~/hooks/useFormValidation';
 import { AddUsersScheme, AddUsersScheme2 } from '~/utils/validation';
+import { useTranslate } from '~/hooks/useTranslate';
 
 /**
  * Переменные ----------------
@@ -86,11 +81,8 @@ const teamController = useTeamStore();
 const requestController = useRequestStore();
 const emails = ref([]);
 const router = useRouter();
-
-/**
- * Хуки ----------------
- */
-const { errors, validateForm } = useFormValidation(); // Для валидации формы
+const $t = await useTranslate('add_users');
+const { errors, validateForm } = useFormValidation();
 
 /**
  * Методы ----------------
@@ -149,24 +141,6 @@ const onRemoveEmail = (email: string) => {
 <!-- ----------------------------------------------------- -->
 
 <style lang="scss" scoped>
-.form {
-  p {
-    margin-bottom: 32px;
-  }
-  .select {
-    margin-bottom: 32px;
-  }
-  small {
-    color: $gray;
-    font-size: 14px;
-    line-height: 16px;
-    a {
-      color: $gray;
-      text-decoration: underline;
-    }
-  }
-}
-
 .warning {
   margin: 0px -50px 50px;
 }
@@ -182,6 +156,12 @@ const onRemoveEmail = (email: string) => {
     padding: 8px 24px;
     background-color: $blue;
     color: $white;
+  }
+}
+
+.emais {
+  input {
+    padding-right: 150px;
   }
 }
 
@@ -209,6 +189,20 @@ const onRemoveEmail = (email: string) => {
       height: 17px;
       cursor: pointer;
     }
+  }
+}
+</style>
+
+<style lang="scss">
+.email1 {
+  input {
+    padding-right: 150px;
+  }
+}
+
+.email2 {
+  input {
+    padding-right: 150px;
   }
 }
 </style>

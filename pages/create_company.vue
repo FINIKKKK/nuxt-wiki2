@@ -1,5 +1,5 @@
 <template>
-  <NuxtLayout name="main" title="">
+  <NuxtLayout name="main" :title="$t.title">
     <!-- Отображение ошибок -->
     <UIWarning
       v-if="requestController.loading?.length"
@@ -8,29 +8,26 @@
 
     <!-- Форма -->
     <form class="form" @submit.prevent="onAddTeam">
-      <h2 class="title">Создать компанию</h2>
-
-      <div class="content">
-        <UIInput
-          label="Название вашей компании"
-          v-model="nameValue"
-          :errors="errors['name']"
-        />
-        <UIInput
-          label="Адресс вашей компании"
-          v-model="addressValue"
-          :errors="errors['address']"
-          type="address"
-        />
-        <p>
-          Нажимая кнопку «Создать компанию» вы принимаете
-          <a href="#">Условия обслуживания в отношении продуктов ITL</a> и
-          соглашаетесь с <a href="#">Политикой конфиденциальности.</a>
-        </p>
-      </div>
+      <UIInput
+        :label="$t.inputName"
+        v-model="nameValue"
+        :errors="errors['name']"
+      />
+      <UIInput
+        :label="$t.inputAddress"
+        v-model="addressValue"
+        :errors="errors['address']"
+        type="address"
+      />
+      <p class="small">
+        {{ $t.smallText1 }}
+        <a href="#">{{ $t.smallLink1 }}</a
+        >{{ $t.smallText2 }}
+        <a href="#">{{ $t.smallLink2 }}</a>
+      </p>
 
       <button class="btn" :class="{ disabled: requestController.loading[url] }">
-        Создать компанию
+        {{ $t.btn }}
       </button>
     </form>
   </NuxtLayout>
@@ -41,29 +38,21 @@
 
 <script lang="ts" setup>
 import { useFormValidation } from '~/hooks/useFormValidation';
-import { useUserStore } from '~/stores/UserController';
 import { TeamScheme } from '~/utils/validation';
 import { useRequestStore } from '~/stores/RequestController';
 import { useCustomFetch } from '~/hooks/useCustomFetch';
+import { useTranslate } from '~/hooks/useTranslate';
 
 /**
- * Системные переменные ----------------
+ * Переменные ----------------
  */
-const userStore = useUserStore(); // Хранилище данных пользователя
-const router = useRouter(); // Роутер
-const requestController = useRequestStore(); // Хранилище запроса
-
-/**
- * Пользовательские переменные ----------------
- */
-const url = 'team/add'; // URL запроса
-const nameValue = ref(''); // Значение названия
-const addressValue = ref(''); // Значение адресса
-
-/**
- * Хуки ----------------
- */
-const { errors, validateForm } = useFormValidation(); // Для обработки формы
+const router = useRouter();
+const requestController = useRequestStore();
+const url = 'team/add';
+const nameValue = ref('');
+const addressValue = ref('');
+const { errors, validateForm } = useFormValidation();
+const $t = await useTranslate('create_company');
 
 /**
  * Методы ----------------
@@ -86,7 +75,7 @@ const onAddTeam = async () => {
     method: 'POST',
   });
 
-  if (data.value) {
+  if (data) {
     // Перенаправляем пользователя на главную
     await router.push('/add_users');
   }
@@ -96,4 +85,8 @@ const onAddTeam = async () => {
 <!-- ----------------------------------------------------- -->
 <!-- ----------------------------------------------------- -->
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+.form small {
+  margin-bottom: 25px;
+}
+</style>
