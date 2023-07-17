@@ -7,8 +7,8 @@ export default {
     select: 'Уровни доступа',
     smallText1: 'Нажимая кнопку «Создать компанию» вы принимаете',
     smallLink1: 'Условия обслуживания в отношении продуктов ITL',
-    smallText2: 'и соглашаетесь с',
-    smallLink2: 'Privacy Policy',
+    smallText2: ' и соглашаетесь с',
+    smallLink2: 'Политикой конфиденциальности',
     btn: 'Выслать приглашение',
   },
   en: {
@@ -19,8 +19,8 @@ export default {
     select: 'Access levels',
     smallText1: 'By clicking the "Create a company" button, you accept',
     smallLink1: 'Terms of Service for ITL products',
-    smallText2: 'and agree with',
-    smallLink2: 'Политикой конфиденциальности',
+    smallText2: ' and agree with',
+    smallLink2: 'Privacy Policy',
     btn: 'Send an invitation',
   },
 };

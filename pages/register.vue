@@ -65,7 +65,7 @@ import { useUserStore } from '~/stores/UserController';
 import { useCustomFetch } from '~/hooks/useCustomFetch';
 import { useRequestStore } from '~/stores/RequestController';
 import { TAuthData } from '~/utils/types/account';
-import { useTranslate } from '~/hooks/useTranslate';
+
 
 /**
  * Переменные ----------------

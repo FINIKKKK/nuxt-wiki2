@@ -41,7 +41,7 @@ import { useFormValidation } from '~/hooks/useFormValidation';
 import { TeamScheme } from '~/utils/validation';
 import { useRequestStore } from '~/stores/RequestController';
 import { useCustomFetch } from '~/hooks/useCustomFetch';
-import { useTranslate } from '~/hooks/useTranslate';
+
 
 /**
  * Переменные ----------------

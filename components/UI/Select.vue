@@ -3,7 +3,7 @@
     ref="selectRef"
     class="select"
     :class="{
-      active: isOpen, // Если открыт
+      active: isOpen,
       full: props.type === 'full',
     }"
     :data-layout="props.type"
@@ -12,15 +12,13 @@
     <div class="selected" @click="toggleDropdown">
       <span class="placeholder" v-if="!model">{{ props.label }}</span>
       <span v-else>{{ model?.label }}</span>
-      <svg-icon
-        class="close"
-        name="close"
+      <i
+        class="fa-regular fa-close"
         v-if="!props.type && model"
         @click="removeActiveSelect"
       />
-      <svg-icon
-        class="triangle"
-        name="triangle"
+      <i
+        class="fa-regular fa-caret-down"
         v-if="props.type === 'triangle' || props.type === 'full'"
       />
     </div>
@@ -30,11 +28,9 @@
       <li
         v-for="option in options"
         :key="option.value || option.value"
-        @click="
-          selectOption(option) // Выбирает элемент
-        "
+        @click="selectOption(option)"
         :class="{
-          active: option === model, // Активный элемент
+          active: option === model,
         }"
       >
         {{ option.label || option.label }}
@@ -60,15 +56,7 @@ const props = defineProps<{
   type?: 'triangle' | 'full';
 }>();
 
-/**
- * События ----------------
- */
-const emits = defineEmits(['update:modelValue']);
-
-/**
- * Вычисляемые значения ----------------
- */
-// Значения поля селекта
+// Значения
 const model = computed({
   get() {
     return props.modelValue;
@@ -79,20 +67,25 @@ const model = computed({
 });
 
 /**
- * Пользовательские переменные ----------------
+ * События ----------------
  */
-const isOpen = ref(false); // Открыт ли select
-const selectRef = ref(null); // Ссылка на html элемент селекта
+const emits = defineEmits(['update:modelValue']);
+
+/**
+ * Переменные ----------------
+ */
+const isOpen = ref(false);
+const selectRef = ref(null);
 
 /**
  * Хуки ----------------
  */
-// Закрыть select, при клике вне его области
 useOutsideClick(selectRef, isOpen);
 
 /**
  * Методы ----------------
  */
+// Удалить активный элемент
 const removeActiveSelect = () => {
   model.value = null;
 };
@@ -116,7 +109,7 @@ const selectOption = (option: TSelect) => {
   user-select: none;
   max-width: 300px;
   &.active {
-    .triangle {
+    .fa-caret-down {
       transform: rotate(180deg);
     }
   }
@@ -149,15 +142,10 @@ const selectOption = (option: TSelect) => {
   span {
     font-size: 14px;
   }
-  svg {
-    width: 13px;
-    height: 13px;
-    flex: 0 0 auto;
-  }
-  .triangle {
+  .fa-caret-down {
     margin-left: 10px;
   }
-  .close {
+  .fa-close {
     margin-left: 15px;
     opacity: 0;
   }

@@ -33,13 +33,9 @@
           v-custom-mask="mask"
         />
 
-        <button
-          @click="emits('btnClick')"
-          v-if="slots.btn"
-          class="btn"
-        >
+        <div @click="emits('btnClick')" v-if="slots.btn" class="btn">
           <slot name="btn"></slot>
-        </button>
+        </div>
       </div>
 
       <!-- Кнопка для показа или скрытия пароля -->
@@ -73,6 +69,16 @@ const props = defineProps<{
   type?: 'password' | 'address';
 }>();
 
+// Значение
+const model = computed({
+  get() {
+    return props.modelValue;
+  },
+  set(val) {
+    emits('update:modelValue', val);
+  },
+});
+
 /**
  * События ----------------
  */
@@ -89,15 +95,6 @@ const slots = useSlots();
 /**
  * Вычисляемые значения ----------------
  */
-// Значения поля ввода
-const model = computed({
-  get() {
-    return props.modelValue;
-  },
-  set(val) {
-    emits('update:modelValue', val);
-  },
-});
 // Маска
 const mask = computed(() => {
   if (props.type === 'phone') {
@@ -148,12 +145,11 @@ const mask = computed(() => {
     }
   }
   &.error {
-    border-color: $red2 !important;
+    .inner {
+      border-color: $red2 !important;
+    }
     label {
       color: $red2 !important;
-    }
-    input,
-    textarea {
     }
   }
   .error {

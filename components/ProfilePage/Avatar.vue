@@ -26,7 +26,7 @@ import { useUserStore } from '~/stores/UserController';
 import { useRequestStore } from '~/stores/RequestController';
 import { useCustomFetch } from '~/hooks/useCustomFetch';
 import { useProfileStore } from '~/stores/ProfileController';
-import { useTranslate } from '~/hooks/useTranslate';
+
 
 /**
  * Переменные ----------------

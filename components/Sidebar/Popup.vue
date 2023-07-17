@@ -45,7 +45,7 @@ import { useCustomFetch } from '~/hooks/useCustomFetch';
 import { TSection } from '~/utils/types/secton';
 import { TComponentItem } from '~/utils/types/base';
 import { useSectionsStore } from '~/stores/SectionContoller';
-import { useTranslate } from '~/hooks/useTranslate';
+
 
 /**
  * Переменные ----------------

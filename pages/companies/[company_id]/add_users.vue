@@ -28,7 +28,7 @@
       <ul class="emails" v-if="emails.length">
         <li class="email" v-for="(email, index) in emails" :key="index">
           <p>{{ email }}</p>
-          <svg-icon name="close" @click="() => onRemoveEmail(email)" />
+          <i class="fa-regular fa-close" @click="() => onRemoveEmail(email)" />
         </li>
       </ul>
 
@@ -69,7 +69,7 @@ import { useTeamStore } from '~/stores/TeamContoller';
 import { useRequestStore } from '~/stores/RequestController';
 import { useFormValidation } from '~/hooks/useFormValidation';
 import { AddUsersScheme, AddUsersScheme2 } from '~/utils/validation';
-import { useTranslate } from '~/hooks/useTranslate';
+
 
 /**
  * Переменные ----------------
@@ -184,7 +184,7 @@ const onRemoveEmail = (email: string) => {
       color: $blue;
       margin-right: 10px;
     }
-    svg {
+    i {
       width: 17px;
       height: 17px;
       cursor: pointer;

@@ -19,7 +19,7 @@
 <script lang="ts" setup>
 import { useCustomFetch } from '~/hooks/useCustomFetch';
 import { TFavoriteData } from '~/utils/types/favorites';
-import { useTranslate } from '~/hooks/useTranslate';
+
 
 /**
  * Переменные ----------------

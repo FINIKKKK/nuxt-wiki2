@@ -24,7 +24,7 @@
 import { useCustomFetch } from '~/hooks/useCustomFetch';
 import { TUserData } from '~/utils/types/account';
 import { useTeamStore } from '~/stores/TeamContoller';
-import { useTranslate } from '~/hooks/useTranslate';
+
 
 /**
  * Переменные ----------------

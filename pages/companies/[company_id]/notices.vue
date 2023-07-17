@@ -32,7 +32,7 @@
 <!-- ----------------------------------------------------- -->
 
 <script lang="ts" setup>
-import { useTranslate } from '~/hooks/useTranslate';
+
 import { useCustomFetch } from '~/hooks/useCustomFetch';
 import { useTeamStore } from '~/stores/TeamContoller';
 import { TNotice, TNotifications } from '~/utils/types/notice';

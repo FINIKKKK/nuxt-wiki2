@@ -14,6 +14,9 @@ export const useCustomFetch = async <T>(
   const requestController = useRequestStore(); // Хранилище запроса
   const config = useRuntimeConfig(); // Конфиг
 
+  // Ставим загрузку
+  requestController.addIsLoading({ [url]: true });
+
   // Хук useFetch
   const { data, pending, error } = (await useFetch(url, {
     ...options, // Дополнительные опции
@@ -37,9 +40,10 @@ export const useCustomFetch = async <T>(
     }
   }
 
-  // Сохраняем данные в хранилице
+  // Сохраняем ошибки в хранилице
   requestController.addErrors({ [url]: error.value });
-  requestController.addIsLoading({ [url]: pending.value });
+  // Убираем загрузку
+  requestController.addIsLoading({ [url]: false });
 
   // Возвращаем данные
   return { data: data.value?.data, message: data.value?.messages };

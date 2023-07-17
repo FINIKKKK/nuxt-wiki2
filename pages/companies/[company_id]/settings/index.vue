@@ -12,7 +12,7 @@
     <SettingsPageTeamForm />
 
     <!-- Форма изменения настроек -->
-    <SettingsPageSettingsForm />
+<!--    <SettingsPageSettingsForm />-->
   </NuxtLayout>
 </template>
 
@@ -27,7 +27,8 @@ import { useSettingsStore } from '~/stores/SettingsController';
  */
 const settingsController = useSettingsStore();
 const route = useRoute();
-const nav = [{ label: 'Настройки', link: route.path }];
+const $t = await useTranslate('settings_general');
+const nav = [{ label: $t.title, link: route.path }];
 </script>
 
 <!-- ----------------------------------------------------- -->

@@ -1,13 +1,13 @@
 <template>
   <form class="form" @submit.prevent="onChangeTeamData">
-    <h2 class="title">Профиль компании</h2>
-    <Input
-      label="Название вашей компании"
+    <h2 class="title">{{ $t.team.title }}</h2>
+    <UIInput
+      :label="$t.team.inputName"
       v-model="nameValue"
       :errors="errors['name']"
     />
-    <Input
-      label="Адресс вашей компании"
+    <UIInput
+      :label="$t.team.inputAddress"
       v-model="codeValue"
       :errors="errors['code']"
     />
@@ -20,7 +20,7 @@
       рабочее пространство.
     </p>
     <button class="btn" :class="{ disabled: requestController.loading[url] }">
-      Сохранить
+      {{ $t.team.btn }}
     </button>
   </form>
 </template>
@@ -29,9 +29,7 @@
 <!-- ----------------------------------------------------- -->
 
 <script lang="ts" setup>
-import Input from '~/components/UI/Input.vue';
 import { useTeamStore } from '~/stores/TeamContoller';
-import { TeamScheme } from '~/utils/validation';
 import { useFormValidation } from '~/hooks/useFormValidation';
 import { useSettingsStore } from '~/stores/SettingsController';
 import { useCustomFetch } from '~/hooks/useCustomFetch';
@@ -40,17 +38,14 @@ import { useRequestStore } from '~/stores/RequestController';
 /**
  * Переменные ----------------
  */
+const url = '/team/edit';
 const teamController = useTeamStore();
 const settingsController = useSettingsStore();
 const requestController = useRequestStore();
-const url = '/team/edit'; // URL запроса
 const nameValue = ref(teamController.activeTeam?.team.name || '');
 const codeValue = ref(teamController.activeTeam?.team.code || '');
-
-/**
- * Хуки ----------------
- */
-const { errors, validateForm } = useFormValidation(); // Для валидации формы
+const $t = await useTranslate('settings_general');
+const { errors, validateForm } = useFormValidation();
 
 /**
  * Отслеживание переменных ----------------
@@ -77,8 +72,8 @@ const onChangeTeamData = async () => {
   };
 
   // Вызываем хук для валидации форм
-  const isValid = await validateForm(dto, TeamScheme);
-  if (!isValid) return false;
+  // const isValid = await validateForm(dto, TeamScheme);
+  // if (!isValid) return false;
 
   // Обновляем данные пользователя
   const { message } = await useCustomFetch(url, {
@@ -103,6 +98,7 @@ const onChangeTeamData = async () => {
   width: 688px;
   margin-bottom: 65px;
 }
+
 .text {
   margin-bottom: 25px;
 }

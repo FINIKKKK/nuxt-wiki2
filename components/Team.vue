@@ -27,7 +27,7 @@
 
 <script lang="ts" setup>
 import { TTeam } from '~/utils/types/team';
-import { useTranslate } from '~/hooks/useTranslate';
+
 
 const $t = await useTranslate('teams');
 

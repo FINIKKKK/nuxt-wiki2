@@ -1,12 +1,12 @@
 import * as yup from 'yup';
-import { useTranslate } from '~/hooks/useTranslate';
+
 
 /**
  * --------------------------------
  * Схемы валидации
  * --------------------------------
  */
-const $t = await useTranslate('validation', true);
+const $t = await useTranslate('validation');
 
 /**
  * Авторизация

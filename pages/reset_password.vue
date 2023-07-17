@@ -29,7 +29,7 @@
 
 <script lang="ts" setup>
 import { useRequestStore } from '~/stores/RequestController';
-import { useTranslate } from '~/hooks/useTranslate';
+
 import { useFormValidation } from '~/hooks/useFormValidation';
 import { useCustomFetch } from '~/hooks/useCustomFetch';
 import {ResetPasswordScheme} from "~/utils/validation";

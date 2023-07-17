@@ -24,7 +24,7 @@ import { useUserStore } from '~/stores/UserController';
 import { useCustomFetch } from '~/hooks/useCustomFetch';
 import { TInnerItem } from '~/utils/types/sidebar';
 import { ComputedRef } from 'vue';
-import { useTranslate } from '~/hooks/useTranslate';
+
 
 /**
  * Переменные ----------------

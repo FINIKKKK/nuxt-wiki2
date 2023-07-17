@@ -62,7 +62,7 @@ import { useTeamStore } from '~/stores/TeamContoller';
 import { useCustomFetch } from '~/hooks/useCustomFetch';
 import debounce from 'lodash.debounce';
 import { TSearchData, TSearchResults } from '~/utils/types/sidebar';
-import { useTranslate } from '~/hooks/useTranslate';
+
 
 /**
  * Переменные ----------------

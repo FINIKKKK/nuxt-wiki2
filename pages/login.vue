@@ -49,7 +49,7 @@ import { LoginScheme } from '~/utils/validation';
 import { useCustomFetch } from '~/hooks/useCustomFetch';
 import { useRequestStore } from '~/stores/RequestController';
 import { TAuthData } from '~/utils/types/account';
-import { useTranslate } from '~/hooks/useTranslate';
+
 
 /**
  * Переменные ----------------

@@ -10,16 +10,14 @@ export const useUserStore = defineStore('userController', () => {
   /**
    * Свойства ----------------
    */
-  const user: Ref<TUser | null> = ref(null); // Пользователь
+  const user: Ref<TUser | null> = ref(null);
 
   /**
    * Методы ----------------
    */
-  // Сохранить пользователя
   const setUser = (value: TUser | null) => {
     user.value = value;
   };
-  // Обновить данные
   const updateUserData = (value: UserDataDto) => {
     if (user.value) {
       user.value.first_name = value.first_name;
@@ -27,7 +25,6 @@ export const useUserStore = defineStore('userController', () => {
       user.value.email = value.email;
     }
   };
-  // Обновить аватарку
   const updateUserAvatar = (value: string) => {
     if (user.value) {
       user.value.picture = value;

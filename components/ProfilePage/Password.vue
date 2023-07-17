@@ -34,7 +34,7 @@ import { PasswordScheme } from '~/utils/validation';
 import { useProfileStore } from '~/stores/ProfileController';
 import { useCustomFetch } from '~/hooks/useCustomFetch';
 import { useRequestStore } from '~/stores/RequestController';
-import { useTranslate } from '~/hooks/useTranslate';
+
 
 /**
  * Переменные ----------------

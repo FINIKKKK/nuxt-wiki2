@@ -16,7 +16,7 @@
 <script lang="ts" setup>
 import { useCustomFetch } from '~/hooks/useCustomFetch';
 import { TArticle } from '~/utils/types/article';
-import { useTranslate } from '~/hooks/useTranslate';
+
 
 /**
  * Переменные ----------------

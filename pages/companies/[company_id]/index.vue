@@ -6,7 +6,7 @@
 <!-- ----------------------------------------------------- -->
 
 <script lang="ts" setup>
-import { useTranslate } from '~/hooks/useTranslate';
+
 
 /**
  * Переменные ----------------

@@ -1,21 +1,21 @@
 <template>
   <form class="form" @submit.prevent="onChangeSettings">
-    <h2 class="title">Региональные настройки</h2>
+    <h2 class="title">{{ $t.region.title }}</h2>
     <UISelect
-      label="Язык интерфейса"
+      :label="$t.region.selectLang"
       :options="languages"
       v-model="langValue"
       type="full"
       class="select"
     />
     <UISelect
-      label="Формат даты"
+      :label="$t.region.selectDate"
       :options="[]"
       v-model="dateValue"
       type="full"
       class="select"
     />
-    <button class="btn">Сохранить</button>
+    <button class="btn">{{ $t.region.btn }}</button>
   </form>
 </template>
 
@@ -37,6 +37,7 @@ const langValue = ref(
   languages.find((obj) => obj.value === langCookie.value) || languages[0],
 );
 const dateValue = ref(null);
+const $t = await useTranslate('settings_general');
 
 /**
  * Методы ----------------

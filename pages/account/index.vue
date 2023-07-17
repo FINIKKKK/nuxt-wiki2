@@ -28,7 +28,7 @@
 
 <script lang="ts" setup>
 import { useProfileStore } from '~/stores/ProfileController';
-import { useTranslate } from '~/hooks/useTranslate';
+
 
 /**
  * Переменные ----------------

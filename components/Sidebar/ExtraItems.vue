@@ -31,7 +31,7 @@
 
 <script lang="ts" setup>
 import { useSectionsStore } from '~/stores/SectionContoller';
-import { useTranslate } from '~/hooks/useTranslate';
+
 
 /**
  * Переменные ----------------

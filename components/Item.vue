@@ -78,7 +78,7 @@ import { useDateString } from '~/hooks/useDateString';
 import { TArticle } from '~/utils/types/article';
 import { TSection } from '~/utils/types/secton';
 import { useCustomFetch } from '~/hooks/useCustomFetch';
-import { useTranslate } from '~/hooks/useTranslate';
+
 
 /**
  * Пропсы ----------------

@@ -22,7 +22,7 @@
 import { useSidebarStore } from '~/stores/SidebarController';
 import { useTeamStore } from '~/stores/TeamContoller';
 import { useSectionsStore } from '~/stores/SectionContoller';
-import { useTranslate } from '~/hooks/useTranslate';
+
 
 /**
  * Переменные ----------------

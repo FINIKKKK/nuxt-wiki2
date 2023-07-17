@@ -60,7 +60,7 @@ import { useCustomFetch } from '~/hooks/useCustomFetch';
 import { TMessage } from '~/utils/types';
 import { useSectionsStore } from '~/stores/SectionContoller';
 import { TAbility } from '~/utils/types/team';
-import { useTranslate } from '~/hooks/useTranslate';
+
 
 /**
  * Пропсы ----------------
