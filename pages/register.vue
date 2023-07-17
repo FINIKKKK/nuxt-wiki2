@@ -1,10 +1,10 @@
 <template>
   <NuxtLayout name="auth">
     <form class="form-auth" @submit.prevent="onRegister">
-      <h1>Регистрация</h1>
+      <h1>{{ $t.register.title }}</h1>
       <p>
-        У вас уже есть аккаунт?
-        <NuxtLink href="/login">Войдите в систему</NuxtLink>
+        {{ $t.register.text }}
+        <NuxtLink href="/login">{{ $t.register.link }}</NuxtLink>
       </p>
 
       <div class="errors">
@@ -16,40 +16,40 @@
       </div>
 
       <UIInput
-        label="Имя"
+        :label="$t.register.inputFirstName"
         v-model="firstNameValue"
         :errors="errors['first_name']"
       />
       <UIInput
-        label="Фамилия"
+        :label="$t.register.inputLastName"
         v-model="lastNameValue"
         :errors="errors['last_name']"
       />
       <UIInput
-        label="Электронная почта"
+        :label="$t.register.inputEmail"
         v-model="emailValue"
         :errors="errors['email']"
       />
       <UIInput
-        label="Номер мобильного телефона"
+        :label="$t.register.inputPhone"
         v-model="phoneValue"
         :errors="errors['phone']"
+        type="phone"
       />
       <UIInput
-        label="Пароль"
-        type="password"
+        :label="$t.register.inputPassword"
         v-model="passwordValue"
         :errors="errors['password']"
+        type="password"
       />
 
       <button class="btn" :class="{ disabled: requestController.loading[url] }">
-        Зарегистрироваться
+        {{ $t.register.btn }}
       </button>
       <small
-        >Нажимая на кнопку, вы соглашаетесь с условиями<a href="#"
-          >Оферты и лицензионного договора</a
-        >
-        и <a href="#">Политикой обработки персональных данных.</a></small
+        >{{ $t.register.small }}<a href="#">{{ $t.register.smallLink1 }}</a>
+        {{ $t.register.smallArticle }}
+        <a href="#">{{ $t.register.smallLink2 }}</a></small
       >
     </form>
   </NuxtLayout>
@@ -65,29 +65,23 @@ import { useUserStore } from '~/stores/UserController';
 import { useCustomFetch } from '~/hooks/useCustomFetch';
 import { useRequestStore } from '~/stores/RequestController';
 import { TAuthData } from '~/utils/types/account';
+import { useTranslate } from '~/hooks/useTranslate';
 
 /**
- * Системные переменные ----------------
+ * Переменные ----------------
  */
-const token = useCookie('token'); // Токен из куки
-const userController = useUserStore(); // Хранилище данных пользователя
-const requestController = useRequestStore(); // Хранилище запроса
-const router = useRouter(); // Роутер
-
-/**
- * Пользовательские переменные ----------------
- */
-const url = 'account/register/secure'; // URL запроса
-const firstNameValue = ref(''); // Значение имени
-const lastNameValue = ref(''); // Значение фамилии
-const emailValue = ref(''); // Значение email
-const phoneValue = ref(''); // Значение телефона
-const passwordValue = ref(''); // Значение пароля
-
-/**
- * Хуки ----------------
- */
-const { errors, validateForm } = useFormValidation(); // Для валидации формы
+const token = useCookie('token');
+const userController = useUserStore();
+const requestController = useRequestStore();
+const router = useRouter();
+const url = 'account/register/secure';
+const firstNameValue = ref('');
+const lastNameValue = ref('');
+const emailValue = ref('');
+const phoneValue = ref('');
+const passwordValue = ref('');
+const { errors, validateForm } = useFormValidation();
+const $t = await useTranslate('auth');
 
 /**
  * Методы ----------------

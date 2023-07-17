@@ -23,6 +23,7 @@
         maxlength="200"
         @focus="isFocus = true"
         @blur="isFocus = false"
+        v-custom-mask="mask"
       />
 
       <!-- Кнопка для показа или скрытия пароля -->
@@ -46,6 +47,8 @@
 <!-- ----------------------------------------------------- -->
 
 <script lang="ts" setup>
+const vCustomMask = vMask();
+
 /**
  * Пропсы ----------------
  */
@@ -80,6 +83,15 @@ const model = computed({
     emits('update:modelValue', val);
   },
 });
+
+//
+const mask = computed(() => {
+  if (props.type === 'phone') {
+    return '+7 (999) 999-99-99';
+  } else {
+    return null;
+  }
+});
 </script>
 
 <!-- ----------------------------------------------------- -->
@@ -103,6 +115,13 @@ const model = computed({
   input {
     font-size: 16px;
     line-height: 20px;
+    transition: 0s;
+  }
+  input:-webkit-autofill,
+  input:-webkit-autofill:hover,
+  input:-webkit-autofill:focus,
+  input:-webkit-autofill:active {
+    -webkit-box-shadow: 0 0 0 30px white inset !important;
   }
   .showPassword {
     position: absolute;

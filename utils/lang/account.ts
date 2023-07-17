@@ -27,8 +27,8 @@ export default {
     title: 'Profile',
     userData: {
       title: 'Personal data',
-      inputFirstName: 'FirstName',
-      inputLastName: 'LastName',
+      inputFirstName: 'Firstname',
+      inputLastName: 'Lastname',
       inputEmail: 'Email',
       btn: 'Save',
       successMessage: 'Data changed successfully',

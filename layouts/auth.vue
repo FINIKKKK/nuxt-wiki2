@@ -2,7 +2,7 @@
   <main>
     <div class="content">
       <NuxtLink to="/" class="logo">
-        <img src="@/assets/img/svg/full_logo.svg" alt="logo" />
+        <img src="/assets/img/full_logo.svg" alt="logo" />
       </NuxtLink>
 
       <!-- Слот -->
@@ -34,7 +34,7 @@ main {
 
 .logo {
   width: 135px;
-  margin-bottom: 109px;
+  margin-bottom: 70px;
   img {
     width: 100%;
   }
