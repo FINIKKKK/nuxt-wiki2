@@ -31,6 +31,13 @@ export const RegisterScheme = yup.object().shape({
 });
 
 /**
+ * Восстановить пароль
+ */
+export const ResetPasswordScheme = yup.object().shape({
+  email: yup.string().required($t.required).email($t.email),
+});
+
+/**
  * Создание команды
  */
 export const TeamScheme = yup.object().shape({

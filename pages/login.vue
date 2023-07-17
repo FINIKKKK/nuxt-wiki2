@@ -1,10 +1,10 @@
 <template>
   <NuxtLayout name="auth">
     <form class="form-auth" @submit.prevent="onLogin">
-      <h1>Вход в систему</h1>
+      <h1>{{ $t.login.title }}</h1>
       <p>
-        Еще нет аккаунта?
-        <NuxtLink href="/register">Зарегистрироваться</NuxtLink>
+        {{ $t.login.text }}
+        <NuxtLink href="/register">{{ $t.login.link }}</NuxtLink>
       </p>
 
       <div class="errors">
@@ -16,22 +16,24 @@
       </div>
 
       <UIInput
-        label="Электронная почта"
+        :label="$t.login.inputEmail"
         v-model="emailValue"
         :errors="errors['email']"
       />
       <UIInput
-        label="Пароль"
+        :label="$t.login.inputPassword"
         v-model="passwordValue"
         type="password"
         :errors="errors['password']"
       />
 
       <p>
-        <NuxtLink href="/reset_password">Забыли пароль?</NuxtLink>
+        <NuxtLink href="/reset_password">{{
+          $t.login.forgotPassword
+        }}</NuxtLink>
       </p>
       <button class="btn" :class="{ disabled: requestController.loading[url] }">
-        Войти
+        {{ $t.login.btn }}
       </button>
     </form>
   </NuxtLayout>
@@ -47,26 +49,20 @@ import { LoginScheme } from '~/utils/validation';
 import { useCustomFetch } from '~/hooks/useCustomFetch';
 import { useRequestStore } from '~/stores/RequestController';
 import { TAuthData } from '~/utils/types/account';
+import { useTranslate } from '~/hooks/useTranslate';
 
 /**
- * Системные переменные ----------------
+ * Переменные ----------------
  */
-const token = useCookie('token'); // Токен из куки
-const userController = useUserStore(); // Хранилище данных пользователя
-const router = useRouter(); // Роутер
-const requestController = useRequestStore(); // Хранилище запроса
-
-/**
- * Пользовательские переменные ----------------
- */
-const url = 'account/auth'; // URL запроса
-const emailValue = ref(''); // Значение email
-const passwordValue = ref(''); // Значение пароля
-
-/**
- * Хуки ----------------
- */
-const { errors, validateForm } = useFormValidation(); // Для валидации формы
+const token = useCookie('token');
+const userController = useUserStore();
+const router = useRouter();
+const requestController = useRequestStore();
+const $t = await useTranslate('auth');
+const url = 'account/auth';
+const emailValue = ref('');
+const passwordValue = ref('');
+const { errors, validateForm } = useFormValidation();
 
 /**
  * Методы ----------------

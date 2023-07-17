@@ -24,6 +24,11 @@ export default {
       btn: 'Войти',
       forgotPassword: 'Забыли пароль?',
     },
+    resetPassword: {
+      title: 'Восстановление пароля',
+      inputEmail: 'Введите адрес электронной почты',
+      btn: 'Продолжить',
+    },
   },
   en: {
     register: {
@@ -49,6 +54,11 @@ export default {
       inputPassword: 'Password',
       btn: 'Log in',
       forgotPassword: 'Forgot your password?',
+    },
+    resetPassword: {
+      title: 'Password recovery',
+      inputEmail: 'Enter your email address',
+      btn: 'Continue',
     },
   },
 };
