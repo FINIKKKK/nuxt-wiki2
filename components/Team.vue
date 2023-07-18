@@ -1,6 +1,6 @@
 <template>
   <li class="team">
-    <NuxtLink :to="`/companies/${props.data.id}`" class="title"
+    <NuxtLink :to="`/companies/${props.data.id}/activity`" class="title"
       >{{ props.data.name }}
     </NuxtLink>
     <ul class="info">
@@ -27,7 +27,6 @@
 
 <script lang="ts" setup>
 import { TTeam } from '~/utils/types/team';
-
 
 const $t = await useTranslate('teams');
 

@@ -46,7 +46,6 @@ import { TSection } from '~/utils/types/secton';
 import { TComponentItem } from '~/utils/types/base';
 import { useSectionsStore } from '~/stores/SectionContoller';
 
-
 /**
  * Переменные ----------------
  */

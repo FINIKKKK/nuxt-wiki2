@@ -25,6 +25,11 @@ import { useCustomFetch } from '~/hooks/useCustomFetch';
 import { TInnerItem } from '~/utils/types/sidebar';
 import { ComputedRef } from 'vue';
 
+/**
+ * Пропсы ----------------
+ */
+const props = defineProps<{
+}>();
 
 /**
  * Переменные ----------------
@@ -148,8 +153,9 @@ const innerItems: TInnerItem[] = [
  */
 // Активный элемент
 const activeItem: ComputedRef<TInnerItem | null> = computed(() => {
+  console.log(props.activeItem);
   return (
-    innerItems.find((obj) => obj.name === sidebarController.activeItem) || null
+    innerItems.find((obj) => obj.name ===  sidebarController.activeItem) || null
   );
 });
 </script>

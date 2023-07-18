@@ -23,7 +23,6 @@ import { useSidebarStore } from '~/stores/SidebarController';
 import { useTeamStore } from '~/stores/TeamContoller';
 import { useSectionsStore } from '~/stores/SectionContoller';
 
-
 /**
  * Переменные ----------------
  */
@@ -44,15 +43,26 @@ const isShow = computed(
 );
 // Ссылка назад
 const link = computed(() => {
-  if (sectionsController.breadCrumbs?.length !== 1) {
+  if (
+    sectionsController.breadCrumbs?.length === 1 &&
+    sectionsController.isArticle
+  ) {
     return `${teamController.activeTeamSlug}/sections/${
-      sectionsController.breadCrumbs[1]?.id ===
-        sectionsController.section?.id && sectionsController.isArticle
-        ? sectionsController.breadCrumbs[1]?.id
-        : sectionsController.breadCrumbs[0]?.id
+      sectionsController.breadCrumbs[sectionsController.breadCrumbs?.length - 1]
+        ?.id
+    }`;
+  } else if (sectionsController.breadCrumbs?.length !== 1) {
+    return `${teamController.activeTeamSlug}/sections/${
+      sectionsController.isArticle
+        ? sectionsController.breadCrumbs[
+            sectionsController.breadCrumbs?.length - 1
+          ]?.id
+        : sectionsController.breadCrumbs[
+            sectionsController.breadCrumbs?.length - 2
+          ]?.id
     }`;
   } else {
-    return `${teamController.activeTeamSlug}`;
+    return `${teamController.activeTeamSlug}/activity`;
   }
 });
 

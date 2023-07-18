@@ -20,30 +20,18 @@ import { useOutsideClick } from '~/hooks/useOutsideClick';
 import { useSidebarStore } from '~/stores/SidebarController';
 
 /**
- * Системные переменные ----------------
+ * Переменные ----------------
  */
-const route = useRoute(); // Роут
-const sidebarController = useSidebarStore(); // Хранилище сайдбара
-
-/**
- * Пользовательские переменные ----------------
- */
-const popupRef = ref(null); // Ref-ссылка на элемент попапа
+const route = useRoute();
+const sidebarController = useSidebarStore();
+const popupRef = ref(null);
 
 /**
  * Хуки ----------------
  */
 // Скрывать попап, если нажатие было вне его области
 useOutsideClick(popupRef, null, () => {
-  const pages = [
-    '/account',
-    '/settings',
-    '/moderation',
-    '/my_works',
-    '/sections',
-    '/articles',
-    '/companies',
-  ];
+  const pages = ['/companies', '/account'];
   if (!pages.some((page) => route.path.includes(page))) {
     sidebarController.close();
   }
@@ -58,32 +46,30 @@ const isShow = computed(
     sidebarController.activeItem === 'home' &&
     (route.path.includes('/sections') || route.path.includes('/articles')),
 );
+
 // Какой элемент отображать в сайдбар изначально
-onMounted(() => {
-  const homePages = ['/moderation', '/my_works', '/sections', '/articles'];
-  const settingsPages = ['/settings'];
-
-  if (homePages.some((page) => route.path.includes(page))) {
-    sidebarController.open('home');
-  } else if (
-    !homePages.some((page) => route.path.includes(page)) &&
-    route.path.includes('/companies')
-  ) {
-    sidebarController.open('home');
-  } else if (settingsPages.some((page) => route.path.includes(page))) {
-    sidebarController.open('settings');
-  } else {
-    sidebarController.close();
-  }
-
-  if (isShow.value) {
-    sidebarController.changeComponent('SidebarExtraItems');
-    sidebarController.closeMap();
-  } else {
-    sidebarController.closeMap();
-    sidebarController.changeComponent('SidebarMainItems');
-  }
-});
+const homePages = [
+  '/moderation',
+  '/my_works',
+  '/activity',
+  '/sections',
+  '/articles',
+];
+const settingsPages = ['/settings'];
+if (homePages.some((page) => route.path.includes(page))) {
+  sidebarController.open('home');
+} else if (settingsPages.some((page) => route.path.includes(page))) {
+  sidebarController.open('cog');
+} else {
+  sidebarController.close();
+}
+if (isShow.value) {
+  sidebarController.changeComponent('SidebarExtraItems');
+  sidebarController.closeMap();
+} else {
+  sidebarController.closeMap();
+  sidebarController.changeComponent('SidebarMainItems');
+}
 </script>
 
 <!-- ----------------------------------------------------- -->
@@ -92,7 +78,6 @@ onMounted(() => {
 <style lang="scss" scoped>
 .sidebar {
   z-index: 200;
-
   height: 100vh;
   display: flex;
   flex-direction: column;

@@ -7,11 +7,10 @@
    Поле ввода
   ---------------------------------------->
   <UIInput
-    class="input"
+    class="search__input"
     :label="$t.search.input"
     v-model="searchValue"
     @input="onSearch"
-    className="label"
   />
 
   <!--------------------------------------
@@ -115,6 +114,14 @@ const onSearch = debounce(async () => {
   h4 {
     color: $gray;
     margin-bottom: 15px;
+  }
+}
+</style>
+
+<style lang="scss">
+.search__input {
+  .inner label {
+    background-color: $bg !important;
   }
 }
 </style>

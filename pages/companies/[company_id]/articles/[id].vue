@@ -61,6 +61,7 @@ const { data: article } = await useCustomFetch<TArticleData>(`team/article`, {
 });
 console.log(article);
 // Сохраняем комментарии в хранилище
+sectionsController.setIsArticle(true);
 commentsController.setComments(article.article.comments);
 elemController.changeTypeElem('article');
 elemController.setArticle(article);

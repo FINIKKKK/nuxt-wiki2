@@ -67,11 +67,11 @@ import { useTeamStore } from '~/stores/TeamContoller';
 import { useSectionsStore } from '~/stores/SectionContoller';
 
 /**
- * Системные переменные ----------------
+ * Переменные ----------------
  */
-const route = useRoute(); // Роут
-const sectionsController = useSectionsStore(); // Хранилище сайдбара
-const teamStore = useTeamStore(); // Хранилище активной команды
+const route = useRoute();
+const sectionsController = useSectionsStore();
+const teamStore = useTeamStore();
 </script>
 
 <!-- ----------------------------------------------------- -->

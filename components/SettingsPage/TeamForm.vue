@@ -11,13 +11,20 @@
       v-model="codeValue"
       :errors="errors['code']"
     />
-    <p class="text">
+    <p class="text" v-if="userController.lang === 'ru'">
       Поделитесь ссылкой
-      <NuxtLink :to="`/companies/${teamController.activeTeamId}`"
+      <NuxtLink :to="`/companies/${teamController.activeTeamId}/activity`"
         >{{ teamController.activeTeam?.team.code }}.itl.wiki
       </NuxtLink>
       чтобы добавить кого-либо с разрешенным доменом электронной почты в ваше
-      рабочее пространство.
+      рабочее пространство
+    </p>
+    <p class="text" v-if="userController.lang === 'en'">
+      Share the
+      <NuxtLink :to="`/companies/${teamController.activeTeamId}/activity`"
+        >{{ teamController.activeTeam?.team.code }}.itl.wiki
+      </NuxtLink>
+      link to add someone with an authorized email domain to your workspace
     </p>
     <button class="btn" :class="{ disabled: requestController.loading[url] }">
       {{ $t.team.btn }}
@@ -34,6 +41,7 @@ import { useFormValidation } from '~/hooks/useFormValidation';
 import { useSettingsStore } from '~/stores/SettingsController';
 import { useCustomFetch } from '~/hooks/useCustomFetch';
 import { useRequestStore } from '~/stores/RequestController';
+import { useUserStore } from '~/stores/UserController';
 
 /**
  * Переменные ----------------
@@ -42,6 +50,7 @@ const url = '/team/edit';
 const teamController = useTeamStore();
 const settingsController = useSettingsStore();
 const requestController = useRequestStore();
+const userController = useUserStore();
 const nameValue = ref(teamController.activeTeam?.team.name || '');
 const codeValue = ref(teamController.activeTeam?.team.code || '');
 const $t = await useTranslate('settings_general');
