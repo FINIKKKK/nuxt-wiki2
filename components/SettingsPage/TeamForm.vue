@@ -72,8 +72,8 @@ const onChangeTeamData = async () => {
   };
 
   // Вызываем хук для валидации форм
-  // const isValid = await validateForm(dto, TeamScheme);
-  // if (!isValid) return false;
+  const isValid = await validateForm(dto, TeamScheme);
+  if (!isValid) return false;
 
   // Обновляем данные пользователя
   const { message } = await useCustomFetch(url, {

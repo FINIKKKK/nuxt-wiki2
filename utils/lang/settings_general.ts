@@ -13,6 +13,10 @@ export default {
       selectDate: 'Формат даты',
       btn: 'Сохранить',
     },
+    languages: {
+      ru: 'Русский',
+      en: 'Английский',
+    },
   },
   en: {
     title: 'Settings',
@@ -27,6 +31,10 @@ export default {
       selectLang: 'Interface language',
       selectDate: 'Date format',
       btn: 'Save',
+    },
+    languages: {
+      ru: 'Russian',
+      en: 'English',
     },
   },
 };

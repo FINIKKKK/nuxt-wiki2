@@ -12,7 +12,7 @@
     <SettingsPageTeamForm />
 
     <!-- Форма изменения настроек -->
-<!--    <SettingsPageSettingsForm />-->
+    <SettingsPageSettingsForm />
   </NuxtLayout>
 </template>
 

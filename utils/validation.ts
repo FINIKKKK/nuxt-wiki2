@@ -1,92 +1,90 @@
 import * as yup from 'yup';
 
-
 /**
  * --------------------------------
  * Схемы валидации
  * --------------------------------
  */
-const $t = await useTranslate('validation');
 
 /**
  * Авторизация
  */
 export const LoginScheme = yup.object().shape({
-  email: yup.string().email($t.email).required($t.required),
-  password: yup.string().required($t.required),
+  email: yup.string().email('email').required('required'),
+  password: yup.string().required('required'),
 });
 
 /**
  * Регистрация
  */
 export const RegisterScheme = yup.object().shape({
-  first_name: yup.string().required($t.required),
-  last_name: yup.string().required($t.required),
-  email: yup.string().required($t.required).email($t.email),
+  first_name: yup.string().required('required'),
+  last_name: yup.string().required('required'),
+  email: yup.string().required('required').email('email'),
   phone: yup
     .string()
-    .required($t.required)
-    .matches(/^\+?\d{1,3}-?\d{3}-?\d{3}-?\d{2}-?\d{2}$/, $t.phone),
-  password: yup.string().required($t.required).min(6, $t.passsword),
+    .required('required')
+    .matches(/^\+?\d{1,3}-?\d{3}-?\d{3}-?\d{2}-?\d{2}$/, 'phone'),
+  password: yup.string().required('required').min(6, 'password'),
 });
 
 /**
  * Восстановить пароль
  */
 export const ResetPasswordScheme = yup.object().shape({
-  email: yup.string().required($t.required).email($t.email),
+  email: yup.string().required('required').email('email'),
 });
 
 /**
  * Создание команды
  */
 export const TeamScheme = yup.object().shape({
-  name: yup.string().required($t.required),
-  code: yup.string().min(6, $t.address).required($t.required),
+  name: yup.string().required('required'),
+  code: yup.string().min(6, 'address').required('required'),
 });
 
 /**
  * Редактирование данных пользователя
  */
 export const UserDataScheme = yup.object().shape({
-  first_name: yup.string().required($t.required),
-  last_name: yup.string().required($t.required),
-  email: yup.string().required($t.required).email($t.email),
+  first_name: yup.string().required('required'),
+  last_name: yup.string().required('required'),
+  email: yup.string().required('required').email('email'),
 });
 
 /**
  * Изменения пароля пользователя
  */
 export const PasswordScheme = yup.object().shape({
-  password: yup.string().required($t.required),
-  new_password: yup.string().required($t.password).min(6, $t.passsword),
+  password: yup.string().required('required'),
+  new_password: yup.string().required('password').min(6, 'password'),
   password_confirmation: yup
     .string()
-    .required($t.required)
-    .oneOf([yup.ref('new_password')], $t.password_confirm),
+    .required('required')
+    .oneOf([yup.ref('new_password')], 'password_confirm'),
 });
 
 /**
  * Создание раздела ----------------
  */
 export const SectionScheme = yup.object().shape({
-  name: yup.string().min(5, $t.section.title).required($t.section.required),
+  name: yup.string().min(5, 'title').required('section.required'),
 });
 
 /**
  * Создание статьи
  */
 export const ArticleScheme = yup.object().shape({
-  name: yup.string().required($t.article.title),
-  section_id: yup.number().required($t.article.section),
-  tabs: yup.array().min(1, $t.article.tabs),
+  name: yup.string().required('article.title'),
+  section_id: yup.number().required('article.section'),
+  tabs: yup.array().min(1, 'article.tabs'),
 });
 
 /**
  * Приглашение пользователей 1
  */
 export const AddUsersScheme = yup.object().shape({
-  emails: yup.array().min(1, $t.user),
+  emails: yup.array().min(1, 'user'),
 });
 
 /**
@@ -95,8 +93,8 @@ export const AddUsersScheme = yup.object().shape({
 export const AddUsersScheme2 = yup.object().shape({
   emails: yup
     .string()
-    .required($t.required2)
-    .test('valid-emails', $t.email, function (value) {
+    .required('required2')
+    .test('valid-emails', 'email', function (value) {
       if (!value) {
         // Поле пустое, ничего не вводили
         return true;

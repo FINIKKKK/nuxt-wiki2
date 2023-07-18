@@ -50,7 +50,7 @@
       <div v-if="type === 'address'" class="url">itl.wiki</div>
     </div>
     <span class="error" v-if="errors">
-      {{ errors[0] }}
+      {{ $t[errors[0]] }}
     </span>
   </div>
 </template>
@@ -78,6 +78,7 @@ const model = computed({
     emits('update:modelValue', val);
   },
 });
+const $t = await useTranslate('validation');
 
 /**
  * События ----------------

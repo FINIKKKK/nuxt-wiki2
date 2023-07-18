@@ -10,6 +10,7 @@ export const useTranslate = async (component: string) => {
   } catch (error) {
     console.error(`Ошибка при импорте модуля ${component}:`, error);
   }
+  console.log();
 
-  return t?.default?.[lang.value || 'en'];
+  return t.default?.[lang.value || 'ru'];
 };

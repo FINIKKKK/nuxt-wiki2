@@ -25,19 +25,25 @@
 <script lang="ts" setup>
 import { useTeamStore } from '~/stores/TeamContoller';
 import { useSettingsStore } from '~/stores/SettingsController';
-import { languages } from '~/utils/data';
+import { useUserStore } from '~/stores/UserController';
 
 /**
  * Переменные ----------------
  */
 const langCookie = useCookie('lang');
 const teamController = useTeamStore();
+const userController = useUserStore();
 const settingsController = useSettingsStore();
+const dateValue = ref(null);
+const $t = await useTranslate('settings_general');
+const router = useRouter();
+const languages = [
+  { value: 'ru', label: $t.languages.ru },
+  { value: 'en', label: $t.languages.en },
+];
 const langValue = ref(
   languages.find((obj) => obj.value === langCookie.value) || languages[0],
 );
-const dateValue = ref(null);
-const $t = await useTranslate('settings_general');
 
 /**
  * Методы ----------------
@@ -46,6 +52,7 @@ const $t = await useTranslate('settings_general');
 const onChangeSettings = async () => {
   langCookie.value = langValue.value.value;
   settingsController.setMessage('Настройки успешно обновлены');
+  window.location.reload()
 };
 </script>
 
