@@ -11,22 +11,18 @@
     </th>
     <th>-</th>
     <th class="controls" ref="refPopup">
-      <svg-icon
-        name="options"
-        class="options"
-        @click="isShowPopup = !isShowPopup"
-      />
+      <i class="fa-regular fa-ellipsis-h" @click="isShowPopup = !isShowPopup" />
       <ul class="popup" v-if="isShowPopup">
         <li class="key">
-          <svg-icon name="key" />
+          <i class="fa-regular fa-key" />
           <p>Изменить уровень доступа</p>
         </li>
         <li @click="onRemoveFromTeam" v-if="props.type !== 'invite'">
-          <svg-icon name="cancel" />
+          <i class="fa-regular fa-cancel" />
           <p>Удалить из компании</p>
         </li>
         <li @click="onCancelInvite" v-if="props.type === 'invite'">
-          <svg-icon name="cancel" />
+          <i class="fa-regular fa-cancel" />
           <p>Отменить приглашение</p>
         </li>
       </ul>
@@ -117,14 +113,16 @@ const onCancelInvite = async () => {
 
 .controls {
   position: relative;
-  .options {
-    margin-bottom: -10px;
+  .fa-ellipsis-h {
     width: 35px;
     height: 35px;
     transform: rotate(90deg);
     cursor: pointer;
     border-radius: 50%;
     padding: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     &:hover {
       background-color: $blue3;
     }
@@ -133,12 +131,6 @@ const onCancelInvite = async () => {
     width: 250px;
     top: 35px;
     right: 10px;
-    .key {
-      svg {
-        width: 17px;
-        height: 17px;
-      }
-    }
   }
 }
 </style>

@@ -38,6 +38,7 @@ a {
   color: $blue;
   transition: 0.2s;
   font-size: 16px;
+  line-height: 19px;
   text-decoration: none;
 }
 
@@ -202,10 +203,10 @@ a.btn {
         text-decoration: none;
       }
     }
-    svg {
+    i {
       margin-right: 15px;
       width: 15px;
-      height: 15px;
+      height: 18px;
     }
     &:hover {
       background-color: $blue3;
