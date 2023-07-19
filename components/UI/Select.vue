@@ -13,7 +13,7 @@
       <span class="placeholder" v-if="!model">{{ props.label }}</span>
       <span v-else>{{ model?.label }}</span>
       <i
-        class="fa-regular fa-close"
+        class="fa-regular fa-times"
         v-if="!props.type && model"
         @click="removeActiveSelect"
       />
@@ -127,7 +127,7 @@ const selectOption = (option: TSelect) => {
   align-items: center;
   color: $black;
   &:hover {
-    .close {
+    .fa-times {
       opacity: 1;
     }
   }
@@ -145,7 +145,7 @@ const selectOption = (option: TSelect) => {
   .fa-caret-down {
     margin-left: 10px;
   }
-  .fa-close {
+  .fa-times {
     margin-left: 15px;
     opacity: 0;
   }

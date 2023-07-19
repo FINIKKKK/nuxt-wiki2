@@ -5,18 +5,14 @@
 <script lang="ts" setup>
 import { OutputBlockData } from '@editorjs/editorjs';
 
+/**
+ * Пропсы ----------------
+ */
 const props = defineProps<{
   modelValue: OutputBlockData[];
+  label: string;
 }>();
 
-/**
- * События ----------------
- */
-const emits = defineEmits(['update:modelValue']);
-
-/**
- * Вычисляемые значения ----------------
- */
 // Значения поля ввода
 const model = computed({
   get() {
@@ -27,8 +23,19 @@ const model = computed({
   },
 });
 
+/**
+ * События ----------------
+ */
+const emits = defineEmits(['update:modelValue']);
+
+/**
+ * Переменные ----------------
+ */
 const refEditor = ref(undefined);
 
+/**
+ * Основная функция ----------------
+ */
 onMounted(async () => {
   const { default: EditorJS } = await import('@editorjs/editorjs');
   // @ts-ignore
@@ -56,17 +63,27 @@ onMounted(async () => {
   // @ts-ignore
   const { default: CheckList } = await import('@editorjs/checklist');
 
+  
+  /**
+   * Editor ----------------
+   */
   const editor = new EditorJS({
     holder: refEditor.value,
-    placeholder: 'Введите текст',
+    placeholder: props.label,
     autofocus: true,
+
+    // Значение
     data: {
       blocks: model.value,
     },
+
+    // Функция изменения данных
     async onChange() {
       const { blocks } = await editor.save();
       model.value = blocks;
     },
+
+    // Инструменты
     tools: {
       header: {
         class: Header,

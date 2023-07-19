@@ -5,7 +5,7 @@
       <input
         v-model="tabNameValue"
         type="text"
-        placeholder="Добавить вкладку"
+        :placeholder="$t.tab"
         @keydown.enter="addTab"
         maxlength="100"
       />
@@ -28,7 +28,7 @@
   <div class="body">
     <template v-for="(tab, index) in createElemController.tabs">
       <div class="input" v-if="activeTab === index">
-        <Editor class="editor" v-model="tab.content" />
+        <Editor class="editor" v-model="tab.content" :label="$t.body" />
       </div>
     </template>
   </div>
@@ -41,26 +41,18 @@
 import { useCreateElemStore } from '~/stores/CreateElemController';
 
 /**
- * Системные переменные ----------------
+ * Переменные ----------------
  */
-const createElemController = useCreateElemStore(); // Хранилище страницы создания
-
-/**
- * Пользовательские переменные ----------------
- */
-const activeTab = ref(0); // Активная вкладка
-const tabNameValue = ref(''); // Значение поле ввода
-
-/**
- * Полльзовательские переменные ----------------
- */
-// Добавить вкладку
+const createElemController = useCreateElemStore();
+const activeTab = ref(0);
+const tabNameValue = ref('');
 const addTab = () => {
   if (tabNameValue.value) {
     createElemController.addTab({ name: tabNameValue.value, content: [] });
     tabNameValue.value = '';
   }
 };
+const $t = await useTranslate('create_elem');
 </script>
 
 <!-- ----------------------------------------------------- -->
@@ -72,6 +64,7 @@ const addTab = () => {
 }
 
 .tabs {
+  margin-top: 25px;
   width: 100%;
   overflow: auto;
   display: flex;

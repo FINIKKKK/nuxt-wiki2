@@ -27,6 +27,7 @@
         :options="selections"
         v-model="createElemController.select"
         class="select"
+        :label="$t.select"
       />
 
       <!-- Заголовок элемента -->
@@ -35,8 +36,8 @@
           v-model="createElemController.title"
           class="title"
           type="text"
-          :placeholder="`Заголовок ${
-            props.type === 'section' ? 'раздела' : 'статьи'
+          :placeholder="`${
+            props.type === 'section' ? $t.sectionTitle : $t.articleTitle
           }`"
         />
       </div>
@@ -79,6 +80,7 @@ const createElemController = useCreateElemStore();
 const sectionsController = useSectionsStore();
 const isScrolled = ref(false);
 const refScroll = ref(null);
+const $t = await useTranslate('create_elem');
 
 /**
  * Получение данных ----------------

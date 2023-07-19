@@ -24,7 +24,7 @@ export default {
       access: 'Access',
       removeFavorite: 'Delete from Favorites',
       favoriteConfirm: 'Are you sure you want to delete from favorites?',
-      publish: 'To publish',
+      publish: 'Publish',
     },
   },
 };

@@ -4,8 +4,8 @@
     <ul class="extra">
       <!-- Доступ -->
       <li class="extra__item" @click="createElemController.toggleAccess()">
-        <svg-icon name="lock" />
-        <p>Доступ</p>
+        <i class="fa-regular fa-lock" />
+        <p>{{ $t.access }}</p>
       </li>
       <!-- Тэги -->
       <li
@@ -13,20 +13,20 @@
         class="extra__item"
         @click="createElemController.toggleTags()"
       >
-        <svg-icon name="tag" />
-        <p>Тэги</p>
+        <i class="fa-regular fa-tag" />
+        <p>{{ $t.tags }}</p>
       </li>
     </ul>
 
     <div class="right__controls">
       <!-- Надписи -->
       <div class="inscription draft" :class="{ active: saveDraft }">
-        <svg-icon name="check" />
-        <p>Черновик сохранен</p>
+        <i class="fa-regular fa-check-circle" />
+        <p>{{ $t.savedDraft }}</p>
       </div>
       <div class="inscription" :class="{ active: isSave }">
-        <svg-icon name="check" />
-        <p>Сохранено</p>
+        <i class="fa-regular fa-check-circle" />
+        <p>{{ $t.saved }}</p>
       </div>
 
       <!-- Кнопки -->
@@ -37,15 +37,20 @@
         </button>
         <!-- Кнопка отмены -->
         <NuxtLink :to="`${teamController.activeTeamSlug}`" class="btn btn2"
-          >Отменить
+          >{{ $t.btnCancel }}
         </NuxtLink>
       </div>
 
       <!-- Дополнительные настройки -->
-      <div class="options" ref="popupRef">
-        <svg-icon name="options" @click="isShowPopup = !isShowPopup" />
+      <div class="options" tabindex="1" @blur="isShowPopup = false">
+        <!-- Кнопка открытия попапа -->
+        <i
+          class="fa-regular fa-ellipsis-h"
+          @click="isShowPopup = !isShowPopup"
+        />
+        <!-- Попап -->
         <ul class="popup" v-if="isShowPopup">
-          <li @click="onSaveDraft">Сохранить черновик</li>
+          <li @click="onSaveDraft">{{ $t.draftBtn }}</li>
         </ul>
       </div>
     </div>
@@ -62,10 +67,9 @@ import { SectionScheme } from '~/utils/validation';
 import { useFormValidation } from '~/hooks/useFormValidation';
 import { useCustomFetch } from '~/hooks/useCustomFetch';
 import { useRequestStore } from '~/stores/RequestController';
-import { useOutsideClick } from '~/hooks/useOutsideClick';
-import {TArticle, TArticleData} from '~/utils/types/article';
-import { TSection, TSectionData } from '~/utils/types/secton';
-import {TMessage} from "~/utils/types";
+import { TArticleData } from '~/utils/types/article';
+import { TSection } from '~/utils/types/secton';
+import { TMessage } from '~/utils/types';
 
 /**
  * Пропсы ----------------
@@ -76,22 +80,19 @@ const props = defineProps<{
 }>();
 
 /**
- * Системные переменные ----------------
+ * Переменные ----------------
  */
-const route = useRoute(); // Роут
-const router = useRouter(); // Роутер
-const teamController = useTeamStore(); // Хранилище активной компании
-const createElemController = useCreateElemStore(); // Хранилище страницы создания
-const requestController = useRequestStore(); // Хранилище запроса
-
-/**
- * Пользовательские переменные ----------------
- */
-const id = route.params.id; // ID элемента
-const isShowPopup = ref(false); // Показывать попап?
-const popupRef = ref(null);
-const saveDraft = ref(false); // Показывать надпись "Черновик сохранен"?
-const isSave = ref(false); //  Показывать надпись "Сохранено"?
+const route = useRoute();
+const router = useRouter();
+const teamController = useTeamStore();
+const createElemController = useCreateElemStore();
+const requestController = useRequestStore();
+const id = route.params.id;
+const isShowPopup = ref(false);
+const saveDraft = ref(false);
+const isSave = ref(false);
+const { errors, validateForm } = useFormValidation();
+const $t = await useTranslate('create_elem');
 
 /**
  * Вычисляемые значения ----------------
@@ -99,9 +100,9 @@ const isSave = ref(false); //  Показывать надпись "Сохран
 // Label кнопки
 const labelBtn = computed(() => {
   if (props.isEdit) {
-    return 'Изменить';
+    return $t.btnEdit;
   } else {
-    return 'Опубликовать';
+    return $t.btnPublish;
   }
 });
 // Значение загрузки
@@ -115,15 +116,8 @@ const isLoading = computed(() => {
 });
 
 /**
- * Хуки ----------------
+ * Вычисляемые значения ----------------
  */
-const { errors, validateForm } = useFormValidation(); // Для валидации формы
-useOutsideClick(popupRef, isShowPopup); // Для закрытия попапа
-
-/**
- * Слежка за значениями ----------------
- */
-
 let flag = true;
 // Сохранять данные и показывать надпись
 watch(
@@ -163,28 +157,6 @@ watch(isSave, () => {
 /**
  * Методы ----------------
  */
-const onSaveDraft = async () => {
-  //
-  const { data } = await useCustomFetch(`team/article/add`, {
-    body: {
-      team_id: teamController.activeTeam?.team.id,
-      name: createElemController.title,
-      section_id: Number(createElemController.select?.value) || null,
-      tabs: createElemController.tabs.map((obj) => ({
-        name: obj.name,
-        content: JSON.stringify(obj.content),
-      })),
-      action: 1,
-    },
-    method: 'POST',
-  });
-  if (data.value) {
-    saveDraft.value = true;
-    setTimeout(() => {
-      saveDraft.value = false;
-    }, 3000);
-  }
-};
 // Метод создания или редактирования элемента
 const onSubmit = async () => {
   // ------------------------------------
@@ -306,6 +278,29 @@ const onSubmit = async () => {
     }
   }
 };
+
+// Сохранить черновик
+const onSaveDraft = async () => {
+  const { data } = await useCustomFetch(`team/article/add`, {
+    body: {
+      team_id: teamController.activeTeam?.team.id,
+      name: createElemController.title,
+      section_id: Number(createElemController.select?.value) || null,
+      tabs: createElemController.tabs.map((obj) => ({
+        name: obj.name,
+        content: JSON.stringify(obj.content),
+      })),
+      action: 1,
+    },
+    method: 'POST',
+  });
+  if (data.value) {
+    saveDraft.value = true;
+    setTimeout(() => {
+      saveDraft.value = false;
+    }, 3000);
+  }
+};
 </script>
 
 <!-- ----------------------------------------------------- -->
@@ -336,9 +331,9 @@ const onSubmit = async () => {
     display: flex;
     align-items: center;
     cursor: pointer;
-    svg {
+    i {
       width: 14px;
-      height: 14px;
+      height: 20px;
       margin-right: 14px;
     }
     &:hover {
@@ -364,7 +359,7 @@ const onSubmit = async () => {
   .options {
     margin-top: 5px;
     margin-left: 15px;
-    svg {
+    i {
       transform: rotate(90deg);
       width: 20px;
       height: 20px;
@@ -392,7 +387,7 @@ const onSubmit = async () => {
   transition: 0.3s;
   opacity: 0;
   color: $blue;
-  svg {
+  i {
     width: 17px;
     height: 17px;
     margin-right: 7px;
@@ -404,8 +399,8 @@ const onSubmit = async () => {
 
 .draft {
   color: $gray;
-  svg {
-    fill: $gray;
+  i {
+    color: $gray;
   }
 }
 </style>

@@ -2,7 +2,7 @@ export default {
   ru: {
     home: {
       title: 'Ваша компания',
-      active: 'Активность',
+      activity: 'Активность',
       my: 'Мои работы',
       moderation: 'На модерации',
       sections: 'Разделы',
