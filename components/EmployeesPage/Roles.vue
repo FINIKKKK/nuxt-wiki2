@@ -8,13 +8,13 @@
       There are several access levels for user interaction with the itl.wiki
       workspace.
     </p>
-    <div class="role">
+    <div class="role" @click="() => onChangeRole('user')">
       <h3>User</h3>
       <p>
         The only people on your team who can add new members and edit settings.
       </p>
     </div>
-    <div class="role">
+    <div class="role" @click="() => onChangeRole('admin')">
       <h3>Administrator</h3>
       <p>
         The only people on your team who can add new members and edit settings.
@@ -23,7 +23,7 @@
         members, or guests.
       </p>
     </div>
-    <div class="role">
+    <div class="role" @click="() => onChangeRole('moderator')">
       <h3>Moderator</h3>
       <p>
         The only people on your team who can add new members and edit settings.
@@ -37,6 +37,8 @@
 
 <script lang="ts" setup>
 import { useEmployeesStore } from '~/stores/EmployeesController';
+import { useCustomFetch } from '~/hooks/useCustomFetch';
+import { useTeamStore } from '~/stores/TeamContoller';
 
 /**
  * Пропсы ----------------
@@ -49,10 +51,26 @@ const props = defineProps<{
  * Переменные ----------------
  */
 const employeesController = useEmployeesStore();
+const teamController = useTeamStore();
 
 /**
  * Методы ----------------
  */
+// Изменить роль пользователя
+const onChangeRole = async (role: string) => {
+  const { message } = await useCustomFetch(`team/employees/role/change`, {
+    body: {
+      team_id: teamController.activeTeamId,
+      user_id: employeesController.user.id,
+      role,
+    },
+    method: 'POST',
+  });
+
+  if(message) {
+    employeesController.closeRoles()
+  }
+};
 </script>
 
 <!-- ----------------------------------------------------- -->
@@ -74,7 +92,6 @@ const employeesController = useEmployeesStore();
   }
   &:hover {
     border-color: $blue;
-
   }
 }
 </style>

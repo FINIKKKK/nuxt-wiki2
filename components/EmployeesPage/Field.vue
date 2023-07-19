@@ -10,7 +10,7 @@
       />
     </div>
 
-    <div class="btn">
+    <div class="btn" @click="employeesController.openAddUsers()">
       <i class="fa-regular fa-plus" />
       <p>Add</p>
     </div>
@@ -22,11 +22,13 @@
 
 <script lang="ts" setup>
 import debounce from 'lodash.debounce';
+import { useEmployeesStore } from '~/stores/EmployeesController';
 
 /**
  * Переменные ----------------
  */
 const searchValue = ref('');
+const employeesController = useEmployeesStore();
 
 /**
  * Методы ----------------

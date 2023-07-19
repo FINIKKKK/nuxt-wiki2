@@ -1,5 +1,5 @@
-<template >
-  <tr class="item" >
+<template>
+  <tr class="item">
     <th>{{ props.data.id }}</th>
     <th>{{ props.data.fullname ? props.data.fullname : '-' }}</th>
     <th>{{ props.data.email }}</th>
@@ -13,7 +13,7 @@
     <th class="controls" tabindex="1" @blur="isShowPopup = false">
       <i class="fa-regular fa-ellipsis-h" @click="isShowPopup = !isShowPopup" />
       <ul class="popup" v-if="isShowPopup">
-        <li class="key" @click="onOpenRolesPopup" ref="refBtn" >
+        <li class="key" @click="onOpenRolesPopup">
           <i class="fa-regular fa-key" />
           <p>Изменить уровень доступа</p>
         </li>
@@ -57,19 +57,8 @@ const emits = defineEmits(['removeFromTeam', 'removeFromInvites']);
  * Переменные ----------------
  */
 const isShowPopup = ref(false);
-const refPopup = ref(null);
 const teamController = useTeamStore();
 const employeesController = useEmployeesStore();
-const refBtn = ref(null);
-
-onMounted(() => {
-  employeesController.setRefBtn(refBtn.value);
-});
-
-/**
- * Хуки ----------------
- */
-// useOutsideClick(refPopup, isShowPopup);
 
 /**
  * Методы ----------------
@@ -104,6 +93,7 @@ const onCancelInvite = async () => {
 const onOpenRolesPopup = () => {
   isShowPopup.value = false;
   employeesController.openRoles();
+  employeesController.setUser(props.data);
 };
 </script>
 

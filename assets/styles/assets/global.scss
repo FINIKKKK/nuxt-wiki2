@@ -222,16 +222,24 @@ a.btn {
 }
 
 // ---- Tables ----
+.table-wrapper {
+  position: relative;
+  overflow-x: auto;
+}
+
 .table {
-  width: 100%;
-  display: table;
-  vertical-align: middle;
+  display: block;
+  overflow-x: auto;
+  white-space: nowrap;
+  min-width: 100%;
   td,
   th {
     text-align: left;
     padding-left: 10px;
   }
   thead {
+    display: table;
+    width: 100%;
     color: $blue;
     border-bottom: 1px solid $blue;
     td,
@@ -240,6 +248,8 @@ a.btn {
     }
   }
   tbody {
+    display: table;
+    width: 100%;
     td,
     th {
     }

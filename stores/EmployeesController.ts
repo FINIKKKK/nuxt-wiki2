@@ -1,4 +1,5 @@
 import { defineStore } from 'pinia';
+import { TUser } from '~/utils/types/account';
 
 /**
  * --------------------------------
@@ -9,9 +10,9 @@ export const useEmployeesStore = defineStore('employeesController', () => {
   /**
    * Свойства ----------------
    */
-  // const employees: Ref<TEmployees | null> = ref(null);
   const isOpenRoles: Ref<boolean> = ref(false);
-  const refBtn: Ref<any> = ref(null);
+  const isOpenAddUsers: Ref<boolean> = ref(false);
+  const user: Ref<TUser | null> = ref(null);
 
   /**
    * Методы ----------------
@@ -22,17 +23,25 @@ export const useEmployeesStore = defineStore('employeesController', () => {
   const closeRoles = () => {
     isOpenRoles.value = false;
   };
-  const setRefBtn = (value: any) => {
-    refBtn.value = value;
+  const setUser = (value: TUser | null) => {
+    user.value = value;
+  };
+  const openAddUsers = () => {
+    isOpenAddUsers.value = true;
+  };
+  const closeAddUsers = () => {
+    isOpenAddUsers.value = false;
   };
 
   // Возращаем данные
   return {
-    // employees,
     isOpenRoles,
+    isOpenAddUsers,
     openRoles,
     closeRoles,
-    refBtn,
-    setRefBtn,
+    openAddUsers,
+    closeAddUsers,
+    user,
+    setUser,
   };
 });

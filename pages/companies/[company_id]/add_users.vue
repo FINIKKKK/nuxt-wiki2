@@ -51,7 +51,7 @@
 
     <button
       class="btn"
-      :class="requestController.loading[url]"
+      :class="{ disabled: requestController.loading[url] }"
       @click="onInviteUsers"
     >
       {{ $t.btn }}
@@ -69,7 +69,6 @@ import { useTeamStore } from '~/stores/TeamContoller';
 import { useRequestStore } from '~/stores/RequestController';
 import { useFormValidation } from '~/hooks/useFormValidation';
 import { AddUsersScheme, AddUsersScheme2 } from '~/utils/validation';
-
 
 /**
  * Переменные ----------------
@@ -109,7 +108,6 @@ const onInviteUsers = async () => {
 
 // Добавить email в список
 const onAddEmail = async (email: string) => {
-  console.log(email);
   // Валидируем данные
   const isValid = await validateForm(
     { emails: emailUsers.value },

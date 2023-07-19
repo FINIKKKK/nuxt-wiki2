@@ -6,8 +6,11 @@
     <!-- Таблица соотрудников -->
     <EmployeesPageTable />
 
+    <!-- Попап редактирования роли -->
     <EmployeesPageRoles :active="employeesController.isOpenRoles" />
 
+    <!-- Попап добавления новых пользователей -->
+    <EmployeesPageAddUsers :active="employeesController.isOpenAddUsers" />
   </NuxtLayout>
 </template>
 
