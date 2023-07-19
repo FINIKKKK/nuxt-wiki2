@@ -28,6 +28,10 @@ import debounce from 'lodash.debounce';
  */
 const searchValue = ref('');
 
+/**
+ * Методы ----------------
+ */
+// Поиск соотрудрников
 const onSearchUsers = debounce(async () => {
   // if (searchValue.value) {
   // const { data } = await useCustomFetch<TSearchData>(`team/search`, {

@@ -1,5 +1,5 @@
-<template>
-  <tr class="item">
+<template >
+  <tr class="item" >
     <th>{{ props.data.id }}</th>
     <th>{{ props.data.fullname ? props.data.fullname : '-' }}</th>
     <th>{{ props.data.email }}</th>
@@ -10,10 +10,10 @@
       {{ props.type === 'invite' ? 'Приглашен(a)' : 'Выдан статус' }}
     </th>
     <th>-</th>
-    <th class="controls" ref="refPopup">
+    <th class="controls" tabindex="1" @blur="isShowPopup = false">
       <i class="fa-regular fa-ellipsis-h" @click="isShowPopup = !isShowPopup" />
       <ul class="popup" v-if="isShowPopup">
-        <li class="key">
+        <li class="key" @click="onOpenRolesPopup" ref="refBtn" >
           <i class="fa-regular fa-key" />
           <p>Изменить уровень доступа</p>
         </li>
@@ -36,9 +36,9 @@
 <script lang="ts" setup>
 import { useFormatDate } from '~/hooks/useFormatData';
 import { TUser } from '~/utils/types/account';
-import { useOutsideClick } from '~/hooks/useOutsideClick';
 import { useCustomFetch } from '~/hooks/useCustomFetch';
 import { useTeamStore } from '~/stores/TeamContoller';
+import { useEmployeesStore } from '~/stores/EmployeesController';
 
 /**
  * Пропсы ----------------
@@ -59,11 +59,17 @@ const emits = defineEmits(['removeFromTeam', 'removeFromInvites']);
 const isShowPopup = ref(false);
 const refPopup = ref(null);
 const teamController = useTeamStore();
+const employeesController = useEmployeesStore();
+const refBtn = ref(null);
+
+onMounted(() => {
+  employeesController.setRefBtn(refBtn.value);
+});
 
 /**
  * Хуки ----------------
  */
-useOutsideClick(refPopup, isShowPopup);
+// useOutsideClick(refPopup, isShowPopup);
 
 /**
  * Методы ----------------
@@ -93,6 +99,11 @@ const onCancelInvite = async () => {
   } else {
     isShowPopup.value = false;
   }
+};
+// Открыть попап
+const onOpenRolesPopup = () => {
+  isShowPopup.value = false;
+  employeesController.openRoles();
 };
 </script>
 

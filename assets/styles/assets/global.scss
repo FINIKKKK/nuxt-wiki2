@@ -178,6 +178,7 @@ a.btn {
 }
 
 .popup {
+  user-select: none;
   background-color: $white;
   border-radius: 3px;
   box-shadow: 0 0 30px rgba(0, 0, 0, 0.08);
@@ -242,54 +243,6 @@ a.btn {
     td,
     th {
     }
-  }
-}
-
-// Правый всплывающий попап
-.aside-popup {
-  position: fixed;
-  right: 0;
-  top: 0;
-  background-color: $white;
-  padding: 50px 0;
-  min-height: 100vh;
-  overflow: auto;
-  width: 500px;
-  z-index: 300;
-  box-shadow: 0 0 10px rgba($blue, 0.3);
-  transform: translateX(110%);
-  transition: 0.3s;
-  &.active {
-    transform: translateX(0);
-  }
-  .title {
-    font-size: 24px;
-    padding: 0 32px 24px;
-    margin-bottom: 16px;
-    border-bottom: 1px solid $blue3;
-  }
-  .content {
-    padding: 15px 32px;
-  }
-  .text {
-    margin-bottom: 20px;
-  }
-}
-
-.aside-popup__wrapper {
-  background-color: rgba(241, 246, 253, .85);
-  position: fixed;
-  top: 0;
-  bottom: 0;
-  right: 0;
-  left: 0;
-  z-index: 200;
-  opacity: 0;
-  transition: 0.3s;
-  pointer-events: none;
-  &.active {
-    opacity: 1;
-    pointer-events: visible;
   }
 }
 
