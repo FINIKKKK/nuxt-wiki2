@@ -5,12 +5,12 @@ export default {
       admin: 'Администратор',
       moderator: 'Модератор',
     },
-    access: [
-      'Полный доступ',
-      'Чтение и редактирование',
-      'Только чтение',
-      'Без доступа',
-    ],
+    access: {
+      access_0: 'Полный доступ',
+      access_1: 'Чтение и редактирование',
+      access_2: 'Только чтение',
+      access_3: 'Без доступа',
+    },
   },
   en: {
     roles: {
@@ -18,11 +18,11 @@ export default {
       admin: 'Admin',
       moderator: 'Moderator',
     },
-    access: [
-      'Full access ',
-      'Reading and editing',
-      'Read only',
-      'Without access',
-    ],
+    access: {
+      access_0: 'Full access ',
+      access_1: 'Reading and editing',
+      access_2: 'Read only',
+      access_3: 'Without access',
+    },
   },
 };

@@ -1,56 +1,45 @@
 <template>
-  <div class="aside-popup__wrapper" :class="{ active: isShowPopup }"></div>
-  <div
-    class="access aside-popup"
-    :class="{
-      active: isShowPopup,
-    }"
-    ref="refPopup"
+  <UIAsidePopup
+    :title="$t.accessPopup.title"
+    @close="createElemController.closeAccess()"
   >
-    <h2 class="title">Права доступа</h2>
+    <p class="text">{{ $t.accessPopup.text }}</p>
 
-    <div class="content">
-      <p class="text">
-        itl.wiki создана для совместной работы, делитесь контентом, который вы
-        создаете, с вашей командой.
-      </p>
+    <div class="field" tabindex="2" @blur="isShowList = false">
+      <!-- Поле поиска пользователей -->
+      <UIInput
+        :label="$t.accessPopup.input"
+        v-model="inputValue"
+        @click="isShowList = true"
+      />
 
-      <div class="field" ref="fieldRef">
-        <!-- Поле поиска пользователей -->
-        <UIInput
-          label="Введите имя пользователя"
-          v-model="inputValue"
-          @click="isShowList = true"
+      <!-- Список работников для выборки -->
+      <ul class="list" v-if="isShowList">
+        <User
+          v-for="employee in employees"
+          :key="employee.id"
+          :data="employee"
+          @click="addEmployeesAccess(employee)"
         />
-
-        <!-- Список работников для выборки -->
-        <ul class="list" v-if="isShowList">
-          <User
-            v-for="employee in employees"
-            :key="employee.id"
-            :data="employee"
-            @click="addEmployeesAccess(employee)"
-          />
-        </ul>
-      </div>
-
-      <!-- Список работников для редактирования прав доступа -->
-      <ul class="employees">
-        <li class="employee" v-for="ability in model">
-          <div class="info">
-            <p class="name">{{ ability?.user.fullname }}</p>
-            <p class="email">{{ ability?.user.email }}</p>
-          </div>
-          <UISelect
-            class="select"
-            :options="accessArr"
-            v-model="ability.permission"
-            type="triangle"
-          />
-        </li>
       </ul>
     </div>
-  </div>
+
+    <!-- Список работников для редактирования прав доступа -->
+    <ul class="employees">
+      <li class="employee" v-for="ability in model">
+        <div class="info">
+          <p class="name">{{ ability?.user.fullname }}</p>
+          <p class="email">{{ ability?.user.email }}</p>
+        </div>
+        <UISelect
+          class="employee_select"
+          :options="accessArrEdit"
+          v-model="ability.permission"
+          type="access"
+        />
+      </li>
+    </ul>
+  </UIAsidePopup>
 </template>
 
 <!-- ----------------------------------------------------- -->
@@ -61,10 +50,8 @@ import { useCustomFetch } from '~/hooks/useCustomFetch';
 import { useTeamStore } from '~/stores/TeamContoller';
 import { TUser } from '~/utils/types/account';
 import { TAbility, TEmployees } from '~/utils/types/team';
-import { useOutsideClick } from '~/hooks/useOutsideClick';
 import { accessArr } from '~/utils/data';
 import { useCreateElemStore } from '~/stores/CreateElemController';
-import { useElemStore } from '~/stores/ElemController';
 
 /**
  * Пропсы ----------------
@@ -73,11 +60,7 @@ const props = defineProps<{
   modelValue: TAbility[];
 }>();
 
-/**
- * События ----------------
- */
-const emits = defineEmits(['update:modelValue']);
-
+// Значение
 const model = computed({
   get() {
     return props.modelValue;
@@ -88,20 +71,26 @@ const model = computed({
 });
 
 /**
+ * События ----------------
+ */
+const emits = defineEmits(['update:modelValue']);
+
+/**
  * Переменные ----------------
  */
 const teamController = useTeamStore();
 const createElemController = useCreateElemStore();
-const elemController = useElemStore();
-const fieldRef = ref(null);
 const inputValue = ref('');
 const isShowList = ref(false);
 const employeesAccess = ref<TUser[]>([]);
-const refPopup = ref(null);
 const employees = ref<TUser[]>([]);
-const isShowPopup = computed(() => {
-  return createElemController.isShowAccess || elemController.isShowAccessPopup;
-});
+const $t = await useTranslate('create_elem');
+const $t2 = await useTranslate('data');
+const accessArrEdit = accessArr.map((item) => ({
+  value: item.value,
+  label: $t2.access[item.label],
+}));
+
 /**
  * Получение данных ----------------
  */
@@ -109,20 +98,10 @@ const isShowPopup = computed(() => {
 const { data } = await useCustomFetch<TEmployees>('team/employees', {
   query: { team_id: teamController.activeTeamId },
 });
-employees.value = data.value.employees;
+employees.value = data.employees;
 
 /**
- * Хуки ----------------
- */
-// Для закрытия попапа, если клик был вне его области
-useOutsideClick(fieldRef, isShowList);
-// useOutsideClick(refPopup, null, () => {
-//   createElemController.closeAccessPopup();
-//   elemController.closeAccessPopup();
-// });
-
-/**
- * Следить за переменными ----------------
+ * Вычисляемое ----------------
  */
 // Сортировать список работников при поиске
 watch(inputValue, () => {
@@ -132,7 +111,7 @@ watch(inputValue, () => {
 });
 
 /**
- * Хуки ----------------
+ * Методы ----------------
  */
 // Добавить работника в область редактирования доступа
 const addEmployeesAccess = (value: TUser) => {
@@ -144,7 +123,7 @@ const addEmployeesAccess = (value: TUser) => {
     employeesAccess.value.push(value);
     // Добавляем в массив
     createElemController.addAbility({ user: value, permission: accessArr[0] });
-    model.value.push({ user: value, permission: accessArr[0] });
+    model.value.push({ user: value, permission: accessArrEdit[0] });
     console.log(model.value);
     // Закрываем список
     isShowList.value = false;
@@ -173,6 +152,7 @@ const addEmployeesAccess = (value: TUser) => {
   width: 100%;
   left: 0;
   top: 75px;
+  z-index: 50;
 }
 
 .employee {
@@ -188,7 +168,7 @@ const addEmployeesAccess = (value: TUser) => {
     color: $gray;
     font-size: 14px;
   }
-  .select {
+  .employee_select {
     width: 140px;
   }
 }

@@ -13,6 +13,16 @@ export default {
     draftBtn: 'Сохранить черновик',
     saved: 'Сохранено',
     confirm: 'Вы уверены, что хотите покинуть эту страницу?',
+    accessPopup: {
+      title: 'Доступ',
+      text: 'itl.wiki создана для совместной работы, делитесь контентом, который вы создаете, с вашей командой',
+      input: 'Введите имя пользователя',
+    },
+    tagsPopup: {
+      title: 'Тэги',
+      text: 'itl.wiki создана для совместной работы, делитесь контентом, который вы создаете, с вашей командой',
+      input: 'Поиск тэгов',
+    },
   },
   en: {
     articleTitle: 'Article title',
@@ -28,5 +38,15 @@ export default {
     draftBtn: 'Save a draft',
     saved: 'Saved',
     confirm: 'Are you sure you want to leave this page?',
+    accessPopup: {
+      title: 'Access',
+      text: 'itl.wiki is designed for collaboration, share the content you create with your team',
+      input: 'Enter the user name',
+    },
+    tagsPopup: {
+      title: 'Tags',
+      text: 'itl.wiki is designed for collaboration, share the content you create with your team',
+      input: 'Tag search',
+    },
   },
 };

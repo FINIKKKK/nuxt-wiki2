@@ -4,14 +4,18 @@
     <CreatePageTabs />
 
     <!-- Тэги -->
-    <CreatePageTags />
+    <PopupsTags :isOpen="createElemController.isOpenTags" />
   </NuxtLayout>
 </template>
 
 <!-- ----------------------------------------------------- -->
 <!-- ----------------------------------------------------- -->
 
-<script lang="ts" setup></script>
+<script lang="ts" setup>
+import { useCreateElemStore } from '~/stores/CreateElemController';
+
+const createElemController = useCreateElemStore();
+</script>
 
 <!-- ----------------------------------------------------- -->
 <!-- ----------------------------------------------------- -->

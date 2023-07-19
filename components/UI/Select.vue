@@ -1,12 +1,13 @@
 <template>
   <div
-    ref="selectRef"
     class="select"
     :class="{
       active: isOpen,
       full: props.type === 'full',
     }"
     :data-layout="props.type"
+    tabindex="0"
+    @blur="isOpen = false"
   >
     <!-- Выбранный элемент -->
     <div class="selected" @click="toggleDropdown">
@@ -19,7 +20,7 @@
       />
       <i
         class="fa-regular fa-caret-down"
-        v-if="props.type === 'triangle' || props.type === 'full'"
+        v-if="props.type === 'access' || props.type === 'full'"
       />
     </div>
     <!-- Список -->
@@ -43,7 +44,6 @@
 <!-- ----------------------------------------------------- -->
 
 <script lang="ts" setup>
-import { useOutsideClick } from '~/hooks/useOutsideClick';
 import { TSelect } from '~/utils/types/base';
 
 /**
@@ -53,7 +53,7 @@ const props = defineProps<{
   label: string;
   options: TSelect[];
   modelValue: TSelect | null;
-  type?: 'triangle' | 'full';
+  type?: 'access' | 'full';
 }>();
 
 // Значения
@@ -75,12 +75,6 @@ const emits = defineEmits(['update:modelValue']);
  * Переменные ----------------
  */
 const isOpen = ref(false);
-const selectRef = ref(null);
-
-/**
- * Хуки ----------------
- */
-useOutsideClick(selectRef, isOpen);
 
 /**
  * Методы ----------------
@@ -112,12 +106,6 @@ const selectOption = (option: TSelect) => {
     .fa-caret-down {
       transform: rotate(180deg);
     }
-  }
-}
-
-.select[data-layout='triangle'] {
-  .selected {
-    justify-content: space-between;
   }
 }
 
@@ -200,6 +188,12 @@ const selectOption = (option: TSelect) => {
   }
   &.active {
     border-color: $blue;
+  }
+}
+
+.select[data-layout='access'] {
+  .selected {
+    justify-content: space-between;
   }
 }
 </style>

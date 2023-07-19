@@ -6,15 +6,15 @@
 
 // Список доступов
 export const accessArr = [
-  { value: 1, label: '$t.access[0]' },
-  { value: 2, label: '$t.access[1]' },
-  { value: 3, label: '$t.access[2]' },
-  { value: 4, label: '$t.access[3]' },
+  { value: 1, label: 'access_0' },
+  { value: 2, label: 'access_1' },
+  { value: 3, label: 'access_2' },
+  { value: 4, label: 'access_3' },
 ];
 
 // Список ролей
 export const roles = [
-  { value: 'user', label: '$t.roles.user' },
-  { value: 'admin', label: '$t.roles.admin' },
-  { value: 'moderator', label: '$t.roles.moderator' },
+  { value: 'user', label: 'user' },
+  { value: 'admin', label: 'admin' },
+  { value: 'moderator', label: 'moderator' },
 ];

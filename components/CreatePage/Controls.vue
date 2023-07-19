@@ -3,7 +3,7 @@
     <!-- Дополнительные элементы -->
     <ul class="extra">
       <!-- Доступ -->
-      <li class="extra__item" @click="createElemController.toggleAccess()">
+      <li class="extra__item" @click="createElemController.openAccess()">
         <i class="fa-regular fa-lock" />
         <p>{{ $t.access }}</p>
       </li>
@@ -11,7 +11,7 @@
       <li
         v-if="props.type === 'article'"
         class="extra__item"
-        @click="createElemController.toggleTags()"
+        @click="createElemController.openTags()"
       >
         <i class="fa-regular fa-tag" />
         <p>{{ $t.tags }}</p>

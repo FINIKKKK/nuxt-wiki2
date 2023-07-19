@@ -46,7 +46,10 @@
       <slot />
 
       <!-- Компонент редактирования доступа -->
-      <!--      <CreatePageAccess />-->
+      <PopupsAccess
+        v-model="abilities"
+        :isOpen="createElemController.isOpenAccess"
+      />
     </div>
   </div>
 </template>
@@ -81,6 +84,7 @@ const sectionsController = useSectionsStore();
 const isScrolled = ref(false);
 const refScroll = ref(null);
 const $t = await useTranslate('create_elem');
+const abilities = ref([]);
 
 /**
  * Получение данных ----------------
@@ -96,7 +100,7 @@ const { data: sections } = await useCustomFetch<TSection[]>(
 sectionsController.setSections(sections);
 
 /**
- * Вычисляемые значения ----------------
+ * Вычисляемое ----------------
  */
 // Конвертировать массив разделов
 const selections = computed(() => {
@@ -153,7 +157,7 @@ onBeforeRouteLeave((to, from, next) => {
     createElemController.setSelect(null);
     createElemController.setTabs([]);
   } else {
-    if (confirm('Вы уверены, что хотите покинуть эту страницу?')) {
+    if (confirm($t.confirm)) {
       next();
       createElemController.setTitle('');
       createElemController.setSelect(null);
