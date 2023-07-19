@@ -1,5 +1,12 @@
 <template>
-  <NuxtLayout name="main" title="Пользователи" :nav="nav">
+  <NuxtLayout name="main" :title='$t.title' :nav="nav">
+    <!-- Warning -->
+    <UIWarning
+      v-if="employeesController.successMessage"
+      :message="employeesController.successMessage"
+      class="warning"
+    />
+
     <!-- Поиск и кнопка добавления новых пользователей -->
     <EmployeesPageField />
 
@@ -26,10 +33,11 @@ import { useEmployeesStore } from '~/stores/EmployeesController';
  */
 const teamController = useTeamStore();
 const employeesController = useEmployeesStore();
+const $t = await useTranslate('employees');
 const nav = [
-  { label: 'Настройки', link: `${teamController.activeTeamSlug}/settings` },
+  { label: $t.settings, link: `${teamController.activeTeamSlug}/settings` },
   {
-    label: 'Пользователи',
+    label: $t.title,
     link: `${teamController.activeTeamSlug}/settings/employees`,
   },
 ];
@@ -38,4 +46,9 @@ const nav = [
 <!-- ----------------------------------------------------- -->
 <!-- ----------------------------------------------------- -->
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+.warning {
+  margin: -15px -55px;
+  margin-bottom: 40px;
+}
+</style>

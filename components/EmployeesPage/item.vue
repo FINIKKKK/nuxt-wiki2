@@ -7,25 +7,30 @@
       {{ props.data.logged_in ? useFormatDate(props.data.logged_in) : '-' }}
     </th>
     <th>
-      {{ props.type === 'invite' ? 'Приглашен(a)' : 'Выдан статус' }}
+      {{ props.type === 'invite' ? $t.table.status1 : $t.table.status2 }}
     </th>
     <th>-</th>
     <th class="controls" tabindex="1" @blur="isShowPopup = false">
-      <i class="fa-regular fa-ellipsis-h" @click="isShowPopup = !isShowPopup" />
-      <ul class="popup" v-if="isShowPopup">
-        <li class="key" @click="onOpenRolesPopup">
-          <i class="fa-regular fa-key" />
-          <p>Изменить уровень доступа</p>
-        </li>
-        <li @click="onRemoveFromTeam" v-if="props.type !== 'invite'">
-          <i class="fa-regular fa-cancel" />
-          <p>Удалить из компании</p>
-        </li>
-        <li @click="onCancelInvite" v-if="props.type === 'invite'">
-          <i class="fa-regular fa-cancel" />
-          <p>Отменить приглашение</p>
-        </li>
-      </ul>
+      <template v-if="userController.user.id !== props.data.id">
+        <i
+          class="fa-regular fa-ellipsis-h"
+          @click="isShowPopup = !isShowPopup"
+        />
+        <ul class="popup" v-if="isShowPopup">
+          <li class="key" @click="onOpenRolesPopup">
+            <i class="fa-regular fa-key" />
+            <p>{{ $t.table.btnEdit }}</p>
+          </li>
+          <li @click="onRemoveFromTeam" v-if="props.type !== 'invite'">
+            <i class="fa-regular fa-cancel" />
+            <p>{{ $t.table.btnRemove }}</p>
+          </li>
+          <li @click="onCancelInvite" v-if="props.type === 'invite'">
+            <i class="fa-regular fa-cancel" />
+            <p>{{ $t.table.btnCancel }}</p>
+          </li>
+        </ul>
+      </template>
     </th>
   </tr>
 </template>
@@ -39,6 +44,7 @@ import { TUser } from '~/utils/types/account';
 import { useCustomFetch } from '~/hooks/useCustomFetch';
 import { useTeamStore } from '~/stores/TeamContoller';
 import { useEmployeesStore } from '~/stores/EmployeesController';
+import { useUserStore } from '~/stores/UserController';
 
 /**
  * Пропсы ----------------
@@ -59,6 +65,8 @@ const emits = defineEmits(['removeFromTeam', 'removeFromInvites']);
 const isShowPopup = ref(false);
 const teamController = useTeamStore();
 const employeesController = useEmployeesStore();
+const userController = useUserStore();
+const $t = await useTranslate('employees');
 
 /**
  * Методы ----------------
@@ -102,13 +110,12 @@ const onOpenRolesPopup = () => {
 
 <style lang="scss" scoped>
 .item {
-  height: 64px;
   transition: 0.2s;
-  th {
-    padding: 12px 16px;
-  }
   &:hover {
     background-color: $white;
+    .controls .fa-ellipsis-h {
+      opacity: 1;
+    }
   }
 }
 
@@ -124,6 +131,8 @@ const onOpenRolesPopup = () => {
     display: flex;
     align-items: center;
     justify-content: center;
+    opacity: 0;
+    transition: 0.2s;
     &:hover {
       background-color: $blue3;
     }

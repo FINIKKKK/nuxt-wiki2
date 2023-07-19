@@ -1,33 +1,21 @@
 <template>
   <UIAsidePopup
-    title="Change access level"
+    :title="$t.changeRoles.title"
     :isOpen="props.active"
     @close="employeesController.closeRoles()"
   >
-    <p class="text">
-      There are several access levels for user interaction with the itl.wiki
-      workspace.
-    </p>
+    <p class="text">{{ $t.changeRoles.text }}</p>
     <div class="role" @click="() => onChangeRole('user')">
-      <h3>User</h3>
-      <p>
-        The only people on your team who can add new members and edit settings.
-      </p>
+      <h3>{{ $t.changeRoles.user }}</h3>
+      <p>{{ $t.changeRoles.userText }}</p>
     </div>
     <div class="role" @click="() => onChangeRole('admin')">
-      <h3>Administrator</h3>
-      <p>
-        The only people on your team who can add new members and edit settings.
-        If you create a workspace and are on a team or corporate plan, you
-        automatically become an admin and can add more people as fellow admins,
-        members, or guests.
-      </p>
+      <h3>{{ $t.changeRoles.admin }}</h3>
+      <p>{{ $t.changeRoles.adminText }}</p>
     </div>
     <div class="role" @click="() => onChangeRole('moderator')">
-      <h3>Moderator</h3>
-      <p>
-        The only people on your team who can add new members and edit settings.
-      </p>
+      <h3>{{ $t.changeRoles.moderator }}</h3>
+      <p>{{ $t.changeRoles.moderatorText }}</p>
     </div>
   </UIAsidePopup>
 </template>
@@ -39,6 +27,7 @@
 import { useEmployeesStore } from '~/stores/EmployeesController';
 import { useCustomFetch } from '~/hooks/useCustomFetch';
 import { useTeamStore } from '~/stores/TeamContoller';
+import { useUserStore } from '~/stores/UserController';
 
 /**
  * Пропсы ----------------
@@ -52,6 +41,8 @@ const props = defineProps<{
  */
 const employeesController = useEmployeesStore();
 const teamController = useTeamStore();
+const userController = useUserStore();
+const $t = await useTranslate('employees');
 
 /**
  * Методы ----------------
@@ -67,8 +58,9 @@ const onChangeRole = async (role: string) => {
     method: 'POST',
   });
 
-  if(message) {
-    employeesController.closeRoles()
+  if (message) {
+    employeesController.closeRoles();
+    employeesController.setSuccessMessage($t.changeRoles.successMessage);
   }
 };
 </script>

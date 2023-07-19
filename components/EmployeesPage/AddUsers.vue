@@ -1,15 +1,12 @@
 <template>
   <UIAsidePopup
-    title="Change access level"
+    :title="$t.addUsers.title"
     :isOpen="props.active"
-    @close="employeesController.closeAddUsers()"
+    @close="closeAddUsers"
   >
-    <p class="text">
-      There are several access levels for user interaction with the itl.wiki
-      workspace.
-    </p>
+    <p class="text">{{ $t.addUsers.text }}</p>
     <UIInput
-      label="Enter user e-mail addresses separated by commas"
+      :label="$t.addUsers.input"
       v-model="emailValue"
       :errors="errors['emails']"
       @keydown.enter="() => onAddEmail(emailValue)"
@@ -29,7 +26,7 @@
       @click="onAddUsers"
       :class="{ disabled: requestController.loading[url] }"
     >
-      Add
+      {{ $t.addUsers.btn }}
     </button>
   </UIAsidePopup>
 </template>
@@ -43,7 +40,7 @@ import { useCustomFetch } from '~/hooks/useCustomFetch';
 import { useTeamStore } from '~/stores/TeamContoller';
 import { useFormValidation } from '~/hooks/useFormValidation';
 import { AddUsersScheme, AddUsersScheme2 } from '~/utils/validation';
-import {useRequestStore} from "~/stores/RequestController";
+import { useRequestStore } from '~/stores/RequestController';
 
 /**
  * Пропсы ----------------
@@ -55,18 +52,18 @@ const props = defineProps<{
 /**
  * Переменные ----------------
  */
+const url = 'team/employees/add';
 const employeesController = useEmployeesStore();
 const teamController = useTeamStore();
+const requestController = useRequestStore();
 const emailValue = ref('');
 const emails = ref([]);
-const requestController = useRequestStore();
 const { errors, validateForm } = useFormValidation();
-const url = 'team/employees/add';
+const $t = await useTranslate('employees');
 
 /**
  * Методы ----------------
  */
-
 // Добавить email в список
 const onAddEmail = async (email: string) => {
   // Валидируем данные
@@ -115,8 +112,20 @@ const onAddUsers = async () => {
   });
 
   if (message) {
-    employeesController.closeRoles();
+    employeesController.closeAddUsers();
+    emails.value = [];
+    emailValue.value = '';
+    errors.value = [];
+    employeesController.setSuccessMessage($t.addUsers.successMessage);
   }
+};
+
+// Закрыть попап
+const closeAddUsers = () => {
+  employeesController.closeAddUsers();
+  emails.value = [];
+  emailValue.value = '';
+  errors.value = [];
 };
 </script>
 

@@ -4,12 +4,12 @@
       <!-- THead -->
       <thead>
         <tr>
-          <th>ID</th>
-          <th>Имя и фамилия</th>
-          <th>E-mail</th>
-          <th>Последняя активность</th>
-          <th>Статус</th>
-          <th>Уровень доступа</th>
+          <th>{{ $t.table.id }}</th>
+          <th>{{ $t.table.name }}</th>
+          <th>{{ $t.table.email }}</th>
+          <th>{{ $t.table.last_activity }}</th>
+          <th>{{ $t.table.status }}</th>
+          <th>{{ $t.table.access }}</th>
           <th></th>
         </tr>
       </thead>
@@ -61,6 +61,7 @@ import { useTeamStore } from '~/stores/TeamContoller';
 const url = 'team/employees';
 const requestController = useRequestStore();
 const teamController = useTeamStore();
+const $t = await useTranslate('employees');
 
 /**
  * Получение данных ----------------
@@ -96,4 +97,8 @@ const removeFromInvites = (id: number) => {
 <!-- ----------------------------------------------------- -->
 <!-- ----------------------------------------------------- -->
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+.table-wrapper {
+  padding-bottom: 85px;
+}
+</style>

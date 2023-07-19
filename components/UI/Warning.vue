@@ -1,6 +1,6 @@
 <template>
   <div class="errors" :class="{ success: props.message }">
-    <svg-icon name="warning" />
+    <i class="fa-regular fa-exclamation-triangle" />
     <div class="items">
       <!-- Либо отображать ошибки -->
       <span v-if="!props.message" v-for="error in props.errors">{{
@@ -35,11 +35,12 @@ const props = defineProps<{
   align-items: center;
   padding: 21px 50px;
   margin: 0 -36px 35px;
-  svg {
+  i {
     width: 23px;
     height: 23px;
+    font-size: 22px;
     margin-right: 16px;
-    fill: $red;
+    color: $red;
   }
   .items span {
     display: block;
@@ -50,8 +51,8 @@ const props = defineProps<{
   }
   &.success {
     background-color: rgba(#6dcaac, 0.5);
-    svg {
-      fill: #359173;
+    i {
+      color: #359173;
     }
     .items span {
       color: #359173;

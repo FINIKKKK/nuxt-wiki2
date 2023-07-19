@@ -4,7 +4,7 @@
       <i class="fa-regular fa-search" />
       <input
         type="text"
-        placeholder="Search"
+        :placeholder="$t.search"
         v-model="searchValue"
         @input="onSearchUsers"
       />
@@ -12,7 +12,7 @@
 
     <div class="btn" @click="employeesController.openAddUsers()">
       <i class="fa-regular fa-plus" />
-      <p>Add</p>
+      <p>{{ $t.add }}</p>
     </div>
   </div>
 </template>
@@ -29,6 +29,7 @@ import { useEmployeesStore } from '~/stores/EmployeesController';
  */
 const searchValue = ref('');
 const employeesController = useEmployeesStore();
+const $t = await useTranslate('employees');
 
 /**
  * Методы ----------------
