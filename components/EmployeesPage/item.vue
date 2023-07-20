@@ -4,7 +4,7 @@
     <th>{{ props.data.fullname ? props.data.fullname : '-' }}</th>
     <th>{{ props.data.email }}</th>
     <th>
-      {{ props.data.logged_in ? useFormatDate(props.data.logged_in) : '-' }}
+      {{ props.data.logged_in ? useFormatDate(props.data.logged_in, userController.lang) : '-' }}
     </th>
     <th>
       {{ props.type === 'invite' ? $t.table.status1 : $t.table.status2 }}

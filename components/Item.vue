@@ -25,7 +25,7 @@
       <!-- Дата -->
       <div
         class="date"
-        v-html="useDateString(props.data.created_at, props.data.updated_at)"
+        v-html="useDateString(props.data.created_at, props.data.updated_at, userController.lang)"
       ></div>
 
       <!--------------------------------------
@@ -52,7 +52,7 @@
           v-if="props.place === 'favorite'"
           @click="onRemoveFromFavorites"
         >
-          <svg-icon name="add2" />
+          <i class="fa-regular fa-plus-circle" />
           <p>{{ $t.item.removeFromFavorites }}</p>
         </div>
         <!-- Кнопка публикации -->
@@ -61,7 +61,7 @@
           v-if="props.place === 'moderation'"
           @click="onPublicArticle"
         >
-          <svg-icon name="check" />
+          <i class="fa-regular fa-check-circle" />
           <p>{{ $t.item.publish }}</p>
         </div>
       </div>
@@ -78,7 +78,7 @@ import { useDateString } from '~/hooks/useDateString';
 import { TArticle } from '~/utils/types/article';
 import { TSection } from '~/utils/types/secton';
 import { useCustomFetch } from '~/hooks/useCustomFetch';
-
+import {useUserStore} from "~/stores/UserController";
 
 /**
  * Пропсы ----------------
@@ -99,6 +99,7 @@ const emits = defineEmits(['removeFromFavorites', 'removeFromModeration']);
  */
 const route = useRoute();
 const teamController = useTeamStore();
+const userController = useUserStore();
 const $t = await useTranslate('elem');
 
 /**

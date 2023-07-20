@@ -3,7 +3,7 @@
     <!-- Аватарка -->
     <div class="img">
       <!-- Если, есть аватарка -->
-      <img :src="userController.user?.picture" alt="avatar" />
+      <Avatar :data="userController.user" />
     </div>
     <div
       class="btn-inline"
@@ -26,7 +26,6 @@ import { useUserStore } from '~/stores/UserController';
 import { useRequestStore } from '~/stores/RequestController';
 import { useCustomFetch } from '~/hooks/useCustomFetch';
 import { useProfileStore } from '~/stores/ProfileController';
-
 
 /**
  * Переменные ----------------

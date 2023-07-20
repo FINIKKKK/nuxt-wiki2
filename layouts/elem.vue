@@ -30,7 +30,7 @@
           <!-- Время -->
           <li
             class="elem__info-item"
-            v-html="useDateString(props.data.created_at, props.data.updated_at)"
+            v-html="useDateString(props.data.created_at, props.data.updated_at, userController.lang)"
           ></li>
         </ul>
 
@@ -60,6 +60,7 @@ import { useCustomFetch } from '~/hooks/useCustomFetch';
 import { TMessage } from '~/utils/types';
 import { useSectionsStore } from '~/stores/SectionContoller';
 import { TAbility } from '~/utils/types/team';
+import {useUserStore} from "~/stores/UserController";
 
 
 /**
@@ -82,6 +83,7 @@ const props = defineProps<{
 const route = useRoute();
 const teamController = useTeamStore();
 const sectionsController = useSectionsStore();
+const userController = useUserStore();
 const isFavorite = ref(props.properties?.bookmark || false);
 const abilities = ref<TAbility[]>([]);
 const $t = await useTranslate('elem');

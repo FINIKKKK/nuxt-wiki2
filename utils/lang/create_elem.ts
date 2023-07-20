@@ -17,6 +17,7 @@ export default {
       title: 'Доступ',
       text: 'itl.wiki создана для совместной работы, делитесь контентом, который вы создаете, с вашей командой',
       input: 'Введите имя пользователя',
+      select: 'Доступ',
     },
     tagsPopup: {
       title: 'Тэги',
@@ -42,6 +43,7 @@ export default {
       title: 'Access',
       text: 'itl.wiki is designed for collaboration, share the content you create with your team',
       input: 'Enter the user name',
+      select: 'Access',
     },
     tagsPopup: {
       title: 'Tags',

@@ -5,12 +5,12 @@
   >
     <p class="text">{{ $t.accessPopup.text }}</p>
 
-    <div class="field" tabindex="2" @blur="isShowList = false">
+    <div class="field" ref="refEmployees">
       <!-- Поле поиска пользователей -->
       <UIInput
         :label="$t.accessPopup.input"
         v-model="inputValue"
-        @click="isShowList = true"
+        @click="isShowList = !isShowList"
       />
 
       <!-- Список работников для выборки -->
@@ -32,10 +32,11 @@
           <p class="email">{{ ability?.user.email }}</p>
         </div>
         <UISelect
-          class="employee_select"
+          class="select"
           :options="accessArrEdit"
           v-model="ability.permission"
           type="access"
+          :label="$t.accessPopup.select"
         />
       </li>
     </ul>
@@ -52,6 +53,8 @@ import { TUser } from '~/utils/types/account';
 import { TAbility, TEmployees } from '~/utils/types/team';
 import { accessArr } from '~/utils/data';
 import { useCreateElemStore } from '~/stores/CreateElemController';
+import { useUserStore } from '~/stores/UserController';
+import { useOutsideClick } from '~/hooks/useOutsideClick';
 
 /**
  * Пропсы ----------------
@@ -80,6 +83,7 @@ const emits = defineEmits(['update:modelValue']);
  */
 const teamController = useTeamStore();
 const createElemController = useCreateElemStore();
+const userController = useUserStore();
 const inputValue = ref('');
 const isShowList = ref(false);
 const employeesAccess = ref<TUser[]>([]);
@@ -90,6 +94,12 @@ const accessArrEdit = accessArr.map((item) => ({
   value: item.value,
   label: $t2.access[item.label],
 }));
+const refEmployees = ref(null);
+
+/**
+ * Хуки ----------------
+ */
+useOutsideClick(refEmployees, isShowList);
 
 /**
  * Получение данных ----------------
@@ -98,7 +108,9 @@ const accessArrEdit = accessArr.map((item) => ({
 const { data } = await useCustomFetch<TEmployees>('team/employees', {
   query: { team_id: teamController.activeTeamId },
 });
-employees.value = data.employees;
+employees.value = data.employees.filter(
+  (obj) => obj.id !== userController.user.id,
+);
 
 /**
  * Вычисляемое ----------------
@@ -168,8 +180,9 @@ const addEmployeesAccess = (value: TUser) => {
     color: $gray;
     font-size: 14px;
   }
-  .employee_select {
+  .select {
     width: 140px;
+    margin-bottom: 0;
   }
 }
 </style>

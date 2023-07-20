@@ -1,8 +1,8 @@
 <template>
-  <li class="user" :data-layout="props.className">
-    <Avatar :data="props.data" />
-    <p>{{ props.data.fullname }}</p>
-  </li>
+  <div class="avatar" v-if="props.data.picture.includes('user.jpg')">
+    {{ `${props.data.first_name[0]}${props.data.last_name[0]}` }}
+  </div>
+  <img :src="props.data.picture" alt="avatar" v-else />
 </template>
 
 <!-- ----------------------------------------------------- -->
@@ -16,7 +16,6 @@ import { TUser } from '~/utils/types/account';
  */
 const props = defineProps<{
   data: TUser;
-  className?: 'comment';
 }>();
 </script>
 
@@ -24,24 +23,18 @@ const props = defineProps<{
 <!-- ----------------------------------------------------- -->
 
 <style lang="scss" scoped>
-.user {
-  cursor: pointer;
+.avatar {
+  text-transform: uppercase;
+  font-size: 14px;
+  background-color: $bg;
+  border-radius: 50%;
+  width: 35px;
+  height: 35px;
+  color: $blue;
+  border: 1px solid $blue;
   display: flex;
   align-items: center;
-  padding: 10px;
-  &:hover {
-    background-color: rgba($blue, 0.1);
-  }
-}
-</style>
-
-<style>
-.user {
-  img {
-    width: 35px;
-    height: 35px;
-    margin-right: 15px;
-    border-radius: 50%;
-  }
+  justify-content: center;
+  margin-right: 15px;
 }
 </style>

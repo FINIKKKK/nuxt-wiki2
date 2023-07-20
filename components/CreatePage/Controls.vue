@@ -36,7 +36,7 @@
           {{ labelBtn }}
         </button>
         <!-- Кнопка отмены -->
-        <NuxtLink :to="`${teamController.activeTeamSlug}`" class="btn btn2"
+        <NuxtLink :to="`${teamController.activeTeamSlug}/activity`" class="btn btn2"
           >{{ $t.btnCancel }}
         </NuxtLink>
       </div>

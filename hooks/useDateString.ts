@@ -1,22 +1,23 @@
 import { useFormatDate } from '~/hooks/useFormatData';
 
-
-// const $t = await useTranslate('elem');
-
 /**
  * Хук для правильного отображения даты
  */
-export const useDateString = (createdAt: string, updatedAt: string) => {
+export const useDateString = (
+  createdAt: string,
+  updatedAt: string,
+  lang: 'ru' | 'en',
+) => {
   // Либо дата создания
   if (createdAt !== updatedAt) {
-    return `${''}: <span style="color: #000000">${useFormatDate(
-      updatedAt,
-    )}<span>`;
+    return `${
+      lang === 'ru' ? 'Обновлено' : 'Updated'
+    }: <span style="color: #000000">${useFormatDate(updatedAt, lang)}<span>`;
   }
   // Либо дата изменения
   else {
-    return `${''}: <span style="color: #000000">${useFormatDate(
-      createdAt,
-    )}<span>`;
+    return `${
+      lang === 'ru' ? 'Опубликовано' : 'Published'
+    }: <span style="color: #000000">${useFormatDate(createdAt, lang)}<span>`;
   }
 };

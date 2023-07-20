@@ -7,7 +7,7 @@
           elemController.type === 'section' ? 'sections' : 'articles'
         }/edit/${route.params.id}`"
       >
-        <svg-icon name="edit" />
+        <i class="fa-regular fa-edit" />
       </NuxtLink>
     </div>
 
@@ -18,7 +18,7 @@
       @click="onSubscribe"
       :title="isSubscribed ? 'Отписаться' : 'Подписаться'"
     >
-      <svg-icon :name="isSubscribed ? 'attach2' : 'attach'" />
+      <i :class="`fa-regular fa-${isSubscribed ? 'attach2' : 'attach'}`" />
     </div>
 
     <!-- Доступ -->
@@ -27,7 +27,7 @@
       @click="elemController.openAccessPopup()"
       title="Изменить доступ"
     >
-      <svg-icon name="lock" />
+      <i class="fa-regular fa-lock" />
     </div>
 
     <!-- Сгенерировать ссылку -->
@@ -36,13 +36,13 @@
       @click="elemController.toggleLinkPopup()"
       title="Поделиться"
     >
-      <svg-icon name="share" />
+      <i class="fa-regular fa-share" />
     </div>
 
     <!-- Дополнительные возможности -->
     <div class="extra" ref="refPopup" title="Дополнительно">
       <div class="control" @click="isShowPopup = !isShowPopup">
-        <svg-icon name="options" />
+        <i class="fa-regular fa-ellipsis-h" />
       </div>
       <ul class="popup" v-if="isShowPopup">
         <!-- Открыть историю статьи -->
@@ -50,14 +50,14 @@
           <NuxtLink
             :to="`${teamController.activeTeamSlug}/articles/history/${elemController.article.article.id}`"
           >
-            <svg-icon name="reverse" />
+            <i class="fa-regular fa-reverse" />
             <p>Журнал версий</p>
           </NuxtLink>
         </li>
 
         <!-- Удалить элемент -->
         <li @click="onDelete">
-          <svg-icon name="remove" />
+          <i class="fa-regular fa-remove" />
           <p>
             Удалить
             {{ elemController.type === 'section' ? 'раздел' : 'статью' }}
