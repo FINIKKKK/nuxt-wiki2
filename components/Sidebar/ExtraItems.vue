@@ -13,13 +13,10 @@
   </div>
 
   <!-- Посты -->
-  <div class="items" v-if="sectionsController.section?.items?.length">
+  <div class="items" v-if="articles?.length">
     <h3>{{ $t.home.articles }}</h3>
     <ul>
-      <template
-        v-for="article in sectionsController.section?.items"
-        :key="article.id"
-      >
+      <template v-for="article in articles" :key="article.id">
         <SidebarItem :data="article" type="article" />
       </template>
     </ul>
@@ -32,12 +29,14 @@
 <script lang="ts" setup>
 import { useSectionsStore } from '~/stores/SectionContoller';
 
-
 /**
  * Переменные ----------------
  */
 const sectionsController = useSectionsStore();
 const $t = await useTranslate('sidebar');
+const articles = sectionsController.section?.items.filter(
+  (obj) => obj.status_id === 3,
+);
 </script>
 
 <!-- ----------------------------------------------------- -->

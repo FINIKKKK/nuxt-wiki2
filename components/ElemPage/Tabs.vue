@@ -23,11 +23,17 @@
     </div>
 
     <template v-for="(tab, index) in props.tabs">
-      <div class="map" v-if="index === activeTab">
-        <div class="caption">
-          <svg-icon name="hamburger2" />
-          <p>Содержание</p>
-        </div>
+      <div
+        class="map"
+        v-if="
+          index === activeTab &&
+          JSON.parse(tab.content).filter((obj) => obj.type === 'header')?.length
+        "
+      >
+        <a href="#title" class="caption">
+          <i class="fa-regular fa-align-left" />
+          <p>{{ $t.titles }}</p>
+        </a>
         <a
           :href="`#${item.id}`"
           v-for="item in JSON.parse(tab.content).filter(
@@ -37,7 +43,7 @@
           class="item"
           :class="{ child: item.data.level === 3 }"
         >
-          <svg-icon name="minus" v-if="item.data.level === 3" />
+          <i class="fa-regular fa-minus" v-if="item.data.level === 3" />
           <p>
             {{ item.data.text }}
           </p>
@@ -61,9 +67,10 @@ const props = defineProps<{
 }>();
 
 /**
- * Полльзовательские переменные ----------------
+ * Переменные ----------------
  */
-const activeTab = ref(0); // Активная вкладка
+const activeTab = ref(0);
+const $t = await useTranslate('elem');
 </script>
 
 <!-- ----------------------------------------------------- -->
@@ -116,11 +123,19 @@ const activeTab = ref(0); // Активная вкладка
     display: flex;
     align-items: center;
     margin-bottom: 8px;
-    svg {
-      fill: $gray;
+    color: $gray;
+    text-decoration: none;
+    i {
+      color: $gray;
       width: 15px;
-      height: 15px;
+      height: 20px;
       margin-right: 10px;
+    }
+    &:hover {
+      color: $blue;
+      i {
+        color: $blue;
+      }
     }
   }
   .item {
@@ -138,17 +153,17 @@ const activeTab = ref(0); // Активная вкладка
       text-overflow: ellipsis;
     }
     &.child {
-      svg {
+      i {
         width: 8px;
-        height: 8px;
-        margin-right: 10px;
-        fill: $gray;
+        height: 20px;
+        margin-right: 15px;
+        color: $gray;
       }
     }
     &:hover {
       color: $blue;
-      svg {
-        fill: $blue;
+      i {
+        color: $blue;
       }
     }
   }

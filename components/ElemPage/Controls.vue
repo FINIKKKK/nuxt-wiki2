@@ -1,7 +1,7 @@
 <template>
   <div class="controls">
     <!-- Редактировать -->
-    <div class="control" title="Редактировать">
+    <div class="control" :title="$t.controls.edit">
       <NuxtLink
         :to="`${teamController.activeTeamSlug}/${
           elemController.type === 'section' ? 'sections' : 'articles'
@@ -14,18 +14,19 @@
     <!-- Закрепить -->
     <div
       class="control"
+      :class="{ active: isSubscribed }"
       v-if="elemController.type === 'article'"
       @click="onSubscribe"
-      :title="isSubscribed ? 'Отписаться' : 'Подписаться'"
+      :title="isSubscribed ? $t.controls.subscribe : $t.controls.unsubscribe"
     >
-      <i :class="`fa-regular fa-${isSubscribed ? 'attach2' : 'attach'}`" />
+      <i class="fa-regular fa-thumb-tack" />
     </div>
 
     <!-- Доступ -->
     <div
       class="control"
       @click="elemController.openAccessPopup()"
-      title="Изменить доступ"
+      :title="$t.controls.access"
     >
       <i class="fa-regular fa-lock" />
     </div>
@@ -34,13 +35,13 @@
     <div
       class="control"
       @click="elemController.toggleLinkPopup()"
-      title="Поделиться"
+      :title="$t.controls.share"
     >
       <i class="fa-regular fa-share" />
     </div>
 
     <!-- Дополнительные возможности -->
-    <div class="extra" ref="refPopup" title="Дополнительно">
+    <div class="extra" ref="refPopup" :title="$t.controls.extra">
       <div class="control" @click="isShowPopup = !isShowPopup">
         <i class="fa-regular fa-ellipsis-h" />
       </div>
@@ -50,17 +51,20 @@
           <NuxtLink
             :to="`${teamController.activeTeamSlug}/articles/history/${elemController.article.article.id}`"
           >
-            <i class="fa-regular fa-reverse" />
-            <p>Журнал версий</p>
+            <i class="fa-regular fa-history" />
+            <p>{{ $t.controls.history }}</p>
           </NuxtLink>
         </li>
 
         <!-- Удалить элемент -->
         <li @click="onDelete">
-          <i class="fa-regular fa-remove" />
+          <i class="fa-regular fa-times-circle" />
           <p>
-            Удалить
-            {{ elemController.type === 'section' ? 'раздел' : 'статью' }}
+            {{
+              elemController.type === 'section'
+                ? $t.controls.removeSection
+                : $t.controls.removeArticle
+            }}
           </p>
         </li>
       </ul>
@@ -86,7 +90,8 @@ const teamController = useTeamStore();
 const elemController = useElemStore();
 const refPopup = ref(null);
 const isShowPopup = ref(false);
-const isSubscribed = ref(elemController.article?.properties.subscription); //
+const isSubscribed = ref(elemController.article?.properties.subscription);
+const $t = await useTranslate('elem');
 
 /**
  * Хуки ----------------
@@ -101,8 +106,10 @@ const onDelete = async () => {
   // Подтверждение удаления
   if (
     window.confirm(
-      `Вы точно хотите удалить ${
-        elemController.type === 'section' ? 'раздел' : 'статью'
+      `${
+        elemController.type === 'section'
+          ? $t.controls.confirmSection
+          : $t.controls.confirmArticle
       }?`,
     )
   ) {
@@ -182,6 +189,9 @@ const onSubscribe = async () => {
     height: 100%;
     transition: 0.2s;
     &:hover {
+      background-color: $blue2;
+    }
+    &.active {
       background-color: $blue2;
     }
   }

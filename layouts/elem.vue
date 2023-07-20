@@ -13,7 +13,7 @@
             @click="toggleFavorite"
           />
           <!-- Заголовок -->
-          <h1 class="title">{{ props.data.name }}</h1>
+          <h1 class="title" id="title">{{ props.data.name }}</h1>
         </div>
 
         <!--------------------------------------

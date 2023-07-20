@@ -12,11 +12,16 @@
     <div class="footer">
       <!-- Кнопка изменения рейтинга -->
       <div class="rate">
-        <p>Эта страница была полезной?</p>
+        <p>{{ $t.rate}}</p>
         <div class="smiles">
-          <svg-icon name="smile" @click="onChangeRate" class="green" />
-          <svg-icon name="smile2" @click="onChangeRate" class="orange" />
-          <svg-icon name="smile3" @click="onChangeRate" class="red" />
+          <i
+            v-for="item in smiles"
+            :key="item.id"
+            :class="`fa-regular fa-${item.name} ${
+              'active' && isRated === item.id
+            }`"
+            @click="() => onChangeRate(item.id)"
+          />
         </div>
       </div>
       <!-- Список тэгов -->
@@ -48,6 +53,13 @@ const teamController = useTeamStore();
 const sectionsController = useSectionsStore();
 const commentsController = useCommentsStore();
 const elemController = useElemStore();
+const isRated = ref<number | null>(null);
+const smiles = [
+  { id: 1, name: 'smile' },
+  { id: 2, name: 'meh' },
+  { id: 3, name: 'frown' },
+];
+const $t = await useTranslate('elem');
 
 /**
  * Получение данных ----------------
@@ -77,7 +89,7 @@ const { data: articleEdit } = await useCustomFetch<TArticleData>(
 );
 console.log(articleEdit);
 
-// Получаем разделы
+// Разделы
 if (!sectionsController.section) {
   const { data: section } = await useCustomFetch<TSectionData>(`team/section`, {
     query: {
@@ -94,18 +106,18 @@ if (!sectionsController.section) {
  * Методы ----------------
  */
 // Изменить рейтинг
-const onChangeRate = async () => {
+const onChangeRate = async (mark: number) => {
   const { message } = await useCustomFetch(`team/mark/add`, {
     body: {
       team_id: teamController.activeTeamId,
       entity_type: 'article',
       entity_id: route.params.id,
-      mark: 3,
+      mark,
     },
     method: 'POST',
   });
   if (message) {
-    console.log('gg', message);
+    isRated.value = mark;
   }
 };
 </script>
@@ -124,7 +136,8 @@ const onChangeRate = async () => {
 .rate {
   display: flex;
   align-items: center;
-  svg {
+  i {
+    font-size: 20px;
     width: 25px;
     height: 25px;
     fill: $gray;
@@ -141,32 +154,32 @@ const onChangeRate = async () => {
     margin-right: 10px;
   }
   .smiles {
-    svg:not(:last-child) {
+    i:not(:last-child) {
       margin-right: 5px;
     }
   }
-  .green {
+  .fa-smile {
     &:hover {
-      fill: green;
+      color: green;
     }
     &.active {
-      fill: green;
+      color: green;
     }
   }
-  .orange {
+  .fa-meh {
     &:hover {
-      fill: orange;
+      color: orange;
     }
     &.active {
-      fill: orange;
+      color: orange;
     }
   }
-  .red {
+  .fa-frown {
     &:hover {
-      fill: red;
+      color: red;
     }
     &.active {
-      fill: red;
+      color: red;
     }
   }
 }
