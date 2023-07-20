@@ -107,7 +107,7 @@ const onRegister = async () => {
     method: 'POST',
   });
 
-  if (data.value) {
+  if (data) {
     // Устанавливаем токен в куки
     token.value = data.value.token;
     // Устанавливаем данные пользователя в хранилище

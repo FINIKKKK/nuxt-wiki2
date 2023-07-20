@@ -12,7 +12,7 @@
     <div class="footer">
       <!-- Кнопка изменения рейтинга -->
       <div class="rate">
-        <p>{{ $t.rate}}</p>
+        <p>{{ $t.rate }}</p>
         <div class="smiles">
           <i
             v-for="item in smiles"
@@ -29,7 +29,7 @@
     </div>
 
     <!-- Комментарии -->
-    <!--    <Comments />-->
+    <Comments />
   </NuxtLayout>
 </template>
 
@@ -130,7 +130,7 @@ const onChangeRate = async (mark: number) => {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-bottom: 25px;
+  margin-bottom: 50px;
 }
 
 .rate {
@@ -141,8 +141,9 @@ const onChangeRate = async (mark: number) => {
     width: 25px;
     height: 25px;
     fill: $gray;
-    opacity: 0.3;
+    opacity: 0.2;
     cursor: pointer;
+    font-weight: 700;
     &:hover {
       opacity: 1;
     }

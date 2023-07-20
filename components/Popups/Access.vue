@@ -2,7 +2,7 @@
   <UIAsidePopup
     :title="$t.accessPopup.title"
     :isOpen="props.isOpen"
-    @close="createElemController.closeAccess()"
+    @close="emits('close')"
   >
     <p class="text">{{ $t.accessPopup.text }}</p>
 
@@ -78,7 +78,7 @@ const model = computed({
 /**
  * События ----------------
  */
-const emits = defineEmits(['update:modelValue']);
+const emits = defineEmits(['update:modelValue', 'close']);
 
 /**
  * Переменные ----------------

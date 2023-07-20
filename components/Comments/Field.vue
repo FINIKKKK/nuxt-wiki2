@@ -1,27 +1,37 @@
 <template>
   <div class="field">
     <div class="input">
-      <UITextarea
+      <UIInput
         label="Добавить комментарий"
+        :isTextarea="true"
+        :limit="350"
         v-model="commentsController.fieldValue"
-      />
-      <div class="btns">
-        <svg-icon
-          :name="commentsController.editComment ? 'edit' : 'submit'"
-          class="svg-btn submit"
-          :class="{ disabled: requestController.loading[url] }"
+        @btnClick="createOrEditComment"
+        @btnClick2="cancelEdit"
+        class="comment_input"
+      >
+        <template
+          #btn2
           v-if="commentsController.fieldValue"
-          @click="createOrEditComment"
           title="Редактировать комментарий"
-        />
-        <svg-icon
-          name="close"
-          class="svg-btn close"
+        >
+          <i
+            :class="`fa-regular fa-${
+              commentsController.editComment ? 'edit' : 'paper-plane'
+            } ${'disabled' && requestController.loading[url]}`"
+          />
+        </template>
+        <template
+          #btn3
           v-if="commentsController.editComment"
-          @click="cancelEdit"
           title="Отменить редактирование"
-        />
-      </div>
+        >
+          <i
+            class="fa-regular fa-remove"
+            :class="{ disabled: requestController.loading[url] }"
+          />
+        </template>
+      </UIInput>
     </div>
 
     <div class="users">
@@ -46,7 +56,7 @@ import { useCustomFetch } from '~/hooks/useCustomFetch';
 import { TComment } from '~/utils/types/comment';
 import { TUser } from '~/utils/types/account';
 import { useCommentsStore } from '~/stores/CommentsController';
-import {TEmployees} from "~/utils/types/team";
+import { TEmployees } from '~/utils/types/team';
 
 /**
  * Переменные ----------------
@@ -82,11 +92,11 @@ const createOrEditComment = async () => {
       method: 'POST',
     });
 
-    if (data.value) {
+    if (data) {
       // Очищаем поле
       commentsController.changeFieldValue('');
       // Добавляем в массив комментарий
-      commentsController.addComment(data.value);
+      commentsController.addComment(data);
     }
   }
   // ------------------------------------
@@ -101,13 +111,13 @@ const createOrEditComment = async () => {
       },
       method: 'POST',
     });
-    console.log(data.value);
+    console.log(data);
 
-    if (data.value) {
+    if (data) {
       // Очищаем поле
       commentsController.changeFieldValue('');
       // Изменяем комментарий в массиве
-      commentsController.updateComments(data.value);
+      commentsController.updateComments(data);
     }
   }
 };
@@ -159,5 +169,30 @@ const cancelEdit = () => {
 .users {
   background-color: $bg;
   max-width: 200px;
+  max-height: 200px;
+}
+</style>
+
+<style lang="scss">
+.comment_input {
+  .inner .flex {
+    align-items: flex-start !important;
+  }
+}
+
+.users {
+  .user {
+    padding: 7px 10px;
+    .avatar,
+    img {
+      font-size: 10px;
+      line-height: 14px;
+      width: 25px;
+      height: 25px;
+    }
+  }
+  p {
+    font-size: 14px;
+  }
 }
 </style>

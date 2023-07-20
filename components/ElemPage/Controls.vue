@@ -25,7 +25,7 @@
     <!-- Доступ -->
     <div
       class="control"
-      @click="elemController.openAccessPopup()"
+      @click="elemController.openAccess()"
       :title="$t.controls.access"
     >
       <i class="fa-regular fa-lock" />
@@ -34,7 +34,7 @@
     <!-- Сгенерировать ссылку -->
     <div
       class="control"
-      @click="elemController.toggleLinkPopup()"
+      @click="elemController.toggleLink()"
       :title="$t.controls.share"
     >
       <i class="fa-regular fa-share" />
@@ -110,7 +110,7 @@ const onDelete = async () => {
         elemController.type === 'section'
           ? $t.controls.confirmSection
           : $t.controls.confirmArticle
-      }?`,
+      }`,
     )
   ) {
     // Удаляем элемент
@@ -127,7 +127,7 @@ const onDelete = async () => {
       method: 'POST',
     });
 
-    if (data.value) {
+    if (data) {
       // Перенаправляем пользователя
       await router.push(`${teamController.activeTeamId}`);
       // Закрываем попап
@@ -198,6 +198,9 @@ const onSubscribe = async () => {
     }
   }
   i {
+    display: flex;
+    align-items: center;
+    justify-content: center;
     width: 20px;
     height: 20px;
   }

@@ -15,26 +15,40 @@
         <svg-icon v-if="props.type === 'address'" name="tooltip" />
       </label>
 
-      <div
-        style="
-          display: flex;
-          align-items: center;
-          justify-content: space-between;
-        "
-      >
+      <div class="flex">
         <input
+          v-if="!props.isTextarea"
           :type="
             props.type === 'password' && !isShowPassword ? 'password' : 'text'
           "
           v-model="model"
-          maxlength="200"
+          :maxlength="props.limit ? props.limit : 200"
           @focus="isFocus = true"
           @blur="isFocus = false"
           v-custom-mask="mask"
         />
+        <textarea
+          v-else
+          v-model="model"
+          :maxlength="props.limit ? props.limit : 250"
+          @focus="isFocus = true"
+          @blur="isFocus = false"
+          ref="textareaRef"
+        >
+        </textarea>
 
         <div @click="emits('btnClick')" v-if="slots.btn" class="btn">
           <slot name="btn"></slot>
+        </div>
+        <div @click="emits('btnClick')" v-if="slots.btn2" class="btn-icon">
+          <slot name="btn2"></slot>
+        </div>
+        <div
+          @click="emits('btnClick2')"
+          v-if="slots.btn3"
+          class="btn-icon btn-icon2"
+        >
+          <slot name="btn3"></slot>
         </div>
       </div>
 
@@ -46,7 +60,7 @@
           @click="isShowPassword = !isShowPassword"
         />
       </div>
-      <!-- Url адресс -->
+      <!-- URL адресс -->
       <div v-if="type === 'address'" class="url">itl.wiki</div>
     </div>
     <span class="error" v-if="errors">
@@ -67,6 +81,8 @@ const props = defineProps<{
   modelValue: string;
   errors?: string[];
   type?: 'password' | 'address' | 'phone';
+  limit?: number;
+  isTextarea?: boolean;
 }>();
 
 // Значение
@@ -78,12 +94,11 @@ const model = computed({
     emits('update:modelValue', val);
   },
 });
-const $t = await useTranslate('validation');
 
 /**
  * События ----------------
  */
-const emits = defineEmits(['update:modelValue', 'btnClick']);
+const emits = defineEmits(['update:modelValue', 'btnClick', 'btnClick2']);
 
 /**
  * Переменные ----------------
@@ -92,6 +107,8 @@ const vCustomMask = vMask();
 const isShowPassword = ref(false);
 const isFocus = ref(false);
 const slots = useSlots();
+const textareaRef = ref<HTMLTextAreaElement | null>(null);
+const $t = await useTranslate('validation');
 
 /**
  * Вычисляемые значения ----------------
@@ -104,6 +121,16 @@ const mask = computed(() => {
     return null;
   }
 });
+// Изменять высоту textarea
+if (props.isTextarea) {
+  watch(model, () => {
+    if (textareaRef.value) {
+      const textarea = textareaRef.value as HTMLTextAreaElement;
+      textarea.style.height = '50px';
+      textarea.style.height = `${textarea.scrollHeight}px`;
+    }
+  });
+}
 </script>
 
 <!-- ----------------------------------------------------- -->
@@ -133,8 +160,16 @@ const mask = computed(() => {
     textarea {
       width: 100%;
       padding: 16px 24px;
-      transition: 0.3s;
       border-radius: 2px;
+    }
+    input {
+      transition: 0.3s;
+    }
+    textarea {
+      height: 55px;
+      &::-webkit-scrollbar {
+        display: none;
+      }
     }
   }
   &.focus {
@@ -230,6 +265,12 @@ const mask = computed(() => {
   }
 }
 
+.flex {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
 .btn {
   cursor: pointer;
   font-size: 14px;
@@ -238,5 +279,40 @@ const mask = computed(() => {
   color: $white;
   margin-left: 15px;
   margin-right: 10px;
+}
+
+.btn-icon {
+  width: 30px;
+  height: 30px;
+  background-color: rgba($blue, 0.1);
+  padding: 8px;
+  transition: 0.3s;
+  cursor: pointer;
+  border-radius: 2px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 12px 15px 0 15px;
+  i {
+    font-weight: 700;
+  }
+  &:hover {
+    background-color: $blue2;
+  }
+}
+
+.btn-icon2 {
+  margin-left: -5px;
+}
+</style>
+
+<style lang="scss">
+.btn-icon {
+  .disabled {
+    opacity: 0.5;
+  }
+  i {
+    font-weight: 700;
+  }
 }
 </style>

@@ -11,8 +11,8 @@ export const useElemStore = defineStore('elemController', () => {
    * Свойства ----------------
    */
   const type: Ref<'section' | 'article'> = ref('section');
-  const isShowAccessPopup: Ref<boolean> = ref(false);
-  const isShowLinkPopup: Ref<boolean> = ref(false);
+  const isOpenAccess: Ref<boolean> = ref(false);
+  const isOpenLink: Ref<boolean> = ref(false);
   const article: Ref<TArticleData | null> = ref(null);
 
   /**
@@ -21,25 +21,25 @@ export const useElemStore = defineStore('elemController', () => {
   const changeTypeElem = (value: 'section' | 'article') => {
     type.value = value;
   };
-  const toggleAccessPopup = () => {
-    isShowAccessPopup.value = !isShowAccessPopup.value;
-    console.log(isShowAccessPopup.value);
+  const toggleAccess = () => {
+    isOpenAccess.value = !isOpenAccess.value;
+    console.log(isOpenAccess.value);
   };
-  const openAccessPopup = () => {
-    isShowAccessPopup.value = true;
-    console.log(isShowAccessPopup.value);
+  const openAccess = () => {
+    isOpenAccess.value = true;
+    console.log(isOpenAccess.value);
   };
-  const closeAccessPopup = () => {
-    isShowAccessPopup.value = false;
+  const closeAccess = () => {
+    isOpenAccess.value = false;
   };
-  const toggleLinkPopup = () => {
-    isShowLinkPopup.value = !isShowLinkPopup.value;
+  const toggleLink = () => {
+    isOpenLink.value = !isOpenLink.value;
   };
-  const openLinkPopup = () => {
-    isShowLinkPopup.value = true;
+  const openLink = () => {
+    isOpenLink.value = true;
   };
-  const closeLinkPopup = () => {
-    isShowLinkPopup.value = false;
+  const closeLink = () => {
+    isOpenLink.value = false;
   };
   const setArticle = (value: TArticleData | null) => {
     article.value = value;
@@ -49,14 +49,14 @@ export const useElemStore = defineStore('elemController', () => {
   return {
     type,
     changeTypeElem,
-    isShowAccessPopup,
-    openAccessPopup,
-    closeAccessPopup,
-    toggleAccessPopup,
-    isShowLinkPopup,
-    openLinkPopup,
-    closeLinkPopup,
-    toggleLinkPopup,
+    isOpenAccess,
+    openAccess,
+    closeAccess,
+    toggleAccess,
+    isOpenLink,
+    openLink,
+    closeLink,
+    toggleLink,
     article,
     setArticle,
   };

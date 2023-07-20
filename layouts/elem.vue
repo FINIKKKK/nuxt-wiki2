@@ -44,7 +44,11 @@
         <!--------------------------------------
           Попап доступа у пользователей
         ---------------------------------------->
-        <!--        <CreatePageAccess v-model="abilities" />-->
+        <PopupsAccess
+          :isOpen="elemController.isOpenAccess"
+          v-model="abilities"
+          @close="elemController.closeAccess()"
+        />
 
         <!--------------------------------------
           Слот
@@ -66,8 +70,10 @@ import { useTeamStore } from '~/stores/TeamContoller';
 import { useCustomFetch } from '~/hooks/useCustomFetch';
 import { TMessage } from '~/utils/types';
 import { useSectionsStore } from '~/stores/SectionContoller';
-import { TAbility } from '~/utils/types/team';
+import { TAbility, TEmployees } from '~/utils/types/team';
 import { useUserStore } from '~/stores/UserController';
+import { useElemStore } from '~/stores/ElemController';
+import { useEmployeesStore } from '~/stores/EmployeesController';
 
 /**
  * Пропсы ----------------
@@ -79,9 +85,6 @@ const props = defineProps<{
 }>();
 
 //
-// const {data} = await useCustomFetch(`team/abilities`, {
-//   query: {team_id: teamController.activeTeamId, entity_id: route.para},
-// });
 
 /**
  * Переменные ----------------
@@ -90,9 +93,11 @@ const route = useRoute();
 const teamController = useTeamStore();
 const sectionsController = useSectionsStore();
 const userController = useUserStore();
+const elemController = useElemStore();
 const isFavorite = ref(props.properties?.bookmark || false);
 const abilities = ref<TAbility[]>([]);
 const $t = await useTranslate('elem');
+const employeesController = useEmployeesStore();
 const nav = [
   {
     label: sectionsController.breadCrumbs[0]?.name,
@@ -111,6 +116,57 @@ const nav = [
     link: `${teamController.activeTeamSlug}/articles/${props.data.id}`,
   },
 ];
+
+const { data } = await useCustomFetch<any>(`team/abilities`, {
+  query: {
+    team_id: teamController.activeTeamId,
+    entity_id: route.params.id,
+    entity_type: 'article',
+  },
+});
+//
+const { data: employees } = await useCustomFetch<TEmployees>('team/employees', {
+  query: { team_id: teamController.activeTeamId },
+});
+
+console.log(data);
+
+const abilities2 = data.users.map((obj) => ({
+  user: employees.employees.find((user) => user.id == obj.entity_id),
+  permission: obj.ability.name,
+}));
+
+const permissions = {
+  'articles.edit': 'edit',
+  'articles.share': 'share',
+  'articles.view': 'view'
+};
+
+// watch(
+//   abilities,
+//   async () => {
+//     console.log(abilities.value);
+//     //
+//     const dto = {
+//       team_id: teamController.activeTeamId,
+//       entity_id: route.params.id,
+//       entity_type: 'article',
+//       user_id: abilities.value[0].user.id,
+//       permission: abilities.value[0].permission.value,
+//     };
+//
+//     console.log(dto);
+//
+//     const { data } = await useCustomFetch(`team/abilities/add`, {
+//       body: dto,
+//       method: 'POST',
+//     });
+//
+//     if (data) {
+//     }
+//   },
+//   { deep: true },
+// );
 
 /**
  * Методы ----------------

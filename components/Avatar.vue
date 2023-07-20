@@ -37,4 +37,11 @@ const props = defineProps<{
   justify-content: center;
   margin-right: 15px;
 }
+
+img {
+  width: 35px;
+  height: 35px;
+  margin-right: 15px;
+  border-radius: 50%;
+}
 </style>

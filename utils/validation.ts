@@ -23,8 +23,7 @@ export const RegisterScheme = yup.object().shape({
   email: yup.string().required('required').email('email'),
   phone: yup
     .string()
-    .required('required')
-    .matches(/^\+?\d{1,3}-?\d{3}-?\d{3}-?\d{2}-?\d{2}$/, 'phone'),
+    .required('required'),
   password: yup.string().required('required').min(6, 'password'),
 });
 
