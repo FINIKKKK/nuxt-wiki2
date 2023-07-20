@@ -7,9 +7,10 @@
           Шапка элемента
         ---------------------------------------->
         <div class="elem__header">
-          <svg-icon
+          <i
+            class="fa-regular fa-bookmark"
+            :class="{ active: isFavorite }"
             v-if="props.type === 'article'"
-            :name="isFavorite ? 'favorite2' : 'favorite'"
             @click="toggleFavorite"
           />
           <!-- Заголовок -->
@@ -24,13 +25,19 @@
           <li class="elem__info-item">
             {{ $t.author }}:
             <span>{{
-                `${props.data?.creator.first_name} ${props.data?.creator.last_name}`
-              }}</span>
+              `${props.data?.creator.first_name} ${props.data?.creator.last_name}`
+            }}</span>
           </li>
           <!-- Время -->
           <li
             class="elem__info-item"
-            v-html="useDateString(props.data.created_at, props.data.updated_at, userController.lang)"
+            v-html="
+              useDateString(
+                props.data.created_at,
+                props.data.updated_at,
+                userController.lang,
+              )
+            "
           ></li>
         </ul>
 
@@ -60,8 +67,7 @@ import { useCustomFetch } from '~/hooks/useCustomFetch';
 import { TMessage } from '~/utils/types';
 import { useSectionsStore } from '~/stores/SectionContoller';
 import { TAbility } from '~/utils/types/team';
-import {useUserStore} from "~/stores/UserController";
-
+import { useUserStore } from '~/stores/UserController';
 
 /**
  * Пропсы ----------------
@@ -158,12 +164,16 @@ const toggleFavorite = async () => {
   align-items: center;
   margin-bottom: 12px;
   position: relative;
-  svg {
+  i {
+    font-size: 18px;
     width: 20px;
     height: 20px;
     position: absolute;
-    left: -40px;
+    left: -30px;
     cursor: pointer;
+    &.active {
+      font-weight: 700;
+    }
   }
 }
 

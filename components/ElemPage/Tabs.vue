@@ -27,7 +27,7 @@
         class="map"
         v-if="
           index === activeTab &&
-          JSON.parse(tab.content).filter((obj) => obj.type === 'header')?.length
+          JSON.parse(tab.content).filter((obj: OutputBlockData) => obj.type === 'header')?.length
         "
       >
         <a href="#title" class="caption">
@@ -37,7 +37,7 @@
         <a
           :href="`#${item.id}`"
           v-for="item in JSON.parse(tab.content).filter(
-            (obj) => obj.type === 'header',
+            (obj: OutputBlockData) => obj.type === 'header',
           )"
           :key="item.id"
           class="item"
@@ -58,6 +58,7 @@
 
 <script lang="ts" setup>
 import { TTabParse } from '~/utils/types/article';
+import {OutputBlockData} from "@editorjs/editorjs";
 
 /**
  * Пропсы ----------------

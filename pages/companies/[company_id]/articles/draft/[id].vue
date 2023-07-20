@@ -15,7 +15,7 @@
 import { useCustomFetch } from '~/hooks/useCustomFetch';
 import { useTeamStore } from '~/stores/TeamContoller';
 import { useCreateElemStore } from '~/stores/CreateElemController';
-import { TArticleEdit } from '~/utils/types/article';
+import {TArticleEdit, TTabParse} from '~/utils/types/article';
 import { useSectionsStore } from '~/stores/SectionContoller';
 
 /**
@@ -44,7 +44,7 @@ const section =
   ) || null;
 // Значение вкладок
 const tabs = await computed(() => {
-  return data.value.article.tabs.map((obj) => ({
+  return data.value.article.tabs.map((obj: TTabParse) => ({
     name: obj.name,
     content: JSON.parse(obj.content),
   }));

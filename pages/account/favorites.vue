@@ -18,7 +18,8 @@
 
 <script lang="ts" setup>
 import { useCustomFetch } from '~/hooks/useCustomFetch';
-import { TFavoriteData } from '~/utils/types/favorites';
+import {TFavorite, TFavoriteData} from '~/utils/types/favorites';
+import {TArticle} from "~/utils/types/article";
 
 
 /**
@@ -45,7 +46,7 @@ const { data: favorites } = await useCustomFetch<TFavoriteData>(
 // Удалить из списка (событие)
 const removeFromFavorites = (id: number) => {
   favorites.internal[0] = favorites.internal[0].filter(
-    (obj) => obj.article.id !== id,
+    (obj: TFavorite) => obj.article.id !== id,
   );
 };
 </script>

@@ -52,7 +52,7 @@ const onChangeRole = async (role: string) => {
   const { message } = await useCustomFetch(`team/employees/role/change`, {
     body: {
       team_id: teamController.activeTeamId,
-      user_id: employeesController.user.id,
+      user_id: employeesController.user?.id,
       role,
     },
     method: 'POST',

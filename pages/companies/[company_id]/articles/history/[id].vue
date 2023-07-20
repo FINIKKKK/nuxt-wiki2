@@ -25,6 +25,7 @@
             useDateString(
               article.article.created_at,
               article.article.updated_at,
+              userController.lang,
             )
           "
         ></li>
@@ -41,8 +42,8 @@
       <ul class="list">
         <li v-for="item in history">
           <div class="info">
-<!--            <div class="date">{{ useFormatDate(item.created_at) }}</div>-->
-<!--            <div class="author">{{ item.creator.fullname }}</div>-->
+            <!--            <div class="date">{{ useFormatDate(item.created_at) }}</div>-->
+            <!--            <div class="author">{{ item.creator.fullname }}</div>-->
           </div>
           <div class="btn btn2" v-if="false">
             <p>Текущая версия</p>
@@ -65,11 +66,18 @@ import { useCustomFetch } from '~/hooks/useCustomFetch';
 import { useTeamStore } from '~/stores/TeamContoller';
 import { TArticleData } from '~/utils/types/article';
 import { useDateString } from '~/hooks/useDateString';
-import { useFormatDate } from '../../../../../hooks/useFormatData';
+import { useUserStore } from '~/stores/UserController';
 
+/**
+ * Переменные ----------------
+ */
 const teamController = useTeamStore();
 const route = useRoute();
+const userController = useUserStore();
 
+/**
+ * Получение данных ----------------
+ */
 const { data: article } = await useCustomFetch<TArticleData>(`team/article`, {
   query: {
     team_id: teamController.activeTeamId,

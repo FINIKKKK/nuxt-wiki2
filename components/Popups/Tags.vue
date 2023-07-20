@@ -1,14 +1,15 @@
 <template>
   <UIAsidePopup
-    :title="$t.tagsPopup.title"
-    @close="createElemController.closeTags()"
+      :title="$t.tagsPopup.title"
+      :isOpen="props.isOpen"
+      @close="createElemController.closeTags()"
   >
     <p class="text">{{ $t.tagsPopup.text }}</p>
 
     <UIInput
-      :label="$t.tagsPopup.input"
-      v-model="inputValue"
-      @input="searchTag"
+        :label="$t.tagsPopup.input"
+        v-model="inputValue"
+        @input="searchTag"
     />
   </UIAsidePopup>
 </template>
@@ -17,10 +18,17 @@
 <!-- ----------------------------------------------------- -->
 
 <script lang="ts" setup>
-import { useCustomFetch } from '~/hooks/useCustomFetch';
-import { useTeamStore } from '~/stores/TeamContoller';
-import { useCreateElemStore } from '~/stores/CreateElemController';
+import {useCustomFetch} from '~/hooks/useCustomFetch';
+import {useTeamStore} from '~/stores/TeamContoller';
+import {useCreateElemStore} from '~/stores/CreateElemController';
 import debounce from 'lodash.debounce';
+
+/**
+ * Пропсы ----------------
+ */
+const props = defineProps<{
+  isOpen: boolean;
+}>();
 
 /**
  * Переменные ----------------
@@ -44,7 +52,7 @@ const searchTag = debounce(async () => {
     };
 
     // Поиск
-    const { data } = await useCustomFetch('team/settings/tags/find', {
+    const {data} = await useCustomFetch('team/settings/tags/find', {
       body: dto,
       method: 'POST',
     });

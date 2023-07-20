@@ -1,8 +1,8 @@
 <template>
-  <div class="avatar" v-if="props.data.picture.includes('user.jpg')">
+  <div class="avatar" v-if="props.data?.picture.includes('user.jpg')">
     {{ `${props.data.first_name[0]}${props.data.last_name[0]}` }}
   </div>
-  <img :src="props.data.picture" alt="avatar" v-else />
+  <img :src="props.data?.picture" alt="avatar" v-else />
 </template>
 
 <!-- ----------------------------------------------------- -->
@@ -15,7 +15,7 @@ import { TUser } from '~/utils/types/account';
  * Пропсы ----------------
  */
 const props = defineProps<{
-  data: TUser;
+  data: TUser | null;
 }>();
 </script>
 

@@ -1,6 +1,7 @@
 <template>
   <UIAsidePopup
     :title="$t.accessPopup.title"
+    :isOpen="props.isOpen"
     @close="createElemController.closeAccess()"
   >
     <p class="text">{{ $t.accessPopup.text }}</p>
@@ -61,6 +62,7 @@ import { useOutsideClick } from '~/hooks/useOutsideClick';
  */
 const props = defineProps<{
   modelValue: TAbility[];
+  isOpen: boolean;
 }>();
 
 // Значение
@@ -109,7 +111,7 @@ const { data } = await useCustomFetch<TEmployees>('team/employees', {
   query: { team_id: teamController.activeTeamId },
 });
 employees.value = data.employees.filter(
-  (obj) => obj.id !== userController.user.id,
+  (obj: TUser) => obj.id !== userController.user?.id,
 );
 
 /**
@@ -117,7 +119,7 @@ employees.value = data.employees.filter(
  */
 // Сортировать список работников при поиске
 watch(inputValue, () => {
-  employees.value = data.value.employees.filter((obj) =>
+  employees.value = data.value.employees.filter((obj: TUser) =>
     obj.fullname.toLowerCase().includes(inputValue.value.toLowerCase()),
   );
 });

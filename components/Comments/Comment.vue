@@ -3,7 +3,7 @@
     <!-- Информация о комментарие -->
     <div class="info">
       <div class="user">{{ props.data.creator.fullname }}</div>
-      <div class="date">{{ useFormatDate(props.data.created_at) }}</div>
+      <div class="date">{{ useFormatDate(props.data.created_at, userController.lang) }}</div>
     </div>
 
     <!-- Текст комментария -->
@@ -39,6 +39,7 @@ import { useOutsideClick } from '~/hooks/useOutsideClick';
 import { useCustomFetch } from '~/hooks/useCustomFetch';
 import { useTeamStore } from '~/stores/TeamContoller';
 import { useCommentsStore } from '~/stores/CommentsController';
+import {useUserStore} from "~/stores/UserController";
 
 /**
  * Пропсы ----------------
@@ -54,6 +55,7 @@ const popupRef = ref(null);
 const isShowPopup = ref(false);
 const teamController = useTeamStore();
 const commentsController = useCommentsStore();
+const userController = useUserStore();
 
 /**
  * Хуки ----------------

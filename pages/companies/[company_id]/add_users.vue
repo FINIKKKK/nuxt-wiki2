@@ -78,7 +78,7 @@ const emailUsers = ref('');
 const selectValue = ref(roles[0]);
 const teamController = useTeamStore();
 const requestController = useRequestStore();
-const emails = ref([]);
+const emails = ref<string[]>([]);
 const router = useRouter();
 const $t = await useTranslate('add_users');
 const { errors, validateForm } = useFormValidation();
@@ -123,7 +123,7 @@ const onAddEmail = async (email: string) => {
 };
 
 // Добавить email в список через запятую
-const onSplitAddEmail = (e) => {
+const onSplitAddEmail = (e: any) => {
   if (e.target.value.includes(',')) {
     onAddEmail(emailUsers.value.split(',')[0]);
   }

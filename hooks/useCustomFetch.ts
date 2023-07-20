@@ -46,5 +46,6 @@ export const useCustomFetch = async <T>(
   requestController.addIsLoading({ [url]: false });
 
   // Возвращаем данные
+  // @ts-ignore
   return { data: data.value?.data, message: data.value?.messages };
 };

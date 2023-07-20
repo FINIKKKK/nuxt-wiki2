@@ -11,7 +11,7 @@ export const useUserStore = defineStore('userController', () => {
    * Свойства ----------------
    */
   const user: Ref<TUser | null> = ref(null);
-  const lang: Ref<string> = ref('ru');
+  const lang: Ref<'ru' | 'en'> = ref('ru');
 
   /**
    * Методы ----------------
@@ -31,7 +31,7 @@ export const useUserStore = defineStore('userController', () => {
       user.value.picture = value;
     }
   };
-  const changeLang = (value: string) => {
+  const changeLang = (value: 'ru' | 'en') => {
     lang.value = value;
   };
 
@@ -42,6 +42,6 @@ export const useUserStore = defineStore('userController', () => {
     updateUserData,
     updateUserAvatar,
     lang,
-    changeLang
+    changeLang,
   };
 });

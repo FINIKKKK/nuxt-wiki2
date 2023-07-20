@@ -1,6 +1,6 @@
 <template>
   <h3 class="title">
-    {{ $t.search.title }} {{ teamController.activeTeam.team.name }}.itl.kz
+    {{ $t.search.title }} {{ teamController.activeTeam?.team.name }}.itl.kz
   </h3>
 
   <!--------------------------------------

@@ -49,7 +49,7 @@
         <!-- Открыть историю статьи -->
         <li v-if="elemController.type === 'article'">
           <NuxtLink
-            :to="`${teamController.activeTeamSlug}/articles/history/${elemController.article.article.id}`"
+            :to="`${teamController.activeTeamSlug}/articles/history/${elemController.article?.article.id}`"
           >
             <i class="fa-regular fa-history" />
             <p>{{ $t.controls.history }}</p>
@@ -143,7 +143,7 @@ const subscribe = async () => {
   const { data } = await useCustomFetch(`subscribe/change`, {
     body: {
       team_id: teamController.activeTeamId,
-      article_id: elemController.article.article.id,
+      article_id: elemController.article?.article.id,
     },
     method: 'POST',
   });
@@ -192,13 +192,14 @@ const onSubscribe = async () => {
       background-color: $blue2;
     }
     &.active {
-      background-color: $blue2;
+      i {
+        font-weight: 700;
+      }
     }
   }
-  svg {
+  i {
     width: 20px;
     height: 20px;
-    fill: $blue;
   }
 }
 

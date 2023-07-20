@@ -66,7 +66,7 @@ const props = defineProps<{
   label: string;
   modelValue: string;
   errors?: string[];
-  type?: 'password' | 'address';
+  type?: 'password' | 'address' | 'phone';
 }>();
 
 // Значение

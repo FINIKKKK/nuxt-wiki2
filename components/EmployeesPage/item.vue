@@ -11,7 +11,7 @@
     </th>
     <th>-</th>
     <th class="controls" tabindex="1" @blur="isShowPopup = false">
-      <template v-if="userController.user.id !== props.data.id">
+      <template v-if="userController.user?.id !== props.data.id">
         <i
           class="fa-regular fa-ellipsis-h"
           @click="isShowPopup = !isShowPopup"

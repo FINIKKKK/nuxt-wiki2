@@ -82,7 +82,7 @@ const teamController = useTeamStore();
 const createElemController = useCreateElemStore();
 const sectionsController = useSectionsStore();
 const isScrolled = ref(false);
-const refScroll = ref(null);
+const refScroll = ref<HTMLDivElement | null>(null);
 const $t = await useTranslate('create_elem');
 const abilities = ref([]);
 
@@ -122,7 +122,7 @@ const selections = computed(() => {
 
     return transformSections(sections);
   } else {
-    return sections.map((obj) => ({
+    return sections.map((obj: TSection) => ({
       value: obj.id,
       label: obj.name,
     }));
@@ -175,7 +175,7 @@ onBeforeRouteLeave((to, from, next) => {
 const onChangeHeader = () => {
   const block = refScroll.value;
 
-  block.addEventListener('scroll', function () {
+  block && block.addEventListener('scroll', function () {
     if (block.scrollTop > 30) {
       isScrolled.value = true;
     } else {

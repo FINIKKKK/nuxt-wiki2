@@ -57,7 +57,7 @@ const employeesController = useEmployeesStore();
 const teamController = useTeamStore();
 const requestController = useRequestStore();
 const emailValue = ref('');
-const emails = ref([]);
+const emails = ref<string[]>([]);
 const { errors, validateForm } = useFormValidation();
 const $t = await useTranslate('employees');
 
@@ -81,7 +81,7 @@ const onAddEmail = async (email: string) => {
 };
 
 // Добавить email в список через запятую
-const onSplitAddEmail = (e) => {
+const onSplitAddEmail = (e: any) => {
   if (e.target.value.includes(',')) {
     onAddEmail(emailValue.value.split(',')[0]);
   }
@@ -115,7 +115,7 @@ const onAddUsers = async () => {
     employeesController.closeAddUsers();
     emails.value = [];
     emailValue.value = '';
-    errors.value = [];
+    errors.value = [] as any;
     employeesController.setSuccessMessage($t.addUsers.successMessage);
   }
 };
@@ -125,7 +125,7 @@ const closeAddUsers = () => {
   employeesController.closeAddUsers();
   emails.value = [];
   emailValue.value = '';
-  errors.value = [];
+  errors.value = [] as any;
 };
 </script>
 

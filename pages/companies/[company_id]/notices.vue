@@ -15,7 +15,7 @@
             <User :data="notice.to" class="user" />
           </th>
           <th>{{ notice.params.message }}</th>
-          <th>{{ useFormatDate(notice.created_at) }}</th>
+          <th>{{ useFormatDate(notice.created_at, userController.lang) }}</th>
           <th>{{ notice.read_at ? 'Прочитано' : 'Не прочитано' }}</th>
         </tr>
       </tbody>
@@ -32,13 +32,13 @@
 <!-- ----------------------------------------------------- -->
 
 <script lang="ts" setup>
-
 import { useCustomFetch } from '~/hooks/useCustomFetch';
 import { useTeamStore } from '~/stores/TeamContoller';
 import { TNotice, TNotifications } from '~/utils/types/notice';
 import { useFormatDate } from '~/hooks/useFormatData';
 import { useRequestStore } from '~/stores/RequestController';
 import { useSidebarStore } from '~/stores/SidebarController';
+import { useUserStore } from '~/stores/UserController';
 
 /**
  * Переменные ----------------
@@ -51,14 +51,22 @@ const nav = [{ label: $t.title, link: route.path }];
 const requestController = useRequestStore();
 const sidebarController = useSidebarStore();
 const notificationsList = ref<TNotice[]>([]);
+const userController = useUserStore();
 
-//
+/**
+ * Получение данных ----------------
+ */
+// Список уведомлений
 const { data: notifications } = await useCustomFetch<TNotifications>(url, {
   query: { team_id: teamController.activeTeamId, limit: 15, offset: 0 },
 });
 console.log(notifications);
 notificationsList.value.push(...notifications.notifications);
 
+/**
+ * Вычисляемое ----------------
+ */
+// При скролле добавляю новые уведомления
 watch(
   () => sidebarController.isEndScrollPage,
   async () => {

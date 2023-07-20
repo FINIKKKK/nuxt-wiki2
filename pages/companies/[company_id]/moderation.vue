@@ -17,7 +17,6 @@
 import { useCustomFetch } from '~/hooks/useCustomFetch';
 import { TArticle } from '~/utils/types/article';
 import { useTeamStore } from '~/stores/TeamContoller';
-import {useTranslate} from "~/hooks/useTranslate";
 
 /**
  * Системные переменные ----------------
@@ -31,7 +30,7 @@ const nav = [{ label: $t.home.moderation, link: route.path }];
  * Получение данных ----------------
  */
 // Статьи на модерации
-const { data: articles } = await useCustomFetch<TArticle[]>(`team/moderation`, {
+let { data: articles } = await useCustomFetch<TArticle[]>(`team/moderation`, {
   query: { team_id: teamController.activeTeamId },
 });
 console.log(articles);
@@ -41,7 +40,7 @@ console.log(articles);
  */
 // Удалить элемент из списка
 const removeFromModeration = (id: number) => {
-  articles = articles.filter((obj) => obj.id !== id);
+  articles = articles.filter((obj: TArticle) => obj.id !== id);
 };
 </script>
 

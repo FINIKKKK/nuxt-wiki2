@@ -54,6 +54,7 @@ import { useCustomFetch } from '~/hooks/useCustomFetch';
 import { TEmployees } from '~/utils/types/team';
 import { useRequestStore } from '~/stores/RequestController';
 import { useTeamStore } from '~/stores/TeamContoller';
+import {TUser} from "~/utils/types/account";
 
 /**
  * Переменные ----------------
@@ -83,13 +84,13 @@ console.log(employees);
 // Удалить из списка (событие)
 const removeFromTeam = (id: number) => {
   employees.value.employees = employees.value.employees.filter(
-    (obj) => obj.id !== id,
+    (obj: TUser) => obj.id !== id,
   );
 };
 // Удалить из приглашенных (событие)
 const removeFromInvites = (id: number) => {
   employees.value.invites = employees.value.invites.filter(
-    (obj) => obj.id !== id,
+    (obj: TUser) => obj.id !== id,
   );
 };
 </script>

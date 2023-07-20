@@ -49,7 +49,7 @@
             :class="{ active: Number(route.params.id) === article.id }"
             v-if="article.status_id === 3"
           >
-            <NuxtLink :to="`${teamStore.activeTeamSlug}/sections/${article.id}`"
+            <NuxtLink :to="`${teamStore.activeTeamSlug}/articles/${article.id}`"
               >{{ article.name }}
             </NuxtLink>
           </li>

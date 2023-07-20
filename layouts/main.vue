@@ -64,15 +64,18 @@ const sidebarController = useSidebarStore();
  */
 // Изменить стили у header
 const onChangeHeader = () => {
-  const block = refContent.value;
+  const block = refContent.value as HTMLDivElement | null;
 
-  if (block.scrollTop > 30) {
+  if (block && block.scrollTop > 30) {
     isScrolled.value = true;
   } else {
     isScrolled.value = false;
   }
 
-  if (block.scrollHeight - (block.scrollTop + window.innerHeight) < 100) {
+  if (
+    block &&
+    block.scrollHeight - (block.scrollTop + window.innerHeight) < 100
+  ) {
     sidebarController.setEndScrollPage(true);
   } else {
     sidebarController.setEndScrollPage(false);
