@@ -94,9 +94,7 @@ const selectUser = (user: TUser) => {
   newSpan.contentEditable = 'false';
   refDivContent.value.appendChild(newSpan);
 
-
-
-  // placeCursorAtEnd();
+  placeCursorAtEnd();
 };
 
 const placeCursorAtEnd = () => {
@@ -130,20 +128,8 @@ const handleInput = (e: any) => {
     lastInputCharacter.value = '';
     isShowUsers.value = false;
   }
-
-  console.log(lastInputCharacter.value);
   console.log(cursorPosition.value);
 };
-
-function updateLastInputCharacter() {
-  const textContent = refDivContent.value.textContent;
-  if (textContent.length > 0) {
-    lastInputCharacter.value = textContent.charAt(textContent.length - 1);
-    console.log(lastInputCharacter.value);
-  } else {
-    lastInputCharacter.value = '';
-  }
-}
 
 const createOrEditComment = async () => {
   // ------------------------------------

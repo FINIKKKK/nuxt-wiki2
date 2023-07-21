@@ -6,7 +6,7 @@
           class="tab"
           v-for="(tab, index) in props.tabs"
           :key="index"
-          @click="activeTab = index"
+          @click="() => setActiveTab(index, tab.id)"
           :class="{ active: index === activeTab }"
         >
           {{ tab.name }}
@@ -22,7 +22,7 @@
       </div>
     </div>
 
-    <template v-for="(tab, index) in props.tabs">
+    <template v-for="(tab, index) in props.tabs" v-if="!isHistory">
       <div
         class="map"
         v-if="
@@ -58,20 +58,35 @@
 
 <script lang="ts" setup>
 import { TTabParse } from '~/utils/types/article';
-import {OutputBlockData} from "@editorjs/editorjs";
+import { OutputBlockData } from '@editorjs/editorjs';
 
 /**
  * Пропсы ----------------
  */
 const props = defineProps<{
   tabs: TTabParse[];
+  isHistory?: boolean;
 }>();
+
+/**
+ * События ----------------
+ */
+const emits = defineEmits(['activeTab']);
 
 /**
  * Переменные ----------------
  */
 const activeTab = ref(0);
 const $t = await useTranslate('elem');
+
+/**
+ * Методы ----------------
+ */
+// Установить активную вкладку
+const setActiveTab = (index: number, id: number) => {
+  activeTab.value = index;
+  emits('activeTab', { index, id });
+};
 </script>
 
 <!-- ----------------------------------------------------- -->

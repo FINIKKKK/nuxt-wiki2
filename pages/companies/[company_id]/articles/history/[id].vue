@@ -1,61 +1,74 @@
 <template>
-  <div class="flex">
-    <div class="content">
-      <!--------------------------------------
-        Шапка элемента
-      ---------------------------------------->
-      <div class="elem__header">
-        <!-- Заголовок -->
-        <h1 class="title">{{ article.article.name }}</h1>
-      </div>
+  <div class="main">
+    <!-- Warning -->
+    <UIWarning
+      v-if="successMessage"
+      :message="successMessage"
+      class="warning"
+    />
 
-      <!--------------------------------------
-        Информация об элементе
-      ---------------------------------------->
-      <ul class="elem__info">
-        <!-- Автор -->
-        <li class="elem__info-item">
-          Автор:
-          <span>{{ `${article.article.creator.fullname}` }}</span>
-        </li>
-        <!-- Время -->
-        <li
-          class="elem__info-item"
-          v-html="
-            useDateString(
-              article.article.created_at,
-              article.article.updated_at,
-              userController.lang,
-            )
-          "
-        ></li>
-      </ul>
-
-      <!--------------------------------------
-        Вкладки
-      ---------------------------------------->
-      <ElemPageTabs :tabs="article.article.tabs" />
+    <!--------------------------------------
+      Шапка элемента
+    ---------------------------------------->
+    <div class="elem__header">
+      <!-- Заголовок -->
+      <h1 class="title">{{ article.article.name }}</h1>
     </div>
 
-    <div class="history aside-popup">
-      <h3 class="title">Журнал версий</h3>
-      <ul class="list">
-        <li v-for="item in history">
-          <div class="info">
-            <!--            <div class="date">{{ useFormatDate(item.created_at) }}</div>-->
-            <!--            <div class="author">{{ item.creator.fullname }}</div>-->
-          </div>
-          <div class="btn btn2" v-if="false">
-            <p>Текущая версия</p>
-          </div>
-          <div class="btn btn2">
-            <p>Востановить</p>
-            <svg-icon name="reverse" />
-          </div>
-        </li>
-      </ul>
-    </div>
+    <!--------------------------------------
+      Информация об элементе
+    ---------------------------------------->
+    <ul class="elem__info">
+      <!-- Автор -->
+      <li class="elem__info-item">
+        {{ $t.author }}:
+        <span>{{ `${history.creator.fullname}` }}</span>
+      </li>
+      <!-- Время -->
+      <li
+        class="elem__info-item"
+        v-html="
+          useDateString(
+            article.article.created_at,
+            article.article.updated_at,
+            userController.lang,
+          )
+        "
+      ></li>
+    </ul>
+
+    <!--------------------------------------
+      Вкладки
+    ---------------------------------------->
+    <ElemPageTabs
+      :tabs="article.article.tabs"
+      :isHistory="true"
+      @activeTab="setActiveTab"
+    />
   </div>
+
+  <!--------------------------------------
+    Журнал версий
+  ---------------------------------------->
+  <AsidePopup :title="$t.popup.title" :isOpen="true" class="aside">
+    <ul class="list">
+      <li v-if="activeHistory">
+        <div class="info">
+          <div class="date">
+            {{ useFormatDate(activeHistory.created_at, userController.lang) }}
+          </div>
+          <div class="author">{{ activeHistory.creator.fullname }}</div>
+        </div>
+        <div class="btn btn2 tag" v-if="true">
+          <p>{{ $t.popup.current }}</p>
+        </div>
+        <div class="btn btn2" v-else @click="onRollback">
+          <p>{{ $t.popup.recover }}</p>
+          <i class="fa-regular fa-refresh" />
+        </div>
+      </li>
+    </ul>
+  </AsidePopup>
 </template>
 
 <!-- ----------------------------------------------------- -->
@@ -67,6 +80,8 @@ import { useTeamStore } from '~/stores/TeamContoller';
 import { TArticleData } from '~/utils/types/article';
 import { useDateString } from '~/hooks/useDateString';
 import { useUserStore } from '~/stores/UserController';
+import AsidePopup from '~/components/UI/AsidePopup.vue';
+import { useFormatDate } from '~/hooks/useFormatData';
 
 /**
  * Переменные ----------------
@@ -74,56 +89,90 @@ import { useUserStore } from '~/stores/UserController';
 const teamController = useTeamStore();
 const route = useRoute();
 const userController = useUserStore();
+const successMessage = ref('');
+const activeTab = ref({
+  index: 0,
+  id: null,
+});
+const activeHistory = ref(null);
+const $t = await useTranslate('history');
 
 /**
  * Получение данных ----------------
  */
-const { data: article } = await useCustomFetch<TArticleData>(`team/article`, {
-  query: {
-    team_id: teamController.activeTeamId,
-    article_id: route.params.id,
+const { data: article } = await useCustomFetch<TArticleData>(
+  `team/article/edit`,
+  {
+    query: {
+      team_id: teamController.activeTeamId,
+      article_id: route.params.id,
+    },
   },
-});
-//
+);
+// История вкладки
 const { data: history } = await useCustomFetch(`team/article/tab/history`, {
   query: {
     team_id: teamController.activeTeamId,
-    tab_id: article.value.article.tabs[0].id,
+    tab_id: article.article.tabs[0].id,
   },
 });
-console.log(history.value);
+activeHistory.value = history;
 
-// const { data } = await useCustomFetch(`team/article/tab/history`, {
-//   query: { team_id: teamController.activeTeamId, tab_id: 547 },
-// });
-// console.log(data.value);
-// console.log(data.value.content);
+/**
+ * Методы ----------------
+ */
+// Сменить активную вкладку (событие)
+const setActiveTab = async ({ index, id }) => {
+  activeTab.value.index = index;
+  activeTab.value.id = id;
+
+  const { data: history } = await useCustomFetch(`team/article/tab/history`, {
+    query: {
+      team_id: teamController.activeTeamId,
+      tab_id: activeTab.value.id,
+    },
+  });
+  activeHistory.value = history;
+};
+
+// Откатить историю вкладки
+const onRollback = async () => {
+  const { message } = await useCustomFetch(
+    `team/article/tab/history/rollback`,
+    {
+      body: {
+        team_id: teamController.activeTeamId,
+        tab_id: activeTab.value.id,
+        history_id: activeHistory.id,
+      },
+      method: 'POST',
+    },
+  );
+
+  if (message) {
+    successMessage.value = 'Success!';
+  }
+};
 </script>
 
 <!-- ----------------------------------------------------- -->
 <!-- ----------------------------------------------------- -->
 
 <style lang="scss" scoped>
-.flex {
-  display: flex;
-  width: 100%;
+.warning {
+  margin: -35px -75px 35px !important;
 }
 
-.content {
-  width: 70%;
+.main {
+  width: calc(100% - 500px);
+  overflow: auto;
   padding: 75px;
+  height: 100vh;
   .elem__header {
     display: flex;
     align-items: center;
     margin-bottom: 12px;
     position: relative;
-    svg {
-      width: 20px;
-      height: 20px;
-      position: absolute;
-      left: -25px;
-      cursor: pointer;
-    }
   }
   .title {
     font-size: 24px;
@@ -133,6 +182,11 @@ console.log(history.value);
     display: flex;
     align-items: center;
     margin-bottom: 30px;
+  }
+  .elem__info-item {
+    &:not(:last-child) {
+      margin-right: 20px;
+    }
   }
 }
 
@@ -175,5 +229,23 @@ console.log(history.value);
       background-color: $blue3;
     }
   }
+}
+</style>
+
+<style lang="scss">
+.aside-popup__wrapper {
+  display: none;
+}
+
+.btn {
+  cursor: pointer;
+  i {
+    margin-left: 10px;
+    font-size: 14px;
+  }
+}
+
+.tag {
+  pointer-events: none;
 }
 </style>
