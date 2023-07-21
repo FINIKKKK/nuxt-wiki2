@@ -1,40 +1,48 @@
 <template>
   <div class="field">
     <div class="input">
-      <UIInput
-        label="Добавить комментарий"
-        :isTextarea="true"
-        :limit="350"
-        v-model="commentsController.fieldValue"
-        @btnClick="createOrEditComment"
-        @btnClick2="cancelEdit"
-        class="comment_input"
-      >
-        <template
-          #btn2
-          v-if="commentsController.fieldValue"
-          title="Редактировать комментарий"
-        >
-          <i
-            :class="`fa-regular fa-${
-              commentsController.editComment ? 'edit' : 'paper-plane'
-            } ${'disabled' && requestController.loading[url]}`"
-          />
-        </template>
-        <template
-          #btn3
-          v-if="commentsController.editComment"
-          title="Отменить редактирование"
-        >
-          <i
-            class="fa-regular fa-remove"
-            :class="{ disabled: requestController.loading[url] }"
-          />
-        </template>
-      </UIInput>
+      <!--      <UIInput-->
+      <!--        label="Добавить комментарий"-->
+      <!--        :isTextarea="true"-->
+      <!--        :limit="350"-->
+      <!--        v-model="commentsController.fieldValue"-->
+      <!--        @btnClick="createOrEditComment"-->
+      <!--        @btnClick2="cancelEdit"-->
+      <!--        class="comment_input"-->
+      <!--        @input="handleInput"-->
+      <!--      >-->
+      <!--        <template-->
+      <!--          #btn2-->
+      <!--          v-if="commentsController.fieldValue"-->
+      <!--          title="Редактировать комментарий"-->
+      <!--        >-->
+      <!--          <i-->
+      <!--            :class="`fa-regular fa-${-->
+      <!--              commentsController.editComment ? 'edit' : 'paper-plane'-->
+      <!--            } ${'disabled' && requestController.loading[url]}`"-->
+      <!--          />-->
+      <!--        </template>-->
+      <!--        <template-->
+      <!--          #btn3-->
+      <!--          v-if="commentsController.editComment"-->
+      <!--          title="Отменить редактирование"-->
+      <!--        >-->
+      <!--          <i-->
+      <!--            class="fa-regular fa-remove"-->
+      <!--            :class="{ disabled: requestController.loading[url] }"-->
+      <!--          />-->
+      <!--        </template>-->
+      <!--      </UIInput>-->
     </div>
 
-    <div class="users">
+    <div
+      ref="refDivContent"
+      class="div-input"
+      contenteditable
+      @input="handleInput"
+    ></div>
+
+    <div class="users" v-if="isShowUsers">
       <User
         v-for="user in users.employees"
         :key="user.id"
@@ -66,6 +74,8 @@ const requestController = useRequestStore();
 const teamController = useTeamStore();
 const commentsController = useCommentsStore();
 const url = 'team/comment/add';
+const isShowUsers = ref(true);
+const refDivContent = ref(null);
 
 /**
  * Получение данных ----------------
@@ -77,6 +87,64 @@ const { data: users } = await useCustomFetch<TEmployees>(`team/employees`, {
 /**
  * Методы ----------------
  */
+const selectUser = (user: TUser) => {
+  const newSpan = document.createElement('span');
+  newSpan.textContent = `@${user.fullname} `;
+  newSpan.classList.add('input-span');
+  newSpan.contentEditable = 'false';
+  refDivContent.value.appendChild(newSpan);
+
+
+
+  // placeCursorAtEnd();
+};
+
+const placeCursorAtEnd = () => {
+  const selection = window.getSelection();
+  const range = document.createRange();
+  const div = refDivContent.value;
+  range.selectNodeContents(div);
+  range.collapse(false);
+  selection.removeAllRanges();
+  selection.addRange(range);
+  div.focus();
+};
+const lastInputCharacter = ref('');
+const cursorPosition = ref(0);
+
+const handleInput = (e: any) => {
+  commentsController.fieldValue = e.target.textContent;
+
+  const selection = window.getSelection();
+  cursorPosition.value = selection.anchorOffset;
+
+  const inputLength = e.data ? e.data.length : 0;
+  if (inputLength > 0) {
+    lastInputCharacter.value = e.data.charAt(inputLength - 1);
+    if (lastInputCharacter.value === '@') {
+      isShowUsers.value = true;
+    } else {
+      isShowUsers.value = false;
+    }
+  } else {
+    lastInputCharacter.value = '';
+    isShowUsers.value = false;
+  }
+
+  console.log(lastInputCharacter.value);
+  console.log(cursorPosition.value);
+};
+
+function updateLastInputCharacter() {
+  const textContent = refDivContent.value.textContent;
+  if (textContent.length > 0) {
+    lastInputCharacter.value = textContent.charAt(textContent.length - 1);
+    console.log(lastInputCharacter.value);
+  } else {
+    lastInputCharacter.value = '';
+  }
+}
+
 const createOrEditComment = async () => {
   // ------------------------------------
   // Создаем комментарий
@@ -121,13 +189,6 @@ const createOrEditComment = async () => {
     }
   }
 };
-
-const selectUser = (user: TUser) => {
-  commentsController.changeFieldValue(
-    (commentsController.fieldValue += `${user.fullname} `),
-  );
-};
-
 const cancelEdit = () => {
   commentsController.changeEditComment(null);
   commentsController.changeFieldValue('');
@@ -194,5 +255,18 @@ const cancelEdit = () => {
   p {
     font-size: 14px;
   }
+}
+
+.div-input {
+  background-color: $blue3;
+}
+
+.input-span {
+  color: $blue;
+}
+
+.custom-span-class {
+  color: red;
+  font-weight: bold;
 }
 </style>
