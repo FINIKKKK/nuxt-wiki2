@@ -5,8 +5,9 @@ export default {
       title: 'Журнал версий',
       current: 'Текущая версия',
       recover: 'Восстановить',
-      confirm: 'Вы точно уверены, что хотите откатиться к данной версии?',
     },
+    confirm: 'Вы точно уверены, что хотите откатиться к данной версии?',
+    success: 'Вкладка успешно откатана',
   },
   en: {
     author: 'Author',
@@ -14,7 +15,8 @@ export default {
       title: 'Version history',
       current: 'Current version',
       recover: 'Recover',
-      confirm: 'Are you sure you want to roll back to this version?',
     },
+    confirm: 'Are you sure you want to roll back to this version?',
+    success: 'The tab was successfully rolled back',
   },
 };

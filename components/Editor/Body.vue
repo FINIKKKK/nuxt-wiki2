@@ -19,35 +19,15 @@
         </li>
       </ul>
 
-      <!-- delimeter -->
+      <!-- delimiter -->
       <div v-else-if="obj.type === 'delimiter'" class="el delimiter">***</div>
 
       <!-- headers -->
-      <h6
-        v-else-if="obj.type === 'header' && obj.data.level === 6"
-        class="title"
-        :id="obj.id"
-      >
-        {{ obj.data.text }}
-      </h6>
-      <h5
-        v-else-if="obj.type === 'header' && obj.data.level === 5"
-        class="title"
-        :id="obj.id"
-      >
-        {{ obj.data.text }}
-      </h5>
-      <h4
-        v-else-if="obj.type === 'header' && obj.data.level === 4"
-        class="title"
-        :id="obj.id"
-      >
-        {{ obj.data.text }}
-      </h4>
       <h3
         v-else-if="obj.type === 'header' && obj.data.level === 3"
         class="title"
         :id="obj.id"
+        v-observe="() => console.log(obj.id)"
       >
         {{ obj.data.text }}
       </h3>
@@ -55,21 +35,16 @@
         v-else-if="obj.type === 'header' && obj.data.level === 2"
         class="title"
         :id="obj.id"
+        v-observe="() => console.log(obj.id)"
       >
         {{ obj.data.text }}
       </h2>
-      <h1
-        v-else-if="obj.type === 'header' && obj.data.level === 1"
-        class="title"
-        :id="obj.id"
-      >
-        {{ obj.data.text }}
-      </h1>
 
-      <!-- codebox -->
+
+      <!-- codeBox -->
       <div v-else-if="obj.type === 'codeBox'" class="el code">
         <div class="code__lg">
-          {{ obj.data.language !== 'Auto-detect' ? obj.data.language : ' ' }}
+          {{ obj.data.language !== 'Auto-detect' ? obj.data.language : '' }}
         </div>
         <code v-html="obj.data.code"></code>
       </div>

@@ -1,74 +1,76 @@
 <template>
-  <div class="main">
-    <!-- Warning -->
-    <UIWarning
-      v-if="successMessage"
-      :message="successMessage"
-      class="warning"
-    />
+  <div class="base">
+    <div class="main">
+      <!-- Warning -->
+      <UIWarning
+        v-if="successMessage"
+        :message="successMessage"
+        class="warning"
+      />
 
-    <!--------------------------------------
-      Шапка элемента
-    ---------------------------------------->
-    <div class="elem__header">
-      <!-- Заголовок -->
-      <h1 class="title">{{ article.article.name }}</h1>
+      <!--------------------------------------
+        Шапка элемента
+      ---------------------------------------->
+      <div class="elem__header">
+        <!-- Заголовок -->
+        <h1 class="title">{{ article.article.name }}</h1>
+      </div>
+
+      <!--------------------------------------
+        Информация об элементе
+      ---------------------------------------->
+      <ul class="elem__info">
+        <!-- Автор -->
+        <li class="elem__info-item">
+          {{ $t.author }}:
+          <span>{{ `${history.creator.fullname}` }}</span>
+        </li>
+        <!-- Время -->
+        <li
+          class="elem__info-item"
+          v-html="
+            useDateString(
+              article.article.created_at,
+              article.article.updated_at,
+              userController.lang,
+            )
+          "
+        ></li>
+      </ul>
+
+      <!--------------------------------------
+        Вкладки
+      ---------------------------------------->
+      <ElemPageTabs
+        :tabs="article.article.tabs"
+        :isHistory="true"
+        @activeTab="setActiveTab"
+      />
     </div>
 
     <!--------------------------------------
-      Информация об элементе
+      Журнал версий
     ---------------------------------------->
-    <ul class="elem__info">
-      <!-- Автор -->
-      <li class="elem__info-item">
-        {{ $t.author }}:
-        <span>{{ `${history.creator.fullname}` }}</span>
-      </li>
-      <!-- Время -->
-      <li
-        class="elem__info-item"
-        v-html="
-          useDateString(
-            article.article.created_at,
-            article.article.updated_at,
-            userController.lang,
-          )
-        "
-      ></li>
-    </ul>
-
-    <!--------------------------------------
-      Вкладки
-    ---------------------------------------->
-    <ElemPageTabs
-      :tabs="article.article.tabs"
-      :isHistory="true"
-      @activeTab="setActiveTab"
-    />
-  </div>
-
-  <!--------------------------------------
-    Журнал версий
-  ---------------------------------------->
-  <AsidePopup :title="$t.popup.title" :isOpen="true" class="aside">
-    <ul class="list">
-      <li v-if="activeHistory">
-        <div class="info">
-          <div class="date">
-            {{ useFormatDate(activeHistory.created_at, userController.lang) }}
+    <AsidePopup :title="$t.popup.title" :isOpen="true">
+      <ul class="list">
+        <li v-if="activeHistory">
+          <div class="info">
+            <div class="date">
+              {{ useFormatDate(activeHistory.created_at, userController.lang) }}
+            </div>
+            <div class="author">{{ activeHistory.creator.fullname }}</div>
           </div>
-          <div class="author">{{ activeHistory.creator.fullname }}</div>
-        </div>
-        <div class="btn btn2 tag" v-if="true">
-          <p>{{ $t.popup.current }}</p>
-        </div>
-        <div class="btn btn2" v-else @click="onRollback">
-          <p>{{ $t.popup.recover }}</p>
-          <i class="fa-regular fa-refresh" />
-        </div>
-      </li>
-    </ul>
-  </AsidePopup>
+          <div class="btn btn2 tag" v-if="true">
+            <p>{{ $t.popup.current }}</p>
+          </div>
+          <div class="btn btn2" v-else @click="onRollback">
+            <p>{{ $t.popup.recover }}</p>
+            <i class="fa-regular fa-refresh" />
+          </div>
+        </li>
+      </ul>
+    </AsidePopup>
+  </div>
 </template>
 
 <!-- ----------------------------------------------------- -->
@@ -77,7 +79,7 @@
 <script lang="ts" setup>
 import { useCustomFetch } from '~/hooks/useCustomFetch';
 import { useTeamStore } from '~/stores/TeamContoller';
-import { TArticleData } from '~/utils/types/article';
+import { TArticleData, THistory } from '~/utils/types/article';
 import { useDateString } from '~/hooks/useDateString';
 import { useUserStore } from '~/stores/UserController';
 import AsidePopup from '~/components/UI/AsidePopup.vue';
@@ -90,7 +92,7 @@ const teamController = useTeamStore();
 const route = useRoute();
 const userController = useUserStore();
 const successMessage = ref('');
-const activeTab = ref({
+const activeTab = ref<{ index: number; id: number | null }>({
   index: 0,
   id: null,
 });
@@ -110,12 +112,15 @@ const { data: article } = await useCustomFetch<TArticleData>(
   },
 );
 // История вкладки
-const { data: history } = await useCustomFetch(`team/article/tab/history`, {
-  query: {
-    team_id: teamController.activeTeamId,
-    tab_id: article.article.tabs[0].id,
+const { data: history } = await useCustomFetch<THistory>(
+  `team/article/tab/history`,
+  {
+    query: {
+      team_id: teamController.activeTeamId,
+      tab_id: article.article.tabs[0].id,
+    },
   },
-});
+);
 activeHistory.value = history;
 
 /**
@@ -126,31 +131,36 @@ const setActiveTab = async ({ index, id }) => {
   activeTab.value.index = index;
   activeTab.value.id = id;
 
-  const { data: history } = await useCustomFetch(`team/article/tab/history`, {
-    query: {
-      team_id: teamController.activeTeamId,
-      tab_id: activeTab.value.id,
+  const { data: history } = await useCustomFetch<THistory>(
+    `team/article/tab/history`,
+    {
+      query: {
+        team_id: teamController.activeTeamId,
+        tab_id: activeTab.value.id,
+      },
     },
-  });
+  );
   activeHistory.value = history;
 };
 
 // Откатить историю вкладки
 const onRollback = async () => {
-  const { message } = await useCustomFetch(
-    `team/article/tab/history/rollback`,
-    {
-      body: {
-        team_id: teamController.activeTeamId,
-        tab_id: activeTab.value.id,
-        history_id: activeHistory.id,
+  if (window.confirm($t.confirm)) {
+    const { message } = await useCustomFetch(
+      `team/article/tab/history/rollback`,
+      {
+        body: {
+          team_id: teamController.activeTeamId,
+          tab_id: activeTab.value.id,
+          history_id: activeHistory.id,
+        },
+        method: 'POST',
       },
-      method: 'POST',
-    },
-  );
+    );
 
-  if (message) {
-    successMessage.value = 'Success!';
+    if (message) {
+      successMessage.value = $t.success;
+    }
   }
 };
 </script>
@@ -233,7 +243,7 @@ const onRollback = async () => {
 </style>
 
 <style lang="scss">
-.aside-popup__wrapper {
+.base .aside-popup__wrapper {
   display: none;
 }
 

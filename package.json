@@ -39,6 +39,7 @@
     "imask": "^7.1.2",
     "inputmask": "^5.0.8",
     "install": "^0.13.0",
+    "intersection-observer": "^0.12.2",
     "lodash": "^4.17.21",
     "lodash.debounce": "^4.0.8",
     "maska": "^2.1.9",

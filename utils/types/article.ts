@@ -4,6 +4,7 @@ import { OutputBlockData } from '@editorjs/editorjs';
 import { TAbility, TTeam } from '~/utils/types/team';
 import { TUser } from '~/utils/types/account';
 import { TComment } from '~/utils/types/comment';
+import User from '~/components/User.vue';
 
 export interface TArticle extends TBase {
   name: string;
@@ -57,4 +58,9 @@ export interface TArticleData {
   article: TArticle;
   breadcrumbs: TSection[];
   properties: TProperties;
+}
+
+export interface THistory extends TBase {
+  creator: TUser;
+  content: string;
 }

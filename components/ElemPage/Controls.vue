@@ -23,13 +23,13 @@
     </div>
 
     <!-- Доступ -->
-    <div
-      class="control"
-      @click="elemController.openAccess()"
-      :title="$t.controls.access"
-    >
-      <i class="fa-regular fa-lock" />
-    </div>
+<!--    <div-->
+<!--      class="control"-->
+<!--      @click="elemController.openAccess()"-->
+<!--      :title="$t.controls.access"-->
+<!--    >-->
+<!--      <i class="fa-regular fa-lock" />-->
+<!--    </div>-->
 
     <!-- Сгенерировать ссылку -->
     <div
