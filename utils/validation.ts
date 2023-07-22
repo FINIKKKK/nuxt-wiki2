@@ -21,9 +21,7 @@ export const RegisterScheme = yup.object().shape({
   first_name: yup.string().required('required'),
   last_name: yup.string().required('required'),
   email: yup.string().required('required').email('email'),
-  phone: yup
-    .string()
-    .required('required'),
+  phone: yup.string().required('required'),
   password: yup.string().required('required').min(6, 'password'),
 });
 
@@ -107,4 +105,11 @@ export const AddUsersScheme2 = yup.object().shape({
       });
       return isValid;
     }),
+});
+
+/**
+ * Создание тэга
+ */
+export const TagScheme = yup.object().shape({
+  name: yup.string().required('required').min(5, 'tag.min').max(30, 'tag.max'),
 });

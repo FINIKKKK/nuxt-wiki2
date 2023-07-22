@@ -16,10 +16,14 @@ export default {
       tabs: 'Вы не ввели информацию о статье',
     },
     user: 'Добавьте хотя бы одного пользователя',
+    tag: {
+      min: 'Тэг должен быть состоять минимум из 5 символов',
+      max: 'Тэг должен быть состоять максимум из 30 символов',
+    },
   },
   en: {
     required: 'The field is required',
-    required2: 'First fill in the field ',
+    required2: 'First fill in the field',
     email: 'Incorrect email',
     phone: 'Incorrect phone number',
     password: 'The password must consist of at least 6 characters',
@@ -34,5 +38,9 @@ export default {
       tabs: 'You have not entered information about the article',
     },
     user: 'Add at least one user',
+    tag: {
+      min: 'The tag must consist of a minimum of 5 characters ',
+      max: 'The tag must consist of a maximum of 30 characters ',
+    },
   },
 };
