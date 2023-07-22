@@ -65,16 +65,16 @@ export const PasswordScheme = yup.object().shape({
  * Создание раздела ----------------
  */
 export const SectionScheme = yup.object().shape({
-  name: yup.string().min(5, 'title').required('section.required'),
+  name: yup.string().min(5, 'section_title').required('section_required'),
 });
 
 /**
  * Создание статьи
  */
 export const ArticleScheme = yup.object().shape({
-  name: yup.string().required('article.title'),
-  section_id: yup.number().required('article.section'),
-  tabs: yup.array().min(1, 'article.tabs'),
+  name: yup.string().required('article_title'),
+  section_id: yup.number().required('article_section'),
+  tabs: yup.array().min(1, 'article_tabs'),
 });
 
 /**
@@ -111,5 +111,5 @@ export const AddUsersScheme2 = yup.object().shape({
  * Создание тэга
  */
 export const TagScheme = yup.object().shape({
-  name: yup.string().required('required').min(5, 'tag.min').max(30, 'tag.max'),
+  name: yup.string().required('required').min(5, 'tag_min').max(30, 'tag_max'),
 });

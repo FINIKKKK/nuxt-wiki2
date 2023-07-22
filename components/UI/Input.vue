@@ -187,6 +187,12 @@ if (props.isTextarea) {
     label {
       color: $red2 !important;
     }
+    .btn {
+      background-color: $red;
+    }
+    .btn-icon {
+      background-color: rgba($red, 0.15);
+    }
   }
   .error {
     font-size: 12px;
@@ -307,6 +313,14 @@ if (props.isTextarea) {
 </style>
 
 <style lang="scss">
+.error {
+  .btn-icon {
+    i {
+      color: $red;
+    }
+  }
+}
+
 .btn-icon {
   .disabled {
     opacity: 0.5;
