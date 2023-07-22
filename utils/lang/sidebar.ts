@@ -25,6 +25,7 @@ export default {
       title: 'Настройки',
       general: 'Общие',
       employees: 'Соотрудники',
+      tags: 'Тэги',
     },
     profile: {
       title: 'Профиль',
@@ -61,6 +62,7 @@ export default {
       title: 'Settings',
       general: 'General',
       employees: 'Employees',
+      tags: 'Tags',
     },
     profile: {
       title: 'Profile',
