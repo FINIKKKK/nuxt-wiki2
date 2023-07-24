@@ -26,6 +26,8 @@ export default {
       general: 'Общие',
       employees: 'Соотрудники',
       tags: 'Тэги',
+      plans: 'Тарифные планы',
+      services: 'Сервисы',
     },
     profile: {
       title: 'Профиль',
@@ -63,6 +65,8 @@ export default {
       general: 'General',
       employees: 'Employees',
       tags: 'Tags',
+      plans: 'Tariff plans',
+      services: 'Services',
     },
     profile: {
       title: 'Profile',

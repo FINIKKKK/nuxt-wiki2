@@ -125,6 +125,11 @@ const innerItems: TInnerItem[] = [
         label: $t.settings.tags,
         link: `${teamController.activeTeamSlug}/settings/tags`,
       },
+      {
+        icon: 'bank',
+        label: $t.settings.plans,
+        link: `${teamController.activeTeamSlug}/settings/plans`,
+      },
     ],
   },
   {

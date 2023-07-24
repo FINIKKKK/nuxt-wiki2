@@ -12,6 +12,16 @@ export default {
       btnMy: 'Ваш тариф',
       btnChange: 'Сменить тариф',
     },
+    features: {
+      disk_999: '1 гб дискового пространства',
+      disk_2: '',
+      disk_1: '',
+      history_1: 'История изменений',
+      sharing_1: 'Внешняя база знаний',
+      sharing_0: '',
+      domain_1: 'Свой домен',
+      domain_0: '',
+    },
   },
   en: {
     title: 'Tariff plans ',
@@ -25,6 +35,16 @@ export default {
       plan_3: 'Trial',
       btnMy: 'Your tariff',
       btnChange: 'Change the tariff',
+    },
+    features: {
+      disk_999: '1 gb of disk space',
+      disk_2: '',
+      disk_1: '',
+      history_1: 'History of changes',
+      sharing_1: 'External knowledge base',
+      sharing_0: '',
+      domain_1: 'Your domain',
+      domain_0: '',
     },
   },
 };
