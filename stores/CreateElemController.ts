@@ -21,6 +21,7 @@ export const useCreateElemStore = defineStore('createElemController', () => {
   const isOpenAccess: Ref<boolean> = ref(false);
   const isLoading: Ref<boolean> = ref(false);
   const errors: Ref<any> = ref([]);
+  const isPublish = ref(false);
 
   /**
    * Методы ----------------
@@ -67,6 +68,9 @@ export const useCreateElemStore = defineStore('createElemController', () => {
   const setErrors = (value: any) => {
     errors.value = Object.values(value).flat(2);
   };
+  const changePublish = (value: boolean) => {
+    isPublish.value = value;
+  };
 
   // Возращаем данные
   return {
@@ -93,5 +97,7 @@ export const useCreateElemStore = defineStore('createElemController', () => {
     closeAccess,
     setLoading,
     setErrors,
+    isPublish,
+    changePublish,
   };
 });

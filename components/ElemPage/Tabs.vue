@@ -41,7 +41,10 @@
           )"
           :key="item.id"
           class="item"
-          :class="{ child: item.data.level === 3 }"
+          :class="{
+            child: item.data.level === 3,
+            active: elemController.activeTitle === item.id,
+          }"
         >
           <i class="fa-regular fa-minus" v-if="item.data.level === 3" />
           <p>
@@ -59,6 +62,7 @@
 <script lang="ts" setup>
 import { TTabParse } from '~/utils/types/article';
 import { OutputBlockData } from '@editorjs/editorjs';
+import { useElemStore } from '~/stores/ElemController';
 
 /**
  * Пропсы ----------------
@@ -78,6 +82,7 @@ const emits = defineEmits(['activeTab']);
  */
 const activeTab = ref(0);
 const $t = await useTranslate('elem');
+const elemController = useElemStore();
 
 /**
  * Методы ----------------
@@ -180,6 +185,21 @@ const setActiveTab = (index: number, id: number) => {
       color: $blue;
       i {
         color: $blue;
+      }
+    }
+    &.active {
+      color: $blue;
+      i {
+        color: $blue;
+      }
+      position: relative;
+      &::before {
+        content: '';
+        position: absolute;
+        height: 100%;
+        width: 1px;
+        background-color: $blue;
+        left: -32px;
       }
     }
   }

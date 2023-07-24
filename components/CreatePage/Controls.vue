@@ -36,7 +36,9 @@
           {{ labelBtn }}
         </button>
         <!-- Кнопка отмены -->
-        <NuxtLink :to="`${teamController.activeTeamSlug}/activity`" class="btn btn2"
+        <NuxtLink
+          :to="`${teamController.activeTeamSlug}/activity`"
+          class="btn btn2"
           >{{ $t.btnCancel }}
         </NuxtLink>
       </div>
@@ -159,6 +161,7 @@ watch(isSave, () => {
  */
 // Метод создания или редактирования элемента
 const onSubmit = async () => {
+  createElemController.changePublish(true);
   // ------------------------------------
   // Изменяем или создаем раздел
   // ------------------------------------

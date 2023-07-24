@@ -87,6 +87,8 @@ const isScrolled = ref(false);
 const refScroll = ref<HTMLDivElement | null>(null);
 const $t = await useTranslate('create_elem');
 
+createElemController.changePublish(false);
+
 /**
  * Получение данных ----------------
  */
@@ -152,7 +154,7 @@ onMounted(() => {
  */
 // Предупреждение прежде чем покинуть страницу
 onBeforeRouteLeave((to, from, next) => {
-  if (to.path.includes('/articles/') || to.path.includes('/sections/')) {
+  if (createElemController.isPublish) {
     next();
     createElemController.setTitle('');
     createElemController.setSelect(null);
@@ -176,13 +178,14 @@ onBeforeRouteLeave((to, from, next) => {
 const onChangeHeader = () => {
   const block = refScroll.value;
 
-  block && block.addEventListener('scroll', function () {
-    if (block.scrollTop > 30) {
-      isScrolled.value = true;
-    } else {
-      isScrolled.value = false;
-    }
-  });
+  block &&
+    block.addEventListener('scroll', function () {
+      if (block.scrollTop > 30) {
+        isScrolled.value = true;
+      } else {
+        isScrolled.value = false;
+      }
+    });
 };
 </script>
 
@@ -200,9 +203,9 @@ const onChangeHeader = () => {
   transition: 0.2s;
   background-color: $bg;
 }
+
 .scrolled {
   box-shadow: 0 0 10px rgba($blue, 0.3);
-
 }
 
 .form {

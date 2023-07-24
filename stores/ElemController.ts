@@ -14,6 +14,7 @@ export const useElemStore = defineStore('elemController', () => {
   const isOpenAccess: Ref<boolean> = ref(false);
   const isOpenShare: Ref<boolean> = ref(false);
   const article: Ref<TArticleData | null> = ref(null);
+  const activeTitle: Ref<any> = ref(null);
 
   /**
    * Методы ----------------
@@ -44,6 +45,11 @@ export const useElemStore = defineStore('elemController', () => {
   const setArticle = (value: TArticleData | null) => {
     article.value = value;
   };
+  const changeActiveTitle = (value: any) => {
+    activeTitle.value = value;
+    const url = `#${value}`;
+    window.history.pushState({ anchor: value }, '', url);
+  };
 
   // Возращаем данные
   return {
@@ -59,5 +65,7 @@ export const useElemStore = defineStore('elemController', () => {
     toggleShare,
     article,
     setArticle,
+    activeTitle,
+    changeActiveTitle,
   };
 });

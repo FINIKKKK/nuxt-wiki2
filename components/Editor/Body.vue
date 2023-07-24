@@ -27,7 +27,7 @@
         v-else-if="obj.type === 'header' && obj.data.level === 3"
         class="title"
         :id="obj.id"
-        v-observe="() => console.log(obj.id)"
+        v-observe="() => elemController.changeActiveTitle(obj.id)"
       >
         {{ obj.data.text }}
       </h3>
@@ -35,11 +35,10 @@
         v-else-if="obj.type === 'header' && obj.data.level === 2"
         class="title"
         :id="obj.id"
-        v-observe="() => console.log(obj.id)"
+        v-observe="() => elemController.changeActiveTitle(obj.id)"
       >
         {{ obj.data.text }}
       </h2>
-
 
       <!-- codeBox -->
       <div v-else-if="obj.type === 'codeBox'" class="el code">
@@ -90,6 +89,7 @@
 
 <script lang="ts" setup>
 import { OutputBlockData } from '@editorjs/editorjs';
+import { useElemStore } from '~/stores/ElemController';
 
 /**
  * Пропсы ----------------
@@ -97,6 +97,11 @@ import { OutputBlockData } from '@editorjs/editorjs';
 const props = defineProps<{
   data: OutputBlockData[];
 }>();
+
+/**
+ * Переменные ----------------
+ */
+const elemController = useElemStore();
 </script>
 
 <style lang="scss">
@@ -165,6 +170,12 @@ const props = defineProps<{
   // headers ###############
   .title {
     margin-bottom: 24px;
+    &::before {
+      content: '';
+      display: block;
+      height: 150px;
+      margin-top: -150px;
+    }
   }
   h2.title {
     font-size: 24px;
@@ -173,22 +184,6 @@ const props = defineProps<{
   h3.title {
     font-size: 20px;
     line-height: 32px;
-  }
-  h1.title {
-    font-size: 45px;
-    line-height: 50px;
-  }
-  h4.title {
-    font-size: 26px;
-    line-height: 32px;
-  }
-  h5.title {
-    font-size: 20px;
-    line-height: 28px;
-  }
-  h6.title {
-    font-size: 16px;
-    line-height: 26px;
   }
   // code ###############
   .code {
