@@ -3,7 +3,7 @@ import { TArticleData } from '~/utils/types/article';
 
 /**
  * --------------------------------
- * Хранилище
+ * Хранилище страницы радела или статьи
  * --------------------------------
  */
 export const useElemStore = defineStore('elemController', () => {
