@@ -4,7 +4,10 @@
     <CreatePageTabs />
 
     <!-- Тэги -->
-    <CreatePageTags />
+    <PopupsTags
+      :isOpen="createElemController.isOpenTags"
+      @close="createElemController.closeTags()"
+    />
   </NuxtLayout>
 </template>
 
@@ -15,7 +18,7 @@
 import { useCustomFetch } from '~/hooks/useCustomFetch';
 import { useTeamStore } from '~/stores/TeamContoller';
 import { useCreateElemStore } from '~/stores/CreateElemController';
-import { TArticleEdit, TTab, TTabParse } from '~/utils/types/article';
+import { TArticleEdit, TTabParse } from '~/utils/types/article';
 import { useSectionsStore } from '~/stores/SectionContoller';
 
 /**
@@ -25,6 +28,7 @@ const route = useRoute();
 const teamController = useTeamStore();
 const createElemController = useCreateElemStore();
 const sectionsController = useSectionsStore();
+const $t = await useTranslate('data');
 
 /**
  * Получение данных ----------------
@@ -39,6 +43,7 @@ const { data: article } = await useCustomFetch<TArticleEdit>(
     },
   },
 );
+console.log(article);
 
 /**
  * Вычисляемые значения ----------------
@@ -67,6 +72,16 @@ createElemController.setSelect(
 );
 createElemController.setTabs(tabs.value);
 createElemController.setTags(article.article.tags);
+createElemController.setAbilities(
+  article.abilities.users.map((obj) => ({
+    user: obj,
+    permission: {
+      value: obj.permission.level,
+      label: $t.access[accessArr.find((access) => access.value === obj.permission.level)
+        ?.label],
+    },
+  })),
+);
 </script>
 
 <!-- ----------------------------------------------------- -->

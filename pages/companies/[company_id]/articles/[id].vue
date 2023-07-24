@@ -32,10 +32,10 @@
     <Comments />
 
     <!-- Попап для публичного доступа -->
-    <PopupsShare
-      :isOpen="elemController.isOpenShare"
-      @close="elemController.closeShare()"
-    />
+<!--    <PopupsShare-->
+<!--      :isOpen="elemController.isOpenShare"-->
+<!--      @close="elemController.closeShare()"-->
+<!--    />-->
   </NuxtLayout>
 </template>
 

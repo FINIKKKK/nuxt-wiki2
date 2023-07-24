@@ -12,7 +12,7 @@ export const useElemStore = defineStore('elemController', () => {
    */
   const type: Ref<'section' | 'article'> = ref('section');
   const isOpenAccess: Ref<boolean> = ref(false);
-  const isOpenLink: Ref<boolean> = ref(false);
+  const isOpenShare: Ref<boolean> = ref(false);
   const article: Ref<TArticleData | null> = ref(null);
 
   /**
@@ -32,14 +32,14 @@ export const useElemStore = defineStore('elemController', () => {
   const closeAccess = () => {
     isOpenAccess.value = false;
   };
-  const toggleLink = () => {
-    isOpenLink.value = !isOpenLink.value;
+  const toggleShare = () => {
+    isOpenShare.value = !isOpenShare.value;
   };
-  const openLink = () => {
-    isOpenLink.value = true;
+  const openShare = () => {
+    isOpenShare.value = true;
   };
-  const closeLink = () => {
-    isOpenLink.value = false;
+  const closeShare = () => {
+    isOpenShare.value = false;
   };
   const setArticle = (value: TArticleData | null) => {
     article.value = value;
@@ -53,10 +53,10 @@ export const useElemStore = defineStore('elemController', () => {
     openAccess,
     closeAccess,
     toggleAccess,
-    isOpenLink,
-    openLink,
-    closeLink,
-    toggleLink,
+    isOpenShare,
+    openShare,
+    closeShare,
+    toggleShare,
     article,
     setArticle,
   };

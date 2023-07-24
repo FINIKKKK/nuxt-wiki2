@@ -6,6 +6,7 @@
     <CreatePageControls
       :type="props.type"
       :isEdit="props.isEdit"
+      class="controls"
       :class="{ scrolled: isScrolled }"
     />
 
@@ -47,8 +48,9 @@
 
       <!-- Компонент редактирования доступа -->
       <PopupsAccess
-        v-model="abilities"
+        v-model="createElemController.abilities"
         :isOpen="createElemController.isOpenAccess"
+        @close="createElemController.closeAccess()"
       />
     </div>
   </div>
@@ -84,7 +86,6 @@ const sectionsController = useSectionsStore();
 const isScrolled = ref(false);
 const refScroll = ref<HTMLDivElement | null>(null);
 const $t = await useTranslate('create_elem');
-const abilities = ref([]);
 
 /**
  * Получение данных ----------------
@@ -195,9 +196,13 @@ const onChangeHeader = () => {
   height: 100vh;
 }
 
+.controls {
+  transition: 0.2s;
+  background-color: $bg;
+}
 .scrolled {
   box-shadow: 0 0 10px rgba($blue, 0.3);
-  background-color: $bg;
+
 }
 
 .form {

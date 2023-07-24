@@ -43,8 +43,11 @@ export const useCreateElemStore = defineStore('createElemController', () => {
   const addTag = (value: number) => {
     tags.value.push(value);
   };
+  const setAbilities = (value: TAbility[]) => {
+    abilities.value = value;
+  };
   const addAbility = (value: TAbility) => {
-    abilities.value.push(value);
+    abilities.value = [...abilities.value, value];
   };
   const openAccess = () => {
     isOpenAccess.value = true;
@@ -82,6 +85,7 @@ export const useCreateElemStore = defineStore('createElemController', () => {
     addTab,
     setTags,
     addTag,
+    setAbilities,
     addAbility,
     openTags,
     openAccess,

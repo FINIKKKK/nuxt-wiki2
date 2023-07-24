@@ -13,12 +13,12 @@ import { useSectionsStore } from '~/stores/SectionContoller';
 import { TSectionEdit } from '~/utils/types/secton';
 
 /**
- * Системные переменные ----------------
+ *  Переменные ----------------
  */
-const route = useRoute(); // Роут
-const teamController = useTeamStore(); // Хранилище активной компании
-const createElemController = useCreateElemStore(); // Хранилище страницы создания
-const sectionsController = useSectionsStore(); // Хранилище разделов
+const route = useRoute();
+const teamController = useTeamStore();
+const createElemController = useCreateElemStore();
+const sectionsController = useSectionsStore();
 
 /**
  * Получение данных ----------------
@@ -32,13 +32,15 @@ const { data } = await useCustomFetch<TSectionEdit>(`team/section/edit`, {
  */
 // Значение селекта
 const section = sectionsController.sections?.find(
-  (obj) => obj.id === data.value.section.parent_id,
+  (obj) => obj.id === data.section.parent_id,
 );
+
 // Сохраняем данные в хранилище
-createElemController.setTitle(data.value.section.name);
+createElemController.setTitle(data.section.name);
 createElemController.setSelect(
   section ? { value: section.id, label: section.name } : null,
 );
+createElemController.setAbilities(data.abilities)
 </script>
 
 <!-- ----------------------------------------------------- -->

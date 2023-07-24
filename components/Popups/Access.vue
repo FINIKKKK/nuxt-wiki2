@@ -12,12 +12,13 @@
         :label="$t.accessPopup.input"
         v-model="inputValue"
         @click="isShowList = !isShowList"
+        @input="onSearchUser"
       />
 
       <!-- Список работников для выборки -->
       <ul class="list" v-if="isShowList">
         <User
-          v-for="employee in employees"
+          v-for="employee in employeesSearch"
           :key="employee.id"
           :data="employee"
           @click="addEmployeesAccess(employee)"
@@ -34,10 +35,10 @@
         </div>
         <UISelect
           class="select"
+          :label="$t.accessPopup.select"
           :options="accessArrEdit"
           v-model="ability.permission"
           type="access"
-          :label="$t.accessPopup.select"
         />
       </li>
     </ul>
@@ -56,6 +57,7 @@ import { accessArr } from '~/utils/data';
 import { useCreateElemStore } from '~/stores/CreateElemController';
 import { useUserStore } from '~/stores/UserController';
 import { useOutsideClick } from '~/hooks/useOutsideClick';
+import debounce from 'lodash.debounce';
 
 /**
  * Пропсы ----------------
@@ -97,6 +99,7 @@ const accessArrEdit = accessArr.map((item) => ({
   label: $t2.access[item.label],
 }));
 const refEmployees = ref(null);
+const employeesSearch = ref([]);
 
 /**
  * Хуки ----------------
@@ -113,6 +116,7 @@ const { data } = await useCustomFetch<TEmployees>('team/employees', {
 employees.value = data.employees.filter(
   (obj: TUser) => obj.id !== userController.user?.id,
 );
+employeesSearch.value = employees.value;
 
 /**
  * Вычисляемое ----------------
@@ -146,6 +150,17 @@ const addEmployeesAccess = (value: TUser) => {
     isShowList.value = false;
   }
 };
+
+// Поиск пользователя
+const onSearchUser = debounce(async () => {
+  if (inputValue.value) {
+    employeesSearch.value = employees.value.filter((obj) =>
+      obj.fullname.toLowerCase().includes(inputValue.value.toLowerCase()),
+    );
+  } else {
+    employeesSearch.value = employees.value;
+  }
+}, 250);
 </script>
 
 <!-- ----------------------------------------------------- -->

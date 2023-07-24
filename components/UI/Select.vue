@@ -12,7 +12,11 @@
     <!-- Выбранный элемент -->
     <div class="selected" @click="toggleDropdown">
       <span class="placeholder" v-if="!model">{{ props.label }}</span>
-      <span v-else>{{ model?.label }}</span>
+      <span v-else>{{
+        model?.label.includes('access_')
+          ? $t.access[model?.label]
+          : model?.label
+      }}</span>
       <i
         class="fa-regular fa-times"
         v-if="!props.type && model"
@@ -75,6 +79,7 @@ const emits = defineEmits(['update:modelValue']);
  * Переменные ----------------
  */
 const isOpen = ref(false);
+const $t = await useTranslate('data');
 
 /**
  * Методы ----------------

@@ -10,7 +10,7 @@ export const useTagsStore = defineStore('tagController', () => {
   /**
    * Свойства ----------------
    */
-  const tags: Ref<TTag[]> = ref([{id: 1, name: 'tag'}]);
+  const tags: Ref<TTag[]> = ref([]);
   const editId: Ref<number | null> = ref(null);
   const inputValue: Ref<string> = ref('');
 
