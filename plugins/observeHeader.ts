@@ -1,48 +1,34 @@
 import 'intersection-observer';
 
 export default defineNuxtPlugin((nuxtApp) => {
-  let isScrolled = false; // Флаг, чтобы отслеживать, был ли скролл на 30 пикселей
-
-  // Функция для добавления/удаления класса в зависимости от значения isScrolled
-  function updateScrollClass(el) {
-    if (isScrolled) {
-      el.classList.add('scrolled-class');
-    } else {
-      el.classList.remove('scrolled-class');
-    }
-  }
-
   nuxtApp.vueApp.directive('observe-header', {
     mounted(el, binding) {
-      const options = {
-        root: null,
-        rootMargin: '0px',
-        threshold: 0.5,
+      const onChangeHeader = () => {
+        if (el.scrollTop > 30) {
+          el.classList.add('scrolled');
+        } else {
+          el.classList.remove('scrolled');
+        }
+
+        if (typeof binding.value === 'function') {
+          // Передаем аргументы в пользовательскую функцию
+          binding.value(el.scrollTop > 30);
+        }
       };
 
-      const observer = new IntersectionObserver((entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            binding.value(entry.target);
-          }
-        });
-      }, options);
+      el.addEventListener('scroll', onChangeHeader);
 
-      observer.observe(el);
+      // Удаление обработчика события при уничтожении элемента
+      el._cleanupScrollEvent = () => {
+        el.removeEventListener('scroll', onChangeHeader);
+      };
 
-      // Добавляем обработчик события скролла для обновления флага isScrolled
-      window.addEventListener('scroll', () => {
-        isScrolled = window.scrollY >= 30;
-        updateScrollClass(el);
-      });
+      // Вызываем функцию вручную, чтобы проверить состояние при монтировании элемента
+      onChangeHeader();
     },
 
-    unmounted() {
-      // Удаляем обработчик события при демонтировании директивы, чтобы избежать утечек памяти
-      window.removeEventListener('scroll', () => {
-        isScrolled = window.scrollY >= 30;
-        updateScrollClass(el);
-      });
+    beforeUnmount(el) {
+      el._cleanupScrollEvent();
     },
 
     getSSRProps(binding, vnode) {

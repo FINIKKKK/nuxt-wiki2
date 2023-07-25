@@ -1,5 +1,5 @@
 <template>
-  <div class="main">
+  <div class="main" v-observe-header>
     <!--------------------------------------
       Элементы управления
     ---------------------------------------->
@@ -169,23 +169,6 @@ onBeforeRouteLeave((to, from, next) => {
     }
   }
 });
-
-/**
- * Методы ----------------
- */
-// Изменить стили у header
-const onChangeHeader = () => {
-  const block = refScroll.value;
-
-  block &&
-    block.addEventListener('scroll', function () {
-      if (block.scrollTop > 30) {
-        isScrolled.value = true;
-      } else {
-        isScrolled.value = false;
-      }
-    });
-};
 </script>
 
 <!-- ----------------------------------------------------- -->
@@ -196,15 +179,16 @@ const onChangeHeader = () => {
   padding-top: 80px;
   overflow: auto;
   height: 100vh;
+  &.scrolled {
+    .controls {
+      box-shadow: 0 0 10px rgba($blue, 0.3);
+    }
+  }
 }
 
 .controls {
   transition: 0.2s;
   background-color: $bg;
-}
-
-.scrolled {
-  box-shadow: 0 0 10px rgba($blue, 0.3);
 }
 
 .form {

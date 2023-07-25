@@ -1,5 +1,5 @@
 <template>
-  <div class="controls">
+  <div class="controls" >
     <!-- Дополнительные элементы -->
     <ul class="extra">
       <!-- Доступ -->

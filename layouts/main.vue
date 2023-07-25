@@ -5,7 +5,7 @@
 
     <div class="content__wrapper" :class="{ nonav: !nav }">
       <!-- Навигация -->
-      <div class="header" v-if="props.nav" :class="{ scrolled: isScrolled }">
+      <div class="header" v-if="props.nav" ref="refHeader">
         <nav class="nav">
           <template v-for="item in nav">
             <div class="nav__item" v-if="item?.label">
@@ -23,12 +23,7 @@
       </div>
 
       <!-- Остальной контент на странице -->
-      <div
-        id="scroll"
-        class="content"
-        ref="refContent"
-        @scroll="onChangeHeader"
-      >
+      <div class="content" v-observe-header="onChangeHeader">
         <!-- Заголовок -->
         <h1 class="title" v-if="props.title">{{ props.title }}</h1>
 
@@ -41,7 +36,6 @@
 
 <script lang="ts" setup>
 import { TNav } from '~/utils/types/base';
-import { useSidebarStore } from '~/stores/SidebarController';
 
 /**
  * Пропсы ----------------
@@ -55,30 +49,17 @@ const props = defineProps<{
  * Переменные ----------------
  */
 const route = useRoute();
-const refContent = ref(null);
-const isScrolled = ref(false);
-const sidebarController = useSidebarStore();
+const refHeader = ref<HTMLDivElement | null>(null);
 
 /**
  * Методы ----------------
  */
-// Изменить стили у header
-const onChangeHeader = () => {
-  const block = refContent.value as HTMLDivElement | null;
-
-  if (block && block.scrollTop > 30) {
-    isScrolled.value = true;
+// Поменять стили у header при скролле
+const onChangeHeader = (value: boolean) => {
+  if (value) {
+    refHeader.value?.classList.add('scrolled');
   } else {
-    isScrolled.value = false;
-  }
-
-  if (
-    block &&
-    block.scrollHeight - (block.scrollTop + window.innerHeight) < 100
-  ) {
-    sidebarController.setEndScrollPage(true);
-  } else {
-    sidebarController.setEndScrollPage(false);
+    refHeader.value?.classList.remove('scrolled');
   }
 };
 </script>
@@ -125,6 +106,7 @@ main {
   display: flex;
   align-items: center;
   justify-content: space-between;
+  transition: 0.2s;
   &.scrolled {
     box-shadow: 0 0 10px rgba($blue, 0.3);
   }
