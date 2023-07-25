@@ -8,7 +8,7 @@
 <!-- ----------------------------------------------------- -->
 
 <script lang="ts" setup>
-import AsidePopup from '~/components/UI/AsidePopup.vue';
+import AsidePopup from '~/components/Popup/AsidePopup.vue';
 
 /**
  * Пропсы ----------------

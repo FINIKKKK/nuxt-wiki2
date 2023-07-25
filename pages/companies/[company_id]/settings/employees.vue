@@ -1,5 +1,5 @@
 <template>
-  <NuxtLayout name="main" :title='$t.title' :nav="nav">
+  <NuxtLayout name="main" :title="$t.title" :nav="nav">
     <!-- Warning -->
     <UIWarning
       v-if="employeesController.successMessage"
@@ -14,10 +14,16 @@
     <EmployeesPageTable />
 
     <!-- Попап редактирования роли -->
-    <EmployeesPageRoles :active="employeesController.isOpenRoles" />
+    <PopupRoles
+      :isOpen="employeesController.isOpenRoles"
+      @close="employeesController.closeRoles()"
+    />
 
     <!-- Попап добавления новых пользователей -->
-    <EmployeesPageAddUsers :active="employeesController.isOpenAddUsers" />
+    <PopupAddUsers
+      :isOpen="employeesController.isOpenAddUsers"
+      @close="employeesController.closeAddUsers()"
+    />
   </NuxtLayout>
 </template>
 

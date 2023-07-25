@@ -1,8 +1,8 @@
 <template>
-  <UIAsidePopup
+  <Popup
     :title="$t.addUsers.title"
-    :isOpen="props.active"
-    @close="closeAddUsers"
+    :isOpen="props.isOpen"
+    @close="emits('close')"
   >
     <p class="text">{{ $t.addUsers.text }}</p>
     <UIInput
@@ -28,7 +28,7 @@
     >
       {{ $t.addUsers.btn }}
     </button>
-  </UIAsidePopup>
+  </Popup>
 </template>
 
 <!-- ----------------------------------------------------- -->
@@ -46,8 +46,13 @@ import { useRequestStore } from '~/stores/RequestController';
  * Пропсы ----------------
  */
 const props = defineProps<{
-  active: boolean;
+  isOpen: boolean;
 }>();
+
+/**
+ * События ----------------
+ */
+const emits = defineEmits(['close']);
 
 /**
  * Переменные ----------------
@@ -118,14 +123,6 @@ const onAddUsers = async () => {
     errors.value = [] as any;
     employeesController.setSuccessMessage($t.addUsers.successMessage);
   }
-};
-
-// Закрыть попап
-const closeAddUsers = () => {
-  employeesController.closeAddUsers();
-  emails.value = [];
-  emailValue.value = '';
-  errors.value = [] as any;
 };
 </script>
 

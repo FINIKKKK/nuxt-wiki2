@@ -1,18 +1,23 @@
 <template>
-  <NuxtLayout name="create" type="article" :isEdit="true">
-    <PagesEdit />
-  </NuxtLayout>
+  <!-- Табы -->
+  <CreatePageTabs />
+
+  <!-- Тэги -->
+  <PopupTags
+    :isOpen="createElemController.isOpenTags"
+    @close="createElemController.closeTags()"
+  />
 </template>
 
 <!-- ----------------------------------------------------- -->
 <!-- ----------------------------------------------------- -->
 
 <script lang="ts" setup>
-import { useCustomFetch } from '~/hooks/useCustomFetch';
 import { useTeamStore } from '~/stores/TeamContoller';
 import { useCreateElemStore } from '~/stores/CreateElemController';
-import { TArticleEdit, TTabParse } from '~/utils/types/article';
 import { useSectionsStore } from '~/stores/SectionContoller';
+import { useCustomFetch } from '~/hooks/useCustomFetch';
+import { TArticleEdit, TTabParse } from '~/utils/types/article';
 
 /**
  * Переменные ----------------
@@ -36,10 +41,9 @@ const { data: article } = await useCustomFetch<TArticleEdit>(
     },
   },
 );
-console.log(article);
 
 /**
- * Вычисляемые значения ----------------
+ * Вычисляемое ----------------
  */
 // Значение селекта
 const section =
@@ -54,7 +58,8 @@ const tabs = await computed(() => {
   }));
 });
 // Сохраняем данные в хранилище
-createElemController.setTitle(article.article.name);
+createElemController.setTitle(article.article.name); // Заголовок
+// Селект
 createElemController.setSelect(
   section
     ? {
@@ -63,8 +68,11 @@ createElemController.setSelect(
       }
     : null,
 );
+// Вкладки
 createElemController.setTabs(tabs.value);
+// Тэги
 createElemController.setTags(article.article.tags);
+// Значение доступа
 createElemController.setAbilities(
   article.abilities.users.map((obj) => ({
     user: obj,

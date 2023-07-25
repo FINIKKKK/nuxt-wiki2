@@ -82,7 +82,7 @@ import { useTeamStore } from '~/stores/TeamContoller';
 import { TArticleData, THistory } from '~/utils/types/article';
 import { useDateString } from '~/hooks/useDateString';
 import { useUserStore } from '~/stores/UserController';
-import AsidePopup from '~/components/UI/AsidePopup.vue';
+import AsidePopup from '~/components/Popup/AsidePopup.vue';
 import { useFormatDate } from '~/hooks/useFormatData';
 
 /**

@@ -1,5 +1,5 @@
 <template>
-  <div class="main" ref="refScroll" @scroll="onChangeHeader">
+  <div class="main">
     <!--------------------------------------
       Элементы управления
     ---------------------------------------->
@@ -7,7 +7,6 @@
       :type="props.type"
       :isEdit="props.isEdit"
       class="controls"
-      :class="{ scrolled: isScrolled }"
     />
 
     <!--------------------------------------
@@ -47,7 +46,7 @@
       <slot />
 
       <!-- Компонент редактирования доступа -->
-      <PopupsAccess
+      <PopupAccess
         v-model="createElemController.abilities"
         :isOpen="createElemController.isOpenAccess"
         @close="createElemController.closeAccess()"
@@ -86,8 +85,6 @@ const sectionsController = useSectionsStore();
 const isScrolled = ref(false);
 const refScroll = ref<HTMLDivElement | null>(null);
 const $t = await useTranslate('create_elem');
-
-createElemController.changePublish(false);
 
 /**
  * Получение данных ----------------
@@ -131,6 +128,8 @@ const selections = computed(() => {
     }));
   }
 });
+createElemController.changePublish(false);
+
 // Получаем сохраненые данные и устанавливаем их÷
 onMounted(() => {
   const savedArticle = localStorage.getItem('article');

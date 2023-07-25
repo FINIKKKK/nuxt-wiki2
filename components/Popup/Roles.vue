@@ -1,8 +1,8 @@
 <template>
-  <UIAsidePopup
+  <Popup
     :title="$t.changeRoles.title"
-    :isOpen="props.active"
-    @close="employeesController.closeRoles()"
+    :isOpen="props.isOpen"
+    @close="emits('close')"
   >
     <p class="text">{{ $t.changeRoles.text }}</p>
     <div class="role" @click="() => onChangeRole('user')">
@@ -17,7 +17,7 @@
       <h3>{{ $t.changeRoles.moderator }}</h3>
       <p>{{ $t.changeRoles.moderatorText }}</p>
     </div>
-  </UIAsidePopup>
+  </Popup>
 </template>
 
 <!-- ----------------------------------------------------- -->
@@ -33,8 +33,13 @@ import { useUserStore } from '~/stores/UserController';
  * Пропсы ----------------
  */
 const props = defineProps<{
-  active: boolean;
+  isOpen: boolean;
 }>();
+
+/**
+ * События ----------------
+ */
+const emits = defineEmits(['close']);
 
 /**
  * Переменные ----------------

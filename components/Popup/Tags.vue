@@ -1,5 +1,5 @@
 <template>
-  <UIAsidePopup
+  <Popup
       :title="$t.tagsPopup.title"
       :isOpen="props.isOpen"
       @close="createElemController.closeTags()"
@@ -11,7 +11,7 @@
         v-model="inputValue"
         @input="searchTag"
     />
-  </UIAsidePopup>
+  </Popup>
 </template>
 
 <!-- ----------------------------------------------------- -->

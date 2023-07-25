@@ -1,5 +1,5 @@
 <template>
-  <UIAsidePopup
+  <Popup
     :title="$t.accessPopup.title"
     :isOpen="props.isOpen"
     @close="emits('close')"
@@ -42,7 +42,7 @@
         />
       </li>
     </ul>
-  </UIAsidePopup>
+  </Popup>
 </template>
 
 <!-- ----------------------------------------------------- -->

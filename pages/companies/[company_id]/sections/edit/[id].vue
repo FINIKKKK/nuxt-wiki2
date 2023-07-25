@@ -28,19 +28,18 @@ const { data } = await useCustomFetch<TSectionEdit>(`team/section/edit`, {
   query: { team_id: teamController.activeTeamId, section_id: route.params.id },
 });
 /**
- * Вычисляемые значения ----------------
+ * Вычисляемое ----------------
  */
 // Значение селекта
 const section = sectionsController.sections?.find(
   (obj) => obj.id === data.section.parent_id,
 );
-
 // Сохраняем данные в хранилище
 createElemController.setTitle(data.section.name);
 createElemController.setSelect(
   section ? { value: section.id, label: section.name } : null,
 );
-createElemController.setAbilities(data.abilities)
+createElemController.setAbilities(data.abilities);
 </script>
 
 <!-- ----------------------------------------------------- -->
