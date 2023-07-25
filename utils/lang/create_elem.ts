@@ -11,7 +11,9 @@ export default {
     btnCancel: 'Отменить',
     btnEdit: 'Изменить',
     draftText: 'Черновик сохранен',
+    draftText2: 'Черновик обновлен',
     draftBtn: 'Сохранить черновик',
+    draftBtn2: 'Обновить черновик',
     saved: 'Сохранено',
     confirm: 'Вы уверены, что хотите покинуть эту страницу?',
     accessPopup: {
@@ -38,7 +40,9 @@ export default {
     btnCancel: 'Cancel',
     btnEdit: 'Edit',
     draftText: 'Draft is saved',
+    draftText2: 'Draft is updated',
     draftBtn: 'Save a draft',
+    draftBtn2: 'Update a draft',
     saved: 'Saved',
     confirm: 'Are you sure you want to leave this page?',
     accessPopup: {

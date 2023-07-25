@@ -14,7 +14,7 @@
     ---------------------------------------->
     <UIWarning
       v-if="createElemController.errors.length"
-      :errors="createElemController.errors"
+      :errors="errors"
       class="warning"
     />
 
@@ -82,9 +82,8 @@ const router = useRouter();
 const teamController = useTeamStore();
 const createElemController = useCreateElemStore();
 const sectionsController = useSectionsStore();
-const isScrolled = ref(false);
-const refScroll = ref<HTMLDivElement | null>(null);
 const $t = await useTranslate('create_elem');
+const $t2 = await useTranslate('validation');
 
 /**
  * Получение данных ----------------
@@ -102,6 +101,11 @@ sectionsController.setSections(sections);
 /**
  * Вычисляемое ----------------
  */
+// Ошибки
+const errors = computed(() => {
+  return createElemController.errors.map((obj) => $t2[obj]);
+});
+
 // Конвертировать массив разделов
 const selections = computed(() => {
   if (props.type === 'article') {
@@ -130,8 +134,8 @@ const selections = computed(() => {
 });
 createElemController.changePublish(false);
 
-// Получаем сохраненые данные и устанавливаем их÷
 onMounted(() => {
+  // Получаем сохраненые данные и устанавливаем их÷
   const savedArticle = localStorage.getItem('article');
   const parsedSavedArticle = savedArticle && JSON.parse(savedArticle);
   if (

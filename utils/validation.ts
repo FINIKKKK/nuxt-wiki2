@@ -113,3 +113,13 @@ export const AddUsersScheme2 = yup.object().shape({
 export const TagScheme = yup.object().shape({
   name: yup.string().required('required').min(5, 'tag_min').max(30, 'tag_max'),
 });
+
+
+
+/**
+ * Создание черновика
+ */
+export const ArticleDraftScheme = yup.object().shape({
+  name: yup.string().required('article_title'),
+  section_id: yup.number().required('article_section'),
+});

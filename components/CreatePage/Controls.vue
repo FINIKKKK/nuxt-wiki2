@@ -1,5 +1,5 @@
 <template>
-  <div class="controls" >
+  <div class="controls">
     <!-- Дополнительные элементы -->
     <ul class="extra">
       <!-- Доступ -->
@@ -20,11 +20,15 @@
 
     <div class="right__controls">
       <!-- Надписи -->
-      <div class="inscription draft" :class="{ active: saveDraft }">
+      <div
+        class="inscription draft"
+        :class="{ active: saveDraft }"
+        v-if="saveDraft"
+      >
         <i class="fa-regular fa-check-circle" />
-        <p>{{ $t.savedDraft }}</p>
+        <p>{{ saveDraft }}</p>
       </div>
-      <div class="inscription" :class="{ active: isSave }">
+      <div class="inscription" :class="{ active: isSave }" v-if="isSave">
         <i class="fa-regular fa-check-circle" />
         <p>{{ $t.saved }}</p>
       </div>
@@ -52,7 +56,9 @@
         />
         <!-- Попап -->
         <ul class="popup" v-if="isShowPopup">
-          <li @click="onSaveDraft">{{ $t.draftBtn }}</li>
+          <li @click="onSaveDraft">
+            {{ !isDraftPage ? $t.draftBtn : $t.draftBtn2 }}
+          </li>
         </ul>
       </div>
     </div>
@@ -65,7 +71,7 @@
 <script lang="ts" setup>
 import { useCreateElemStore } from '~/stores/CreateElemController';
 import { useTeamStore } from '~/stores/TeamContoller';
-import { SectionScheme } from '~/utils/validation';
+import { ArticleDraftScheme, SectionScheme } from '~/utils/validation';
 import { useFormValidation } from '~/hooks/useFormValidation';
 import { useCustomFetch } from '~/hooks/useCustomFetch';
 import { useRequestStore } from '~/stores/RequestController';
@@ -91,10 +97,11 @@ const createElemController = useCreateElemStore();
 const requestController = useRequestStore();
 const id = route.params.id;
 const isShowPopup = ref(false);
-const saveDraft = ref(false);
+const saveDraft = ref('');
 const isSave = ref(false);
 const { errors, validateForm } = useFormValidation();
 const $t = await useTranslate('create_elem');
+const isDraftPage = route.path.includes('draft');
 
 /**
  * Вычисляемые значения ----------------
@@ -284,23 +291,48 @@ const onSubmit = async () => {
 
 // Сохранить черновик
 const onSaveDraft = async () => {
-  const { data } = await useCustomFetch(`team/article/add`, {
-    body: {
-      team_id: teamController.activeTeam?.team.id,
-      name: createElemController.title,
-      section_id: Number(createElemController.select?.value) || null,
-      tabs: createElemController.tabs.map((obj) => ({
-        name: obj.name,
-        content: JSON.stringify(obj.content),
-      })),
-      action: 1,
+  // Данные
+  const dto = {
+    ...(isDraftPage && { article_id: route.params.id }),
+    team_id: teamController.activeTeam?.team.id,
+    name: createElemController.title,
+    section_id: Number(createElemController.select?.value) || null,
+    tabs: createElemController.tabs.map((obj) => ({
+      name: obj.name,
+      content: JSON.stringify(obj.content),
+    })),
+    action: 1,
+  };
+
+  // Валидируем данные
+  const isValid = await validateForm(dto, ArticleDraftScheme);
+  createElemController.setErrors(errors.value);
+  isShowPopup.value = false;
+  if (!isValid) return false;
+
+  // Добавляем или редактируем черновик
+  const { data, message } = await useCustomFetch<TArticleData>(
+    !isDraftPage ? 'team/article/add' : 'team/article/edit',
+    {
+      body: dto,
+      method: 'POST',
     },
-    method: 'POST',
-  });
-  if (data.value) {
-    saveDraft.value = true;
+  );
+
+  if (data) {
+    saveDraft.value = $t.draftText;
     setTimeout(() => {
-      saveDraft.value = false;
+      saveDraft.value = '';
+    }, 3000);
+    createElemController.changePublish(true);
+    await router.push(
+      `${teamController.activeTeamSlug}/articles/draft/${data.article.id}`,
+    );
+  }
+  if (message) {
+    saveDraft.value = $t.draftText2;
+    setTimeout(() => {
+      saveDraft.value = '';
     }, 3000);
   }
 };
