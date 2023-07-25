@@ -4,6 +4,8 @@
 
 <script lang="ts" setup>
 import { OutputBlockData } from '@editorjs/editorjs';
+import { useCustomFetch } from '~/hooks/useCustomFetch';
+import { useTeamStore } from '~/stores/TeamContoller';
 
 /**
  * Пропсы ----------------
@@ -32,6 +34,8 @@ const emits = defineEmits(['update:modelValue']);
  * Переменные ----------------
  */
 const refEditor = ref(undefined);
+const teamController = useTeamStore();
+const config = useRuntimeConfig();
 
 /**
  * Основная функция ----------------
@@ -59,11 +63,8 @@ onMounted(async () => {
   // @ts-ignore
   const { default: LinkTool } = await import('@editorjs/link');
   // @ts-ignore
-  const { default: SimpleImage } = await import('@editorjs/simple-image');
-  // @ts-ignore
   const { default: CheckList } = await import('@editorjs/checklist');
 
-  
   /**
    * Editor ----------------
    */
@@ -92,7 +93,39 @@ onMounted(async () => {
         },
       },
       list: List,
-      codeBox: CodeBox,
+      image: {
+        class: Image,
+        config: {
+          buttonContent: 'Выберите изображение',
+          uploader: {
+            async uploadByFile(file: any) {
+              // Данные
+              const formData = new FormData();
+              formData.append('image', file);
+              formData.append('team_id', teamController.activeTeamId);
+
+              // Обновляем аватарку
+              const { data } = await useCustomFetch<{ url: string }>(
+                'team/store/add',
+                { method: 'POST' },
+                formData,
+              );
+
+              if (data) {
+                return {
+                  success: 1,
+                  file: {
+                    url: `${config.public.apiUrl}storage/${data.path}`,
+                  },
+                };
+              }
+            },
+          },
+        },
+      },
+      delimiter: Delimiter,
+      // codeBox: CodeBox,
+      inlineCode: InlineCode,
       linkTool: LinkTool,
       embed: Embed,
       quote: {
@@ -104,9 +137,6 @@ onMounted(async () => {
         },
       },
       checklist: CheckList,
-      delimiter: Delimiter,
-      inlineCode: InlineCode,
-      simpleImage: SimpleImage,
       table: Table,
     },
   });

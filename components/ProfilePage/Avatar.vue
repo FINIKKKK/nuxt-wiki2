@@ -37,13 +37,17 @@ const profileController = useProfileStore();
 const $t = await useTranslate('account');
 
 /**
- * Отслеживание переменных ----------------
+ * Вычисляемое ----------------
  */
 // Показать warning c ошибками
 watch(profileController.errors, () => {
   profileController.setErrors(profileController.errors);
 });
 
+
+/**
+ * Методы ----------------
+ */
 // Метод изменения аватарки пользователя
 const onChangeAvatar = async (e: any) => {
   // Убираем warning

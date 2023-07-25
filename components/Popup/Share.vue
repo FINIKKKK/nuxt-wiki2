@@ -41,13 +41,11 @@
  */
 const props = defineProps<{
   isOpen: boolean;
-  modelValue: any;
 }>();
 
 /**
- * События ----------------
+ * Переменные ----------------
  */
-const emits = defineEmits(['update:modelValue', 'close']);
 const config = useRuntimeConfig();
 const linkValue = ref(`${config.public.url}article/public/356`);
 const inputMessage = ref('');
@@ -56,23 +54,13 @@ const commentsCheck = ref(false);
 const indexingCheck = ref(false);
 const $t = await useTranslate('elem');
 
-// Значение
-const model = computed({
-  get() {
-    return props.modelValue;
-  },
-  set(val) {
-    emits('update:modelValue', val);
-  },
-});
-
 /**
  * Методы ----------------
  */
 // Скопировать ссылку
 const onCopyLink = () => {
   navigator.clipboard.writeText(linkValue.value);
-  inputMessage.value = 'Ссылка скопирована в буфер обмена!';
+  inputMessage.value = $t.sharePopup.copyText;
   setTimeout(() => {
     inputMessage.value = '';
   }, 4000);
