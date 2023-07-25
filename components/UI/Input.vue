@@ -26,6 +26,7 @@
           @focus="isFocus = true"
           @blur="isFocus = false"
           v-custom-mask="mask"
+          :readonly="props.isRead"
         />
         <textarea
           v-else
@@ -63,6 +64,7 @@
       <!-- URL адресс -->
       <div v-if="type === 'address'" class="url">itl.wiki</div>
     </div>
+    <span class="message" v-if="props.message">{{ props.message }}</span>
     <span class="error" v-if="errors">
       {{ $t[errors[0]] }}
     </span>
@@ -83,6 +85,8 @@ const props = defineProps<{
   type?: 'password' | 'address' | 'phone';
   limit?: number;
   isTextarea?: boolean;
+  isRead?: boolean;
+  message?: string;
 }>();
 
 // Значение
@@ -121,6 +125,7 @@ const mask = computed(() => {
     return null;
   }
 });
+
 // Изменять высоту textarea
 if (props.isTextarea) {
   watch(model, () => {
@@ -138,6 +143,7 @@ if (props.isTextarea) {
 
 <style lang="scss" scoped>
 .input {
+  position: relative;
   .inner {
     border: 1px solid $blue2;
     position: relative;
@@ -298,10 +304,7 @@ if (props.isTextarea) {
   display: flex;
   align-items: center;
   justify-content: center;
-  margin: 12px 15px 0 15px;
-  i {
-    font-weight: 700;
-  }
+  margin: 0px 15px 0 15px;
   &:hover {
     background-color: $blue2;
   }
@@ -309,6 +312,19 @@ if (props.isTextarea) {
 
 .btn-icon2 {
   margin-left: -5px;
+}
+
+.message {
+  position: absolute;
+  bottom: 60px;
+  right: 0;
+  font-size: 12px;
+  background-color: $white;
+  padding: 5px 10px;
+  box-shadow: 0 0 10px rgba($blue, 0.2);
+  border-radius: 3px;
+  max-width: 230px;
+  z-index: 30;
 }
 </style>
 
@@ -324,9 +340,6 @@ if (props.isTextarea) {
 .btn-icon {
   .disabled {
     opacity: 0.5;
-  }
-  i {
-    font-weight: 700;
   }
 }
 </style>

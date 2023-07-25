@@ -22,19 +22,10 @@
       <i class="fa-regular fa-thumb-tack" />
     </div>
 
-    <!-- Доступ -->
-<!--    <div-->
-<!--      class="control"-->
-<!--      @click="elemController.openAccess()"-->
-<!--      :title="$t.controls.access"-->
-<!--    >-->
-<!--      <i class="fa-regular fa-lock" />-->
-<!--    </div>-->
-
     <!-- Сгенерировать ссылку -->
     <div
       class="control"
-      @click="elemController.toggleLink()"
+      @click="elemController.openShare()"
       :title="$t.controls.share"
     >
       <i class="fa-regular fa-share" />

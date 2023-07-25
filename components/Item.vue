@@ -41,10 +41,6 @@
             <i class="fa-regular fa-edit"></i>
             <p>{{ $t.item.edit }}</p>
           </NuxtLink>
-<!--          <div class="btn__item">-->
-<!--            <i class="fa-regular fa-lock"></i>-->
-<!--            <p>{{ $t.item.access }}</p>-->
-<!--          </div>-->
         </template>
         <!-- Кнопка удаления из избранного -->
         <div

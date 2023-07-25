@@ -4,8 +4,11 @@
     :class="{ active: props.isOpen }"
     @click.self="emits('close')"
   ></div>
-  <div class="aside-popup" :class="{ active: props.isOpen }">
-    <h3 class="title">{{ props.title }}</h3>
+  <div
+    class="aside-popup"
+    :class="`${props.isOpen && 'active'} ${props.className && props.className}`"
+  >
+    <h3 class="title" v-if="props.title">{{ props.title }}</h3>
     <div class="content">
       <slot />
     </div>
@@ -21,7 +24,8 @@
  */
 const props = defineProps<{
   isOpen: boolean;
-  title: string;
+  title?: string;
+  className?: string;
 }>();
 
 /**

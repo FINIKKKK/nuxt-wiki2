@@ -27,6 +27,17 @@ export default {
       confirmSection: 'Вы точно хотите удалить раздел?',
       confirmArticle: 'Вы точно хотите удалить статью?',
     },
+    sharePopup: {
+      title: 'Публичный доступ',
+      text1:
+        'itl.wiki создана для совместной работы, поэтому вы можете поделиться контентом и сделать его публичным',
+      text2:
+        'Когда вы делаете публичным раздел, его подразделы и страницы также становятся публичными, создавая полностью навигационный веб-сайт с ссылками',
+      input: 'Публичная ссылка',
+      copy: 'Копировать',
+      comments: 'Разрешить комментарии',
+      indexing: 'Индексация в поисковых системах',
+    },
   },
   en: {
     author: 'Author',
@@ -55,6 +66,17 @@ export default {
       history: 'Version history',
       confirmSection: 'Are you sure you want to delete the section?',
       confirmArticle: 'Are you sure you want to delete the article?',
+    },
+    sharePopup: {
+      title: 'Public access',
+      text1:
+        'itl.wiki is designed for collaboration, so you can share content and make it public',
+      text2:
+        'When you make a section public, its subsections and pages also become public, creating a fully navigational website with links',
+      input: 'Public link',
+      copy: 'Copy',
+      comments: 'Allow comments',
+      indexing: 'Indexing in search engines',
     },
   },
 };

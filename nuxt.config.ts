@@ -18,6 +18,7 @@ export default defineNuxtConfig({
   },
   runtimeConfig: {
     public: {
+      url: 'http://localhost:3000/',
       apiUrl: 'https://api.wiki.itl.systems/',
     },
   },

@@ -30,12 +30,6 @@
 
     <!-- Комментарии -->
     <Comments />
-
-    <!-- Попап для публичного доступа -->
-<!--    <PopupsShare-->
-<!--      :isOpen="elemController.isOpenShare"-->
-<!--      @close="elemController.closeShare()"-->
-<!--    />-->
   </NuxtLayout>
 </template>
 

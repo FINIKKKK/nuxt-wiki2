@@ -42,13 +42,12 @@
         </ul>
 
         <!--------------------------------------
-          Попап доступа у пользователей
+          Попап для публичного доступа
         ---------------------------------------->
-<!--        <PopupsAccess-->
-<!--          :isOpen="elemController.isOpenAccess"-->
-<!--          v-model="abilities"-->
-<!--          @close="elemController.closeAccess()"-->
-<!--        />-->
+        <PopupShare
+          :isOpen="elemController.isOpenShare"
+          @close="elemController.closeShare()"
+        />
 
         <!--------------------------------------
           Слот
@@ -70,7 +69,6 @@ import { useTeamStore } from '~/stores/TeamContoller';
 import { useCustomFetch } from '~/hooks/useCustomFetch';
 import { TMessage } from '~/utils/types';
 import { useSectionsStore } from '~/stores/SectionContoller';
-import { TAbility } from '~/utils/types/team';
 import { useUserStore } from '~/stores/UserController';
 import { useElemStore } from '~/stores/ElemController';
 
@@ -88,11 +86,10 @@ const props = defineProps<{
  */
 const route = useRoute();
 const teamController = useTeamStore();
+const elemController = useElemStore();
 const sectionsController = useSectionsStore();
 const userController = useUserStore();
-const elemController = useElemStore();
 const isFavorite = ref(props.properties?.bookmark || false);
-const abilities = ref<TAbility[]>([]);
 const $t = await useTranslate('elem');
 const nav = [
   {
@@ -112,14 +109,6 @@ const nav = [
     link: `${teamController.activeTeamSlug}/articles/${props.data.id}`,
   },
 ];
-
-const { data } = await useCustomFetch<any>(`team/abilities`, {
-  query: {
-    team_id: teamController.activeTeamId,
-    entity_id: route.params.id,
-    entity_type: 'article',
-  },
-});
 
 /**
  * Методы ----------------
