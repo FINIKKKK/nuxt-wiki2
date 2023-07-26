@@ -11,17 +11,24 @@
     />
 
     <UIInput
-      :label="$t.commentsPopup.input"
-      v-model="inputValue"
+      :label="$t.input"
+      v-model="commentsController.fieldValuePopup"
       btnType="fill"
+      :isTextarea="true"
+      @keydown.enter.prevent
       @btnClick="onAddComment"
     >
-      <template #btn2 v-if="inputValue">
+      <template #btn2 v-if="commentsController.fieldValuePopup">
         <i class="fa-regular fa-paper-plane" />
       </template>
     </UIInput>
 
-
+    <template
+      v-for="comment in commentsController.commentsPopup"
+      :key="comment"
+    >
+      <CommentsComment :data="comment" />
+    </template>
   </Popup>
 </template>
 
@@ -32,6 +39,7 @@
 import { useElemStore } from '~/stores/ElemController';
 import { useCustomFetch } from '~/hooks/useCustomFetch';
 import { useTeamStore } from '~/stores/TeamContoller';
+import { useCommentsStore } from '~/stores/CommentsController';
 
 /**
  * Пропсы ----------------
@@ -48,11 +56,11 @@ const emits = defineEmits(['close']);
 /**
  * Переменные ----------------
  */
-const inputValue = ref('');
 const route = useRoute();
 const elemController = useElemStore();
 const teamController = useTeamStore();
-const $t = await useTranslate('elem');
+const commentsController = useCommentsStore();
+const $t = await useTranslate('comments');
 
 /**
  * Методы ----------------
@@ -62,7 +70,7 @@ const onAddComment = async () => {
   // Данные
   const dto = {
     team_id: teamController.activeTeamId,
-    comment: inputValue.value,
+    comment: commentsController.fieldValuePopup,
     entity_type: 'article',
     entity_id: route.params.id,
     tab_id: elemController.activeTab.id,
@@ -74,6 +82,13 @@ const onAddComment = async () => {
     body: dto,
     method: 'POST',
   });
+
+  if (data) {
+    // Добавить комментарий в массив
+    commentsController.addCommentPopup(data);
+    // Очистить поле
+    commentsController.changeFieldValuePopup('');
+  }
 };
 </script>
 

@@ -3,7 +3,9 @@
     <!-- Информация о комментарие -->
     <div class="info">
       <div class="user">{{ props.data.creator.fullname }}</div>
-      <div class="date">{{ useFormatDate(props.data.created_at, userController.lang) }}</div>
+      <div class="date">
+        {{ useFormatDate(props.data.created_at, userController.lang) }}
+      </div>
     </div>
 
     <!-- Текст комментария -->
@@ -11,18 +13,14 @@
 
     <!-- Попап с кнопками -->
     <div class="extra" ref="popupRef">
-      <svg-icon
-        name="options"
-        class="options"
-        @click="isShowPopup = !isShowPopup"
-      />
+      <i class="fa-regular fa-ellipsis-h" @click="isShowPopup = !isShowPopup" />
 
       <ul class="popup" v-if="isShowPopup">
         <li>
-          <button @click="setEditComment">Редактировать комментарий</button>
+          <button @click="setEditComment">{{ $t.edit }}</button>
         </li>
         <li>
-          <button @click="onRemoveComment">Удалить комментарий</button>
+          <button @click="onRemoveComment">{{ $t.delete }}</button>
         </li>
       </ul>
     </div>
@@ -39,13 +37,14 @@ import { useOutsideClick } from '~/hooks/useOutsideClick';
 import { useCustomFetch } from '~/hooks/useCustomFetch';
 import { useTeamStore } from '~/stores/TeamContoller';
 import { useCommentsStore } from '~/stores/CommentsController';
-import {useUserStore} from "~/stores/UserController";
+import { useUserStore } from '~/stores/UserController';
 
 /**
  * Пропсы ----------------
  */
 const props = defineProps<{
   data: TComment;
+  type?: 'block';
 }>();
 
 /**
@@ -56,6 +55,7 @@ const isShowPopup = ref(false);
 const teamController = useTeamStore();
 const commentsController = useCommentsStore();
 const userController = useUserStore();
+const $t = await useTranslate('comments');
 
 /**
  * Хуки ----------------
@@ -66,25 +66,39 @@ useOutsideClick(popupRef, isShowPopup);
  * Методы ----------------
  */
 const onRemoveComment = async () => {
-  if (window.confirm('Вы действительно хотите удалить комментарий?')) {
-    const data = await useCustomFetch(`team/comment/delete`, {
+  if (window.confirm($t.confirm)) {
+    const { message } = await useCustomFetch(`team/comment/delete`, {
       body: { team_id: teamController.activeTeamId, comment_id: props.data.id },
       method: 'POST',
     });
-    if (data) {
-      // Удаляем комментарий из массива
-      commentsController.removeComment(props.data.id);
+
+    if (message) {
+      if (props.type !== 'block') {
+        // Удаляем комментарий из массива
+        commentsController.removeComment(props.data.id);
+      } else {
+        // Удаляем комментарий из массива
+        commentsController.removeCommentPopup(props.data.id);
+      }
       // Убраем попап
       isShowPopup.value = false;
     }
   }
 };
 
+// Установить редактирование комментария
 const setEditComment = () => {
-  // Вставляем текст комментария в поле ввода
-  commentsController.changeFieldValue(props.data.text);
-  // Изменяем комментарий в массиве
-  commentsController.changeEditComment(props.data);
+  if (props.type !== 'block') {
+    // Вставляем текст комментария в поле ввода
+    commentsController.changeFieldValue(props.data.text);
+    // Изменяем комментарий в массиве
+    commentsController.changeEditComment(props.data);
+  } else {
+    // Вставляем текст комментария в поле ввода
+    commentsController.changeFieldValuePopup(props.data.text);
+    // Изменяем комментарий в массиве
+    commentsController.changeEditCommentPopup(props.data);
+  }
   // Убраем попап
   isShowPopup.value = false;
 };
@@ -115,7 +129,7 @@ const setEditComment = () => {
   }
 }
 
-.options {
+.fa-ellipsis-h {
   cursor: pointer;
   width: 15px;
   height: 15px;

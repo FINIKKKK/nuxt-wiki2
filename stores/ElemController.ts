@@ -1,7 +1,7 @@
 import { defineStore } from 'pinia';
 import { TArticleData } from '~/utils/types/article';
 import { OutputBlockData } from '@editorjs/editorjs';
-import {TComment} from "~/utils/types/comment";
+import { TComment } from '~/utils/types/comment';
 
 /**
  * --------------------------------
@@ -24,7 +24,6 @@ export const useElemStore = defineStore('elemController', () => {
   const isOpenComments = ref(false);
   const activeCommentBlock = ref<OutputBlockData[]>([]);
   const blockId = ref<any>(null);
-  const comments = ref<TComment[]>([]);
 
   /**
    * Методы ----------------
@@ -75,9 +74,6 @@ export const useElemStore = defineStore('elemController', () => {
   const setActiveBlockId = (value: any) => {
     blockId.value = value;
   };
-  const setComments = (value: TComment[]) => {
-    comments.value = value
-  };
 
   // Возращаем данные
   return {
@@ -104,7 +100,5 @@ export const useElemStore = defineStore('elemController', () => {
     setActiveTab,
     blockId,
     setActiveBlockId,
-    comments,
-    setComments,
   };
 });

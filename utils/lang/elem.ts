@@ -39,10 +39,6 @@ export default {
       comments: 'Разрешить комментарии',
       indexing: 'Индексация в поисковых системах',
     },
-    commentsPopup: {
-      title: 'Комментарии',
-      input: 'Текст комментария',
-    },
   },
   en: {
     author: 'Author',
@@ -83,10 +79,6 @@ export default {
       copyText: 'The link is copied to the clipboard',
       comments: 'Allow comments',
       indexing: 'Indexing in search engines',
-    },
-    commentsPopup: {
-      title: 'Comments',
-      input: 'Comment text',
     },
   },
 };

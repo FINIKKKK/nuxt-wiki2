@@ -6,6 +6,7 @@
       focus: isFocus || model,
       error: props.errors?.length,
       address: props.type === 'address',
+      textarea: props.isTextarea
     }"
   >
     <div class="inner">
@@ -332,6 +333,15 @@ if (props.isTextarea) {
   border-radius: 3px;
   max-width: 230px;
   z-index: 30;
+}
+
+.input.textarea {
+  .flex {
+    align-items: flex-start;
+  }
+  .btn-icon {
+    margin-top: 12px;
+  }
 }
 </style>
 

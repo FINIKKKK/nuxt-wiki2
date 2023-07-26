@@ -2,6 +2,9 @@
   <div class="body" :class="{ mini: props.type === 'mini' }">
     <template v-for="obj in data" :key="obj.id">
       <div class="block">
+        <!--------------------------------------
+         Различный контент
+        ---------------------------------------->
         <div class="block_content">
           <!-- paragraph -->
           <p
@@ -89,12 +92,17 @@
           </table>
         </div>
 
+        <!--------------------------------------
+         Кнопки управления
+        ---------------------------------------->
         <div
           class="controls"
           v-if="props.type !== 'mini' && obj.type !== 'delimiter'"
           @click="() => setActiveBlock(obj)"
         >
+          <!-- Кнопка открытия попапа для добавления комментариев -->
           <i class="fa-regular fa-add" v-hover />
+          <!-- Количество комментариев -->
           <div class="message" v-if="activeComments(obj.id)?.length">
             <i class="fa-regular fa-message" />
             {{ activeComments(obj.id)?.length }}
@@ -109,6 +117,7 @@
 import { OutputBlockData } from '@editorjs/editorjs';
 import { useElemStore } from '~/stores/ElemController';
 import { TComment } from '~/utils/types/comment';
+import { useCommentsStore } from '~/stores/CommentsController';
 
 /**
  * Пропсы ----------------
@@ -123,6 +132,15 @@ const props = defineProps<{
  * Переменные ----------------
  */
 const elemController = useElemStore();
+const commentsController = useCommentsStore();
+
+/**
+ * Вычисляемое ----------------
+ */
+// Комментарии у блока
+const activeComments = (id: any) => {
+  return props.comments.filter((comment) => comment.block_id === id) || null;
+};
 
 /**
  * Методы ----------------
@@ -132,15 +150,7 @@ const setActiveBlock = (obj: OutputBlockData) => {
   elemController.openComments();
   elemController.setActiveCommentBlock(obj);
   elemController.setActiveBlockId(obj.id);
-  elemController.setComments(activeComments(obj.id));
-};
-
-/**
- * Вычисляемое ----------------
- */
-// Комментарии у блока
-const activeComments = (id: any) => {
-  return props.comments.filter((comment) => comment.block_id === id) || null;
+  commentsController.setCommentsPopup(activeComments(obj.id));
 };
 </script>
 

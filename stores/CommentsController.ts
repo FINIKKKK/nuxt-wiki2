@@ -13,6 +13,9 @@ export const useCommentsStore = defineStore('commentsController', () => {
   const comments: Ref<TComment[]> = ref([]);
   const editComment: Ref<TComment | null> = ref(null);
   const fieldValue: Ref<string> = ref('');
+  const commentsPopup: Ref<TComment[]> = ref([]);
+  const editCommentPopup: Ref<TComment | null> = ref(null);
+  const fieldValuePopup: Ref<string> = ref('');
 
   /**
    * Методы ----------------
@@ -37,6 +40,21 @@ export const useCommentsStore = defineStore('commentsController', () => {
   const changeFieldValue = (value: string) => {
     fieldValue.value = value;
   };
+  const setCommentsPopup = (value: TComment[]) => {
+    commentsPopup.value = value;
+  };
+  const changeFieldValuePopup = (value: string) => {
+    fieldValuePopup.value = value;
+  };
+  const addCommentPopup = (value: TComment) => {
+    commentsPopup.value = [...commentsPopup.value, value];
+  };
+  const changeEditCommentPopup = (value: TComment | null) => {
+    editCommentPopup.value = value;
+  };
+  const removeCommentPopup = (id: number) => {
+    commentsPopup.value = commentsPopup.value.filter((obj) => obj.id !== id);
+  };
 
   // Возращаем данные
   return {
@@ -48,6 +66,14 @@ export const useCommentsStore = defineStore('commentsController', () => {
     editComment,
     changeEditComment,
     fieldValue,
+    commentsPopup,
+    setCommentsPopup,
+    fieldValuePopup,
+    editCommentPopup,
     changeFieldValue,
+    changeFieldValuePopup,
+    addCommentPopup,
+    changeEditCommentPopup,
+    removeCommentPopup,
   };
 });
