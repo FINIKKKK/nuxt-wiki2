@@ -6,8 +6,8 @@
           class="tab"
           v-for="(tab, index) in props.tabs"
           :key="index"
-          @click="() => setActiveTab(index, tab.id)"
-          :class="{ active: index === activeTab }"
+          @click="elemController.setActiveTab(index, tab.id)"
+          :class="{ active: index === elemController.activeTab.index }"
         >
           {{ tab.name }}
         </li>
@@ -17,7 +17,8 @@
         <EditorBody
           :key="index"
           :data="JSON.parse(tab.content)"
-          v-if="index === activeTab"
+          v-if="index === elemController.activeTab.index"
+          :comments="elemController.article.article.tabs[index].comments"
         />
       </div>
     </div>
@@ -26,7 +27,7 @@
       <div
         class="map"
         v-if="
-          index === activeTab &&
+          index === elemController.activeTab.index &&
           JSON.parse(tab.content).filter((obj: OutputBlockData) => obj.type === 'header')?.length
         "
       >
@@ -80,18 +81,13 @@ const emits = defineEmits(['activeTab']);
 /**
  * Переменные ----------------
  */
-const activeTab = ref(0);
 const $t = await useTranslate('elem');
 const elemController = useElemStore();
 
 /**
- * Методы ----------------
+ * Вычисляемое ----------------
  */
-// Установить активную вкладку
-const setActiveTab = (index: number, id: number) => {
-  activeTab.value = index;
-  emits('activeTab', { index, id });
-};
+elemController.setActiveTab(0, props.tabs[0].id);
 </script>
 
 <!-- ----------------------------------------------------- -->

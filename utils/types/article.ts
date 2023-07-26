@@ -27,6 +27,7 @@ export interface TArticle extends TBase {
 export interface TTab {
   name: string;
   content: OutputBlockData[];
+  comments: TComment[];
 }
 
 export interface TTabParse {

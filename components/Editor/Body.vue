@@ -1,5 +1,5 @@
 <template>
-  <div class="body">
+  <div class="body" :class="{ mini: props.type === 'mini' }">
     <template v-for="obj in data" :key="obj.id">
       <div class="block">
         <div class="block_content">
@@ -54,7 +54,7 @@
 
           <!-- quote -->
           <div v-else-if="obj.type === 'quote'" class="el quote">
-            <svg-icon name="document" />
+            <i class="fa-regular fa-quote-left" />
             <div class="quote__content">
               <h3 v-html="obj.data.text"></h3>
               <p v-html="obj.data.caption"></p>
@@ -89,11 +89,17 @@
           </table>
         </div>
 
-        <i
-          class="fa-regular fa-add"
-          v-hover
+        <div
+          class="controls"
+          v-if="props.type !== 'mini' && obj.type !== 'delimiter'"
           @click="() => setActiveBlock(obj)"
-        />
+        >
+          <i class="fa-regular fa-add" v-hover />
+          <div class="message" v-if="activeComments(obj.id)?.length">
+            <i class="fa-regular fa-message" />
+            {{ activeComments(obj.id)?.length }}
+          </div>
+        </div>
       </div>
     </template>
   </div>
@@ -102,12 +108,15 @@
 <script lang="ts" setup>
 import { OutputBlockData } from '@editorjs/editorjs';
 import { useElemStore } from '~/stores/ElemController';
+import { TComment } from '~/utils/types/comment';
 
 /**
  * Пропсы ----------------
  */
 const props = defineProps<{
   data: OutputBlockData[];
+  type?: 'mini';
+  comments?: TComment[];
 }>();
 
 /**
@@ -122,6 +131,16 @@ const elemController = useElemStore();
 const setActiveBlock = (obj: OutputBlockData) => {
   elemController.openComments();
   elemController.setActiveCommentBlock(obj);
+  elemController.setActiveBlockId(obj.id);
+  elemController.setComments(activeComments(obj.id));
+};
+
+/**
+ * Вычисляемое ----------------
+ */
+// Комментарии у блока
+const activeComments = (id: any) => {
+  return props.comments.filter((comment) => comment.block_id === id) || null;
 };
 </script>
 
@@ -132,16 +151,21 @@ const setActiveBlock = (obj: OutputBlockData) => {
     margin-bottom: 25px;
   }
   &:hover {
-    .fa-regular {
+    .controls {
       opacity: 1;
     }
   }
-  .fa-regular {
+  .controls {
     opacity: 0;
-    cursor: pointer;
     position: absolute;
+    transition: 0.2s;
     top: 0;
-    right: -25px;
+    left: 100%;
+    display: flex;
+    cursor: pointer;
+  }
+  .fa-add {
+    cursor: pointer;
     font-style: normal;
     font-size: 12px;
     font-weight: 700;
@@ -152,7 +176,6 @@ const setActiveBlock = (obj: OutputBlockData) => {
     display: flex;
     align-items: center;
     justify-content: center;
-    transition: 0.2s;
   }
   .block_content {
     transition: 0.2s;
@@ -160,6 +183,20 @@ const setActiveBlock = (obj: OutputBlockData) => {
       background-color: $blue2;
     }
   }
+  .message {
+    margin-left: 10px;
+    display: flex;
+    align-items: center;
+    color: $gray;
+    i {
+      color: $gray;
+      margin-right: 5px;
+    }
+  }
+}
+
+.fa-regular {
+  font-style: normal !important;
 }
 
 .body {
@@ -219,18 +256,12 @@ const setActiveBlock = (obj: OutputBlockData) => {
     line-height: 40px;
     text-align: center;
     letter-spacing: 10px;
-    margin-top: 25px;
+    margin-top: 40px;
   }
   // headers ###############
   .title {
     margin-bottom: -10px;
     display: inline-block;
-    &::before {
-      content: '';
-      display: block;
-      height: 150px;
-      margin-top: -150px;
-    }
   }
   h2.title {
     font-size: 24px;
@@ -271,10 +302,12 @@ const setActiveBlock = (obj: OutputBlockData) => {
     background-color: $blue2;
     padding: 15px 25px;
     border-radius: 15px;
-    svg {
-      fill: $blue;
+    i {
+      color: $blue;
+      font-weight: 400;
       width: 25px;
       height: 25px;
+      font-size: 24px;
       margin-right: 20px;
     }
     .quote__content {
@@ -339,6 +372,60 @@ const setActiveBlock = (obj: OutputBlockData) => {
   .table {
     tr {
       border-bottom: 1px solid rgba($blue, 0.1);
+    }
+  }
+}
+
+.body.mini {
+  color: $gray;
+  font-size: 14px;
+  // list ###############
+  .list {
+    li {
+      padding-left: 30px;
+      &::before {
+        width: 4px;
+        height: 4px;
+        top: 9px;
+        background-color: $gray;
+      }
+    }
+  }
+  // headers ###############
+  h2.title {
+    font-size: 20px;
+    line-height: 28px;
+  }
+  h3.title {
+    font-size: 16px;
+    line-height: 24px;
+  }
+  // quote ###############
+  .quote {
+    padding: 12px 20px;
+    i {
+      font-size: 20px;
+      margin-right: 15px;
+    }
+  }
+  // checkbox ###############
+  .checkbox {
+    input + label::before {
+      border: 1px solid $gray;
+    }
+    input:checked + label::before {
+      border-color: $gray;
+      background-color: $gray;
+    }
+  }
+  // table ###############
+  .table {
+    tr {
+      border-bottom: 1px solid rgba($blue, 0.1);
+    }
+    td,
+    th {
+      padding: 10px 16px;
     }
   }
 }

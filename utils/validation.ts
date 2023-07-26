@@ -114,8 +114,6 @@ export const TagScheme = yup.object().shape({
   name: yup.string().required('required').min(5, 'tag_min').max(30, 'tag_max'),
 });
 
-
-
 /**
  * Создание черновика
  */

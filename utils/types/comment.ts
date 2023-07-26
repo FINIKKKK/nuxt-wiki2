@@ -9,4 +9,5 @@ export interface TComment extends TBase {
   text: string;
   user_id: number;
   likes: any[];
+  block_id?: number;
 }
