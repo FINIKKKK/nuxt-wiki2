@@ -10,6 +10,12 @@ import { TComment } from '~/utils/types/comment';
  */
 export const useElemStore = defineStore('elemController', () => {
   /**
+   * Переменные ----------------
+   */
+  const router = useRouter();
+  const route = useRoute();
+
+  /**
    * Свойства ----------------
    */
   const type: Ref<'section' | 'article'> = ref('section');
@@ -57,7 +63,7 @@ export const useElemStore = defineStore('elemController', () => {
   const changeActiveTitle = (value: any) => {
     activeTitle.value = value;
     const url = `#${value}`;
-    window.history.pushState({ anchor: value }, '', url);
+    router.replace({ query: route.query, hash: url });
   };
   const openComments = () => {
     isOpenComments.value = true;
@@ -70,6 +76,7 @@ export const useElemStore = defineStore('elemController', () => {
   };
   const setActiveTab = (index: number, id: number) => {
     activeTab.value = { index, id };
+    router.replace({ query: { tab: index }, hash: route.hash });
   };
   const setActiveBlockId = (value: any) => {
     blockId.value = value;

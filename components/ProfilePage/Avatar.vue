@@ -44,7 +44,6 @@ watch(profileController.errors, () => {
   profileController.setErrors(profileController.errors);
 });
 
-
 /**
  * Методы ----------------
  */

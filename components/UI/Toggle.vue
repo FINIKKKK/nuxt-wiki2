@@ -1,7 +1,7 @@
 <template>
   <div
     class="toggle"
-    @click="model = !model"
+    @click="onToggle"
     :class="`${model && 'active'}  ${props.type && props.type}`"
   >
     <div class="toggle_button"></div>
@@ -23,7 +23,7 @@ const props = defineProps<{
 /**
  * События ----------------
  */
-const emits = defineEmits(['update:modelValue']);
+const emits = defineEmits(['update:modelValue', 'onToggle']);
 
 // Значение
 const model = computed({
@@ -34,6 +34,15 @@ const model = computed({
     emits('update:modelValue', val);
   },
 });
+
+/**
+ * Методы ----------------
+ */
+// Переключить
+const onToggle = () => {
+  emits('onToggle');
+  model.value = !model.value;
+};
 </script>
 
 <!-- ----------------------------------------------------- -->

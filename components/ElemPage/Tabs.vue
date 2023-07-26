@@ -17,7 +17,7 @@
         <EditorBody
           :key="index"
           :data="JSON.parse(tab.content)"
-          v-if="index === elemController.activeTab.index"
+          v-show="index === elemController.activeTab.index"
           :comments="elemController.article.article.tabs[index].comments"
         />
       </div>
@@ -81,13 +81,22 @@ const emits = defineEmits(['activeTab']);
 /**
  * Переменные ----------------
  */
-const $t = await useTranslate('elem');
+const route = useRoute();
+const router = useRouter();
 const elemController = useElemStore();
+const $t = await useTranslate('elem');
 
 /**
  * Вычисляемое ----------------
  */
-elemController.setActiveTab(0, props.tabs[0].id);
+const tabIndex = Number(route.query.tab);
+if (tabIndex) {
+  elemController.setActiveTab(tabIndex, props.tabs[tabIndex].id);
+} else {
+  elemController.setActiveTab(0, props.tabs[0].id);
+}
+
+const hash = route.hash;
 </script>
 
 <!-- ----------------------------------------------------- -->

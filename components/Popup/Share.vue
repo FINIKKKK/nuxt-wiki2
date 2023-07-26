@@ -1,34 +1,39 @@
 <template>
   <Popup :isOpen="props.isOpen" @close="emits('close')">
+    <!-- Сменить мод -->
     <div class="header">
       <h3 class="title">{{ $t.sharePopup.title }}</h3>
-      <UIToggle v-model="publicCheck" type="big" />
+      <UIToggle v-model="publicCheck" type="big" @click="onChangeMode" />
     </div>
 
-    <p class="text">{{ $t.sharePopup.text1 }}</p>
-    <p class="text">{{ $t.sharePopup.text2 }}</p>
+    <template v-if="publicCheck">
+      <p class="text">{{ $t.sharePopup.text1 }}</p>
+      <p class="text">{{ $t.sharePopup.text2 }}</p>
 
-    <UIInput
-      :label="$t.sharePopup.input"
-      v-model="linkValue"
-      :isRead="true"
-      :message="inputMessage"
-      @btnClick="onCopyLink"
-      class="input"
-    >
-      <template #btn2>
-        <i class="fa-regular fa-files" :title="$t.sharePopup.copy" />
-      </template>
-    </UIInput>
+      <!-- Поле ввода с ссылкой -->
+      <UIInput
+        :label="$t.sharePopup.input"
+        v-model="linkValue"
+        :isRead="true"
+        :message="inputMessage"
+        @btnClick="onCopyLink"
+        class="input"
+      >
+        <template #btn2>
+          <i class="fa-regular fa-files" :title="$t.sharePopup.copy" />
+        </template>
+      </UIInput>
 
-    <div class="option">
-      <p>{{ $t.sharePopup.comments }}</p>
-      <UIToggle v-model="commentsCheck" />
-    </div>
-    <div class="option">
-      <p>{{ $t.sharePopup.indexing }}</p>
-      <UIToggle v-model="indexingCheck" />
-    </div>
+      <!-- Дополнительные настройки -->
+      <div class="option">
+        <p>{{ $t.sharePopup.comments }}</p>
+        <UIToggle v-model="commentsCheck" />
+      </div>
+      <div class="option">
+        <p>{{ $t.sharePopup.indexing }}</p>
+        <UIToggle v-model="indexingCheck" />
+      </div>
+    </template>
   </Popup>
 </template>
 
@@ -36,11 +41,15 @@
 <!-- ----------------------------------------------------- -->
 
 <script lang="ts" setup>
+import { useTeamStore } from '~/stores/TeamContoller';
+import { useCustomFetch } from '~/hooks/useCustomFetch';
+
 /**
  * Пропсы ----------------
  */
 const props = defineProps<{
   isOpen: boolean;
+  isPublic: boolean;
 }>();
 
 /**
@@ -51,10 +60,12 @@ const emits = defineEmits(['close']);
 /**
  * Переменные ----------------
  */
+const teamController = useTeamStore();
+const route = useRoute();
 const config = useRuntimeConfig();
-const linkValue = ref(`${config.public.url}article/public/356`);
+const linkValue = ref(`${config.public.url}article/public/${route.params.id}`);
 const inputMessage = ref('');
-const publicCheck = ref(false);
+const publicCheck = ref(props.isPublic);
 const commentsCheck = ref(false);
 const indexingCheck = ref(false);
 const $t = await useTranslate('elem');
@@ -69,6 +80,18 @@ const onCopyLink = () => {
   setTimeout(() => {
     inputMessage.value = '';
   }, 4000);
+};
+
+// Поменять уровень доступа у статьи
+const onChangeMode = async () => {
+  const { message } = await useCustomFetch(`team/article/mode`, {
+    body: {
+      team_id: teamController.activeTeamId,
+      article_id: route.params.id,
+      public: publicCheck.value,
+    },
+    method: 'POST',
+  });
 };
 </script>
 

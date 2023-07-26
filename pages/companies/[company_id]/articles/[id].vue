@@ -31,6 +31,13 @@
     <!-- Комментарии -->
     <Comments />
 
+    <!-- Попап для публичного доступа -->
+    <PopupShare
+      :isOpen="elemController.isOpenShare"
+      @close="elemController.closeShare()"
+      :isPublic="article.article.public"
+    />
+
     <!-- Попап с комментированием блоков -->
     <PopupCommentsBlock
       :isOpen="elemController.isOpenComments"

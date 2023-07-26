@@ -245,6 +245,11 @@ const onSubmit = async () => {
         user_id: obj.user.id,
         permission: obj.permission.value,
       })),
+      images: createElemController.tabs.map((obj) =>
+        obj.content
+          .filter((obj2) => obj2.type === 'image')
+          .map((image) => image.id),
+      ),
       action:
         teamController.activeTeam?.role.id === 1 ||
         teamController.activeTeam?.role.id === 2
