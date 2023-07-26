@@ -13,7 +13,6 @@ export const useSidebarStore = defineStore('sidebarController', () => {
   const activeItem: Ref<string | null> = ref(null);
   const currentComponent: Ref<string | null> = ref(null);
   const isActiveMap: Ref<boolean> = ref(false);
-  const isEndScrollPage: Ref<boolean> = ref(false);
 
   /**
    * Методы ----------------
@@ -38,9 +37,6 @@ export const useSidebarStore = defineStore('sidebarController', () => {
   const closeMap = () => {
     isActiveMap.value = false;
   };
-  const setEndScrollPage = (value: boolean) => {
-    isEndScrollPage.value = value;
-  };
 
   // Возращаем данные
   return {
@@ -54,7 +50,5 @@ export const useSidebarStore = defineStore('sidebarController', () => {
     setActiveItem,
     openMap,
     closeMap,
-    isEndScrollPage,
-    setEndScrollPage,
   };
 });

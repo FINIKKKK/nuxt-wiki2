@@ -25,6 +25,8 @@
       v-for="(item, index) in Array(10)"
       :key="index"
     />
+
+    <div v-observe="() => getNotices()"></div>
   </NuxtLayout>
 </template>
 
@@ -37,7 +39,6 @@ import { useTeamStore } from '~/stores/TeamContoller';
 import { TNotice, TNotifications } from '~/utils/types/notice';
 import { useFormatDate } from '~/hooks/useFormatData';
 import { useRequestStore } from '~/stores/RequestController';
-import { useSidebarStore } from '~/stores/SidebarController';
 import { useUserStore } from '~/stores/UserController';
 
 /**
@@ -49,7 +50,6 @@ const teamController = useTeamStore();
 const $t = await useTranslate('notices');
 const nav = [{ label: $t.title, link: route.path }];
 const requestController = useRequestStore();
-const sidebarController = useSidebarStore();
 const notificationsList = ref<TNotice[]>([]);
 const userController = useUserStore();
 
@@ -60,36 +60,36 @@ const userController = useUserStore();
 const { data: notifications } = await useCustomFetch<TNotifications>(url, {
   query: { team_id: teamController.activeTeamId, limit: 15, offset: 0 },
 });
-console.log(notifications);
 notificationsList.value.push(...notifications.notifications);
 
 /**
- * Вычисляемое ----------------
+ * Методы ----------------
  */
-// При скролле добавляю новые уведомления
-watch(
-  () => sidebarController.isEndScrollPage,
-  async () => {
-    if (sidebarController.isEndScrollPage) {
-      const { data: newNotifications } = await useCustomFetch<TNotifications>(
-        url,
-        {
-          query: {
-            team_id: teamController.activeTeamId,
-            limit: 15,
-            offset: notificationsList.value.length,
-          },
+// Получение новых уведомлений
+let isEnd = false;
+const getNotices = async () => {
+  if (!isEnd) {
+    const { data: newNotifications } = await useCustomFetch<TNotifications>(
+      url,
+      {
+        query: {
+          team_id: teamController.activeTeamId,
+          limit: 15,
+          offset: notificationsList.value.length,
         },
-      );
-      notificationsList.value = [
-        ...notificationsList.value,
-        ...newNotifications.notifications,
-      ];
-      console.log(notifications.length);
-      console.log(notificationsList.value);
+      },
+    );
+
+    if (!newNotifications.notifications.length) {
+      isEnd = true;
     }
-  },
-);
+
+    notificationsList.value = [
+      ...notificationsList.value,
+      ...newNotifications.notifications,
+    ];
+  }
+};
 </script>
 
 <!-- ----------------------------------------------------- -->

@@ -43,6 +43,8 @@
         </template>
       </tbody>
     </table>
+
+    <div v-observe="() => getEmployees()"></div>
   </div>
 </template>
 
@@ -54,7 +56,8 @@ import { useCustomFetch } from '~/hooks/useCustomFetch';
 import { TEmployees } from '~/utils/types/team';
 import { useRequestStore } from '~/stores/RequestController';
 import { useTeamStore } from '~/stores/TeamContoller';
-import {TUser} from "~/utils/types/account";
+import { TUser } from '~/utils/types/account';
+import { TNotifications } from '~/utils/types/notice';
 
 /**
  * Переменные ----------------
@@ -62,6 +65,7 @@ import {TUser} from "~/utils/types/account";
 const url = 'team/employees';
 const requestController = useRequestStore();
 const teamController = useTeamStore();
+const employeesList = ref([]);
 const $t = await useTranslate('employees');
 
 /**
@@ -76,22 +80,47 @@ const { data: employees } = await useCustomFetch<TEmployees>(url, {
     order_sort: 'DESC',
   },
 });
-console.log(employees);
+employeesList.value = [employees.invites, employees.employees];
 
 /**
  * Методы ----------------
  */
 // Удалить из списка (событие)
 const removeFromTeam = (id: number) => {
-  employees.value.employees = employees.value.employees.filter(
+  employees.employees = employees.employees.filter(
     (obj: TUser) => obj.id !== id,
   );
 };
+
 // Удалить из приглашенных (событие)
 const removeFromInvites = (id: number) => {
-  employees.value.invites = employees.value.invites.filter(
-    (obj: TUser) => obj.id !== id,
-  );
+  employees.invites = employees.invites.filter((obj: TUser) => obj.id !== id);
+};
+
+// Получить новых работников
+let isEnd = false;
+const getEmployees = async () => {
+  if (!isEnd) {
+    const { data: newEmployees } = await useCustomFetch<TEmployees>(url, {
+      query: {
+        team_id: teamController.activeTeamId,
+        limit: 15,
+        offset: employeesList.value.length,
+        order_by: 'created_at',
+        order_sort: 'DESC',
+      },
+    });
+
+    if (!newEmployees.invites.length && !newEmployees.employees.length) {
+      isEnd = true;
+    }
+
+    employees.value = [
+      ...employeesList.value,
+      ...newEmployees.invites,
+      ...newEmployees.employees,
+    ];
+  }
 };
 </script>
 
