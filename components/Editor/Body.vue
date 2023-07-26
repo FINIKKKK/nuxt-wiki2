@@ -1,88 +1,100 @@
 <template>
   <div class="body">
     <template v-for="obj in data" :key="obj.id">
-      <!-- paragraph -->
-      <p
-        v-if="obj.type === 'paragraph'"
-        class="el text"
-        v-html="obj.data.text"
-      ></p>
+      <div class="block">
+        <div class="block_content">
+          <!-- paragraph -->
+          <p
+            v-if="obj.type === 'paragraph'"
+            class="el text"
+            v-html="obj.data.text"
+          ></p>
 
-      <!-- list -->
-      <ul
-        v-else-if="obj.type === 'list'"
-        class="el list"
-        :class="{ ordered: obj.data.style === 'ordered' }"
-      >
-        <li v-for="(item, index) in obj.data.items" :key="index">
-          {{ item }}
-        </li>
-      </ul>
+          <!-- list -->
+          <ul
+            v-else-if="obj.type === 'list'"
+            class="el list"
+            :class="{ ordered: obj.data.style === 'ordered' }"
+          >
+            <li v-for="(item, index) in obj.data.items" :key="index">
+              {{ item }}
+            </li>
+          </ul>
 
-      <!-- delimiter -->
-      <div v-else-if="obj.type === 'delimiter'" class="el delimiter">***</div>
+          <!-- delimiter -->
+          <div v-else-if="obj.type === 'delimiter'" class="el delimiter">
+            ***
+          </div>
 
-      <!-- headers -->
-      <h3
-        v-else-if="obj.type === 'header' && obj.data.level === 3"
-        class="title"
-        :id="obj.id"
-        v-observe="() => elemController.changeActiveTitle(obj.id)"
-      >
-        {{ obj.data.text }}
-      </h3>
-      <h2
-        v-else-if="obj.type === 'header' && obj.data.level === 2"
-        class="title"
-        :id="obj.id"
-        v-observe="() => elemController.changeActiveTitle(obj.id)"
-      >
-        {{ obj.data.text }}
-      </h2>
+          <!-- headers -->
+          <h3
+            v-else-if="obj.type === 'header' && obj.data.level === 3"
+            class="title"
+            :id="obj.id"
+            v-observe="() => elemController.changeActiveTitle(obj.id)"
+          >
+            {{ obj.data.text }}
+          </h3>
+          <h2
+            v-else-if="obj.type === 'header' && obj.data.level === 2"
+            class="title"
+            :id="obj.id"
+            v-observe="() => elemController.changeActiveTitle(obj.id)"
+          >
+            {{ obj.data.text }}
+          </h2>
 
-      <!-- codeBox -->
-      <div v-else-if="obj.type === 'codeBox'" class="el code">
-        <div class="code__lg">
-          {{ obj.data.language !== 'Auto-detect' ? obj.data.language : '' }}
+          <!-- codeBox -->
+          <div v-else-if="obj.type === 'codeBox'" class="el code">
+            <div class="code__lg">
+              {{ obj.data.language !== 'Auto-detect' ? obj.data.language : '' }}
+            </div>
+            <code v-html="obj.data.code"></code>
+          </div>
+
+          <!-- quote -->
+          <div v-else-if="obj.type === 'quote'" class="el quote">
+            <svg-icon name="document" />
+            <div class="quote__content">
+              <h3 v-html="obj.data.text"></h3>
+              <p v-html="obj.data.caption"></p>
+            </div>
+          </div>
+
+          <!-- image -->
+          <div v-else-if="obj.type === 'image'" class="el img">
+            <img :src="obj.data.file.url" alt="img" />
+          </div>
+
+          <!-- checklist -->
+          <div v-else-if="obj.type === 'checklist'" class="el checkbox">
+            <input
+              type="checkbox"
+              :id="obj.data.items[0].text"
+              :name="obj.data.items[0].text"
+              :checked="obj.data.items[0].checked"
+            />
+            <label :for="obj.data.items[0].text">{{
+              obj.data.items[0].text
+            }}</label>
+          </div>
+
+          <!-- table -->
+          <table v-else-if="obj.type === 'table'" class="el table">
+            <tr v-for="(row, index) in obj.data.content" :key="index">
+              <td v-for="(str, index) in row" :key="index">
+                {{ str }}
+              </td>
+            </tr>
+          </table>
         </div>
-        <code v-html="obj.data.code"></code>
-      </div>
 
-      <!-- quote -->
-      <div v-else-if="obj.type === 'quote'" class="el quote">
-        <svg-icon name="document" />
-        <div class="quote__content">
-          <h3 v-html="obj.data.text"></h3>
-          <p v-html="obj.data.caption"></p>
-        </div>
-      </div>
-
-      <!-- image -->
-      <div v-else-if="obj.type === 'image'" class="el img">
-        <img :src="obj.data.file.url" alt="img" />
-      </div>
-
-      <!-- checklist -->
-      <div v-else-if="obj.type === 'checklist'" class="el checkbox">
-        <input
-          type="checkbox"
-          :id="obj.data.items[0].text"
-          :name="obj.data.items[0].text"
-          :checked="obj.data.items[0].checked"
+        <i
+          class="fa-regular fa-add"
+          v-hover
+          @click="() => setActiveBlock(obj)"
         />
-        <label :for="obj.data.items[0].text">{{
-          obj.data.items[0].text
-        }}</label>
       </div>
-
-      <!-- table -->
-      <table v-else-if="obj.type === 'table'" class="el table">
-        <tr v-for="(row, index) in obj.data.content" :key="index">
-          <td v-for="(str, index) in row" :key="index">
-            {{ str }}
-          </td>
-        </tr>
-      </table>
     </template>
   </div>
 </template>
@@ -102,13 +114,55 @@ const props = defineProps<{
  * Переменные ----------------
  */
 const elemController = useElemStore();
+
+/**
+ * Методы ----------------
+ */
+// Установить активный блок для комментария
+const setActiveBlock = (obj: OutputBlockData) => {
+  elemController.openComments();
+  elemController.setActiveCommentBlock(obj);
+};
 </script>
 
 <style lang="scss">
-.body {
-  .el:not(:last-child) {
-    margin-bottom: 15px;
+.block {
+  position: relative;
+  &:not(:last-child) {
+    margin-bottom: 25px;
   }
+  &:hover {
+    .fa-regular {
+      opacity: 1;
+    }
+  }
+  .fa-regular {
+    opacity: 0;
+    cursor: pointer;
+    position: absolute;
+    top: 0;
+    right: -25px;
+    font-style: normal;
+    font-size: 12px;
+    font-weight: 700;
+    background-color: $blue2;
+    padding: 5px;
+    width: 25px;
+    height: 25px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: 0.2s;
+  }
+  .block_content {
+    transition: 0.2s;
+    &.hover {
+      background-color: $blue2;
+    }
+  }
+}
+
+.body {
   // text ###############
   b {
     font-weight: 700;
@@ -169,7 +223,8 @@ const elemController = useElemStore();
   }
   // headers ###############
   .title {
-    margin-bottom: 24px;
+    margin-bottom: -10px;
+    display: inline-block;
     &::before {
       content: '';
       display: block;

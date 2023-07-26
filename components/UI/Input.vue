@@ -41,13 +41,19 @@
         <div @click="emits('btnClick')" v-if="slots.btn" class="btn">
           <slot name="btn"></slot>
         </div>
-        <div @click="emits('btnClick')" v-if="slots.btn2" class="btn-icon">
+        <div
+          @click="emits('btnClick')"
+          v-if="slots.btn2"
+          class="btn-icon"
+          :class="{ fill: props.btnType === 'fill' }"
+        >
           <slot name="btn2"></slot>
         </div>
         <div
           @click="emits('btnClick2')"
           v-if="slots.btn3"
           class="btn-icon btn-icon2"
+          :class="{ fill: props.btnType === 'fill' }"
         >
           <slot name="btn3"></slot>
         </div>
@@ -87,6 +93,7 @@ const props = defineProps<{
   isTextarea?: boolean;
   isRead?: boolean;
   message?: string;
+  btnType?: 'fill';
 }>();
 
 // Значение
@@ -340,6 +347,12 @@ if (props.isTextarea) {
 .btn-icon {
   .disabled {
     opacity: 0.5;
+  }
+}
+
+.btn-icon.fill {
+  i {
+    font-weight: 700;
   }
 }
 </style>

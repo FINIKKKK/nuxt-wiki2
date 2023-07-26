@@ -30,6 +30,12 @@
 
     <!-- Комментарии -->
     <Comments />
+
+    <!-- Попап с комментированием блоков -->
+    <PopupCommentsBlock
+      :isOpen="elemController.isOpenComments"
+      @close="elemController.closeComments"
+    />
   </NuxtLayout>
 </template>
 

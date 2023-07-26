@@ -44,6 +44,11 @@ const props = defineProps<{
 }>();
 
 /**
+ * События ----------------
+ */
+const emits = defineEmits(['close']);
+
+/**
  * Переменные ----------------
  */
 const config = useRuntimeConfig();

@@ -1,5 +1,6 @@
 import { defineStore } from 'pinia';
 import { TArticleData } from '~/utils/types/article';
+import { OutputBlockData } from '@editorjs/editorjs';
 
 /**
  * --------------------------------
@@ -15,6 +16,8 @@ export const useElemStore = defineStore('elemController', () => {
   const isOpenShare: Ref<boolean> = ref(false);
   const article: Ref<TArticleData | null> = ref(null);
   const activeTitle: Ref<any> = ref(null);
+  const isOpenComments = ref(false);
+  const activeCommentBlock = ref<OutputBlockData[]>([]);
 
   /**
    * Методы ----------------
@@ -50,6 +53,15 @@ export const useElemStore = defineStore('elemController', () => {
     const url = `#${value}`;
     window.history.pushState({ anchor: value }, '', url);
   };
+  const openComments = () => {
+    isOpenComments.value = true;
+  };
+  const closeComments = () => {
+    isOpenComments.value = false;
+  };
+  const setActiveCommentBlock = (value: OutputBlockData) => {
+    activeCommentBlock.value = [value];
+  };
 
   // Возращаем данные
   return {
@@ -67,5 +79,10 @@ export const useElemStore = defineStore('elemController', () => {
     setArticle,
     activeTitle,
     changeActiveTitle,
+    activeCommentBlock,
+    setActiveCommentBlock,
+    isOpenComments,
+    openComments,
+    closeComments,
   };
 });
