@@ -12,11 +12,11 @@
         <NuxtLink :to="link">
           {{ props.data.name }}
         </NuxtLink>
-        <div class="tags">
-          <div class="tag" v-if="props.data.status_id === 1">
+        <div class="flags">
+          <div class="flag" v-if="props.data.status_id === 1">
             {{ $t.item.draft }}
           </div>
-          <div class="tag" v-if="props.data.status_id === 2">
+          <div class="flag" v-if="props.data.status_id === 2">
             {{ $t.item.moderation }}
           </div>
         </div>
@@ -140,7 +140,6 @@ const onPublicArticle = async () => {
     body: { team_id: teamController.activeTeamId, article_id: props.data.id },
     method: 'POST',
   });
-  console.log(data);
 
   if (data) {
     emits('removeFromModeration', props.data.id);
@@ -194,25 +193,6 @@ const onPublicArticle = async () => {
     }
   }
 }
-
-.tags {
-  user-select: none;
-  display: flex;
-  align-items: center;
-  margin-left: 15px;
-  .tag {
-    &:not(:last-child) {
-      margin-right: 5px;
-    }
-    background-color: rgba($blue, 0.15);
-    color: $black;
-    font-size: 12px;
-    line-height: 10px;
-    padding: 5px 5px !important;
-    border-radius: 2px;
-  }
-}
-
 .btns {
   position: absolute;
   top: 50%;

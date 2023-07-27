@@ -35,6 +35,13 @@ import { useTeamStore } from '~/stores/TeamContoller';
 import { useEmployeesStore } from '~/stores/EmployeesController';
 
 /**
+ * Мета ----------------
+ */
+definePageMeta({
+  middleware: 'owner-access',
+});
+
+/**
  * Переменные ----------------
  */
 const teamController = useTeamStore();

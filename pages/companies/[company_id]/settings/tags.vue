@@ -42,6 +42,13 @@ import { TTag } from '~/utils/types/tag';
 import { useTagsStore } from '~/stores/TagsController';
 
 /**
+ * Мета ----------------
+ */
+definePageMeta({
+  middleware: 'owner-access',
+});
+
+/**
  * Переменные ----------------
  */
 const userController = useUserStore();
@@ -96,7 +103,7 @@ const setActiveLetter = async (index, letter) => {
       query: activeLetter.value.letter.toLowerCase(),
     },
   });
-  tagsController.setTags(data)
+  tagsController.setTags(data);
 };
 </script>
 

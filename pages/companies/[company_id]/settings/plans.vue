@@ -48,6 +48,13 @@ import { TMyBilling, TPlan } from '~/utils/types/plan';
 import { useRequestStore } from '~/stores/RequestController';
 
 /**
+ * Мета ----------------
+ */
+definePageMeta({
+  middleware: 'owner-access',
+});
+
+/**
  * Переменные ----------------
  */
 const teamController = useTeamStore();
@@ -96,6 +103,7 @@ const onChangePlan = async (id: number) => {
 .title {
   margin-bottom: 25px;
 }
+
 .text {
   margin-top: -15px;
   margin-bottom: 40px;

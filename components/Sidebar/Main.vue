@@ -77,8 +77,6 @@ const items = [
  */
 // Показываеть элемент сайдбара
 const isShowItem = computed(() => (item: string) => {
-  // Получаем роль пользователя в компании
-  const role = teamController.activeTeam?.role.name;
   // Если есть активная компания, то показываем только tooltip и профиль
   return (
     teamController.activeTeam ||

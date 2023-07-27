@@ -7,6 +7,14 @@
         }`"
       ></i>
       <p>{{ props.data.name }}</p>
+      <div class="flags">
+        <div class="flag" v-if="props.data.status_id === 1">
+          {{ $t.item.draft }}
+        </div>
+        <div class="flag" v-if="props.data.status_id === 2">
+          {{ $t.item.moderation }}
+        </div>
+      </div>
     </NuxtLink>
   </li>
 </template>
@@ -28,12 +36,13 @@ const props = defineProps<{
 }>();
 
 /**
- * Системные переменные ----------------
+ * Переменные ----------------
  */
-const teamController = useTeamStore(); // Хранилище активной команды
+const teamController = useTeamStore();
+const $t = await useTranslate('elem');
 
 /**
- * Вычисляемые значения ----------------
+ * Вычисляемое ----------------
  */
 // Ссылка на элемент
 const itemLink = computed(() => {

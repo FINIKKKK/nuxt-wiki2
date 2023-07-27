@@ -1,6 +1,6 @@
 <template>
   <h3 class="title">
-    {{ $t.search.title }} {{ teamController.activeTeam?.team.name }}.itl.kz
+    {{ $t.search.title }} {{ teamController.activeTeam?.team.name }}.itl.wiki
   </h3>
 
   <!--------------------------------------
@@ -20,13 +20,15 @@
   <div class="list" v-if="searchData?.articles.length">
     <h4>{{ $t.search.articles }}</h4>
     <ul>
-      <SidebarItem
-        v-for="article in searchData?.articles"
-        :key="article.id"
-        :data="article"
-        type="article"
-        class="item"
-      />
+      <template v-for="article in searchData?.articles">
+        <SidebarItem
+          :key="article.id"
+          :data="article"
+          type="article"
+          class="item"
+          v-if="isShowItem(article.created_by, article.status_id)"
+        />
+      </template>
     </ul>
   </div>
 
@@ -61,7 +63,7 @@ import { useTeamStore } from '~/stores/TeamContoller';
 import { useCustomFetch } from '~/hooks/useCustomFetch';
 import debounce from 'lodash.debounce';
 import { TSearchData, TSearchResults } from '~/utils/types/sidebar';
-
+import { useUserStore } from '~/stores/UserController';
 
 /**
  * Переменные ----------------
@@ -69,7 +71,22 @@ import { TSearchData, TSearchResults } from '~/utils/types/sidebar';
 const teamController = useTeamStore();
 const searchData = ref<TSearchResults | null>(null);
 const searchValue = ref('');
+const userController = useUserStore();
 const $t = await useTranslate('sidebar');
+
+/**
+ * Вычисляемое ----------------
+ */
+// Показывать ли статью в поиске?
+const isShowItem = computed(() => (creatorId, statusId) => {
+  if (statusId === 1) {
+    return userController.user?.id === creatorId;
+  } else if (statusId === 2) {
+    return userController.user?.id === creatorId || teamController.isAccessEdit;
+  } else {
+    return true;
+  }
+});
 
 /**
  * Методы ----------------

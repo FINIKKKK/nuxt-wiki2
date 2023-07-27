@@ -62,7 +62,7 @@ const isShowArticle = computed(() => (item: TArticle) => {
   if (item.status_id === 1) {
     return userController.user?.id === item.creator.id;
   } else if (item.status_id === 2) {
-    return true;
+    return userController.user?.id === item.creator.id || teamController.isAccessEdit;
   } else {
     return true;
   }

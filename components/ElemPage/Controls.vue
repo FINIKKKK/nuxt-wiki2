@@ -1,11 +1,7 @@
 <template>
   <div class="controls">
     <!-- Редактировать -->
-    <div
-      class="control"
-      :title="$t.controls.edit"
-      v-if="isAccessEdit"
-    >
+    <div class="control" :title="$t.controls.edit" v-if="isAccessEdit">
       <NuxtLink
         :to="`${teamController.activeTeamSlug}/${
           elemController.type === 'section' ? 'sections' : 'articles'
@@ -130,25 +126,26 @@ const onDelete = async () => {
     )
   ) {
     // Удаляем элемент
-    const { data } = await useCustomFetch(`team/section/delete`, {
-      body: {
-        team_id: teamController.activeTeamId,
-        ...(elemController.type === 'section' && {
-          section_id: route.params.id,
-        }),
-        ...(elemController.type === 'article' && {
-          article_id: route.params.id,
-        }),
+    const { data } = await useCustomFetch(
+      `team/${
+        elemController.type === 'section' ? 'section' : 'article'
+      }/delete`,
+      {
+        body: {
+          team_id: teamController.activeTeamId,
+          ...(elemController.type === 'section' && {
+            section_id: route.params.id,
+          }),
+          ...(elemController.type === 'article' && {
+            article_id: route.params.id,
+          }),
+        },
+        method: 'POST',
       },
-      method: 'POST',
-    });
+    );
 
-    if (data) {
-      // Перенаправляем пользователя
-      await router.push(`${teamController.activeTeamId}`);
-      // Закрываем попап
-      isShowPopup.value = false;
-    }
+    // Перенаправляем пользователя
+    await router.push(`${teamController.activeTeamId}/activity`);
   } else {
     // Закрываем попап
     isShowPopup.value = false;

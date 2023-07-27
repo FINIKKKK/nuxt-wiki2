@@ -256,3 +256,22 @@ a.btn {
 .warning-m {
   margin: -50px -50px 50px !important;
 }
+
+// Flags
+.flags {
+  user-select: none;
+  display: flex;
+  align-items: center;
+  margin-left: 15px;
+  .flag {
+    &:not(:last-child) {
+      margin-right: 5px;
+    }
+    background-color: rgba($blue, 0.15);
+    color: $black;
+    font-size: 12px;
+    line-height: 10px;
+    padding: 5px 5px !important;
+    border-radius: 2px;
+  }
+}

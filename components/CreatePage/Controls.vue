@@ -250,11 +250,7 @@ const onSubmit = async () => {
           .filter((obj2) => obj2.type === 'image')
           .map((image) => image.id),
       ),
-      action:
-        teamController.activeTeam?.role.id === 1 ||
-        teamController.activeTeam?.role.id === 2
-          ? 3
-          : 2,
+      action: teamController.isAccessEdit ? 3 : 2,
     };
 
     // Вызываем хук для валидации форм
