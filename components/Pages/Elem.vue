@@ -51,7 +51,7 @@
 
 <script lang="ts" setup>
 import { useTeamStore } from '~/stores/TeamContoller';
-import { useSectionsStore } from '~/stores/SectionContoller';
+import { useSectionsStore } from '~/stores/sectionsController';
 import { useCustomFetch } from '~/hooks/useCustomFetch';
 import { TArticleData } from '~/utils/types/article';
 import { TSectionData } from '~/utils/types/secton';
@@ -92,11 +92,11 @@ const { data: article } = await useCustomFetch<TArticleData>(`team/article`, {
   },
 });
 // Сохраняем комментарии в хранилище
-sectionsController.setIsArticle(true);
 commentsController.setComments(article.article.comments);
 elemController.changeTypeElem('article');
 elemController.setArticle(article);
 
+// Данные статьи
 const { data: articleEdit } = await useCustomFetch<TArticleData>(
   `team/article/edit`,
   {
@@ -106,10 +106,9 @@ const { data: articleEdit } = await useCustomFetch<TArticleData>(
     },
   },
 );
-console.log(articleEdit);1
 
 // Разделы
-if (!sectionsController.section) {
+if (!elemController.section) {
   const { data: section } = await useCustomFetch<TSectionData>(`team/section`, {
     query: {
       team_id: teamController.activeTeamId,
@@ -117,7 +116,7 @@ if (!sectionsController.section) {
     },
   });
   // Сохраняем в хранилище
-  sectionsController.setSection(section.section);
+  elemController.setSection(section.section);
   sectionsController.setBreadCrumbs(section.section.breadcrumbs);
 }
 

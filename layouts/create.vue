@@ -63,7 +63,7 @@ import { useTeamStore } from '~/stores/TeamContoller';
 import { useCustomFetch } from '~/hooks/useCustomFetch';
 import { useCreateElemStore } from '~/stores/CreateElemController';
 import { TSection } from '~/utils/types/secton';
-import { useSectionsStore } from '~/stores/SectionContoller';
+import { useSectionsStore } from '~/stores/sectionsController';
 import { TSelect } from '~/utils/types/base';
 
 /**

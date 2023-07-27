@@ -10,8 +10,8 @@ export const useTeamStore = defineStore('teamController', () => {
   /**
    * Свойства ----------------
    */
-  const teams: Ref<TTeam[]> = ref([]); // Команды
-  const activeTeam: Ref<TActiveTeam | null> = ref(null); // Активная команда
+  const teams: Ref<TTeam[]> = ref([]);
+  const activeTeam: Ref<TActiveTeam | null> = ref(null);
 
   /**
    * Методы ----------------
@@ -43,6 +43,30 @@ export const useTeamStore = defineStore('teamController', () => {
   const activeTeamSlug = computed(() => {
     return `/companies/${activeTeam.value?.team.id}`;
   });
+  // Роль пользователя
+  const role = computed(() => {
+    return activeTeam.value?.role.name;
+  });
+  // Владелец?
+  const isOwner = computed(() => {
+    return role.value === 'owner';
+  });
+  // Админ или модератор?
+  const adminOrModer = computed(() => {
+    return role.value === 'admin' || role.value === 'moderator';
+  });
+  // Пользователь?
+  const isUser = computed(() => {
+    return role.value === 'user';
+  });
+  // Есть доступ для редактирования?
+  const isAccessEdit = computed(() => {
+    return (
+      role.value === 'admin' ||
+      role.value === 'moderator' ||
+      role.value === 'owner'
+    );
+  });
 
   // Возращаем данные
   return {
@@ -53,5 +77,10 @@ export const useTeamStore = defineStore('teamController', () => {
     setActiveTeam,
     setTeams,
     editActiveTeam,
+    role,
+    isOwner,
+    adminOrModer,
+    isUser,
+    isAccessEdit,
   };
 });

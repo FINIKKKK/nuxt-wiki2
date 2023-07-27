@@ -15,11 +15,7 @@
           </template>
         </nav>
 
-        <ElemPageControls
-          v-if="
-            route.path.includes('sections') || route.path.includes('articles')
-          "
-        />
+        <ElemPageControls v-if="isShowControls" />
       </div>
 
       <!-- Остальной контент на странице -->
@@ -50,6 +46,14 @@ const props = defineProps<{
  */
 const route = useRoute();
 const refHeader = ref<HTMLDivElement | null>(null);
+
+/**
+ * Вычисляемое ----------------
+ */
+// Показывать элементы управления
+const isShowControls = computed(() => {
+  return route.path.includes('sections') || route.path.includes('articles');
+});
 
 /**
  * Методы ----------------

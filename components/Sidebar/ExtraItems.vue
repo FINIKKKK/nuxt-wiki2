@@ -1,10 +1,10 @@
 <template>
   <!-- Разделы -->
   <div class="items">
-    <h3 class="title">{{ sectionsController.section?.name }}</h3>
+    <h3 class="title">{{ elemController.section?.name }}</h3>
     <ul>
       <template
-        v-for="section in sectionsController.section?.child"
+        v-for="section in elemController.section?.child"
         :key="section.id"
       >
         <SidebarItem :data="section" type="section" />
@@ -27,14 +27,14 @@
 <!-- ----------------------------------------------------- -->
 
 <script lang="ts" setup>
-import { useSectionsStore } from '~/stores/SectionContoller';
+import { useElemStore } from '~/stores/ElemController';
 
 /**
  * Переменные ----------------
  */
-const sectionsController = useSectionsStore();
+const elemController = useElemStore();
 const $t = await useTranslate('sidebar');
-const articles = sectionsController.section?.items.filter(
+const articles = elemController.section?.items.filter(
   (obj) => obj.status_id === 3,
 );
 </script>

@@ -1,5 +1,6 @@
 import { useTeamStore } from '~/stores/TeamContoller';
 import { useCustomFetch } from '~/hooks/useCustomFetch';
+import {TActiveTeam} from "~/utils/types/team";
 
 /**
  * ------------------------------------------------------------
@@ -10,7 +11,7 @@ export default defineNuxtRouteMiddleware(async (to, from) => {
   /**
    * Переменные ----------------
    */
-  const teamController = useTeamStore(); // Хранилище команд
+  const teamController = useTeamStore();
 
   /**
    * Проверка команды ----------------
@@ -21,7 +22,7 @@ export default defineNuxtRouteMiddleware(async (to, from) => {
     if (!teamController.activeTeam) {
       const id = to.fullPath.split('/')[2];
       // Получаем данные текущей команды
-      const { data } = await useCustomFetch<any>(`/team`, {
+      const { data } = await useCustomFetch<TActiveTeam>(`/team`, {
         query: { team_id: id },
       });
 

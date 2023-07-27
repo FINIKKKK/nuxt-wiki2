@@ -25,7 +25,7 @@
 
 <script lang="ts" setup>
 import { useTeamStore } from '~/stores/TeamContoller';
-import { useSectionsStore } from '~/stores/SectionContoller';
+import { useSectionsStore } from '~/stores/sectionsController';
 import { useCustomFetch } from '~/hooks/useCustomFetch';
 import { TSectionData } from '~/utils/types/secton';
 import { useUserStore } from '~/stores/UserController';
@@ -51,9 +51,8 @@ const { data: section } = await useCustomFetch<TSectionData>(`team/section`, {
   },
 });
 // Сохраняем в хранилище
-sectionsController.setSection(section.section);
+elemController.setSection(section.section);
 sectionsController.setBreadCrumbs(section.section.breadcrumbs);
-sectionsController.setIsArticle(false);
 elemController.changeTypeElem('section');
 
 /**
@@ -63,10 +62,7 @@ const isShowArticle = computed(() => (item: TArticle) => {
   if (item.status_id === 1) {
     return userController.user?.id === item.creator.id;
   } else if (item.status_id === 2) {
-    return (
-      teamController.activeTeam?.role.id === 1 ||
-      teamController.activeTeam?.role.id === 2
-    );
+    return true;
   } else {
     return true;
   }

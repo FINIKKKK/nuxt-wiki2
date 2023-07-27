@@ -1,6 +1,6 @@
 <template>
   <NuxtLayout name="main" :title="$t.title" :nav="nav">
-    <table class="table">
+    <table class="table" v-if="notificationsList.length">
       <thead>
         <tr>
           <th>Пользователь</th>
@@ -20,6 +20,7 @@
         </tr>
       </tbody>
     </table>
+    <p v-else>{{$t.no_notices}}</p>
     <LoadingTableItem
       v-if="requestController.loading[url]"
       v-for="(item, index) in Array(10)"

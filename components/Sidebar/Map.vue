@@ -64,7 +64,7 @@
 
 <script lang="ts" setup>
 import { useTeamStore } from '~/stores/TeamContoller';
-import { useSectionsStore } from '~/stores/SectionContoller';
+import { useSectionsStore } from '~/stores/sectionsController';
 
 /**
  * Переменные ----------------

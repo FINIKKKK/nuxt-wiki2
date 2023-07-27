@@ -15,7 +15,7 @@
 <script lang="ts" setup>
 import { useTeamStore } from '~/stores/TeamContoller';
 import { useCreateElemStore } from '~/stores/CreateElemController';
-import { useSectionsStore } from '~/stores/SectionContoller';
+import { useSectionsStore } from '~/stores/sectionsController';
 import { useCustomFetch } from '~/hooks/useCustomFetch';
 import { TArticleEdit, TTabParse } from '~/utils/types/article';
 

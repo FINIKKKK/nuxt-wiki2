@@ -80,16 +80,12 @@ const isShowItem = computed(() => (item: string) => {
   // Получаем роль пользователя в компании
   const role = teamController.activeTeam?.role.name;
   // Если есть активная компания, то показываем только tooltip и профиль
-  if (teamController.activeTeam || item === 'tooltip' || item === 'user') {
-    // Если роль - модератор
-    if (role === 'owner') {
-      // Показываем всё
-      return true;
-    }
-    // Иначе
-    // Не показываем только настройки
-    else return item !== 'cog';
-  }
+  return (
+    teamController.activeTeam ||
+    item === 'tooltip' ||
+    item === 'user' ||
+    item === 'cog'
+  );
 });
 // Показывать ли элементы?
 const isShow = computed(

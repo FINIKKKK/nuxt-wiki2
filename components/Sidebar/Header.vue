@@ -21,7 +21,7 @@
 <script lang="ts" setup>
 import { useSidebarStore } from '~/stores/SidebarController';
 import { useTeamStore } from '~/stores/TeamContoller';
-import { useSectionsStore } from '~/stores/SectionContoller';
+import { useSectionsStore } from '~/stores/sectionsController';
 
 /**
  * Переменные ----------------

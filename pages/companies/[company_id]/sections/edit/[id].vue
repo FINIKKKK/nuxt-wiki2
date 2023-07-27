@@ -9,7 +9,7 @@
 import { useCustomFetch } from '~/hooks/useCustomFetch';
 import { useTeamStore } from '~/stores/TeamContoller';
 import { useCreateElemStore } from '~/stores/CreateElemController';
-import { useSectionsStore } from '~/stores/SectionContoller';
+import { useSectionsStore } from '~/stores/sectionsController';
 import { TSectionEdit } from '~/utils/types/secton';
 
 /**

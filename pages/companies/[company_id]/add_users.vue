@@ -95,10 +95,14 @@ const onInviteUsers = async () => {
   if (!isValid) return false;
 
   // Высылаем приглашения
-  const { data } = await useCustomFetch(url, {
+  const { message } = await useCustomFetch(url, {
     body: dto,
     method: 'POST',
   });
+
+  if (message) {
+    await router.push(`${teamController.activeTeamSlug}/settings/employees`);
+  }
 };
 </script>
 

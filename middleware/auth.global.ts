@@ -12,10 +12,10 @@ export default defineNuxtRouteMiddleware(async (to, from) => {
   /**
    * Переменные ----------------
    */
-  const userController = useUserStore(); // Хранилище данных пользователя
-  const teamController = useTeamStore(); // Хранилище команд
-  const excludedRoutes = ['/register', '/login']; // Исключенные маршруты
-  const token = useCookie('token'); // Токен
+  const userController = useUserStore();
+  const teamController = useTeamStore();
+  const excludedRoutes = ['/register', '/login'];
+  const token = useCookie('token');
 
   /**
    * Проверка аутефикации пользователя ----------------

@@ -60,7 +60,7 @@ import { TArticle, TProperties } from '~/utils/types/article';
 import { useTeamStore } from '~/stores/TeamContoller';
 import { useCustomFetch } from '~/hooks/useCustomFetch';
 import { TMessage } from '~/utils/types';
-import { useSectionsStore } from '~/stores/SectionContoller';
+import { useSectionsStore } from '~/stores/sectionsController';
 import { useUserStore } from '~/stores/UserController';
 import { useElemStore } from '~/stores/ElemController';
 

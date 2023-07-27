@@ -62,7 +62,7 @@ export default {
       text: 'There are several access levels for user interaction with the itl.wiki workspace',
       input: 'Enter the email address separated by commas',
       btn: 'Add',
-      successMessage: 'Invitations have been sent successfully\n',
+      successMessage: 'Invitations have been sent successfully',
     },
     changeRoles: {
       title: 'Change access level',

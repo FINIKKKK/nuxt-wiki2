@@ -25,7 +25,6 @@ import { useCustomFetch } from '~/hooks/useCustomFetch';
 import { TInnerItem } from '~/utils/types/sidebar';
 import { ComputedRef } from 'vue';
 
-
 /**
  * Переменные ----------------
  */
@@ -113,22 +112,32 @@ const innerItems: TInnerItem[] = [
       {
         icon: 'cog',
         label: $t.settings.general,
+        link: `/settings`,
+        isShow: !teamController.isOwner,
+      },
+      {
+        icon: 'cog',
+        label: $t.settings.general,
         link: `${teamController.activeTeamSlug}/settings`,
+        isShow: teamController.isOwner,
       },
       {
         icon: 'user',
         label: $t.settings.employees,
         link: `${teamController.activeTeamSlug}/settings/employees`,
+        isShow: teamController.isOwner,
       },
       {
         icon: 'tags',
         label: $t.settings.tags,
         link: `${teamController.activeTeamSlug}/settings/tags`,
+        isShow: teamController.isOwner,
       },
       {
         icon: 'bank',
         label: $t.settings.plans,
         link: `${teamController.activeTeamSlug}/settings/plans`,
+        isShow: teamController.isOwner,
       },
     ],
   },
@@ -159,7 +168,7 @@ const innerItems: TInnerItem[] = [
 // Активный элемент
 const activeItem: ComputedRef<TInnerItem | null> = computed(() => {
   return (
-    innerItems.find((obj) => obj.name ===  sidebarController.activeItem) || null
+    innerItems.find((obj) => obj.name === sidebarController.activeItem) || null
   );
 });
 </script>

@@ -1,7 +1,11 @@
 <template>
   <div class="controls">
     <!-- Редактировать -->
-    <div class="control" :title="$t.controls.edit">
+    <div
+      class="control"
+      :title="$t.controls.edit"
+      v-if="isAccessEdit"
+    >
       <NuxtLink
         :to="`${teamController.activeTeamSlug}/${
           elemController.type === 'section' ? 'sections' : 'articles'
@@ -17,7 +21,7 @@
       :class="{ active: isSubscribed }"
       v-if="elemController.type === 'article'"
       @click="onSubscribe"
-      :title="isSubscribed ? $t.controls.subscribe : $t.controls.unsubscribe"
+      :title="!isSubscribed ? $t.controls.subscribe : $t.controls.unsubscribe"
     >
       <i class="fa-regular fa-thumb-tack" />
     </div>
@@ -27,12 +31,18 @@
       class="control"
       @click="elemController.openShare()"
       :title="$t.controls.share"
+      v-if="elemController.type === 'article' && isAccessEdit"
     >
       <i class="fa-regular fa-share" />
     </div>
 
     <!-- Дополнительные возможности -->
-    <div class="extra" ref="refPopup" :title="$t.controls.extra">
+    <div
+      class="extra"
+      ref="refPopup"
+      :title="$t.controls.extra"
+      v-if="isAccessEdit"
+    >
       <div class="control" @click="isShowPopup = !isShowPopup">
         <i class="fa-regular fa-ellipsis-h" />
       </div>
@@ -71,6 +81,7 @@ import { useCustomFetch } from '~/hooks/useCustomFetch';
 import { useTeamStore } from '~/stores/TeamContoller';
 import { useElemStore } from '~/stores/ElemController';
 import { useOutsideClick } from '~/hooks/useOutsideClick';
+import { useUserStore } from '~/stores/UserController';
 
 /**
  * Переменные ----------------
@@ -79,6 +90,7 @@ const route = useRoute();
 const router = useRouter();
 const teamController = useTeamStore();
 const elemController = useElemStore();
+const userController = useUserStore();
 const refPopup = ref(null);
 const isShowPopup = ref(false);
 const isSubscribed = ref(elemController.article?.properties.subscription);
@@ -88,6 +100,19 @@ const $t = await useTranslate('elem');
  * Хуки ----------------
  */
 useOutsideClick(refPopup, isShowPopup);
+
+/**
+ * Методы ----------------
+ */
+// Есть ли доступ для редактирования?
+const isAccessEdit = computed(() => {
+  const typeElem =
+    elemController.type === 'article'
+      ? elemController.article?.article?.creator.id
+      : elemController.section?.creator.id;
+
+  return userController.user.id === typeElem || teamController.isAccessEdit;
+});
 
 /**
  * Методы ----------------
@@ -130,6 +155,7 @@ const onDelete = async () => {
   }
 };
 
+// Подписаться на статью
 const subscribe = async () => {
   const { data } = await useCustomFetch(`subscribe/change`, {
     body: {

@@ -2,6 +2,7 @@ import { defineStore } from 'pinia';
 import { TArticleData } from '~/utils/types/article';
 import { OutputBlockData } from '@editorjs/editorjs';
 import { TComment } from '~/utils/types/comment';
+import { TSectionData } from '~/utils/types/secton';
 
 /**
  * --------------------------------
@@ -22,6 +23,7 @@ export const useElemStore = defineStore('elemController', () => {
   const isOpenAccess: Ref<boolean> = ref(false);
   const isOpenShare: Ref<boolean> = ref(false);
   const article: Ref<TArticleData | null> = ref(null);
+  const section: Ref<TSectionData | null> = ref(null);
   const activeTitle: Ref<any> = ref(null);
   const activeTab = ref<{ index: number; id: number | null }>({
     index: 0,
@@ -39,11 +41,9 @@ export const useElemStore = defineStore('elemController', () => {
   };
   const toggleAccess = () => {
     isOpenAccess.value = !isOpenAccess.value;
-    console.log(isOpenAccess.value);
   };
   const openAccess = () => {
     isOpenAccess.value = true;
-    console.log(isOpenAccess.value);
   };
   const closeAccess = () => {
     isOpenAccess.value = false;
@@ -59,6 +59,9 @@ export const useElemStore = defineStore('elemController', () => {
   };
   const setArticle = (value: TArticleData | null) => {
     article.value = value;
+  };
+  const setSection = (value: TSectionData | null) => {
+    section.value = value;
   };
   const changeActiveTitle = (value: any) => {
     activeTitle.value = value;
@@ -107,5 +110,7 @@ export const useElemStore = defineStore('elemController', () => {
     setActiveTab,
     blockId,
     setActiveBlockId,
+    section,
+    setSection,
   };
 });

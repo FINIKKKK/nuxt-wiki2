@@ -5,21 +5,14 @@
     @close="emits('close')"
   >
     <p class="text">{{ $t.addUsers.text }}</p>
-    <UIInput
-      :label="$t.addUsers.input"
-      v-model="emailValue"
-      :errors="errors['emails']"
-      @keydown.enter="() => onAddEmail(emailValue)"
-      @input="onSplitAddEmail"
-    />
 
-    <!-- Список emails -->
-    <ul class="emails" v-if="emails.length">
-      <li class="email" v-for="(email, index) in emails" :key="index">
-        <p>{{ email }}</p>
-        <i class="fa-regular fa-close" @click="() => onRemoveEmail(email)" />
-      </li>
-    </ul>
+    <!-- Поле ввода с разделением элементов -->
+    <UIInputSplit
+      :label="$t.addUsers.input"
+      :scheme="AddUsersScheme2"
+      v-model="emails"
+      :errors="errors['emails']"
+    />
 
     <button
       class="btn"
@@ -61,7 +54,6 @@ const url = 'team/employees/add';
 const employeesController = useEmployeesStore();
 const teamController = useTeamStore();
 const requestController = useRequestStore();
-const emailValue = ref('');
 const emails = ref<string[]>([]);
 const { errors, validateForm } = useFormValidation();
 const $t = await useTranslate('employees');
@@ -69,34 +61,6 @@ const $t = await useTranslate('employees');
 /**
  * Методы ----------------
  */
-// Добавить email в список
-const onAddEmail = async (email: string) => {
-  // Валидируем данные
-  const isValid = await validateForm(
-    { emails: emailValue.value },
-    AddUsersScheme2,
-  );
-  if (!isValid) return false;
-
-  if (!emails.value.find((obj) => obj === email)) {
-    // Добавить email
-    emails.value.push(email.trim());
-  }
-  emailValue.value = '';
-};
-
-// Добавить email в список через запятую
-const onSplitAddEmail = (e: any) => {
-  if (e.target.value.includes(',')) {
-    onAddEmail(emailValue.value.split(',')[0]);
-  }
-};
-
-// Удалить email из списка
-const onRemoveEmail = (email: string) => {
-  emails.value = emails.value.filter((obj) => obj !== email);
-};
-
 // Добавить пользователей
 const onAddUsers = async () => {
   // Данные запроса
@@ -119,7 +83,6 @@ const onAddUsers = async () => {
   if (message) {
     employeesController.closeAddUsers();
     emails.value = [];
-    emailValue.value = '';
     errors.value = [] as any;
     employeesController.setSuccessMessage($t.addUsers.successMessage);
   }
