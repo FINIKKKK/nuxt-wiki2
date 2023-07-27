@@ -2,7 +2,7 @@
   <NuxtLayout name="main" :title="$t.title">
     <!-- Ошибки -->
     <UIWarning
-      class="warning"
+      class="warning-m"
       :errors="requestController.errors[url]"
       v-if="requestController.errors[url]"
     />
@@ -13,28 +13,19 @@
         {{ $t.text }}
       </p>
 
-      <UIInput
+      <!-- Поле ввода с разделением элементов -->
+      <UIInputSplit
         :label="$t.input"
-        v-model="emailUsers"
+        :scheme="AddUsersScheme2"
+        v-model="emails"
         :errors="errors['emails']"
-        @keydown.enter="() => onAddEmail(emailUsers)"
-        @input="onSplitAddEmail"
-        @btnClick="() => onAddEmail(emailUsers)"
       >
         <template #btn> {{ $t.inputBtn }}</template>
-      </UIInput>
-
-      <!-- Список emails -->
-      <ul class="emails" v-if="emails.length">
-        <li class="email" v-for="(email, index) in emails" :key="index">
-          <p>{{ email }}</p>
-          <i class="fa-regular fa-close" @click="() => onRemoveEmail(email)" />
-        </li>
-      </ul>
+      </UIInputSplit>
 
       <!-- Селект -->
       <UISelect
-        :options="roles"
+        :options="rolesList"
         v-model="selectValue"
         type="full"
         class="select"
@@ -73,9 +64,13 @@ import { AddUsersScheme, AddUsersScheme2 } from '~/utils/validation';
 /**
  * Переменные ----------------
  */
+const $t2 = await useTranslate('data');
+const rolesList = roles.map((role) => ({
+  value: role.value,
+  label: $t2.roles[role.label],
+}));
 const url = 'team/employees/add';
-const emailUsers = ref('');
-const selectValue = ref(roles[0]);
+const selectValue = ref(rolesList[0]);
 const teamController = useTeamStore();
 const requestController = useRequestStore();
 const emails = ref<string[]>([]);
@@ -88,7 +83,7 @@ const { errors, validateForm } = useFormValidation();
  */
 // Приглагшаем пользователей
 const onInviteUsers = async () => {
-  // Данные запроса
+  // Данные
   const dto = {
     team_id: teamController.activeTeamId,
     role: selectValue.value.value,
@@ -105,91 +100,12 @@ const onInviteUsers = async () => {
     method: 'POST',
   });
 };
-
-// Добавить email в список
-const onAddEmail = async (email: string) => {
-  // Валидируем данные
-  const isValid = await validateForm(
-    { emails: emailUsers.value },
-    AddUsersScheme2,
-  );
-  if (!isValid) return false;
-
-  if (!emails.value.find((obj) => obj === email)) {
-    // Добавить email
-    emails.value.push(email.trim());
-  }
-  emailUsers.value = '';
-};
-
-// Добавить email в список через запятую
-const onSplitAddEmail = (e: any) => {
-  if (e.target.value.includes(',')) {
-    onAddEmail(emailUsers.value.split(',')[0]);
-  }
-};
-
-// Удалить email из списка
-const onRemoveEmail = (email: string) => {
-  emails.value = emails.value.filter((obj) => obj !== email);
-};
 </script>
 
 <!-- ----------------------------------------------------- -->
 <!-- ----------------------------------------------------- -->
 
-<style lang="scss" scoped>
-.warning {
-  margin: 0px -50px 50px;
-}
-
-.emails__input {
-  position: relative;
-  &-btn {
-    cursor: pointer;
-    position: absolute;
-    top: 6px;
-    right: 6px;
-    font-size: 14px;
-    padding: 8px 24px;
-    background-color: $blue;
-    color: $white;
-  }
-}
-
-.emais {
-  input {
-    padding-right: 150px;
-  }
-}
-
-.emails {
-  display: flex;
-  align-items: center;
-  flex-wrap: wrap;
-  margin-bottom: 12px;
-  .email {
-    &:not(:last-child) {
-      margin-right: 20px;
-    }
-    background-color: $blue2;
-    display: flex;
-    align-items: center;
-    border-radius: 2px;
-    padding: 10px 15px;
-    margin-bottom: 20px;
-    p {
-      color: $blue;
-      margin-right: 10px;
-    }
-    i {
-      width: 17px;
-      height: 17px;
-      cursor: pointer;
-    }
-  }
-}
-</style>
+<style lang="scss" scoped></style>
 
 <style lang="scss">
 .email1 {
