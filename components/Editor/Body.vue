@@ -97,7 +97,11 @@
         ---------------------------------------->
         <div
           class="controls"
-          v-if="props.type !== 'mini' && obj.type !== 'delimiter'"
+          v-if="
+            !props.isHistory &&
+            props.type !== 'mini' &&
+            obj.type !== 'delimiter'
+          "
           @click="() => setActiveBlock(obj)"
         >
           <!-- Кнопка открытия попапа для добавления комментариев -->
@@ -126,6 +130,7 @@ const props = defineProps<{
   data: OutputBlockData[];
   type?: 'mini';
   comments?: TComment[];
+  isHistory?: boolean;
 }>();
 
 /**
@@ -139,7 +144,7 @@ const commentsController = useCommentsStore();
  */
 // Комментарии у блока
 const activeComments = (id: any) => {
-  return props.comments.filter((comment) => comment.block_id === id) || null;
+  return props.comments?.filter((comment) => comment.block_id === id) || null;
 };
 
 /**

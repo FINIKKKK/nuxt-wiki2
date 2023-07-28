@@ -13,7 +13,7 @@
       ---------------------------------------->
       <div class="elem__header">
         <!-- Заголовок -->
-        <h1 class="title">{{ article.article.name }}</h1>
+        <h1 class="title">{{ elemController.article.article.name }}</h1>
       </div>
 
       <!--------------------------------------
@@ -30,8 +30,8 @@
           class="elem__info-item"
           v-html="
             useDateString(
-              article.article.created_at,
-              article.article.updated_at,
+              elemController.article.article.created_at,
+              elemController.article.article.updated_at,
               userController.lang,
             )
           "
@@ -42,7 +42,7 @@
         Вкладки
       ---------------------------------------->
       <ElemPageTabs
-        :tabs="article.article.tabs"
+        :tabs="elemController.article.article.tabs"
         :isHistory="true"
         @activeTab="setActiveTab"
       />
@@ -51,7 +51,7 @@
     <!--------------------------------------
       Журнал версий
     ---------------------------------------->
-    <AsidePopup :title="$t.popup.title" :isOpen="true">
+    <Popup :title="$t.popup.title" :isOpen="true">
       <ul class="list">
         <li v-if="activeHistory">
           <div class="info">
@@ -69,7 +69,7 @@
           </div>
         </li>
       </ul>
-    </AsidePopup>
+    </Popup>
   </div>
 </template>
 
@@ -79,11 +79,18 @@
 <script lang="ts" setup>
 import { useCustomFetch } from '~/hooks/useCustomFetch';
 import { useTeamStore } from '~/stores/TeamContoller';
-import { TArticleData, THistory } from '~/utils/types/article';
+import { THistory } from '~/utils/types/article';
 import { useDateString } from '~/hooks/useDateString';
 import { useUserStore } from '~/stores/UserController';
-import AsidePopup from '~/components/Popup/AsidePopup.vue';
 import { useFormatDate } from '~/hooks/useFormatData';
+import {useCreateElemStore} from "~/stores/CreateElemController";
+
+/**
+ * Мета ----------------
+ */
+definePageMeta({
+  middleware: 'access-history',
+});
 
 /**
  * Переменные ----------------
@@ -98,26 +105,19 @@ const activeTab = ref<{ index: number; id: number | null }>({
 });
 const activeHistory = ref(null);
 const $t = await useTranslate('history');
+const elemController = useCreateElemStore();
 
 /**
  * Получение данных ----------------
  */
-const { data: article } = await useCustomFetch<TArticleData>(
-  `team/article/edit`,
-  {
-    query: {
-      team_id: teamController.activeTeamId,
-      article_id: route.params.id,
-    },
-  },
-);
+
 // История вкладки
 const { data: history } = await useCustomFetch<THistory>(
   `team/article/tab/history`,
   {
     query: {
       team_id: teamController.activeTeamId,
-      tab_id: article.article.tabs[0].id,
+      tab_id: elemController.article.article.tabs[0].id,
     },
   },
 );
@@ -152,7 +152,7 @@ const onRollback = async () => {
         body: {
           team_id: teamController.activeTeamId,
           tab_id: activeTab.value.id,
-          history_id: activeHistory.id,
+          history_id: activeHistory.value.id,
         },
         method: 'POST',
       },

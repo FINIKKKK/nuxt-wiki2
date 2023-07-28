@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia';
 import { TAbility } from '~/utils/types/team';
-import { TTab } from '~/utils/types/article';
+import { TArticleEdit, TTab } from '~/utils/types/article';
 import { TSelect } from '~/utils/types/base';
 
 /**
@@ -22,6 +22,7 @@ export const useCreateElemStore = defineStore('createElemController', () => {
   const isLoading: Ref<boolean> = ref(false);
   const errors: Ref<any> = ref([]);
   const isPublish = ref(false);
+  const article = ref<TArticleEdit | null>(null);
 
   /**
    * Методы ----------------
@@ -71,6 +72,9 @@ export const useCreateElemStore = defineStore('createElemController', () => {
   const changePublish = (value: boolean) => {
     isPublish.value = value;
   };
+  const setArticle = (value: TArticleEdit | null) => {
+    article.value = value;
+  };
 
   // Возращаем данные
   return {
@@ -99,5 +103,7 @@ export const useCreateElemStore = defineStore('createElemController', () => {
     setErrors,
     isPublish,
     changePublish,
+    article,
+    setArticle,
   };
 });
