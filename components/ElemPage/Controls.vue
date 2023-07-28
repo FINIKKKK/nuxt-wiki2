@@ -1,7 +1,7 @@
 <template>
   <div class="controls">
     <!-- Редактировать -->
-    <div class="control" :title="$t.controls.edit" v-if="isAccessEdit">
+    <div class="control" :title="$t.controls.edit" v-if="true">
       <NuxtLink
         :to="`${teamController.activeTeamSlug}/${
           elemController.type === 'section' ? 'sections' : 'articles'

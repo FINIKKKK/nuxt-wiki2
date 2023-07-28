@@ -35,7 +35,7 @@
     <PopupShare
       :isOpen="elemController.isOpenShare"
       @close="elemController.closeShare()"
-      :isPublic="article.article.public"
+      :isPublic="Boolean(article.article.public)"
     />
 
     <!-- Попап с комментированием блоков -->

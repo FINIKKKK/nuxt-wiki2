@@ -15,6 +15,6 @@ export default defineNuxtRouteMiddleware(async (to, from) => {
    * Если пользователь не владелец, то перенаправляем на страницу ошибки ----------------
    */
   if (!teamController.isOwner) {
-    return navigateTo('404');
+    throw createError({ statusCode: 403 });
   }
 });
