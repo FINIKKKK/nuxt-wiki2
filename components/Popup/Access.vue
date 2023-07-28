@@ -57,7 +57,7 @@ import { accessArr } from '~/utils/data';
 import { useCreateElemStore } from '~/stores/CreateElemController';
 import { useUserStore } from '~/stores/UserController';
 import { useOutsideClick } from '~/hooks/useOutsideClick';
-import debounce from 'lodash.debounce';
+import { useDebounce } from '~/hooks/useDebounce';
 
 /**
  * Пропсы ----------------
@@ -152,7 +152,7 @@ const addEmployeesAccess = (value: TUser) => {
 };
 
 // Поиск пользователя
-const onSearchUser = debounce(async () => {
+const onSearchUser = useDebounce(async () => {
   if (inputValue.value) {
     employeesSearch.value = employees.value.filter((obj) =>
       obj.fullname.toLowerCase().includes(inputValue.value.toLowerCase()),

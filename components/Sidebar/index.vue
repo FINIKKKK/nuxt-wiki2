@@ -1,5 +1,5 @@
 <template>
-  <aside class="sidebar" ref="popupRef" id="sidebar">
+  <aside class="sidebar" tabindex="1" @blur="onOutsideClick" id="sidebar">
     <nav class="nav">
       <!-- Главный сайдбар -->
       <SidebarMain />
@@ -16,7 +16,6 @@
 <script lang="ts" setup>
 import SidebarMain from '~/components/Sidebar/Main.vue';
 import SidebarPopup from '~/components/Sidebar/Popup.vue';
-import { useOutsideClick } from '~/hooks/useOutsideClick';
 import { useSidebarStore } from '~/stores/SidebarController';
 
 /**
@@ -24,18 +23,6 @@ import { useSidebarStore } from '~/stores/SidebarController';
  */
 const route = useRoute();
 const sidebarController = useSidebarStore();
-const popupRef = ref(null);
-
-/**
- * Хуки ----------------
- */
-// Скрывать попап, если нажатие было вне его области
-useOutsideClick(popupRef, null, () => {
-  const pages = ['/companies', '/account'];
-  if (!pages.some((page) => route.path.includes(page))) {
-    sidebarController.close();
-  }
-});
 
 /**
  * Вычисляемые значения ----------------
@@ -70,6 +57,17 @@ if (isShow.value) {
   sidebarController.closeMap();
   sidebarController.changeComponent('SidebarMainItems');
 }
+
+/**
+ * Методы ----------------
+ */
+// Скрывать попап, если нажатие было вне его области
+const onOutsideClick = () => {
+  const pages = ['/companies', '/account'];
+  if (!pages.some((page) => route.path.includes(page))) {
+    sidebarController.close();
+  }
+};
 </script>
 
 <!-- ----------------------------------------------------- -->

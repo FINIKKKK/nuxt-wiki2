@@ -1,7 +1,7 @@
 <template>
   <div class="controls">
     <!-- Редактировать -->
-    <div class="control" :title="$t.controls.edit" v-if="true">
+    <div class="control" :title="$t.controls.edit" v-if="isAccessEdit">
       <NuxtLink
         :to="`${teamController.activeTeamSlug}/${
           elemController.type === 'section' ? 'sections' : 'articles'
@@ -35,7 +35,8 @@
     <!-- Дополнительные возможности -->
     <div
       class="extra"
-      ref="refPopup"
+      tabindex="1"
+      @blur="isShowPopup = false"
       :title="$t.controls.extra"
       v-if="isAccessEdit"
     >
@@ -76,7 +77,6 @@
 import { useCustomFetch } from '~/hooks/useCustomFetch';
 import { useTeamStore } from '~/stores/TeamContoller';
 import { useElemStore } from '~/stores/ElemController';
-import { useOutsideClick } from '~/hooks/useOutsideClick';
 import { useUserStore } from '~/stores/UserController';
 
 /**
@@ -87,15 +87,9 @@ const router = useRouter();
 const teamController = useTeamStore();
 const elemController = useElemStore();
 const userController = useUserStore();
-const refPopup = ref(null);
 const isShowPopup = ref(false);
 const isSubscribed = ref(elemController.article?.properties.subscription);
 const $t = await useTranslate('elem');
-
-/**
- * Хуки ----------------
- */
-useOutsideClick(refPopup, isShowPopup);
 
 /**
  * Методы ----------------

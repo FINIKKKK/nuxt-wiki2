@@ -1,15 +1,15 @@
 <template>
   <Popup
-      :title="$t.tagsPopup.title"
-      :isOpen="props.isOpen"
-      @close="createElemController.closeTags()"
+    :title="$t.tagsPopup.title"
+    :isOpen="props.isOpen"
+    @close="createElemController.closeTags()"
   >
     <p class="text">{{ $t.tagsPopup.text }}</p>
 
     <UIInput
-        :label="$t.tagsPopup.input"
-        v-model="inputValue"
-        @input="searchTag"
+      :label="$t.tagsPopup.input"
+      v-model="inputValue"
+      @input="searchTag"
     />
   </Popup>
 </template>
@@ -18,10 +18,10 @@
 <!-- ----------------------------------------------------- -->
 
 <script lang="ts" setup>
-import {useCustomFetch} from '~/hooks/useCustomFetch';
-import {useTeamStore} from '~/stores/TeamContoller';
-import {useCreateElemStore} from '~/stores/CreateElemController';
-import debounce from 'lodash.debounce';
+import { useCustomFetch } from '~/hooks/useCustomFetch';
+import { useTeamStore } from '~/stores/TeamContoller';
+import { useCreateElemStore } from '~/stores/CreateElemController';
+import { useDebounce } from '~/hooks/useDebounce';
 
 /**
  * Пропсы ----------------
@@ -43,7 +43,7 @@ const $t = await useTranslate('create_elem');
  * Методы ----------------
  */
 // Поиск тегов
-const searchTag = debounce(async () => {
+const searchTag = useDebounce(async () => {
   if (inputValue.value) {
     // Данные
     const dto = {
@@ -52,7 +52,7 @@ const searchTag = debounce(async () => {
     };
 
     // Поиск
-    const {data} = await useCustomFetch('team/settings/tags/find', {
+    const { data } = await useCustomFetch('team/settings/tags/find', {
       body: dto,
       method: 'POST',
     });

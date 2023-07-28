@@ -186,8 +186,8 @@ const setActiveBlock = (obj: OutputBlockData) => {
     font-weight: 700;
     background-color: $blue2;
     padding: 5px;
-    width: 25px;
-    height: 25px;
+    width: 24px;
+    height: 24px;
     display: flex;
     align-items: center;
     justify-content: center;

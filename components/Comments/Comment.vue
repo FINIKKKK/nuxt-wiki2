@@ -12,7 +12,7 @@
     <p class="text">{{ props.data.text }}</p>
 
     <!-- Попап с кнопками -->
-    <div class="extra" ref="popupRef">
+    <div class="extra" tabindex="1" @blur="isShowPopup = false">
       <i class="fa-regular fa-ellipsis-h" @click="isShowPopup = !isShowPopup" />
 
       <ul class="popup" v-if="isShowPopup">
@@ -33,7 +33,6 @@
 <script lang="ts" setup>
 import { TComment } from '~/utils/types/comment';
 import { useFormatDate } from '~/hooks/useFormatData';
-import { useOutsideClick } from '~/hooks/useOutsideClick';
 import { useCustomFetch } from '~/hooks/useCustomFetch';
 import { useTeamStore } from '~/stores/TeamContoller';
 import { useCommentsStore } from '~/stores/CommentsController';
@@ -50,17 +49,11 @@ const props = defineProps<{
 /**
  * Переменные ----------------
  */
-const popupRef = ref(null);
 const isShowPopup = ref(false);
 const teamController = useTeamStore();
 const commentsController = useCommentsStore();
 const userController = useUserStore();
 const $t = await useTranslate('comments');
-
-/**
- * Хуки ----------------
- */
-useOutsideClick(popupRef, isShowPopup);
 
 /**
  * Методы ----------------

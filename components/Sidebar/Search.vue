@@ -61,9 +61,9 @@
 <script lang="ts" setup>
 import { useTeamStore } from '~/stores/TeamContoller';
 import { useCustomFetch } from '~/hooks/useCustomFetch';
-import debounce from 'lodash.debounce';
 import { TSearchData, TSearchResults } from '~/utils/types/sidebar';
 import { useUserStore } from '~/stores/UserController';
+import { useDebounce } from '~/hooks/useDebounce';
 
 /**
  * Переменные ----------------
@@ -92,7 +92,7 @@ const isShowItem = computed(() => (creatorId, statusId) => {
  * Методы ----------------
  */
 // Поиск пользователей, разделов, статей
-const onSearch = debounce(async () => {
+const onSearch = useDebounce(async () => {
   if (searchValue.value) {
     const { data } = await useCustomFetch<TSearchData>(`team/search`, {
       query: {
