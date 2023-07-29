@@ -25,7 +25,13 @@
       <!-- Дата -->
       <div
         class="date"
-        v-html="useDateString(props.data.created_at, props.data.updated_at, userController.lang)"
+        v-html="
+          useDateString(
+            props.data.created_at,
+            props.data.updated_at,
+            userController.lang,
+          )
+        "
       ></div>
 
       <!--------------------------------------
@@ -49,7 +55,7 @@
           @click="onRemoveFromFavorites"
         >
           <i class="fa-regular fa-plus-circle" />
-          <p>{{ $t.item.removeFromFavorites }}</p>
+          <p>{{ $t.item.removeFavorite }}</p>
         </div>
         <!-- Кнопка публикации -->
         <div
@@ -74,7 +80,7 @@ import { useDateString } from '~/hooks/useDateString';
 import { TArticle } from '~/utils/types/article';
 import { TSection } from '~/utils/types/secton';
 import { useCustomFetch } from '~/hooks/useCustomFetch';
-import {useUserStore} from "~/stores/UserController";
+import { useUserStore } from '~/stores/UserController';
 
 /**
  * Пропсы ----------------
@@ -96,7 +102,7 @@ const emits = defineEmits(['removeFromFavorites', 'removeFromModeration']);
 const route = useRoute();
 const teamController = useTeamStore();
 const userController = useUserStore();
-const $t = await useTranslate('elem');
+const $t = await useTranslate('items');
 
 /**
  * Вычислительные значения ----------------
@@ -136,13 +142,15 @@ const onRemoveFromFavorites = async () => {
 };
 // Публикация статьи
 const onPublicArticle = async () => {
-  const { data } = await useCustomFetch(`team/article/publish`, {
-    body: { team_id: teamController.activeTeamId, article_id: props.data.id },
-    method: 'POST',
-  });
+  if (window.confirm($t.moder.confirm)) {
+    const { data } = await useCustomFetch(`team/article/publish`, {
+      body: { team_id: teamController.activeTeamId, article_id: props.data.id },
+      method: 'POST',
+    });
 
-  if (data) {
-    emits('removeFromModeration', props.data.id);
+    if (data) {
+      emits('removeFromModeration', props.data.id);
+    }
   }
 };
 </script>
@@ -193,6 +201,7 @@ const onPublicArticle = async () => {
     }
   }
 }
+
 .btns {
   position: absolute;
   top: 50%;
@@ -234,10 +243,11 @@ const onPublicArticle = async () => {
     display: flex;
     align-items: center;
     cursor: pointer;
-    svg {
+    i {
+      font-size: 14px;
       width: 17px;
       height: 17px;
-      margin-right: 10px;
+      margin-right: 7px;
     }
     p {
       color: $black;
@@ -248,7 +258,7 @@ const onPublicArticle = async () => {
       }
     }
     &.btn__item2-remove {
-      svg {
+      i {
         transform: rotate(45deg);
       }
     }

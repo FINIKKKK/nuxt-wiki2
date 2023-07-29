@@ -5,15 +5,6 @@ export default {
     update: 'Обновлено',
     rate: 'Эта страница была полезной?',
     titles: 'Содержание',
-    item: {
-      draft: 'Черновик',
-      moderation: 'На модерации',
-      edit: 'Правка',
-      access: 'Доступ',
-      removeFavorite: 'Удалить из избранного',
-      favoriteConfirm: 'Вы точно хотите удалить из избранного?',
-      publish: 'Опубликовать',
-    },
     controls: {
       edit: 'Редактировать',
       access: 'Доступ',
@@ -26,6 +17,8 @@ export default {
       history: 'Журнал версий',
       confirmSection: 'Вы точно хотите удалить раздел?',
       confirmArticle: 'Вы точно хотите удалить статью?',
+      moder: 'Опубликовать',
+      unsubscribeConfirm: 'Вы точно хотите отписаться от статьи?',
     },
     sharePopup: {
       title: 'Публичный доступ',
@@ -46,15 +39,6 @@ export default {
     update: 'Updated',
     rate: 'Was this page helpful?',
     titles: 'Content',
-    item: {
-      draft: 'Draft',
-      moderation: 'On moderation',
-      edit: 'Edit',
-      access: 'Access',
-      removeFavorite: 'Delete from Favorites',
-      favoriteConfirm: 'Are you sure you want to delete from favorites?',
-      publish: 'Publish',
-    },
     controls: {
       edit: 'Edit',
       access: 'Access',
@@ -67,6 +51,9 @@ export default {
       history: 'Version history',
       confirmSection: 'Are you sure you want to delete the section?',
       confirmArticle: 'Are you sure you want to delete the article?',
+      moder: 'Publish',
+      unsubscribeConfirm:
+        'Are you sure you want to unsubscribe from the article?',
     },
     sharePopup: {
       title: 'Public access',

@@ -1,5 +1,19 @@
 <template>
   <div class="controls">
+    <!-- Опубликовать статью (если на модерации) -->
+    <div
+        class="control"
+        v-if="
+        elemController.type === 'article' &&
+        teamController.isAccessEdit &&
+        elemController.article.article.status_id === 2
+      "
+        @click="onPublicArticle"
+        :title="$t.controls.moder"
+    >
+      <i class="fa-regular fa-check-circle" />
+    </div>
+    
     <!-- Редактировать -->
     <div class="control" :title="$t.controls.edit" v-if="isAccessEdit">
       <NuxtLink
@@ -27,7 +41,7 @@
       class="control"
       @click="elemController.openShare()"
       :title="$t.controls.share"
-      v-if="elemController.type === 'article' && isAccessEdit"
+      v-if="isAccessEdit"
     >
       <i class="fa-regular fa-share" />
     </div>
@@ -92,7 +106,7 @@ const isSubscribed = ref(elemController.article?.properties.subscription);
 const $t = await useTranslate('elem');
 
 /**
- * Методы ----------------
+ * Вычисляемое ----------------
  */
 // Есть ли доступ для редактирования?
 const isAccessEdit = computed(() => {
@@ -120,7 +134,7 @@ const onDelete = async () => {
     )
   ) {
     // Удаляем элемент
-    const { data } = await useCustomFetch(
+    const { message } = await useCustomFetch(
       `team/${
         elemController.type === 'section' ? 'section' : 'article'
       }/delete`,
@@ -138,8 +152,10 @@ const onDelete = async () => {
       },
     );
 
-    // Перенаправляем пользователя
-    await router.push(`${teamController.activeTeamId}/activity`);
+    if (message) {
+      // Перенаправляем пользователя
+      await router.push(`${teamController.activeTeamId}/activity`);
+    }
   } else {
     // Закрываем попап
     isShowPopup.value = false;
@@ -148,24 +164,43 @@ const onDelete = async () => {
 
 // Подписаться на статью
 const subscribe = async () => {
-  const { data } = await useCustomFetch(`subscribe/change`, {
+  const { message } = await useCustomFetch(`subscribe/change`, {
     body: {
       team_id: teamController.activeTeamId,
       article_id: elemController.article?.article.id,
     },
     method: 'POST',
   });
-  isSubscribed.value = !isSubscribed.value;
+
+  if (message) {
+    isSubscribed.value = !isSubscribed.value;
+  }
 };
 
 // Подписаться на статью
 const onSubscribe = async () => {
   if (isSubscribed.value) {
-    if (window.confirm('Вы точно хотите отписаться от статьи?')) {
+    if (window.confirm($t.controls.unsubscribeConfirm)) {
       subscribe();
     }
   } else {
     subscribe();
+  }
+};
+
+// Публикация статьи
+const onPublicArticle = async () => {
+  if (window.confirm($t.moder.confirm)) {
+    const { message } = await useCustomFetch(`team/article/publish`, {
+      body: {
+        team_id: teamController.activeTeamId,
+        article_id: route.params.id,
+      },
+      method: 'POST',
+    });
+
+    if (message) {
+    }
   }
 };
 </script>
