@@ -79,9 +79,7 @@ const innerItems: TInnerItem[] = [
         icon: 'glasses',
         label: $t.home.moderation,
         link: `${teamController.activeTeamSlug}/moderation`,
-        isShow:
-          teamController.activeTeam?.role.name === 'owner' ||
-          teamController.activeTeam?.role.name === 'moderator',
+        isShow: teamController.isAccessEdit,
       },
     ],
   },

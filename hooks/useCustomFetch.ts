@@ -10,9 +10,10 @@ export const useCustomFetch = async <T>(
   options?: FetchOptions & { method?: string },
   formData?: FormData,
 ) => {
-  const token = useCookie('token'); // Токен
-  const requestController = useRequestStore(); // Хранилище запроса
-  const config = useRuntimeConfig(); // Конфиг
+  const token = useCookie('token');
+  const requestController = useRequestStore();
+  const config = useRuntimeConfig();
+  const isLoading = ref(true);
 
   // Ставим загрузку
   requestController.addIsLoading({ [url]: true });
@@ -44,6 +45,7 @@ export const useCustomFetch = async <T>(
   requestController.addErrors({ [url]: error.value });
   // Убираем загрузку
   requestController.addIsLoading({ [url]: false });
+  isLoading.value = false;
 
   // Возвращаем данные
   return {
@@ -52,5 +54,6 @@ export const useCustomFetch = async <T>(
     // @ts-ignore
     message: data.value?.messages,
     error: error.value,
+    isLoading,
   };
 };
