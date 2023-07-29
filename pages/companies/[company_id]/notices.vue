@@ -1,5 +1,8 @@
 <template>
   <NuxtLayout name="main" :title="$t.title" :nav="nav">
+    <!--------------------------------------
+     Табдица уведомлений
+    ---------------------------------------->
     <table class="table" v-if="notificationsList.length">
       <thead>
         <tr>
@@ -10,17 +13,33 @@
         </tr>
       </thead>
       <tbody>
-        <tr v-for="notice in notificationsList" class="notice">
+        <tr
+          v-for="notice in notificationsList"
+          class="notice"
+          :key="notice.id"
+          v-observe="() => addNotice(notice.id)"
+        >
           <th>
             <User :data="notice.to" class="user" />
           </th>
           <th>{{ notice.params.message }}</th>
           <th>{{ useFormatDate(notice.created_at, userController.lang) }}</th>
-          <th>{{ notice.read_at ? 'Прочитано' : 'Не прочитано' }}</th>
+          <th class="status">
+            <p v-if="notice.read_at">Прочитано</p>
+            {{
+              notice.read_at
+                ? useFormatDate(notice.read_at, userController.lang)
+                : 'Не прочитано'
+            }}
+          </th>
         </tr>
       </tbody>
     </table>
-    <p v-else>{{$t.no_notices}}</p>
+
+    <!-- Сообщение, если нету элементов -->
+    <p v-else>{{ $t.no_notices }}</p>
+
+    <!-- Loading -->
     <LoadingTableItem
       v-if="requestController.loading[url]"
       v-for="(item, index) in Array(10)"
@@ -41,6 +60,7 @@ import { TNotice, TNotifications } from '~/utils/types/notice';
 import { useFormatDate } from '~/hooks/useFormatData';
 import { useRequestStore } from '~/stores/RequestController';
 import { useUserStore } from '~/stores/UserController';
+import { useDebounce } from '~/hooks/useDebounce';
 
 /**
  * Переменные ----------------
@@ -53,6 +73,7 @@ const nav = [{ label: $t.title, link: route.path }];
 const requestController = useRequestStore();
 const notificationsList = ref<TNotice[]>([]);
 const userController = useUserStore();
+const readNotices = ref<number[]>([]);
 
 /**
  * Получение данных ----------------
@@ -91,6 +112,28 @@ const getNotices = async () => {
     ];
   }
 };
+
+// Отправить запрос, чтобы прочитать уведомления
+const onReadNotices = useDebounce(async () => {
+  if (readNotices.value.length) {
+    await useCustomFetch(`account/notifications/read`, {
+      body: { notifications: readNotices.value },
+      method: 'POST',
+    });
+    readNotices.value = [];
+  }
+}, 500);
+
+// Прочитать уведомления
+const addNotice = (id: number) => {
+  const notice = notificationsList.value.find((obj: TNotice) => obj.id === id);
+
+  if (!notice?.read_at) {
+    readNotices.value.push(id);
+    notice.read_at = new Date().toString();
+    onReadNotices();
+  }
+};
 </script>
 
 <!-- ----------------------------------------------------- -->
@@ -122,6 +165,13 @@ const getNotices = async () => {
   }
   &:hover {
     background-color: $bg;
+  }
+  .status {
+    p {
+      color: $gray;
+      font-size: 12px;
+      line-height: 14px;
+    }
   }
 }
 </style>
