@@ -104,6 +104,32 @@ const innerItems: TInnerItem[] = [
     title: `Поиск по ${teamController.activeTeam?.team.name}.itl.wiki`,
   },
   {
+    name: 'bank',
+    title: $t.bank.title,
+    items: [
+      {
+        icon: 'dollar-circle',
+        label: $t.bank.plans,
+        link: `${teamController.activeTeamSlug}/billing/plans`,
+      },
+      {
+        icon: 'suitcase',
+        label: $t.bank.services,
+        link: `${teamController.activeTeamSlug}/billing/services`,
+      },
+      {
+        icon: 'book-copy',
+        label: $t.bank.requisites,
+        link: `${teamController.activeTeamSlug}/billing/requisites`,
+      },
+      {
+        icon: 'credit-card',
+        label: $t.bank.invoices,
+        link: `${teamController.activeTeamSlug}/billing/invoices`,
+      },
+    ],
+  },
+  {
     name: 'cog',
     title: $t.settings.title,
     items: [
@@ -131,14 +157,9 @@ const innerItems: TInnerItem[] = [
         link: `${teamController.activeTeamSlug}/settings/tags`,
         isShow: teamController.isOwner,
       },
-      {
-        icon: 'bank',
-        label: $t.settings.plans,
-        link: `${teamController.activeTeamSlug}/settings/plans`,
-        isShow: teamController.isOwner,
-      },
     ],
   },
+
   {
     name: 'user',
     title: $t.profile.title,

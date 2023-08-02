@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia';
 import { TUser, UserDataDto } from '~/utils/types/account';
-import {TPlan} from "~/utils/types/plan";
+import { TMyBilling, TPlan } from '~/utils/types/plan';
 
 /**
  * --------------------------------
@@ -13,7 +13,7 @@ export const useUserStore = defineStore('userController', () => {
    */
   const user: Ref<TUser | null> = ref(null);
   const lang: Ref<'ru' | 'en'> = ref('ru');
-  const plan = ref<TPlan | null>(null);
+  const billing = ref<TMyBilling | null>(null);
 
   /**
    * Методы ----------------
@@ -36,8 +36,8 @@ export const useUserStore = defineStore('userController', () => {
   const changeLang = (value: 'ru' | 'en') => {
     lang.value = value;
   };
-  const changePlan = (value: TPlan | null) => {
-      plan.value = value
+  const setBillingData = (value: TMyBilling | null) => {
+    billing.value = value;
   };
 
   // Возвращаем данные
@@ -48,7 +48,7 @@ export const useUserStore = defineStore('userController', () => {
     updateUserAvatar,
     lang,
     changeLang,
-    plan,
-    changePlan
+    billing,
+    setBillingData,
   };
 });

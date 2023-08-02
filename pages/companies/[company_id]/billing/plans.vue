@@ -79,19 +79,19 @@ const { data: plans } = await useCustomFetch<TPlan[]>(`billing/plans`, {
 const { data: billing } = await useCustomFetch<TMyBilling>(`billing`, {
   query: { team_id: teamController.activeTeamId },
 });
-userController.changePlan(billing.plan);
+userController.setBillingData(billing)
 
 /**
  * Методы ----------------
  */
 // Сменить план
 const onChangePlan = async (id: number) => {
-  const { data } = await useCustomFetch(url, {
+  const { message } = await useCustomFetch(url, {
     body: { team_id: teamController.activeTeamId, plan_id: id },
     method: 'POST',
   });
 
-  if (data) {
+  if (message) {
   }
 };
 </script>

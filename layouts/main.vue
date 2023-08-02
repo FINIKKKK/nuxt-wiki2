@@ -16,6 +16,8 @@
         </nav>
 
         <ElemPageControls v-if="isShowControls" />
+
+        <BillingBalance v-if="route.fullPath.includes('billing')" />
       </div>
 
       <!-- Остальной контент на странице -->

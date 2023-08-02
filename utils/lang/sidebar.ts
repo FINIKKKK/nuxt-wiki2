@@ -21,13 +21,18 @@ export default {
       sections: 'Разделы',
       users: 'Пользователи',
     },
+    bank: {
+      title: 'Биллинг',
+      plans: 'Тарифные планы',
+      services: 'Сервисы',
+      invoices: 'Счета',
+      requisites: 'Реквизиты',
+    },
     settings: {
       title: 'Настройки',
       general: 'Общие',
       employees: 'Соотрудники',
       tags: 'Тэги',
-      plans: 'Тарифные планы',
-      services: 'Сервисы',
     },
     profile: {
       title: 'Профиль',
@@ -60,13 +65,18 @@ export default {
       sections: 'Sections',
       users: 'Users',
     },
+    bank: {
+      title: 'Billing',
+      plans: 'Tariff plans',
+      services: 'Services',
+      invoices: 'Invoices',
+      requisites: 'Requisites',
+    },
     settings: {
       title: 'Settings',
       general: 'General',
       employees: 'Employees',
       tags: 'Tags',
-      plans: 'Tariff plans',
-      services: 'Services',
     },
     profile: {
       title: 'Profile',

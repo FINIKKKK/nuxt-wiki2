@@ -69,7 +69,7 @@ const teamController = useTeamStore();
 const sidebarController = useSidebarStore();
 const items = [
   ['home', 'add', 'search'],
-  ['cog', 'bell', 'tooltip', 'user'],
+  ['bank', 'cog', 'bell', 'tooltip', 'user'],
 ];
 
 /**
@@ -77,13 +77,16 @@ const items = [
  */
 // Показываеть элемент сайдбара
 const isShowItem = computed(() => (item: string) => {
-  // Если есть активная компания, то показываем только tooltip и профиль
-  return (
-    teamController.activeTeam ||
-    item === 'tooltip' ||
-    item === 'user' ||
-    item === 'cog'
-  );
+  if (item === 'bank') {
+    return teamController.isOwner;
+  } else {
+    return (
+      teamController.activeTeam ||
+      item === 'tooltip' ||
+      item === 'user' ||
+      item === 'cog'
+    );
+  }
 });
 // Показывать ли элементы?
 const isShow = computed(
