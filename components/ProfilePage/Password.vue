@@ -88,6 +88,8 @@ const onChangePassword = async () => {
     // Перемещаем пользователя на вверх
     const block = document.getElementById('scroll');
     block && block.scrollTo({ top: 0, behavior: 'smooth' });
+  } else {
+    profileController.setErrors(requestController.errors[url]);
   }
 
   // Если, есть ошибки, то перемещаем пользователя на вверх

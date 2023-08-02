@@ -7,12 +7,10 @@
         <NuxtLink href="/login">{{ $t.register.link }}</NuxtLink>
       </p>
 
-      <div class="errors">
-        <span
-          v-for="(error, index) in requestController.errors[url]"
-          :key="index"
-          >{{ error }}</span
-        >
+      <div class="errors" v-if="errorsRequest?.length">
+        <span v-for="(error, index) in errorsRequest" :key="index">{{
+          error
+        }}</span>
       </div>
 
       <UIInput
@@ -66,7 +64,6 @@ import { useCustomFetch } from '~/hooks/useCustomFetch';
 import { useRequestStore } from '~/stores/RequestController';
 import { TAuthData } from '~/utils/types/account';
 
-
 /**
  * Переменные ----------------
  */
@@ -82,6 +79,19 @@ const phoneValue = ref('');
 const passwordValue = ref('');
 const { errors, validateForm } = useFormValidation();
 const $t = await useTranslate('auth');
+const $t2 = await useTranslate('errors');
+
+/**
+ * Вычисляемое ----------------
+ */
+// Ошибки запроса
+const errorsRequest = computed(() => {
+  if (requestController.errors[url]) {
+    if (requestController.errors[url][0].includes('email')) {
+      return [$t2.email];
+    }
+  }
+});
 
 /**
  * Методы ----------------

@@ -86,6 +86,8 @@ const onChangeUserData = async () => {
     userController.updateUserData(dto);
     // Отображаем сообщение об успешном изменении
     profileController.setMessage($t.userData.successMessage);
+  } else {
+    profileController.setErrors(requestController.errors[url]);
   }
 };
 </script>

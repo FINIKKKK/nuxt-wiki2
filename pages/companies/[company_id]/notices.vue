@@ -6,10 +6,10 @@
     <table class="table" v-if="notificationsList.length">
       <thead>
         <tr>
-          <th>Пользователь</th>
-          <th>Действие</th>
-          <th>Дата</th>
-          <th>Статус</th>
+          <th>{{ $t.user }}</th>
+          <th>{{ $t.action }}</th>
+          <th>{{ $t.date }}</th>
+          <th>{{ $t.status }}</th>
         </tr>
       </thead>
       <tbody>
@@ -22,14 +22,20 @@
           <th>
             <User :data="notice.to" class="user" />
           </th>
-          <th>{{ notice.params.message }}</th>
+
+          <th>
+            <NuxtLink
+              :to="`${teamController.activeTeamSlug}/sections/${notice.entity.section_id}`"
+              >{{ noticeMessage(notice.params.message) }}
+            </NuxtLink>
+          </th>
           <th>{{ useFormatDate(notice.created_at, userController.lang) }}</th>
           <th class="status">
-            <p v-if="notice.read_at">Прочитано</p>
+            <p v-if="notice.read_at">{{ $t.status_read }}</p>
             {{
               notice.read_at
                 ? useFormatDate(notice.read_at, userController.lang)
-                : 'Не прочитано'
+                : $t.status_unread
             }}
           </th>
         </tr>
@@ -83,6 +89,19 @@ const { data: notifications } = await useCustomFetch<TNotifications>(url, {
   query: { team_id: teamController.activeTeamId, limit: 15, offset: 0 },
 });
 notificationsList.value.push(...notifications.notifications);
+console.log(notifications);
+
+/**
+ * Вычисляемое ----------------
+ */
+// Сообщение уведомления
+const noticeMessage = computed(() => (message: string) => {
+  if (message === 'Your article has been published')
+    return $t.messages.article_publish;
+  else if (message === 'Added comment') return $t.messages.add_comment;
+  else if (message === 'Your article has been submitted for review')
+    return $t.messages.article_moder;
+});
 
 /**
  * Методы ----------------

@@ -3,7 +3,7 @@
     <!-- Отображение ошибок -->
     <UIWarning
       v-if="profileController.errors.length || profileController.message"
-      :errors="profileController.errors"
+      :errors="errors"
       :message="profileController.message"
       class="warning"
     />
@@ -29,13 +29,13 @@
 <script lang="ts" setup>
 import { useProfileStore } from '~/stores/ProfileController';
 
-
 /**
  * Переменные ----------------
  */
 const profileController = useProfileStore();
 const route = useRoute();
 const $t = await useTranslate('account');
+const $t2 = await useTranslate('errors');
 const nav = [{ label: $t.title, link: route.path }];
 
 /**
@@ -46,6 +46,23 @@ onBeforeRouteLeave((to, from, next) => {
   profileController.setErrors([]);
   profileController.setMessage('');
   next();
+});
+
+/**
+ * Вычисляемое ----------------
+ */
+// Ошибки
+const errors = computed(() => {
+  console.log(profileController.errors);
+  if (profileController.errors[0].includes('image')) {
+    return [$t2.image];
+  }
+  if (profileController.errors[0].includes('email')) {
+    return [$t2.email];
+  }
+  if (profileController.errors[0].includes('hash')) {
+    return [$t2.password];
+  }
 });
 </script>
 

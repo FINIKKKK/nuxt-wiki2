@@ -8,11 +8,9 @@
       </p>
 
       <div class="errors">
-        <span
-          v-for="(error, index) in requestController.errors[url]"
-          :key="index"
-          >{{ error }}</span
-        >
+        <span v-for="(error, index) in errorsRequest" :key="index">{{
+          error
+        }}</span>
       </div>
 
       <UIInput
@@ -28,9 +26,9 @@
       />
 
       <p>
-        <NuxtLink href="/reset_password">{{
-          $t.login.forgotPassword
-        }}</NuxtLink>
+        <NuxtLink href="/reset_password"
+          >{{ $t.login.forgotPassword }}
+        </NuxtLink>
       </p>
       <button class="btn" :class="{ disabled: requestController.loading[url] }">
         {{ $t.login.btn }}
@@ -50,7 +48,6 @@ import { useCustomFetch } from '~/hooks/useCustomFetch';
 import { useRequestStore } from '~/stores/RequestController';
 import { TAuthData } from '~/utils/types/account';
 
-
 /**
  * Переменные ----------------
  */
@@ -63,6 +60,19 @@ const url = 'account/auth';
 const emailValue = ref('');
 const passwordValue = ref('');
 const { errors, validateForm } = useFormValidation();
+const $t2 = await useTranslate('errors');
+
+/**
+ * Вычисляемое ----------------
+ */
+// Ошибки запроса
+const errorsRequest = computed(() => {
+  if (requestController.errors[url]) {
+    if (requestController.errors[url][0]?.includes('credentials')) {
+      return [$t2.login];
+    }
+  }
+});
 
 /**
  * Методы ----------------
