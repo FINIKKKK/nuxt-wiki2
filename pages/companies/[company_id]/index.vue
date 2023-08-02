@@ -6,7 +6,7 @@
 <script lang="ts" setup>
 definePageMeta({
   middleware: (to, from) => {
-    return navigateTo(`${to.fullPath}/activity`);
+    return navigateTo(`${to.fullPath}activity`);
   },
 });
 </script>

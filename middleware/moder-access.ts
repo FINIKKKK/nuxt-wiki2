@@ -2,7 +2,7 @@ import { useTeamStore } from '~/stores/TeamContoller';
 
 /**
  * ------------------------------------------------------------
- * Middleware для проверки роли владельца
+ * Middleware для проверки доступа к модерации
  * ------------------------------------------------------------
  */
 export default defineNuxtRouteMiddleware(async (to, from) => {
@@ -12,9 +12,9 @@ export default defineNuxtRouteMiddleware(async (to, from) => {
   const teamController = useTeamStore();
 
   /**
-   * Если пользователь не владелец, то прокидываем ошибку ----------------
+   * Если пользователь не имеет прав модерации, то прокидываем ошибку ----------------
    */
-  if (!teamController.isOwner) {
+  if (!teamController.isAccessEdit) {
     throw createError({ statusCode: 403 });
   }
 });

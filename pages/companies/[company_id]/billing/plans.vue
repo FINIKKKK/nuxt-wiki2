@@ -1,35 +1,40 @@
 <template>
   <NuxtLayout name="main" :nav="nav">
     <UIWarning
-      v-if="requestController.errors[url]?.length || successMessage"
-      :errors="requestController.errors[url]"
-      :message="successMessage"
-      class="warning-m"
+        v-if="requestController.errors[url]?.length || successMessage"
+        :errors="errors"
+        :message="successMessage"
+        class="warning-m"
     />
 
     <h2 class="title">{{ $t.title }}</h2>
     <p class="text">{{ $t.text }}</p>
 
+    <!--------------------------------------
+     Карточки тарифов
+    ---------------------------------------->
     <div class="cards">
       <div class="card" v-for="card in plans" :key="card.id">
         <div class="content">
-          <h4 class="name">{{ $t.card[`plan_${card.id}`] }}</h4>
+          <h4 class="name">{{ $t?.card[`plan_${card.id}`] }}</h4>
           <h2 class="price">{{ card.price }}$</h2>
           <ul class="features">
             <li v-for="feature in card.features">
-              {{ $t.features[`${feature.code}_${feature.feature_data.value}`] }}
+              {{
+                $t?.features[`${feature.code}_${feature.feature_data.value}`]
+              }}
             </li>
           </ul>
         </div>
         <button
-          class="btn"
-          :class="{ btn2: userController.plan?.id !== card.id }"
-          @click="() => onChangePlan(card.id)"
+            class="btn"
+            :class="{ btn2: userController.billing?.plan.id !== card.id }"
+            @click="() => onChangePlan(card.id)"
         >
           {{
-            userController.plan?.id !== card.id
-              ? $t.card.btnChange
-              : $t.card.btnMy
+            userController.billing?.plan.id !== card.id
+                ? $t?.card.btnChange
+                : $t?.card.btnMy
           }}
         </button>
       </div>
@@ -41,11 +46,11 @@
 <!-- ----------------------------------------------------- -->
 
 <script lang="ts" setup>
-import { useCustomFetch } from '~/hooks/useCustomFetch';
-import { useTeamStore } from '~/stores/TeamContoller';
-import { useUserStore } from '~/stores/UserController';
-import { TMyBilling, TPlan } from '~/utils/types/plan';
-import { useRequestStore } from '~/stores/RequestController';
+import {useCustomFetch} from '~/hooks/useCustomFetch';
+import {useTeamStore} from '~/stores/TeamContoller';
+import {useUserStore} from '~/stores/UserController';
+import {TMyBilling, TPlan} from '~/utils/types/plan';
+import {useRequestStore} from '~/stores/RequestController';
 
 /**
  * Мета ----------------
@@ -63,35 +68,47 @@ const requestController = useRequestStore();
 const $t = await useTranslate('plans');
 const route = useRoute();
 const nav = [
-  { label: $t.nav.settings, link: `${teamController.activeTeamSlug}/settings` },
-  { label: $t.title, link: route.path },
+  {label: $t.nav.settings, link: `${teamController.activeTeamSlug}/billing`},
+  {label: $t.title, link: route.path},
 ];
 const url = 'billing/plans/change';
 const successMessage = ref('');
+const $t2 = await useTranslate('errors');
 
 /**
  * Получение данных ----------------
  */
 // Список планов
-const { data: plans } = await useCustomFetch<TPlan[]>(`billing/plans`, {
-  query: { team_id: teamController.activeTeamId },
+const {data: plans} = await useCustomFetch<TPlan[]>(`billing/plans`, {
+  query: {team_id: teamController.activeTeamId},
 });
-const { data: billing } = await useCustomFetch<TMyBilling>(`billing`, {
-  query: { team_id: teamController.activeTeamId },
+const {data: billing} = await useCustomFetch<TMyBilling>(`billing`, {
+  query: {team_id: teamController.activeTeamId},
 });
-userController.setBillingData(billing)
+userController.setBillingData(billing);
+
+/**
+ * Вычисляемое ----------------
+ */
+// Ошибки запрсоа
+const errors = computed(() => {
+  if (requestController.errors[url]) {
+    if (requestController.errors[url][0].includes('tariff')) return [$t2.tariff];
+  }
+});
 
 /**
  * Методы ----------------
  */
 // Сменить план
 const onChangePlan = async (id: number) => {
-  const { message } = await useCustomFetch(url, {
-    body: { team_id: teamController.activeTeamId, plan_id: id },
+  const {message} = await useCustomFetch(url, {
+    body: {team_id: teamController.activeTeamId, plan_id: id},
     method: 'POST',
   });
 
   if (message) {
+    successMessage.value = $t.success_message;
   }
 };
 </script>

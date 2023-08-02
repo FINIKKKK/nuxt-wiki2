@@ -58,6 +58,12 @@ onMounted(() => {
     align-items: center;
     padding: 8px 16px;
     border-radius: 3px;
+    &.router-link-active {
+      background-color: $blue3;
+      p {
+        color: $blue;
+      }
+    }
   }
   i {
     width: 25px;
@@ -77,7 +83,7 @@ onMounted(() => {
     transition: 0.3s;
   }
   &:hover {
-    background-color: $blue2;
+    background-color: $blue3;
     a {
       text-decoration: none;
     }

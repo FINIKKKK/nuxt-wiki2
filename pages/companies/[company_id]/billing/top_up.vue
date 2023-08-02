@@ -1,6 +1,6 @@
 <template>
  <NuxtLayout name="main">
-    
+
  </NuxtLayout>
 </template>
 
@@ -8,7 +8,12 @@
 <!-- ----------------------------------------------------- -->
 
 <script lang="ts" setup>
-
+/**
+ * Мета ----------------
+ */
+definePageMeta({
+  middleware: 'owner-access',
+});
 </script>
 
 <!-- ----------------------------------------------------- -->

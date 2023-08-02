@@ -26,9 +26,11 @@ import { TItem } from '~/utils/types/sidebar';
 const props = defineProps<{
   data: TItem;
 }>();
+
 </script>
 
 <!-- ----------------------------------------------------- -->
 <!-- ----------------------------------------------------- -->
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+</style>

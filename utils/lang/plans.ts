@@ -1,8 +1,9 @@
 export default {
   ru: {
     title: 'Тарифные планы',
+    success_message: 'Тарифный план успешно изменен',
     nav: {
-      settings: 'Настройки',
+      billing: 'Биллинг',
     },
     text: 'Основные достоинства itl.wiki раскрываются, когда вы работаете в связке с другими участниками команды и обсуждаете проекты',
     card: {
@@ -24,9 +25,10 @@ export default {
     },
   },
   en: {
-    title: 'Tariff plans ',
+    title: 'Tariff plans',
+    success_message: 'The tariff plan has been successfully changed',
     nav: {
-      settings: 'Settings',
+      billing: 'Billing',
     },
     text: 'The main advantages of itl.wiki are revealed when you work in conjunction with other team members and discuss projects',
     card: {

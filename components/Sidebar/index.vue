@@ -47,6 +47,8 @@ if (homePages.some((page) => route.path.includes(page))) {
   sidebarController.open('home');
 } else if (settingsPages.some((page) => route.path.includes(page))) {
   sidebarController.open('cog');
+} else if (route.fullPath.includes('billing')) {
+  sidebarController.open('bank');
 } else {
   sidebarController.close();
 }

@@ -33,6 +33,13 @@ import { useTeamStore } from '~/stores/TeamContoller';
 import { useRequestStore } from '~/stores/RequestController';
 
 /**
+ * Мета ----------------
+ */
+definePageMeta({
+  middleware: 'moder-access',
+});
+
+/**
  * Системные переменные ----------------
  */
 const teamController = useTeamStore();
