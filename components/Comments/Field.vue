@@ -1,46 +1,40 @@
 <template>
   <div class="field">
     <div class="input">
-      <!--      <UIInput-->
-      <!--        label="Добавить комментарий"-->
-      <!--        :isTextarea="true"-->
-      <!--        :limit="350"-->
-      <!--        v-model="commentsController.fieldValue"-->
-      <!--        @btnClick="createOrEditComment"-->
-      <!--        @btnClick2="cancelEdit"-->
-      <!--        class="comment_input"-->
-      <!--        @input="handleInput"-->
-      <!--      >-->
-      <!--        <template-->
-      <!--          #btn2-->
-      <!--          v-if="commentsController.fieldValue"-->
-      <!--          title="Редактировать комментарий"-->
-      <!--        >-->
-      <!--          <i-->
-      <!--            :class="`fa-regular fa-${-->
-      <!--              commentsController.editComment ? 'edit' : 'paper-plane'-->
-      <!--            } ${'disabled' && requestController.loading[url]}`"-->
-      <!--          />-->
-      <!--        </template>-->
-      <!--        <template-->
-      <!--          #btn3-->
-      <!--          v-if="commentsController.editComment"-->
-      <!--          title="Отменить редактирование"-->
-      <!--        >-->
-      <!--          <i-->
-      <!--            class="fa-regular fa-remove"-->
-      <!--            :class="{ disabled: requestController.loading[url] }"-->
-      <!--          />-->
-      <!--        </template>-->
-      <!--      </UIInput>-->
+      <UIInput
+        label="Добавить комментарий"
+        :limit="350"
+        v-model="commentsController.fieldValue"
+        @btnClick="createOrEditComment"
+        @btnClick2="cancelEdit"
+        class="comment_input"
+        @input="handleInput"
+        type_input="div"
+        @handleInput="handleInput"
+      >
+        <template
+          #btn2
+          v-if="commentsController.fieldValue"
+          title="Редактировать комментарий"
+        >
+          <i
+            :class="`fa-regular fa-${
+              commentsController.editComment ? 'edit' : 'paper-plane'
+            } ${'disabled' && requestController.loading[url]}`"
+          />
+        </template>
+        <template
+          #btn3
+          v-if="commentsController.editComment"
+          title="Отменить редактирование"
+        >
+          <i
+            class="fa-regular fa-remove"
+            :class="{ disabled: requestController.loading[url] }"
+          />
+        </template>
+      </UIInput>
     </div>
-
-    <div
-      ref="refDivContent"
-      class="div-input"
-      contenteditable
-      @input="handleInput"
-    ></div>
 
     <div class="users" v-if="isShowUsers">
       <User
@@ -74,7 +68,7 @@ const requestController = useRequestStore();
 const teamController = useTeamStore();
 const commentsController = useCommentsStore();
 const url = 'team/comment/add';
-const isShowUsers = ref(true);
+const isShowUsers = ref(false);
 const refDivContent = ref(null);
 
 /**
@@ -92,8 +86,11 @@ const selectUser = (user: TUser) => {
   newSpan.textContent = `@${user.fullname} `;
   newSpan.classList.add('input-span');
   newSpan.contentEditable = 'false';
-  refDivContent.value.appendChild(newSpan);
+  document.querySelector('.div_input').appendChild(newSpan);
 
+  commentsController.changeFieldValue(
+    `${commentsController.fieldValue} <span class="input-span">\`@${user.fullname} \`</span>`,
+  );
   placeCursorAtEnd();
 };
 
@@ -128,7 +125,7 @@ const handleInput = (e: any) => {
     lastInputCharacter.value = '';
     isShowUsers.value = false;
   }
-  console.log(cursorPosition.value);
+  // console.log(cursorPosition.value);
 };
 
 const createOrEditComment = async () => {
@@ -141,7 +138,7 @@ const createOrEditComment = async () => {
         team_id: teamController.activeTeamId,
         entity_type: 'article',
         entity_id: route.params.id,
-        comment: commentsController.fieldValue,
+        comment: JSON.stringify(document.querySelector('.div_input').innerHTML),
       },
       method: 'POST',
     });
@@ -161,7 +158,7 @@ const createOrEditComment = async () => {
       body: {
         team_id: teamController.activeTeamId,
         comment_id: commentsController.editComment?.id,
-        comment: commentsController.fieldValue,
+        comment: JSON.stringify(refDivContent.value.innerHTML),
       },
       method: 'POST',
     });

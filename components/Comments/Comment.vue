@@ -9,18 +9,18 @@
     </div>
 
     <!-- Текст комментария -->
-    <p class="text">{{ props.data.text }}</p>
+    <p class="text" v-html="commentText(props.data.text)" />
 
     <!-- Попап с кнопками -->
-    <div class="extra" tabindex="1" @blur="isShowPopup = false">
+    <div class="extra" tabindex="2" @blur="isShowPopup">
       <i class="fa-regular fa-ellipsis-h" @click="isShowPopup = !isShowPopup" />
 
       <ul class="popup" v-if="isShowPopup">
         <li>
-          <button @click="setEditComment">{{ $t.edit }}</button>
+          <button @click="setEditComment">{{ $t?.edit }}</button>
         </li>
         <li>
-          <button @click="onRemoveComment">{{ $t.delete }}</button>
+          <button @click="onRemoveComment">{{ $t?.delete }}</button>
         </li>
       </ul>
     </div>
@@ -54,6 +54,15 @@ const teamController = useTeamStore();
 const commentsController = useCommentsStore();
 const userController = useUserStore();
 const $t = await useTranslate('comments');
+
+//
+const commentText = computed(() => (text: string) => {
+  try {
+    return JSON.parse(text);
+  } catch (error) {
+    return text;
+  }
+});
 
 /**
  * Методы ----------------

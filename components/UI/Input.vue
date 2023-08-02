@@ -6,7 +6,7 @@
       focus: isFocus || model,
       error: props.errors?.length,
       address: props.type === 'address',
-      textarea: props.isTextarea
+      textarea: props.type_input === 'textarea' || props.type_input === 'div',
     }"
   >
     <div class="inner">
@@ -17,8 +17,25 @@
       </label>
 
       <div class="flex">
+        <textarea
+          v-if="type_input === 'textarea'"
+          v-model="model"
+          :maxlength="props.limit ? props.limit : 250"
+          @focus="isFocus = true"
+          @blur="isFocus = false"
+          ref="textareaRef"
+        />
+        <div
+          v-if="type_input === 'div'"
+          class="div_input"
+          contenteditable
+          :maxlength="props.limit ? props.limit : 250"
+          @focus="isFocus = true"
+          @blur="isFocus = false"
+          @input="emits('handleInput')"
+        />
         <input
-          v-if="!props.isTextarea"
+          v-else
           :type="
             props.type === 'password' && !isShowPassword ? 'password' : 'text'
           "
@@ -29,15 +46,6 @@
           v-custom-mask="mask"
           :readonly="props.isRead"
         />
-        <textarea
-          v-else
-          v-model="model"
-          :maxlength="props.limit ? props.limit : 250"
-          @focus="isFocus = true"
-          @blur="isFocus = false"
-          ref="textareaRef"
-        >
-        </textarea>
 
         <div @click="emits('btnClick')" v-if="slots.btn" class="btn">
           <slot name="btn"></slot>
@@ -91,10 +99,10 @@ const props = defineProps<{
   errors?: string[];
   type?: 'password' | 'address' | 'phone';
   limit?: number;
-  isTextarea?: boolean;
   isRead?: boolean;
   message?: string;
   btnType?: 'fill';
+  type_input: 'textarea' | 'div';
 }>();
 
 // Значение
@@ -110,7 +118,12 @@ const model = computed({
 /**
  * События ----------------
  */
-const emits = defineEmits(['update:modelValue', 'btnClick', 'btnClick2']);
+const emits = defineEmits([
+  'update:modelValue',
+  'btnClick',
+  'btnClick2',
+  'handleInput',
+]);
 
 /**
  * Переменные ----------------
@@ -135,7 +148,7 @@ const mask = computed(() => {
 });
 
 // Изменять высоту textarea
-if (props.isTextarea) {
+if (props.type_input === 'textarea') {
   watch(model, () => {
     if (textareaRef.value) {
       const textarea = textareaRef.value as HTMLTextAreaElement;
@@ -171,7 +184,8 @@ if (props.isTextarea) {
       transition: 0.3s;
     }
     input,
-    textarea {
+    textarea,
+    .div_input {
       width: 100%;
       padding: 16px 24px;
       border-radius: 2px;
