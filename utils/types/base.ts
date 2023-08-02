@@ -13,3 +13,9 @@ export interface TNav {
   label: string;
   link: string;
 }
+
+export interface TError404 {
+  statusCode: number;
+  message: string;
+  url: string;
+}
