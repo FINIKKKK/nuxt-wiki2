@@ -14,7 +14,6 @@ export const useEmployeesStore = defineStore('employeesController', () => {
   const isOpenAddUsers: Ref<boolean> = ref(false);
   const user: Ref<TUser | null> = ref(null);
   const successMessage: Ref<string> = ref('');
-  const employees = ref<TUser[]>([]);
 
   /**
    * Методы ----------------
@@ -37,9 +36,6 @@ export const useEmployeesStore = defineStore('employeesController', () => {
   const setSuccessMessage = (value: string) => {
     successMessage.value = value;
   };
-  const setEmployees = (value: TUser[]) => {
-    employees.value = value;
-  };
 
   // Возращаем данные
   return {
@@ -53,7 +49,5 @@ export const useEmployeesStore = defineStore('employeesController', () => {
     setUser,
     successMessage,
     setSuccessMessage,
-    employees,
-    setEmployees,
   };
 });

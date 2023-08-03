@@ -39,6 +39,8 @@
           :options="accessArrEdit"
           v-model="ability.permission"
           type="access"
+          tabindex="3"
+          @change="elemController.setCurrentAbility(ability)"
         />
       </li>
     </ul>
@@ -54,10 +56,10 @@ import { useTeamStore } from '~/stores/TeamContoller';
 import { TUser } from '~/utils/types/account';
 import { TAbility, TEmployees } from '~/utils/types/team';
 import { accessArr } from '~/utils/data';
-import { useCreateElemStore } from '~/stores/CreateElemController';
 import { useUserStore } from '~/stores/UserController';
 import { useOutsideClick } from '~/hooks/useOutsideClick';
 import { useDebounce } from '~/hooks/useDebounce';
+import { useElemStore } from '~/stores/ElemController';
 
 /**
  * Пропсы ----------------
@@ -86,12 +88,12 @@ const emits = defineEmits(['update:modelValue', 'close']);
  * Переменные ----------------
  */
 const teamController = useTeamStore();
-const createElemController = useCreateElemStore();
+const elemController = useElemStore();
 const userController = useUserStore();
 const inputValue = ref('');
 const isShowList = ref(false);
 const employeesAccess = ref<TUser[]>([]);
-const employees = ref<TUser[]>([]);
+const employeesList = ref<TUser[]>([]);
 const $t = await useTranslate('create_elem');
 const $t2 = await useTranslate('data');
 const accessArrEdit = accessArr.map((item) => ({
@@ -110,20 +112,31 @@ useOutsideClick(refEmployees, isShowList);
  * Получение данных ----------------
  */
 // Работники
-const { data } = await useCustomFetch<TEmployees>('team/employees', {
-  query: { team_id: teamController.activeTeamId },
-});
-employees.value = data.employees.filter(
-  (obj: TUser) => obj.id !== userController.user?.id,
-);
-employeesSearch.value = employees.value;
+if (!teamController.employees) {
+  const { data: employees } = await useCustomFetch<TEmployees>(
+    'team/employees',
+    {
+      query: {
+        team_id: teamController.activeTeamId,
+        limit: 15,
+        offset: 0,
+        order_by: 'created_at',
+        order_sort: 'DESC',
+      },
+    },
+  );
+  employeesSearch.value = employeesList.value;
+  teamController.setEmployees(employees);
+} else {
+  employeesSearch.value = teamController.teamEmployees || [];
+}
 
 /**
  * Вычисляемое ----------------
  */
 // Сортировать список работников при поиске
 watch(inputValue, () => {
-  employees.value = data.value.employees.filter((obj: TUser) =>
+  employeesList.value = teamController.teamEmployees?.filter((obj: TUser) =>
     obj.fullname.toLowerCase().includes(inputValue.value.toLowerCase()),
   );
 });
@@ -150,11 +163,11 @@ const addEmployeesAccess = (value: TUser) => {
 // Поиск пользователя
 const onSearchUser = useDebounce(async () => {
   if (inputValue.value) {
-    employeesSearch.value = employees.value.filter((obj) =>
+    employeesSearch.value = employeesList.value.filter((obj) =>
       obj.fullname.toLowerCase().includes(inputValue.value.toLowerCase()),
     );
   } else {
-    employeesSearch.value = employees.value;
+    employeesSearch.value = employeesList.value;
   }
 }, 250);
 </script>

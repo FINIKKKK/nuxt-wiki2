@@ -130,24 +130,39 @@ const isPublic =
 watch(
   () => elemController.abilities,
   async () => {
-    const findUser = elemController.abilities.find((obj) => obj.user.id === value.id);
+    const isEdit = elemController.abilities.find(
+      (obj) => obj.user.id === elemController.currentAbility?.user.id,
+    );
 
     // Данные
     const dto = {
       team_id: teamController.activeTeamId,
       entity_type: 'article',
       entity_id: route.params.id,
-      user_id:
-        elemController.abilities[elemController.abilities.length - 1].user.id,
-      permission:
-        elemController.abilities[elemController.abilities.length - 1].permission
-          .value,
+      ...(!isEdit && {
+        user_id:
+          elemController.abilities[elemController.abilities.length - 1].user.id,
+        permission:
+          elemController.abilities[elemController.abilities.length - 1]
+            .permission.value,
+      }),
+      ...(isEdit && {
+        user_id: elemController.currentAbility?.user.id,
+        permission: elemController.currentAbility?.permission.value,
+      }),
     };
 
-    const { data } = await useCustomFetch(`team/abilities/add`, {
-      body: dto,
-      method: 'POST',
-    });
+    if (isEdit) {
+      const { data } = await useCustomFetch(`team/abilities/edit`, {
+        body: dto,
+        method: 'POST',
+      });
+    } else {
+      const { data } = await useCustomFetch(`team/abilities/add`, {
+        body: dto,
+        method: 'POST',
+      });
+    }
   },
   { deep: true },
 );

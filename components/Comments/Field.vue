@@ -38,7 +38,7 @@
 
     <div class="users" v-if="isShowUsers">
       <User
-        v-for="user in users.employees"
+        v-for="user in teamController.teamEmployees"
         :key="user.id"
         :data="user"
         className="comment"
@@ -74,9 +74,16 @@ const refDivContent = ref(null);
 /**
  * Получение данных ----------------
  */
-const { data: users } = await useCustomFetch<TEmployees>(`team/employees`, {
-  query: { team_id: teamController.activeTeamId },
-});
+// Работники
+if (!teamController.employees) {
+  const { data: employees } = await useCustomFetch<TEmployees>(
+    `team/employees`,
+    {
+      query: { team_id: teamController.activeTeamId },
+    },
+  );
+  teamController.setEmployees(employees);
+}
 
 /**
  * Методы ----------------

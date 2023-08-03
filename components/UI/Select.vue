@@ -73,7 +73,7 @@ const model = computed({
 /**
  * События ----------------
  */
-const emits = defineEmits(['update:modelValue']);
+const emits = defineEmits(['update:modelValue', 'change']);
 
 /**
  * Переменные ----------------
@@ -96,6 +96,7 @@ const toggleDropdown = () => {
 const selectOption = (option: TSelect) => {
   model.value = option;
   isOpen.value = false;
+  emits('change')
 };
 </script>
 

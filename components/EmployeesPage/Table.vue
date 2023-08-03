@@ -27,18 +27,18 @@
         <template v-else>
           <!-- Приглашения -->
           <EmployeesPageItem
-            v-for="employee in employees.invites"
+            v-for="employee in teamController.employees?.invites"
             :key="employee.id"
             :data="employee"
             type="invite"
-            @removeFromInvites="removeFromInvites"
+            @removeFromInvites="teamController.removeFromInvites(employee.id)"
           />
           <!-- Соотрудники -->
           <EmployeesPageItem
-            v-for="employee in employees.employees"
+            v-for="employee in teamController.employees?.employees"
             :key="employee.id"
             :data="employee"
-            @removeFromTeam="removeFromTeam"
+            @removeFromTeam="teamController.removeFromTeam(employee.id)"
           />
         </template>
       </tbody>
@@ -57,7 +57,6 @@ import { TEmployees } from '~/utils/types/team';
 import { useRequestStore } from '~/stores/RequestController';
 import { useTeamStore } from '~/stores/TeamContoller';
 import { TUser } from '~/utils/types/account';
-import { TNotifications } from '~/utils/types/notice';
 
 /**
  * Переменные ----------------
@@ -65,7 +64,7 @@ import { TNotifications } from '~/utils/types/notice';
 const url = 'team/employees';
 const requestController = useRequestStore();
 const teamController = useTeamStore();
-const employeesList = ref([]);
+const employeesList = ref<TEmployees | null>(null);
 const $t = await useTranslate('employees');
 
 /**
@@ -80,23 +79,11 @@ const { data: employees } = await useCustomFetch<TEmployees>(url, {
     order_sort: 'DESC',
   },
 });
-employeesList.value = [employees.invites, employees.employees];
+teamController.setEmployees(employees);
 
 /**
  * Методы ----------------
  */
-// Удалить из списка (событие)
-const removeFromTeam = (id: number) => {
-  employees.employees = employees.employees.filter(
-    (obj: TUser) => obj.id !== id,
-  );
-};
-
-// Удалить из приглашенных (событие)
-const removeFromInvites = (id: number) => {
-  employees.invites = employees.invites.filter((obj: TUser) => obj.id !== id);
-};
-
 // Получить новых работников
 let isEnd = false;
 const getEmployees = async () => {
@@ -120,6 +107,7 @@ const getEmployees = async () => {
       ...newEmployees.invites,
       ...newEmployees.employees,
     ];
+    teamController.addEmployees(newEmployees);
   }
 };
 </script>

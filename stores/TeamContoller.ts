@@ -1,5 +1,13 @@
 import { defineStore } from 'pinia';
-import { TActiveTeam, TeamEditDto, TTeam } from '~/utils/types/team';
+import {
+  TAbility,
+  TActiveTeam,
+  TeamEditDto,
+  TEmployees,
+  TTeam,
+} from '~/utils/types/team';
+import { TUser } from '~/utils/types/account';
+import { useUserStore } from '~/stores/UserController';
 
 /**
  * --------------------------------
@@ -8,63 +16,87 @@ import { TActiveTeam, TeamEditDto, TTeam } from '~/utils/types/team';
  */
 export const useTeamStore = defineStore('teamController', () => {
   /**
+   * Переменные ----------------
+   */
+  const userController = useUserStore();
+
+  /**
    * Свойства ----------------
    */
   const teams: Ref<TTeam[]> = ref([]);
   const activeTeam: Ref<TActiveTeam | null> = ref(null);
+  const employees = ref<TEmployees | null>(null);
 
   /**
    * Методы ----------------
    */
-  // Установить активную команду
   const setActiveTeam = (value: TActiveTeam | null) => {
     activeTeam.value = value;
   };
-  // Сохранить  команды
   const setTeams = (value: TTeam[]) => {
     teams.value = value;
   };
-  // Изменить данные команды
   const editActiveTeam = (value: TeamEditDto) => {
     if (activeTeam.value) {
       activeTeam.value.team.name = value.name;
       activeTeam.value.team.code = value.code;
     }
   };
+  const setEmployees = (value: TEmployees | null) => {
+    employees.value = value;
+  };
+  const addEmployees = (value: TEmployees) => {
+    employees.value = {
+      invites: [...employees.value?.invites, ...value?.invites],
+      employees: [...employees.value?.employees, ...value?.employees],
+    };
+  };
+  const removeFromTeam = (id: number) => {
+    if (employees.value) {
+      employees.value.employees = employees.value.employees.filter(
+        (obj: TUser) => obj.id !== id,
+      );
+    }
+  };
+  const removeFromInvites = (id: number) => {
+    if (employees.value) {
+      employees.value.invites = employees.value.invites.filter(
+        (obj: TUser) => obj.id !== id,
+      );
+    }
+  };
 
   /**
    * Вычисляемые значения ----------------
    */
-  // Id активной команды
   const activeTeamId = computed(() => {
     return activeTeam.value?.team.id;
   });
-  // Slug активной команды
   const activeTeamSlug = computed(() => {
     return `/companies/${activeTeam.value?.team.id}`;
   });
-  // Роль пользователя
   const role = computed(() => {
     return activeTeam.value?.role.name;
   });
-  // Владелец?
   const isOwner = computed(() => {
     return role.value === 'owner';
   });
-  // Админ или модератор?
   const adminOrModer = computed(() => {
     return role.value === 'admin' || role.value === 'moderator';
   });
-  // Пользователь?
   const isUser = computed(() => {
     return role.value === 'user';
   });
-  // Есть доступ для редактирования?
   const isAccessEdit = computed(() => {
     return (
       role.value === 'admin' ||
       role.value === 'moderator' ||
       role.value === 'owner'
+    );
+  });
+  const teamEmployees = computed(() => {
+    return employees.value?.employees.filter(
+      (obj) => obj.id !== userController?.user?.id,
     );
   });
 
@@ -82,5 +114,11 @@ export const useTeamStore = defineStore('teamController', () => {
     adminOrModer,
     isUser,
     isAccessEdit,
+    employees,
+    setEmployees,
+    addEmployees,
+    teamEmployees,
+    removeFromTeam,
+    removeFromInvites
   };
 });

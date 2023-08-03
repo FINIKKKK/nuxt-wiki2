@@ -1,10 +1,10 @@
 import { defineStore } from 'pinia';
 import { TArticleData } from '~/utils/types/article';
 import { OutputBlockData } from '@editorjs/editorjs';
-import { TComment } from '~/utils/types/comment';
 import { TSectionData } from '~/utils/types/secton';
 import { TAbilities, TAbility } from '~/utils/types/team';
 import { TUser } from '~/utils/types/account';
+import { values } from 'lodash';
 
 /**
  * --------------------------------
@@ -35,6 +35,7 @@ export const useElemStore = defineStore('elemController', () => {
   const activeCommentBlock = ref<OutputBlockData[]>([]);
   const blockId = ref<any>(null);
   const abilities = ref<TAbility[]>([]);
+  const currentAbility = ref<TAbility | null>(null);
 
   /**
    * Методы ----------------
@@ -99,6 +100,9 @@ export const useElemStore = defineStore('elemController', () => {
   const changeAbilities = (value: TAbility[]) => {
     abilities.value = value;
   };
+  const setCurrentAbility = (value: TAbility | null) => {
+    currentAbility.value = value;
+  };
 
   // Возращаем данные
   return {
@@ -130,5 +134,7 @@ export const useElemStore = defineStore('elemController', () => {
     abilities,
     changeAbilities,
     setAbilities,
+    currentAbility,
+    setCurrentAbility,
   };
 });
