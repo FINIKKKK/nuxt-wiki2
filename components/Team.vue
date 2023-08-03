@@ -1,17 +1,17 @@
 <template>
-  <li class="team">
+  <li class="item">
     <NuxtLink :to="`/companies/${props.data.id}/activity`" class="title"
       >{{ props.data.name }}
     </NuxtLink>
     <ul class="info">
-      <li class="info__item">
+      <li class="info_item">
         <span>{{ $t.team.plan }}:</span>
         {{ props.data.plan.name === 'Бесплатный' && $t.team.planTypeFree }}
       </li>
-      <li class="info__item">
+      <li class="info_item">
         <span>{{ $t.team.users }}:</span> {{ props.data.employees_count }}
       </li>
-      <li class="info__item">
+      <li class="info_item">
         <span>{{ $t.team.address }}:</span>
         {{ props.data.code }}.wiki.itl.systems
       </li>
@@ -41,7 +41,4 @@ const props = defineProps<{
 <!-- ----------------------------------------------------- -->
 <!-- ----------------------------------------------------- -->
 
-<style lang="scss" scoped>
-.team {
-}
-</style>
+<style lang="scss" scoped></style>

@@ -340,3 +340,55 @@ a.btn {
     margin-bottom: 10px;
   }
 }
+
+// list items
+.items_list {
+  display: flex;
+  flex-wrap: wrap;
+  margin: 0 -24px -48px;
+  .item {
+    margin: 0 24px 48px;
+    width: 405px;
+    height: 220px;
+    position: relative;
+    padding: 32px;
+    background-color: $white;
+    box-shadow: 0 0 5px rgba($blue, 0.2);
+    border-radius: 5px;
+    .title {
+      font-size: 24px;
+      line-height: 32px;
+      margin-bottom: 16px;
+      color: $blue;
+    }
+    .info {
+      li {
+        span {
+          color: $gray;
+        }
+      }
+    }
+    .notices {
+      position: absolute;
+      top: -10px;
+      right: -10px;
+      border-radius: 50%;
+      background-color: $blue;
+      color: $white;
+      font-size: 13px;
+      width: 35px;
+      height: 35px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    &.index {
+      p {
+        margin-bottom: 25px;
+      }
+      .btn {
+        width: 100%;
+      }
+    }
+  }
+}

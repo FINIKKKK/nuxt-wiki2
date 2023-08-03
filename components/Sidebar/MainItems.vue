@@ -147,6 +147,12 @@ const innerItems: TInnerItem[] = [
         isShow: teamController.isOwner,
       },
       {
+        icon: 'users',
+        label: $t.settings.groups,
+        link: `${teamController.activeTeamSlug}/settings/groups`,
+        isShow: teamController.isOwner,
+      },
+      {
         icon: 'tags',
         label: $t.settings.tags,
         link: `${teamController.activeTeamSlug}/settings/tags`,

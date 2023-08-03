@@ -16,7 +16,7 @@ export default {
   en: {
     title: 'Your wiki',
     createTeam: {
-      title:
+      text:
         'Create a wiki and involve employees in the process of continuous exchange of knowledge and experience.',
       button: 'Create a company',
     },
