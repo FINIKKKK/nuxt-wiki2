@@ -27,7 +27,7 @@
 import { useTeamStore } from '~/stores/TeamContoller';
 import { useSectionsStore } from '~/stores/sectionsController';
 import { useCustomFetch } from '~/hooks/useCustomFetch';
-import { TSectionData } from '~/utils/types/secton';
+import { TSectionData, TSectionEdit } from '~/utils/types/secton';
 import { useUserStore } from '~/stores/UserController';
 import { TArticle } from '~/utils/types/article';
 import { useElemStore } from '~/stores/ElemController';
@@ -44,6 +44,7 @@ const elemController = useElemStore();
 /**
  * Получение данных ----------------
  */
+// Данные раздела
 const { data: section } = await useCustomFetch<TSectionData>(`team/section`, {
   query: {
     team_id: teamController.activeTeamId,
@@ -62,7 +63,9 @@ const isShowArticle = computed(() => (item: TArticle) => {
   if (item.status_id === 1) {
     return userController.user?.id === item.creator.id;
   } else if (item.status_id === 2) {
-    return userController.user?.id === item.creator.id || teamController.isAccessEdit;
+    return (
+      userController.user?.id === item.creator.id || teamController.isAccessEdit
+    );
   } else {
     return true;
   }

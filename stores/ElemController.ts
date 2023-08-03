@@ -3,6 +3,8 @@ import { TArticleData } from '~/utils/types/article';
 import { OutputBlockData } from '@editorjs/editorjs';
 import { TComment } from '~/utils/types/comment';
 import { TSectionData } from '~/utils/types/secton';
+import { TAbilities, TAbility } from '~/utils/types/team';
+import { TUser } from '~/utils/types/account';
 
 /**
  * --------------------------------
@@ -32,6 +34,7 @@ export const useElemStore = defineStore('elemController', () => {
   const isOpenComments = ref(false);
   const activeCommentBlock = ref<OutputBlockData[]>([]);
   const blockId = ref<any>(null);
+  const abilities = ref<TAbility[]>([]);
 
   /**
    * Методы ----------------
@@ -84,6 +87,18 @@ export const useElemStore = defineStore('elemController', () => {
   const setActiveBlockId = (value: any) => {
     blockId.value = value;
   };
+  const setAbilities = (value: TAbilities) => {
+    abilities.value = value.users.map((obj: TUser) => ({
+      user: obj,
+      permission: {
+        value: obj.permission.level,
+        label: obj.permission.name,
+      },
+    }));
+  };
+  const changeAbilities = (value: TAbility[]) => {
+    abilities.value = value;
+  };
 
   // Возращаем данные
   return {
@@ -112,5 +127,8 @@ export const useElemStore = defineStore('elemController', () => {
     setActiveBlockId,
     section,
     setSection,
+    abilities,
+    changeAbilities,
+    setAbilities,
   };
 });

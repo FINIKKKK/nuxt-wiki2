@@ -1,7 +1,8 @@
 import { defineStore } from 'pinia';
-import { TAbility } from '~/utils/types/team';
+import { TAbilities, TAbility } from '~/utils/types/team';
 import { TArticleEdit, TTab } from '~/utils/types/article';
 import { TSelect } from '~/utils/types/base';
+import { TUser } from '~/utils/types/account';
 
 /**
  * --------------------------------
@@ -45,8 +46,14 @@ export const useCreateElemStore = defineStore('createElemController', () => {
   const addTag = (value: number) => {
     tags.value.push(value);
   };
-  const setAbilities = (value: TAbility[]) => {
-    abilities.value = value;
+  const setAbilities = (value: TAbilities) => {
+    abilities.value = value.users.map((obj: TUser) => ({
+      user: obj,
+      permission: {
+        value: obj.permission.level,
+        label: obj.permission.name,
+      },
+    }));
   };
   const addAbility = (value: TAbility) => {
     abilities.value = [...abilities.value, value];

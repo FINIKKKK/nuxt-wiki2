@@ -99,6 +99,8 @@ const { data: articleEdit } = await useCustomFetch<TArticleData>(
     },
   },
 );
+elemController.changeAbilities([]);
+elemController.setAbilities(articleEdit.abilities);
 
 // Разделы
 if (!elemController.section) {

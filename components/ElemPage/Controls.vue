@@ -2,18 +2,18 @@
   <div class="controls">
     <!-- Опубликовать статью (если на модерации) -->
     <div
-        class="control"
-        v-if="
+      class="control"
+      v-if="
         elemController.type === 'article' &&
         teamController.isAccessEdit &&
         elemController.article.article.status_id === 2
       "
-        @click="onPublicArticle"
-        :title="$t.controls.moder"
+      @click="onPublicArticle"
+      :title="$t.controls.moder"
     >
       <i class="fa-regular fa-check-circle" />
     </div>
-    
+
     <!-- Редактировать -->
     <div class="control" :title="$t.controls.edit" v-if="isAccessEdit">
       <NuxtLink
@@ -44,6 +44,16 @@
       v-if="isAccessEdit"
     >
       <i class="fa-regular fa-share" />
+    </div>
+
+    <!-- Доступ пользователей и групп -->
+    <div
+      class="control"
+      v-if="isAccessEdit  && elemController.type === 'article'"
+      @click="elemController.openAccess()"
+      :title="$t.controls.access"
+    >
+      <i class="fa-regular fa-lock" />
     </div>
 
     <!-- Дополнительные возможности -->

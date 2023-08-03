@@ -277,7 +277,6 @@ const onSubmit = async () => {
     // Создаем статью
     // ------------------------------------
     else {
-      console.log(dto.images);
       const { data } = await useCustomFetch<TArticleData>(`team/article/add`, {
         body: dto,
         method: 'POST',

@@ -40,6 +40,11 @@ export interface TEmployees {
   invites: TUser[];
 }
 
+export interface TAbilities {
+  users: TUser[];
+  groups: TUser[];
+}
+
 export interface TAbility {
   user: TUser;
   permission: TSelect;

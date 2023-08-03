@@ -54,6 +54,15 @@
           @close="elemController.closeShare()"
           :isPublic="isPublic"
         />
+
+        <!--------------------------------------
+         Попап для доспупа пользователям или группам
+        ---------------------------------------->
+        <PopupAccess
+          :isOpen="elemController.isOpenAccess"
+          @close="elemController.closeAccess()"
+          v-model="elemController.abilities"
+        />
       </div>
     </NuxtLayout>
   </div>
@@ -114,6 +123,34 @@ const isPublic =
   elemController.type === 'section'
     ? Boolean(elemController.section.public)
     : Boolean(elemController.article.article.public);
+
+/**
+ * Методы ----------------
+ */
+watch(
+  () => elemController.abilities,
+  async () => {
+    const findUser = elemController.abilities.find((obj) => obj.user.id === value.id);
+
+    // Данные
+    const dto = {
+      team_id: teamController.activeTeamId,
+      entity_type: 'article',
+      entity_id: route.params.id,
+      user_id:
+        elemController.abilities[elemController.abilities.length - 1].user.id,
+      permission:
+        elemController.abilities[elemController.abilities.length - 1].permission
+          .value,
+    };
+
+    const { data } = await useCustomFetch(`team/abilities/add`, {
+      body: dto,
+      method: 'POST',
+    });
+  },
+  { deep: true },
+);
 
 /**
  * Методы ----------------

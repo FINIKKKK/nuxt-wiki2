@@ -4,7 +4,7 @@
     :isOpen="props.isOpen"
     @close="emits('close')"
   >
-    <p class="text">{{ $t.accessPopup.text }}</p>
+    <p class="text">{{ $t?.accessPopup.text }}</p>
 
     <div class="field" ref="refEmployees">
       <!-- Поле поиска пользователей -->
@@ -133,16 +133,12 @@ watch(inputValue, () => {
  */
 // Добавить работника в область редактирования доступа
 const addEmployeesAccess = (value: TUser) => {
-  const findUser = createElemController.abilities.find(
-    (obj) => obj.user.id === value.id,
-  );
+  const findUser = model.value.find((obj) => obj.user.id === value.id);
   // Если этого работника нет в массиве
   if (!findUser) {
     employeesAccess.value.push(value);
     // Добавляем в массив
-    createElemController.addAbility({ user: value, permission: accessArr[0] });
     model.value.push({ user: value, permission: accessArrEdit[0] });
-    console.log(model.value);
     // Закрываем список
     isShowList.value = false;
   } else {

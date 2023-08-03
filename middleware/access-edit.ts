@@ -109,18 +109,6 @@ export default defineNuxtRouteMiddleware(async (to, from) => {
     // Тэги
     createElemController.setTags(article.article.tags);
     // Значение доступа
-    // createElemController.setAbilities(
-    //   article.abilities.users.map((obj) => ({
-    //     user: obj,
-    //     permission: {
-    //       value: obj.permission.level,
-    //       label:
-    //         $t.access[
-    //           accessArr.find((access) => access.value === obj.permission.level)
-    //             ?.label
-    //         ],
-    //     },
-    //   })),
-    // );
+    createElemController.setAbilities(article.abilities);
   }
 });
