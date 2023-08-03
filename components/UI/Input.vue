@@ -102,7 +102,7 @@ const props = defineProps<{
   isRead?: boolean;
   message?: string;
   btnType?: 'fill';
-  type_input: 'textarea' | 'div';
+  type_input?: 'textarea' | 'div';
 }>();
 
 // Значение

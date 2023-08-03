@@ -114,6 +114,7 @@ const labelBtn = computed(() => {
     return $t.btnPublish;
   }
 });
+
 // Значение загрузки
 const isLoading = computed(() => {
   return (
@@ -249,7 +250,7 @@ const onSubmit = async () => {
         obj.content
           .filter((obj2) => obj2.type === 'image')
           .map((image) => image.id),
-      ),
+      ).reduce((acc, currentArray) => acc.concat(currentArray), []),
       action: teamController.isAccessEdit ? 3 : 2,
     };
 
@@ -276,6 +277,7 @@ const onSubmit = async () => {
     // Создаем статью
     // ------------------------------------
     else {
+      console.log(dto.images);
       const { data } = await useCustomFetch<TArticleData>(`team/article/add`, {
         body: dto,
         method: 'POST',

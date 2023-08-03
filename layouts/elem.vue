@@ -45,6 +45,15 @@
           Слот
         ---------------------------------------->
         <slot />
+
+        <!--------------------------------------
+         Попап для публичного доступа
+        ---------------------------------------->
+        <PopupShare
+          :isOpen="elemController.isOpenShare"
+          @close="elemController.closeShare()"
+          :isPublic="isPublic"
+        />
       </div>
     </NuxtLayout>
   </div>
@@ -101,6 +110,10 @@ const nav = [
     link: `${teamController.activeTeamSlug}/articles/${props.data.id}`,
   },
 ];
+const isPublic =
+  elemController.type === 'section'
+    ? Boolean(elemController.section.public)
+    : Boolean(elemController.article.article.public);
 
 /**
  * Методы ----------------

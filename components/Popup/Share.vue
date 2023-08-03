@@ -43,6 +43,7 @@
 <script lang="ts" setup>
 import { useTeamStore } from '~/stores/TeamContoller';
 import { useCustomFetch } from '~/hooks/useCustomFetch';
+import { useElemStore } from '~/stores/ElemController';
 
 /**
  * Пропсы ----------------
@@ -69,6 +70,7 @@ const publicCheck = ref(props.isPublic);
 const commentsCheck = ref(false);
 const indexingCheck = ref(false);
 const $t = await useTranslate('elem');
+const elemController = useElemStore();
 
 /**
  * Методы ----------------
@@ -84,14 +86,22 @@ const onCopyLink = () => {
 
 // Поменять уровень доступа у статьи
 const onChangeMode = async () => {
-  const { message } = await useCustomFetch(`team/article/mode`, {
-    body: {
-      team_id: teamController.activeTeamId,
-      article_id: route.params.id,
-      public: publicCheck.value,
+  const { message } = await useCustomFetch(
+    `team/${elemController.type === 'section' ? 'section' : 'article'}/mode`,
+    {
+      body: {
+        team_id: teamController.activeTeamId,
+        ...(elemController.type === 'article' && {
+          article_id: route.params.id,
+        }),
+        ...(elemController.type === 'section' && {
+          section_id: route.params.id,
+        }),
+        public: Number(publicCheck.value),
+      },
+      method: 'POST',
     },
-    method: 'POST',
-  });
+  );
 };
 </script>
 
