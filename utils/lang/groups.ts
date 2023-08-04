@@ -16,6 +16,19 @@ export default {
       smallText2: ' и соглашаетесь с',
       smallLink2: 'Политикой конфиденциальности',
     },
+    group: {
+      search: 'Поиск участников группы',
+      add: 'Добавить',
+      popup: 'Добавить участников',
+      popup_input: 'Введите имя пользователя',
+    },
+    table: {
+      id: 'ID',
+      name: 'Имя и фамилия',
+      email: 'E-mail',
+      last_activity: 'Последняя активность',
+      btnRemove: 'Удалить из группы',
+    },
   },
   en: {
     title: 'Groups',
@@ -29,10 +42,23 @@ export default {
     },
     create: {
       input: 'Group name',
-      smallText1: 'By clicking the "Create a group" button, you accept',
+      smallText1: 'By clicking the «Create a group» button, you accept',
       smallLink1: 'Terms of Service for ITL products',
       smallText2: ' and agree with',
       smallLink2: 'Privacy Policy',
+    },
+    group: {
+      search: 'Search for group members',
+      add: 'Add',
+      popup: 'Add users',
+      popup_input: 'Enter the user name',
+    },
+    table: {
+      id: 'ID',
+      name: 'Name and surname',
+      email: 'E-mail',
+      last_activity: 'Last activity',
+      btnRemove: 'Remove from group',
     },
   },
 };

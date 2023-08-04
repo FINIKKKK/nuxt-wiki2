@@ -1,32 +1,24 @@
 import { defineStore } from 'pinia';
 import { TUser } from '~/utils/types/account';
+import { TGroup } from '~/utils/types/group';
 
 /**
  * --------------------------------
- * Хранилище страницы работников
+ * Хранилище страницы группы
  * --------------------------------
  */
-export const useEmployeesStore = defineStore('employeesController', () => {
+export const useGroupStore = defineStore('groupController', () => {
   /**
    * Свойства ----------------
    */
-  const isOpenRoles: Ref<boolean> = ref(false);
   const isOpenAddUsers: Ref<boolean> = ref(false);
-  const user: Ref<TUser | null> = ref(null);
   const successMessage: Ref<string> = ref('');
+  const group = ref<TGroup | null>(null);
+  const users = ref<TUser[]>([]);
 
   /**
    * Методы ----------------
    */
-  const openRoles = () => {
-    isOpenRoles.value = true;
-  };
-  const closeRoles = () => {
-    isOpenRoles.value = false;
-  };
-  const setUser = (value: TUser | null) => {
-    user.value = value;
-  };
   const openAddUsers = () => {
     isOpenAddUsers.value = true;
   };
@@ -36,18 +28,27 @@ export const useEmployeesStore = defineStore('employeesController', () => {
   const setSuccessMessage = (value: string) => {
     successMessage.value = value;
   };
+  const setGroup = (value: TGroup | null) => {
+    group.value = value;
+  };
+  const setUsers = (value: TUser[]) => {
+    users.value = value;
+  };
+  const addUsers = (value: TUser[]) => {
+    users.value = [...users.value, ...value];
+  };
 
   // Возращаем данные
   return {
-    isOpenRoles,
     isOpenAddUsers,
-    openRoles,
-    closeRoles,
     openAddUsers,
     closeAddUsers,
-    user,
-    setUser,
     successMessage,
     setSuccessMessage,
+    group,
+    setGroup,
+    users,
+    setUsers,
+    addUsers,
   };
 });

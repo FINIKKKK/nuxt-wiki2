@@ -300,9 +300,11 @@ if (props.type_input === 'textarea') {
 }
 
 .flex {
+  width: 100%;
   display: flex;
   align-items: center;
   justify-content: space-between;
+  padding-right: 110px;
 }
 
 .btn {
