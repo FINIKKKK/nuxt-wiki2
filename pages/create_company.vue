@@ -20,14 +20,14 @@
         type="address"
       />
       <p class="small">
-        {{ $t.smallText1 }}
-        <a href="#">{{ $t.smallLink1 }}</a
-        >{{ $t.smallText2 }}
-        <a href="#">{{ $t.smallLink2 }}</a>
+        {{ $t?.smallText1 }}
+        <a href="#">{{ $t?.smallLink1 }}</a
+        >{{ $t?.smallText2 }}
+        <a href="#">{{ $t?.smallLink2 }}</a>
       </p>
 
       <button class="btn" :class="{ disabled: requestController.loading[url] }">
-        {{ $t.btn }}
+        {{ $t?.btn }}
       </button>
     </form>
   </NuxtLayout>

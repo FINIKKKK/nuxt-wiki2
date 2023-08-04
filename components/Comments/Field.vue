@@ -11,6 +11,8 @@
         @input="handleInput"
         type_input="div"
         @handleInput="handleInput"
+        @keydown.enter.prevent="false"
+        ref="refInput"
       >
         <template
           #btn2
@@ -36,7 +38,12 @@
       </UIInput>
     </div>
 
-    <div class="users" v-if="isShowUsers">
+    <div
+      class="users popup"
+      v-if="isShowUsers"
+      ref="refPopup"
+    >
+<!--      :style="{ top: popupTop, left: popupLeft }"-->
       <User
         v-for="user in teamController.teamEmployees"
         :key="user.id"
@@ -68,8 +75,12 @@ const requestController = useRequestStore();
 const teamController = useTeamStore();
 const commentsController = useCommentsStore();
 const url = 'team/comment/add';
-const isShowUsers = ref(false);
+const isShowUsers = ref(true);
 const refDivContent = ref(null);
+const refInput = ref(null);
+const popupTop = ref(40);
+const popupLeft = ref(20);
+const refPopup = ref();
 
 /**
  * Получение данных ----------------
@@ -114,7 +125,35 @@ const placeCursorAtEnd = () => {
 const lastInputCharacter = ref('');
 const cursorPosition = ref(0);
 
+/**
+ *  ----------------
+ */
+
+const getInputCursorPosition = (input) => {
+  const position = commentsController.fieldValue.indexOf('@');
+  if (position !== -1) {
+    const inputRect = input.getBoundingClientRect();
+    const inputStyle = window.getComputedStyle(input);
+    const left = inputRect.left + inputStyle.paddingLeft;
+    const top =
+        inputRect.top + inputRect.height + parseInt(inputStyle.paddingTop, 10);
+
+    return { top, left };
+  }
+  return null;
+};
+
+
 const handleInput = (e: any) => {
+  const popup = refPopup.value;
+  const position = getInputCursorPosition(popup);
+  console.log('position', position);
+  // const { top, left } = position;
+  //
+  // // Устанавливаем координаты позиции для popup
+  // popup.style.top = `${top}px`;
+  // popup.style.left = `${left}px`;
+
   commentsController.fieldValue = e.target.textContent;
 
   const selection = window.getSelection();
@@ -132,9 +171,9 @@ const handleInput = (e: any) => {
     lastInputCharacter.value = '';
     isShowUsers.value = false;
   }
-  // console.log(cursorPosition.value);
-};
 
+  // Функция для получения позиции текущего символа @
+};
 const createOrEditComment = async () => {
   // ------------------------------------
   // Создаем комментарий
@@ -191,6 +230,7 @@ const cancelEdit = () => {
 <style lang="scss" scoped>
 .field {
   margin-bottom: 35px;
+  position: relative;
 }
 
 .input {
@@ -218,9 +258,11 @@ const cancelEdit = () => {
 }
 
 .users {
-  background-color: $bg;
   max-width: 200px;
   max-height: 200px;
+  top: 40px;
+  right: auto;
+  left: 20px;
 }
 </style>
 
@@ -237,7 +279,7 @@ const cancelEdit = () => {
     .avatar,
     img {
       font-size: 10px;
-      line-height: 14px;
+      line-height: 16px;
       width: 25px;
       height: 25px;
     }

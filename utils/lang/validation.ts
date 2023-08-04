@@ -14,6 +14,7 @@ export default {
     user: 'Добавьте хотя бы одного пользователя',
     tag_min: 'Тэг должен быть состоять минимум из 5 символов',
     tag_max: 'Тэг должен быть состоять максимум из 30 символов',
+    group_min: 'Название группы должно состоять минимум из 3 символов',
   },
   en: {
     required: 'The field is required',
@@ -28,7 +29,8 @@ export default {
     article_section: 'You have not selected a section',
     article_tabs: 'You have not entered information about the article',
     user: 'Add at least one user',
-    tag_min: 'The tag must consist of a minimum of 5 characters ',
-    tag_max: 'The tag must consist of a maximum of 30 characters ',
+    tag_min: 'The tag must consist of a minimum of 5 characters',
+    tag_max: 'The tag must consist of a maximum of 30 characters',
+    group_min: 'The name of group must consist of a minimum of 3 characters',
   },
 };

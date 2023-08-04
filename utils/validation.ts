@@ -121,3 +121,12 @@ export const ArticleDraftScheme = yup.object().shape({
   name: yup.string().required('article_title'),
   section_id: yup.number().required('article_section'),
 });
+
+
+/**
+ * Создание группы
+ */
+export const GroupScheme = yup.object().shape({
+  name: yup.string().required('required').min(3, 'group_min'),
+});
+
