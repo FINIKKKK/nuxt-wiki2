@@ -15,6 +15,9 @@ export default {
     tag_min: 'Тэг должен быть состоять минимум из 5 символов',
     tag_max: 'Тэг должен быть состоять максимум из 30 символов',
     group_min: 'Название группы должно состоять минимум из 3 символов',
+    bin_length: 'БИН должен содержать 12 символов',
+    bik_length: 'БИК банка должен содержать 9 символов',
+    account: 'Номер счета должен содержать только цифры',
   },
   en: {
     required: 'The field is required',
@@ -32,5 +35,8 @@ export default {
     tag_min: 'The tag must consist of a minimum of 5 characters',
     tag_max: 'The tag must consist of a maximum of 30 characters',
     group_min: 'The name of group must consist of a minimum of 3 characters',
+    bin_length: 'The BIN must contain 12 characters',
+    bik_length: 'The bank\'s BIC must contain 9 characters',
+    account: 'The account number must contain only digits',
   },
 };
