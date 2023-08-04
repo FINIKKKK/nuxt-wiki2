@@ -1,5 +1,7 @@
 import { defineStore } from 'pinia';
 import { TUser } from '~/utils/types/account';
+import { useTeamStore } from '~/stores/TeamContoller';
+import { TEmployees } from '~/utils/types/team';
 
 /**
  * --------------------------------
@@ -8,12 +10,18 @@ import { TUser } from '~/utils/types/account';
  */
 export const useEmployeesStore = defineStore('employeesController', () => {
   /**
+   * Переменные ----------------
+   */
+  const teamController = useTeamStore();
+
+  /**
    * Свойства ----------------
    */
   const isOpenRoles: Ref<boolean> = ref(false);
   const isOpenAddUsers: Ref<boolean> = ref(false);
   const user: Ref<TUser | null> = ref(null);
   const successMessage: Ref<string> = ref('');
+  const employeesSearch = ref<TEmployees | null>(null);
 
   /**
    * Методы ----------------
@@ -36,6 +44,25 @@ export const useEmployeesStore = defineStore('employeesController', () => {
   const setSuccessMessage = (value: string) => {
     successMessage.value = value;
   };
+  const searchUser = (value: string) => {
+    if (value) {
+      employeesSearch.value = {
+        invites:
+          teamController.employees?.invites.filter((obj) =>
+            obj.fullname.toLowerCase().includes(value.toLowerCase()),
+          ) || [],
+        employees:
+          teamController.employees?.employees.filter((obj) =>
+            obj.fullname.toLowerCase().includes(value.toLowerCase()),
+          ) || [],
+      };
+    } else {
+      employeesSearch.value = teamController.employees;
+    }
+  };
+  const changeUsersList = () => {
+    employeesSearch.value = teamController.employees;
+  };
 
   // Возращаем данные
   return {
@@ -49,5 +76,8 @@ export const useEmployeesStore = defineStore('employeesController', () => {
     setUser,
     successMessage,
     setSuccessMessage,
+    employeesSearch,
+    searchUser,
+    changeUsersList,
   };
 });

@@ -14,17 +14,21 @@
     <!-- TBody -->
     <tbody>
       <!-- Загрузка -->
-      <LoadingTableItem
-        :count="7"
+      <tr
+        class="item"
         v-for="(item, index) in Array(10)"
-        :key="index"
         v-if="requestController.loading[url]"
-      />
+        :key="index"
+      >
+        <th v-for="(item, index) in Array(4)" :key="index">
+          <p class="loading">0</p>
+        </th>
+      </tr>
 
       <template v-else>
         <!-- Соотрудники -->
         <GroupPageItem
-          v-for="user in groupController.users"
+          v-for="user in groupController.usersSearch"
           :key="user.id"
           :data="user"
         />

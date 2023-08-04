@@ -6,7 +6,7 @@
         type="text"
         :placeholder="$t.group.search"
         v-model="searchValue"
-        @input="onSearchUsers"
+        @input="onSearchUser"
       />
     </div>
 
@@ -34,22 +34,9 @@ const $t = await useTranslate('groups');
 /**
  * Методы ----------------
  */
-// Поиск соотрудрников
-const onSearchUsers = useDebounce(async () => {
-  // if (searchValue.value) {
-  // const { data } = await useCustomFetch<TSearchData>(`team/search`, {
-  //   query: {
-  //     team_id: teamController.activeTeamId,
-  //     query: searchValue.value,
-  //     type: 'all',
-  //   },
-  // });
-  //   if (data) {
-  //     searchData.value = data.results;
-  //   }
-  // } else {
-  //   searchData.value = null;
-  // }
+// Поиск пользователей
+const onSearchUser = useDebounce(async () => {
+  groupController.searchUser(searchValue.value);
 }, 250);
 </script>
 

@@ -1,12 +1,5 @@
 <template>
   <NuxtLayout name="main" :title="$t.title" :nav="nav">
-    <!-- Warning -->
-    <UIWarning
-      v-if="employeesController.successMessage"
-      :message="employeesController.successMessage"
-      class="warning"
-    />
-
     <!-- Поиск и кнопка добавления новых пользователей -->
     <EmployeesPageField />
 

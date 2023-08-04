@@ -47,7 +47,7 @@ export const useTeamStore = defineStore('teamController', () => {
   };
   const addEmployees = (value: TEmployees) => {
     employees.value = {
-      invites: [...employees.value?.invites, ...value?.invites],
+      invites: employees.value?.invites,
       employees: [...employees.value?.employees, ...value?.employees],
     };
   };
@@ -99,6 +99,11 @@ export const useTeamStore = defineStore('teamController', () => {
       (obj) => obj.id !== userController?.user?.id,
     );
   });
+  const searchUser = (value: string) => {
+    return teamEmployees.value?.filter((obj) =>
+      obj.fullname.toLowerCase().includes(value.toLowerCase()),
+    );
+  };
 
   // Возращаем данные
   return {
@@ -119,6 +124,7 @@ export const useTeamStore = defineStore('teamController', () => {
     addEmployees,
     teamEmployees,
     removeFromTeam,
-    removeFromInvites
+    removeFromInvites,
+    searchUser
   };
 });

@@ -79,6 +79,23 @@ const route = useRoute();
 useOutsideClick(refPopup, isShowList);
 
 /**
+ * Вычисляемое ----------------
+ */
+// Отсортированные пользователи, которых нет в группе
+const filterUsers = computed(() => {
+  return teamController.teamEmployees?.filter(
+    (obj) => !groupController.users.some((obj2) => obj.id === obj2.id),
+  );
+});
+// Сортировать поиск
+watch(
+  () => groupController.users,
+  () => {
+    usersSearch.value = filterUsers.value;
+  },
+);
+
+/**
  * Получение данных ----------------
  */
 // Работники
@@ -97,7 +114,7 @@ if (!teamController.employees) {
   );
   teamController.setEmployees(employees);
 } else {
-  usersSearch.value = teamController.teamEmployees || [];
+  usersSearch.value = filterUsers.value;
 }
 
 /**
@@ -121,11 +138,11 @@ const addUser = (value: TUser) => {
 // Поиск пользователя
 const onSearchUser = useDebounce(async () => {
   if (inputValue.value) {
-    usersSearch.value = teamController.teamEmployees?.filter((obj) =>
+    usersSearch.value = filterUsers.value?.filter((obj) =>
       obj.fullname.toLowerCase().includes(inputValue.value.toLowerCase()),
     );
   } else {
-    usersSearch.value = teamController.teamEmployees;
+    usersSearch.value = filterUsers.value;
   }
 }, 250);
 
@@ -139,13 +156,15 @@ const onAddUsersToGroup = async () => {
   };
 
   // Добавить пользователей в группу
-  const { message } = await useCustomFetch(`team/groups/employees/add`, {
+  const { data } = await useCustomFetch(`team/groups/employees/add`, {
     body: dto,
     method: 'POST',
   });
 
-  if (message) {
+  if (data) {
     groupController.closeAddUsers();
+    groupController.addUsers(users.value);
+    users.value = [];
   }
 };
 </script>

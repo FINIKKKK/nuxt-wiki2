@@ -1,12 +1,5 @@
 <template>
   <NuxtLayout name="main" :nav="nav" :title="group.name">
-    <!-- Warning -->
-    <UIWarning
-      v-if="groupController.successMessage"
-      :message="groupController.successMessage"
-      class="warning"
-    />
-
     <!-- Поиск и кнопка добавления новых пользователей -->
     <GroupPageField />
 
@@ -28,6 +21,13 @@
 import { useTeamStore } from '~/stores/TeamContoller';
 import { useCustomFetch } from '~/hooks/useCustomFetch';
 import { useGroupStore } from '~/stores/GroupController';
+
+/**
+ * Мета ----------------
+ */
+definePageMeta({
+  middleware: 'owner-access',
+});
 
 /**
  * Переменные ----------------
@@ -52,7 +52,6 @@ const nav = [
   { label: $t.title, link: `${teamController.activeTeamSlug}/settings/groups` },
   { label: group.name, link: route.fullPath },
 ];
-console.log(group);
 </script>
 
 <!-- ----------------------------------------------------- -->

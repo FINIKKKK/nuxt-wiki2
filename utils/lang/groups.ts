@@ -27,7 +27,8 @@ export default {
       name: 'Имя и фамилия',
       email: 'E-mail',
       last_activity: 'Последняя активность',
-      btnRemove: 'Удалить из группы',
+      remove: 'Удалить из группы',
+      confirm: 'Вы действительно хотите удалить пользователя из группы?'
     },
   },
   en: {
@@ -58,7 +59,8 @@ export default {
       name: 'Name and surname',
       email: 'E-mail',
       last_activity: 'Last activity',
-      btnRemove: 'Remove from group',
+      remove: 'Remove from group',
+      confirm: 'Do you really want to remove a user from a group?'
     },
   },
 };

@@ -17,28 +17,30 @@
       <!-- TBody -->
       <tbody>
         <!-- Загрузка -->
-        <LoadingTableItem
-          :count="7"
+        <tr
+          class="item"
           v-for="(item, index) in Array(10)"
-          :key="index"
           v-if="requestController.loading[url]"
-        />
+          :key="index"
+        >
+          <th v-for="(item, index) in Array(6)" :key="index">
+            <p class="loading">0</p>
+          </th>
+        </tr>
 
         <template v-else>
           <!-- Приглашения -->
           <EmployeesPageItem
-            v-for="employee in teamController.employees?.invites"
+            v-for="employee in employeesController.employeesSearch?.invites"
             :key="employee.id"
             :data="employee"
             type="invite"
-            @removeFromInvites="teamController.removeFromInvites(employee.id)"
           />
           <!-- Соотрудники -->
           <EmployeesPageItem
-            v-for="employee in teamController.employees?.employees"
+            v-for="employee in employeesController.employeesSearch?.employees"
             :key="employee.id"
             :data="employee"
-            @removeFromTeam="teamController.removeFromTeam(employee.id)"
           />
         </template>
       </tbody>
@@ -56,7 +58,7 @@ import { useCustomFetch } from '~/hooks/useCustomFetch';
 import { TEmployees } from '~/utils/types/team';
 import { useRequestStore } from '~/stores/RequestController';
 import { useTeamStore } from '~/stores/TeamContoller';
-import { TUser } from '~/utils/types/account';
+import { useEmployeesStore } from '~/stores/EmployeesController';
 
 /**
  * Переменные ----------------
@@ -64,7 +66,7 @@ import { TUser } from '~/utils/types/account';
 const url = 'team/employees';
 const requestController = useRequestStore();
 const teamController = useTeamStore();
-const employeesList = ref<TEmployees | null>(null);
+const employeesController = useEmployeesStore();
 const $t = await useTranslate('employees');
 
 /**
@@ -80,6 +82,7 @@ const { data: employees } = await useCustomFetch<TEmployees>(url, {
   },
 });
 teamController.setEmployees(employees);
+// employeesController.changeUsersList();
 
 /**
  * Методы ----------------
@@ -92,7 +95,7 @@ const getEmployees = async () => {
       query: {
         team_id: teamController.activeTeamId,
         limit: 15,
-        offset: employeesList.value.length,
+        offset: teamController.employees.employees.length,
         order_by: 'created_at',
         order_sort: 'DESC',
       },
@@ -102,12 +105,8 @@ const getEmployees = async () => {
       isEnd = true;
     }
 
-    employees.value = [
-      ...employeesList.value,
-      ...newEmployees.invites,
-      ...newEmployees.employees,
-    ];
     teamController.addEmployees(newEmployees);
+    employeesController.changeUsersList();
   }
 };
 </script>

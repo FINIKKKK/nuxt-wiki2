@@ -4,7 +4,7 @@
     :isOpen="props.isOpen"
     @close="emits('close')"
   >
-    <p class="text">{{ $t.addUsers.text }}</p>
+    <p class="text">{{ $t?.addUsers.text }}</p>
 
     <!-- Поле ввода с разделением элементов -->
     <UIInputSplit
@@ -19,7 +19,7 @@
       @click="onAddUsers"
       :class="{ disabled: requestController.loading[url] }"
     >
-      {{ $t.addUsers.btn }}
+      {{ $t?.addUsers.btn }}
     </button>
   </Popup>
 </template>
@@ -81,10 +81,7 @@ const onAddUsers = async () => {
   });
 
   if (message) {
-    employeesController.closeAddUsers();
-    emails.value = [];
-    errors.value = [] as any;
-    employeesController.setSuccessMessage($t.addUsers.successMessage);
+    window.location.reload()
   }
 };
 </script>

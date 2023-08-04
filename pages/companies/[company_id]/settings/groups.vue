@@ -33,6 +33,13 @@ import { useTeamStore } from '~/stores/TeamContoller';
 import { TGroup } from '~/utils/types/group';
 
 /**
+ * Мета ----------------
+ */
+definePageMeta({
+  middleware: 'owner-access',
+});
+
+/**
  * Переменные ----------------
  */
 const $t = await useTranslate('groups');

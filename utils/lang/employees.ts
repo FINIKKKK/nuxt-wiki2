@@ -16,6 +16,8 @@ export default {
       btnEdit: 'Изменить уровень доступа',
       btnRemove: 'Удалить из компании',
       btnCancel: 'Отменить приглашение',
+      confirm: 'Вы действительно хотите удалить пользователя из компании?',
+      confirm2: 'Вы действительно хотите отменить приглашение?'
     },
     addUsers: {
       title: 'Добавить сотрудника',
@@ -56,6 +58,8 @@ export default {
       btnEdit: 'Change access level',
       btnRemove: 'Remove from company',
       btnCancel: 'Cancel the invitation ',
+      confirm: 'Do you really want to remove a user from a company?',
+      confirm2: 'Do you really want to cancel the invitation?'
     },
     addUsers: {
       title: 'Add employee',

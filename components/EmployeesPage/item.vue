@@ -4,7 +4,11 @@
     <th>{{ props.data.fullname ? props.data.fullname : '-' }}</th>
     <th>{{ props.data.email }}</th>
     <th>
-      {{ props.data.logged_in ? useFormatDate(props.data.logged_in, userController.lang) : '-' }}
+      {{
+        props.data.logged_in
+          ? useFormatDate(props.data.logged_in, userController.lang)
+          : '-'
+      }}
     </th>
     <th>
       {{ props.type === 'invite' ? $t.table.status1 : $t.table.status2 }}
@@ -55,11 +59,6 @@ const props = defineProps<{
 }>();
 
 /**
- * События ----------------
- */
-const emits = defineEmits(['removeFromTeam', 'removeFromInvites']);
-
-/**
  * Переменные ----------------
  */
 const isShowPopup = ref(false);
@@ -73,26 +72,33 @@ const $t = await useTranslate('employees');
  */
 // Удалить пользователя из команды
 const onRemoveFromTeam = async () => {
-  if (window.confirm('Вы точно хотите удалить пользователя из компании?')) {
-    const { data } = await useCustomFetch(`team/employees/dismiss`, {
+  if (window.confirm($t.table.confirm)) {
+    const { message } = await useCustomFetch(`team/employees/dismiss`, {
       body: { team_id: teamController.activeTeamId, user_id: props.data.id },
       method: 'POST',
     });
-    emits('removeFromTeam', props.data.id);
-    isShowPopup.value = false;
+    if (message) {
+      teamController.removeFromTeam(props.data.id);
+      employeesController.changeUsersList();
+      isShowPopup.value = false;
+    }
   } else {
     isShowPopup.value = false;
   }
 };
 // Отменить приглашение
 const onCancelInvite = async () => {
-  if (window.confirm('Вы точно хотите отменить приглашение?')) {
-    const { data } = await useCustomFetch(`team/invites/delete`, {
+  if (window.confirm($t.table.confirm2)) {
+    const { message } = await useCustomFetch(`team/invites/delete`, {
       body: { team_id: teamController.activeTeamId, invite_id: props.data.id },
       method: 'POST',
     });
-    emits('removeFromInvites', props.data.id);
-    isShowPopup.value = false;
+
+    if (message) {
+      teamController.removeFromInvites(props.data.id);
+      employeesController.changeUsersList();
+      isShowPopup.value = false;
+    }
   } else {
     isShowPopup.value = false;
   }

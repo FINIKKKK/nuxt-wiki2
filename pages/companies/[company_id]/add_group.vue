@@ -1,7 +1,11 @@
 <template>
   <NuxtLayout name="main" :title="$t.index.btn" :nav="nav">
     <form class="form" @submit.prevent="onCreateGroup">
-      <UIInput :label="$t.create.input" v-model="inputValue" :errors="errors['name']"/>
+      <UIInput
+        :label="$t.create.input"
+        v-model="inputValue"
+        :errors="errors['name']"
+      />
       <p class="small">
         {{ $t?.create?.smallText1 }}
         <a href="#">{{ $t?.create?.smallLink1 }}</a
@@ -19,8 +23,15 @@
 <script lang="ts" setup>
 import { useTeamStore } from '~/stores/TeamContoller';
 import { useCustomFetch } from '~/hooks/useCustomFetch';
-import {useFormValidation} from "~/hooks/useFormValidation";
-import {GroupScheme} from "~/utils/validation";
+import { useFormValidation } from '~/hooks/useFormValidation';
+import { GroupScheme } from '~/utils/validation';
+
+/**
+ * Мета ----------------
+ */
+definePageMeta({
+  middleware: 'owner-access',
+});
 
 /**
  * Переменные ----------------

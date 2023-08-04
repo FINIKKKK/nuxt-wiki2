@@ -17,7 +17,7 @@
           @click="isShowPopup = !isShowPopup"
         />
         <ul class="popup" v-if="isShowPopup">
-          <li @click="onRemoveFromGroup" v-if="props.type !== 'invite'">
+          <li @click="onRemoveFromGroup">
             <i class="fa-regular fa-cancel" />
             <p>{{ $t.table.remove }}</p>
           </li>
@@ -34,22 +34,16 @@
 import { TUser } from '~/utils/types/account';
 import { useCustomFetch } from '~/hooks/useCustomFetch';
 import { useTeamStore } from '~/stores/TeamContoller';
-import { useEmployeesStore } from '~/stores/EmployeesController';
 import { useUserStore } from '~/stores/UserController';
 import { useFormatDate } from '~/hooks/useFormatData';
+import { useGroupStore } from '~/stores/GroupController';
 
 /**
  * Пропсы ----------------
  */
 const props = defineProps<{
   data: TUser;
-  type?: 'invite';
 }>();
-
-/**
- * События ----------------
- */
-const emits = defineEmits(['removeFromTeam', 'removeFromInvites']);
 
 /**
  * Переменные ----------------
@@ -57,20 +51,28 @@ const emits = defineEmits(['removeFromTeam', 'removeFromInvites']);
 const isShowPopup = ref(false);
 const teamController = useTeamStore();
 const userController = useUserStore();
-const $t = await useTranslate('employees');
+const groupController = useGroupStore();
+const $t = await useTranslate('groups');
+const route = useRoute();
 
 /**
  * Методы ----------------
  */
 // Удалить пользователя из команды
 const onRemoveFromGroup = async () => {
-  if (window.confirm('Вы точно хотите удалить пользователя из компании?')) {
-    const { data } = await useCustomFetch(`team/employees/dismiss`, {
-      body: { team_id: teamController.activeTeamId, user_id: props.data.id },
+  if (window.confirm($t.table.confirm)) {
+    const { message } = await useCustomFetch(`team/groups/employees/delete`, {
+      body: {
+        team_id: teamController.activeTeamId,
+        group_id: route.params.id,
+        users: [props.data.id],
+      },
       method: 'POST',
     });
-    emits('removeFromTeam', props.data.id);
-    isShowPopup.value = false;
+    if (message) {
+      groupController.removeUser(props.data.id);
+      isShowPopup.value = false;
+    }
   } else {
     isShowPopup.value = false;
   }

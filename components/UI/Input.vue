@@ -280,6 +280,9 @@ if (props.type_input === 'textarea') {
       display: flex;
       align-items: center;
     }
+    .flex {
+      padding-right: 110px;
+    }
   }
   .url {
     position: absolute;
@@ -304,7 +307,6 @@ if (props.type_input === 'textarea') {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding-right: 110px;
 }
 
 .btn {

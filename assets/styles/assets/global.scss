@@ -280,6 +280,7 @@ a.btn {
 .loading {
   background: #e5e5e5;
   position: relative;
+  font-size: 0;
   &::before {
     position: absolute;
     content: '';

@@ -132,16 +132,6 @@ if (!teamController.employees) {
 }
 
 /**
- * Вычисляемое ----------------
- */
-// Сортировать список работников при поиске
-watch(inputValue, () => {
-  employeesList.value = teamController.teamEmployees?.filter((obj: TUser) =>
-    obj.fullname.toLowerCase().includes(inputValue.value.toLowerCase()),
-  );
-});
-
-/**
  * Методы ----------------
  */
 // Добавить работника в область редактирования доступа
@@ -163,11 +153,9 @@ const addEmployeesAccess = (value: TUser) => {
 // Поиск пользователя
 const onSearchUser = useDebounce(async () => {
   if (inputValue.value) {
-    employeesSearch.value = employeesList.value.filter((obj) =>
-      obj.fullname.toLowerCase().includes(inputValue.value.toLowerCase()),
-    );
+    employeesSearch.value = teamController.searchUser(inputValue.value);
   } else {
-    employeesSearch.value = employeesList.value;
+    employeesSearch.value = teamController.teamEmployees;
   }
 }, 250);
 </script>
