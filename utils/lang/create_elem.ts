@@ -3,6 +3,7 @@ export default {
     articleTitle: 'Заголовок статьи',
     sectionTitle: 'Заголовок раздела',
     tab: 'Добавить вкладку',
+    tab2: 'Вкладка',
     select: 'Выберите раздел',
     body: 'Введите текст',
     tags: 'Тэги',
@@ -16,6 +17,7 @@ export default {
     draftBtn2: 'Обновить черновик',
     saved: 'Сохранено',
     confirm: 'Вы уверены, что хотите покинуть эту страницу?',
+    tab_confirm: 'Вы уверены, что хотите удалить вкладку?',
     accessPopup: {
       title: 'Доступ',
       text: 'itl.wiki создана для совместной работы, делитесь контентом, который вы создаете, с вашей командой',
@@ -32,6 +34,7 @@ export default {
     articleTitle: 'Article title',
     sectionTitle: 'Section title',
     tab: 'Add a tab',
+    tab2: 'Tab',
     select: 'Select a section',
     body: 'Enter the text',
     tags: 'Tags',
@@ -45,6 +48,7 @@ export default {
     draftBtn2: 'Update a draft',
     saved: 'Saved',
     confirm: 'Are you sure you want to leave this page?',
+    tab_confirm: 'Are you sure you want to delete the tab?',
     accessPopup: {
       title: 'Access',
       text: 'itl.wiki is designed for collaboration, share the content you create with your team',

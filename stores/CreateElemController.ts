@@ -24,6 +24,7 @@ export const useCreateElemStore = defineStore('createElemController', () => {
   const errors: Ref<any> = ref([]);
   const isPublish = ref(false);
   const article = ref<TArticleEdit | null>(null);
+  const activeTab = ref<number>(0);
 
   /**
    * Методы ----------------
@@ -37,8 +38,21 @@ export const useCreateElemStore = defineStore('createElemController', () => {
   const setTabs = (value: TTab[]) => {
     tabs.value = value;
   };
+  const setActiveTab = (index: number) => {
+    activeTab.value = index;
+  };
   const addTab = (value: TTab) => {
     tabs.value.push(value);
+  };
+  const editTab = (index: number, name: string) => {
+    tabs.value[index].name = name;
+  };
+  const removeTab = (index: number) => {
+    tabs.value.splice(index, 1);
+    if (activeTab.value === index) {
+      console.log(activeTab.value);
+      activeTab.value = 0;
+    }
   };
   const setTags = (value: number[]) => {
     tags.value = value;
@@ -89,6 +103,8 @@ export const useCreateElemStore = defineStore('createElemController', () => {
     select,
     tabs,
     tags,
+    activeTab,
+    setActiveTab,
     abilities,
     isOpenTags,
     isOpenAccess,
@@ -98,6 +114,8 @@ export const useCreateElemStore = defineStore('createElemController', () => {
     setSelect,
     setTabs,
     addTab,
+    editTab,
+    removeTab,
     setTags,
     addTag,
     setAbilities,
