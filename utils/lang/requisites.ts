@@ -7,6 +7,7 @@ export default {
     add: 'Добавить реквизиты',
     edit: 'Изменить реквизиты',
     btn: 'Добавить',
+    btn2: 'Изменить',
     table: {
       requisites: 'Реквизиты компании',
       name: 'Название организации',
@@ -28,6 +29,7 @@ export default {
     add: 'Add requisites',
     edit: 'Edit requisites',
     btn: 'Add',
+    btn2: 'Edit',
     table: {
       requisites: 'Реквизиты компании',
       name: 'Название организации',

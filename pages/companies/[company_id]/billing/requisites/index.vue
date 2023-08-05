@@ -1,35 +1,28 @@
 <template>
   <NuxtLayout name="main" :nav="nav">
-    <NuxtLink
-      class="btn"
-      :to="`${teamController.activeTeamSlug}/requisites/edit`"
-    >
-      {{ $t?.edit }}
-    </NuxtLink>
-
     <div class="requisites">
       <h3>{{ $t.table.requisites }}</h3>
       <table>
         <tbody>
           <tr>
             <th>{{ $t.table.name }}</th>
-            <th>{{ requisites.requisites?.name }}</th>
+            <th>{{ requisitesController.requisites.requisites?.name }}</th>
           </tr>
           <tr>
             <th>{{ $t.table.bin }}</th>
-            <th>{{ requisites.requisites?.BIN }}</th>
+            <th>{{ requisitesController.requisites.requisites?.BIN }}</th>
           </tr>
           <tr>
             <th>{{ $t.table.bik }}</th>
-            <th>{{ requisites.requisites?.BIK }}</th>
+            <th>{{ requisitesController.requisites.requisites?.BIK }}</th>
           </tr>
           <tr>
             <th>{{ $t.table.account }}</th>
-            <th>{{ requisites.requisites?.account }}</th>
+            <th>{{ requisitesController.requisites.requisites?.account }}</th>
           </tr>
           <tr>
             <th>{{ $t.table.address }}</th>
-            <th>{{ requisites.requisites?.address }}</th>
+            <th>{{ requisitesController.requisites.requisites?.address }}</th>
           </tr>
           <tr>
             <th>{{ $t.table.person }}</th>
@@ -66,6 +59,13 @@
         </tbody>
       </table>
     </div>
+
+    <NuxtLink
+      class="btn"
+      :to="`${teamController.activeTeamSlug}/billing/requisites/edit`"
+    >
+      {{ $t?.edit }}
+    </NuxtLink>
   </NuxtLayout>
 </template>
 
@@ -74,15 +74,14 @@
 
 <script lang="ts" setup>
 import { useTeamStore } from '~/stores/TeamContoller';
-import { useCustomFetch } from '~/hooks/useCustomFetch';
 import { useUserStore } from '~/stores/UserController';
-import { TRequisites } from '~/utils/types/billing';
+import { useRequisitesStore } from '~/stores/RequisitesController';
 
 /**
  * Мета ----------------
  */
 definePageMeta({
-  middleware: 'owner-access',
+  middleware: ['owner-access', 'requisites'],
 });
 
 /**
@@ -90,6 +89,7 @@ definePageMeta({
  */
 const $t = await useTranslate('requisites');
 const teamController = useTeamStore();
+const requisitesController = useRequisitesStore();
 const userController = useUserStore();
 const route = useRoute();
 const nav = [
@@ -99,26 +99,16 @@ const nav = [
     link: route.fullPath,
   },
 ];
-
-/**
- * Получение данных ----------------
- */
-// Данные реквизитов
-const { data: requisites } = await useCustomFetch<TRequisites>(
-  `billing/requisites`,
-  {
-    query: { team_id: teamController.activeTeamId },
-  },
-);
 </script>
 
 <!-- ----------------------------------------------------- -->
 <!-- ----------------------------------------------------- -->
 
 <style lang="scss" scoped>
-.btn {
-  margin-bottom: 40px;
+.contact {
+  margin-bottom: 40px !important;
 }
+
 .requisites {
   &:not(:last-child) {
     margin-bottom: 80px;

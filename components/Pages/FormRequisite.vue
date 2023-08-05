@@ -1,6 +1,10 @@
 <template>
-  <NuxtLayout name="main" :nav="nav" :title="$t.add">
-    <form @submit.prevent="onAddRequisites" class="form">
+  <NuxtLayout
+    name="main"
+    :nav="nav"
+    :title="props.type === 'edit' ? $t.edit : $t.add"
+  >
+    <form @submit.prevent="onAddOrEdit" class="form">
       <UIInput
         :label="$t.table.name"
         v-model="inputName"
@@ -29,7 +33,9 @@
         v-model="inputAddress"
         :errors="errors['address']"
       />
-      <button class="btn">{{ $t?.btn }}</button>
+      <button class="btn">
+        {{ props.type === 'edit' ? $t?.btn2 : $t?.btn }}
+      </button>
     </form>
   </NuxtLayout>
 </template>
@@ -42,19 +48,22 @@ import { useTeamStore } from '~/stores/TeamContoller';
 import { useFormValidation } from '~/hooks/useFormValidation';
 import { useCustomFetch } from '~/hooks/useCustomFetch';
 import { RequisiteSchema } from '~/utils/validation';
+import { useRequisitesStore } from '~/stores/RequisitesController';
 
 /**
- * Мета ----------------
+ * Пропсы ----------------
  */
-definePageMeta({
-  middleware: 'owner-access',
-});
+const props = defineProps<{
+  type?: 'edit' | 'add';
+}>();
 
 /**
  * Переменные ----------------
  */
 const $t = await useTranslate('requisites');
 const teamController = useTeamStore();
+const requisitesController = useRequisitesStore();
+
 const route = useRoute();
 const nav = [
   { label: $t.nav.billing, link: `${teamController.activeTeamSlug}/billing` },
@@ -76,10 +85,21 @@ const inputAccount = ref('');
 const inputAddress = ref('');
 
 /**
+ * Получение данных ----------------
+ */
+if (props.type === 'edit') {
+  inputName.value = requisitesController.requisites?.name;
+  inputBIN.value = requisitesController.requisites?.BIN;
+  inputBIK.value = requisitesController.requisites?.BIK;
+  inputAccount.value = requisitesController.requisites?.account;
+  inputAddress.value = requisitesController.requisites?.address;
+}
+
+/**
  * Методы ----------------
  */
-// Добавить реквизиты
-const onAddRequisites = async () => {
+// Добавить или изменить реквизиты
+const onAddOrEdit = async () => {
   // Данные
   const dto = {
     team_id: teamController.activeTeamId,
@@ -94,13 +114,16 @@ const onAddRequisites = async () => {
   const isValid = await validateForm(dto, RequisiteSchema);
   if (!isValid) return false;
 
-  // Добавить реквизиты
-  const { data } = await useCustomFetch(`billing/requisites/add`, {
-    body: dto,
-    method: 'POST',
-  });
+  // Добавить или изменить реквизиты
+  const { data, message } = await useCustomFetch(
+    `billing/requisites/${props.type === 'edit' ? 'edit' : 'add'}`,
+    {
+      body: dto,
+      method: 'POST',
+    },
+  );
 
-  if (data) {
+  if (data || message) {
     await router.push(`${teamController.activeTeamSlug}/billing/requisites`);
   }
 };
