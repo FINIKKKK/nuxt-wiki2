@@ -2,28 +2,31 @@
   <NuxtLayout name="main" :nav="nav" :title="$t.add">
     <form @submit.prevent="onAddRequisites" class="form">
       <UIInput
-        :label="$t.input.name"
+        :label="$t.table.name"
         v-model="inputName"
         :errors="errors['name']"
       />
       <UIInput
-        :label="$t.input.bin"
+        :label="$t.table.bin"
         v-model="inputBIN"
-        :errors="errors['bin']"
+        :errors="errors['BIN']"
+        @input="inputBIN = inputBIN.toUpperCase()"
       />
       <UIInput
-        :label="$t.input.bik"
+        :label="$t.table.bik"
         v-model="inputBIK"
-        :errors="errors['bik']"
+        :errors="errors['BIK']"
+        @input="inputBIK = inputBIK.toUpperCase()"
       />
       <UIInput
-        :label="$t.input.account"
+        :label="$t.table.account"
         v-model="inputAccount"
         :errors="errors['account']"
+        @input="inputAccount = inputAccount.toUpperCase()"
       />
       <UIInput
-        :label="$t.input.address"
-        v-model="inputAccount"
+        :label="$t.table.address"
+        v-model="inputAddress"
         :errors="errors['address']"
       />
       <button class="btn">{{ $t?.btn }}</button>
@@ -38,7 +41,7 @@
 import { useTeamStore } from '~/stores/TeamContoller';
 import { useFormValidation } from '~/hooks/useFormValidation';
 import { useCustomFetch } from '~/hooks/useCustomFetch';
-import {RequisiteSchema} from "~/utils/validation";
+import { RequisiteSchema } from '~/utils/validation';
 
 /**
  * Мета ----------------

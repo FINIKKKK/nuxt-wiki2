@@ -134,8 +134,8 @@ export const GroupScheme = yup.object().shape({
  */
 export const RequisiteSchema = yup.object().shape({
   name: yup.string().required('required'),
-  bin: yup.string().required('required').length(12, 'bin_length'),
-  bik: yup.string().required('required').length(9, 'bik_length'),
-  account: yup.string().required('required').matches(/^\d+$/, 'account'),
+  BIN: yup.string().required('required').length(12, 'bin_length'),
+  BIK: yup.string().required('required').length(9, 'bik_length'),
+  account: yup.string().required('required'),
   address: yup.string().required('required'),
 });
