@@ -3,12 +3,6 @@
   <div class="items">
     <h3 class="title">{{ elemController.section?.name }}</h3>
     <ul>
-<!--      <div-->
-<!--        class="loading"-->
-<!--        v-for="(item, index) in Array(5)"-->
-<!--        :key="index"-->
-<!--        v-if="isLoading"-->
-<!--      ></div>-->
       <template
         v-for="section in elemController.section?.child"
         :key="section.id"
@@ -19,12 +13,8 @@
   </div>
 
   <!-- Посты -->
-<!--  <div class="items" v-if="isLoading">-->
-<!--    <h3>{{ $t.home.articles }}</h3>-->
-<!--    <div class="loading" v-for="(item, index) in Array(10)" :key="index"></div>-->
-<!--  </div>-->
   <div class="items" v-if="articles?.length">
-    <h3>{{ $t.home.articles }}</h3>
+    <h3>{{ $t?.home.articles }}</h3>
     <ul>
       <template v-for="article in articles" :key="article.id">
         <SidebarItem :data="article" type="article" />
@@ -85,13 +75,13 @@ const isLoading = computed(() => {
   }
 }
 
-.loading {
-  width: 100%;
-  height: 30px;
-  border-radius: 3px;
-  overflow: hidden;
-  &:not(:last-child) {
-    margin-bottom: 10px;
-  }
-}
+//.loading {
+//  width: 100%;
+//  height: 30px;
+//  border-radius: 3px;
+//  overflow: hidden;
+//  &:not(:last-child) {
+//    margin-bottom: 10px;
+//  }
+//}
 </style>

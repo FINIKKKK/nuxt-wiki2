@@ -2,13 +2,13 @@
   <Popup :isOpen="props.isOpen" @close="emits('close')">
     <!-- Сменить мод -->
     <div class="header">
-      <h3 class="title">{{ $t.sharePopup.title }}</h3>
+      <h3 class="title">{{ $t?.sharePopup.title }}</h3>
       <UIToggle v-model="publicCheck" type="big" @click="onChangeMode" />
     </div>
 
     <template v-if="publicCheck">
-      <p class="text">{{ $t.sharePopup.text1 }}</p>
-      <p class="text">{{ $t.sharePopup.text2 }}</p>
+      <p class="text">{{ $t?.sharePopup.text1 }}</p>
+      <p class="text">{{ $t?.sharePopup.text2 }}</p>
 
       <!-- Поле ввода с ссылкой -->
       <UIInput
@@ -26,11 +26,11 @@
 
       <!-- Дополнительные настройки -->
       <div class="option">
-        <p>{{ $t.sharePopup.comments }}</p>
+        <p>{{ $t?.sharePopup.comments }}</p>
         <UIToggle v-model="commentsCheck" />
       </div>
       <div class="option">
-        <p>{{ $t.sharePopup.indexing }}</p>
+        <p>{{ $t?.sharePopup.indexing }}</p>
         <UIToggle v-model="indexingCheck" />
       </div>
     </template>
@@ -64,13 +64,17 @@ const emits = defineEmits(['close']);
 const teamController = useTeamStore();
 const route = useRoute();
 const config = useRuntimeConfig();
-const linkValue = ref(`${config.public.url}article/public/${route.params.id}`);
+const elemController = useElemStore();
+const linkValue = ref(
+  `${config.public.url}${teamController.activeTeamSlug}/${
+    elemController.type === 'section' ? 'sections' : 'articles'
+  }/public/${route.params.id}`,
+);
 const inputMessage = ref('');
 const publicCheck = ref(props.isPublic);
 const commentsCheck = ref(false);
 const indexingCheck = ref(false);
 const $t = await useTranslate('elem');
-const elemController = useElemStore();
 
 /**
  * Методы ----------------

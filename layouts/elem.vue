@@ -23,7 +23,7 @@
         <ul class="elem__info">
           <!-- Автор -->
           <li class="elem__info-item">
-            {{ $t.author }}:
+            {{ $t?.author }}:
             <span>{{
               `${props.data?.creator.first_name} ${props.data?.creator.last_name}`
             }}</span>
@@ -112,8 +112,8 @@ const nav = [
   },
   {
     label:
-      props.data.name !== sectionsController.breadCrumbs[1]?.name &&
-      props.data.name !== sectionsController.breadCrumbs[0]?.name
+      props.data.name !== sectionsController?.breadCrumbs[1]?.name &&
+      props.data.name !== sectionsController?.breadCrumbs[0]?.name
         ? props.data.name
         : null,
     link: `${teamController.activeTeamSlug}/articles/${props.data.id}`,

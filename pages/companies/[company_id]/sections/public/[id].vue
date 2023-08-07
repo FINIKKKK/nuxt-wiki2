@@ -1,5 +1,5 @@
 <template>
-  <PagesSection />
+  <PagesSection :is-public="true" />
 </template>
 
 <!-- ----------------------------------------------------- -->

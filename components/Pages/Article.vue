@@ -55,7 +55,7 @@ import { useElemStore } from '~/stores/ElemController';
  * Пропсы ----------------
  */
 const props = defineProps<{
-  type?: 'public';
+  isPublic?: boolean;
 }>();
 
 /**
