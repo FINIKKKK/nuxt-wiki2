@@ -2,7 +2,7 @@
 export default defineNuxtConfig({
   devtools: { enabled: true },
   css: ['@/assets/styles/style.scss'],
-  modules: ['@pinia/nuxt', '@nuxtjs/svg-sprite'],
+  modules: ['@pinia/nuxt'],
   vite: {
     css: {
       preprocessorOptions: {
@@ -22,4 +22,13 @@ export default defineNuxtConfig({
       apiUrl: 'https://api.wiki.itl.systems/',
     },
   },
+  // websockets: {
+  //   path: '/ws',
+  //   sockets: [
+  //     {
+  //       name: 'local',
+  //       url: 'https://api.wiki.itl.systems/',
+  //     },
+  //   ],
+  // },
 });

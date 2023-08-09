@@ -1,6 +1,7 @@
 import { useTeamStore } from '~/stores/TeamContoller';
 import { useCustomFetch } from '~/hooks/useCustomFetch';
-import {TActiveTeam} from "~/utils/types/team";
+import { TActiveTeam } from '~/utils/types/team';
+import { useUserStore } from '~/stores/UserController';
 
 /**
  * ------------------------------------------------------------
@@ -12,6 +13,7 @@ export default defineNuxtRouteMiddleware(async (to, from) => {
    * Переменные ----------------
    */
   const teamController = useTeamStore();
+  const userController = useUserStore();
 
   /**
    * Проверка команды ----------------
@@ -31,13 +33,24 @@ export default defineNuxtRouteMiddleware(async (to, from) => {
         teamController.setActiveTeam(data);
       }
     }
+
+    // Получение данных биллинга пользователя
+    if (teamController.isOwner && !userController.billing) {
+      const { data: billing } = await useCustomFetch(`billing`, {
+        query: {
+          team_id: teamController.activeTeamId,
+        },
+      });
+      userController.setBillingData(billing);
+    }
   }
   // Если пользователь не находиться на страницах команды
   else {
     // Если установлена активная команда
     if (teamController.activeTeam) {
-      // Тогда ее обнуляем
+      // Тогда ее обнуляем данные
       teamController.setActiveTeam(null);
+      userController.setBillingData(null);
     }
   }
 });
