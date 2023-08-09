@@ -91,7 +91,7 @@ const filterUsers = computed(() => {
 watch(
   () => groupController.users,
   () => {
-    usersSearch.value = filterUsers.value;
+    usersSearch.value = filterUsers.value || [];
   },
 );
 
@@ -114,7 +114,7 @@ if (!teamController.employees) {
   );
   teamController.setEmployees(employees);
 } else {
-  usersSearch.value = filterUsers.value;
+  usersSearch.value = filterUsers.value || [];
 }
 
 /**
@@ -137,12 +137,12 @@ const addUser = (value: TUser) => {
 
 // Поиск пользователя
 const onSearchUser = useDebounce(async () => {
-  if (inputValue.value) {
+  if (inputValue.value && filterUsers.value) {
     usersSearch.value = filterUsers.value?.filter((obj) =>
       obj.fullname.toLowerCase().includes(inputValue.value.toLowerCase()),
     );
   } else {
-    usersSearch.value = filterUsers.value;
+    if (filterUsers.value) usersSearch.value = filterUsers.value;
   }
 }, 250);
 

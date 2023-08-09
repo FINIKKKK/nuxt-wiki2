@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia';
 import { TUser, UserDataDto } from '~/utils/types/account';
-import { TMyBilling, TPlan } from '~/utils/types/plan';
+import { TMyBilling } from '~/utils/types/billing';
 
 /**
  * --------------------------------

@@ -101,7 +101,7 @@ const accessArrEdit = accessArr.map((item) => ({
   label: $t2.access[item.label],
 }));
 const refEmployees = ref(null);
-const employeesSearch = ref([]);
+const employeesSearch = ref<TUser[]>([]);
 
 /**
  * Хуки ----------------
@@ -155,7 +155,8 @@ const onSearchUser = useDebounce(async () => {
   if (inputValue.value) {
     employeesSearch.value = teamController.searchUser(inputValue.value);
   } else {
-    employeesSearch.value = teamController.teamEmployees;
+    if (teamController.teamEmployees)
+      employeesSearch.value = teamController.teamEmployees;
   }
 }, 250);
 </script>

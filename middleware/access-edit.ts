@@ -1,10 +1,10 @@
 import { useTeamStore } from '~/stores/TeamContoller';
 import { useCustomFetch } from '~/hooks/useCustomFetch';
 import { TSectionEdit } from '~/utils/types/secton';
-import { useSectionsStore } from '~/stores/SectionsController';
 import { TArticleEdit, TTabParse } from '~/utils/types/article';
 import { useCreateElemStore } from '~/stores/CreateElemController';
 import { useUserStore } from '~/stores/UserController';
+import {useSectionsStore} from "~/stores/SectionsController";
 
 /**
  * ------------------------------------------------------------

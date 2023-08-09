@@ -8,11 +8,11 @@
     ></div>
 
     <!-- Сообщение, если нету элементов -->
-    <p v-if="!articleList?.length">{{ $t.moder.empty }}</p>
+    <p v-if="!articleList?.length">{{ $t?.moder.empty }}</p>
 
     <!-- Элементы -->
     <Item
-      v-for="article in articles"
+      v-for="article in articleList"
       :key="article.id"
       :data="article"
       place="moderation"
@@ -64,7 +64,7 @@ articleList.value = articles;
  */
 // Удалить элемент из списка  (событие)
 const removeFromModeration = (id: number) => {
-  articles = articles.filter((obj: TArticle) => obj.id !== id);
+  articleList.value = articles.filter((obj: TArticle) => obj.id !== id);
 };
 
 // Получение новых статей на модерации

@@ -22,6 +22,7 @@
 import { useSidebarStore } from '~/stores/SidebarController';
 import { useTeamStore } from '~/stores/TeamContoller';
 import { useSectionsStore } from '~/stores/sectionsController';
+import { useElemStore } from '~/stores/ElemController';
 
 /**
  * Переменные ----------------
@@ -30,6 +31,7 @@ const route = useRoute();
 const sidebarController = useSidebarStore();
 const sectionsController = useSectionsStore();
 const teamController = useTeamStore();
+const elemController = useElemStore();
 const $t = await useTranslate('sidebar');
 
 /**
@@ -45,7 +47,7 @@ const isShow = computed(
 const link = computed(() => {
   if (
     sectionsController.breadCrumbs?.length === 1 &&
-    sectionsController.isArticle
+    elemController.type === 'article'
   ) {
     return `${teamController.activeTeamSlug}/sections/${
       sectionsController.breadCrumbs[sectionsController.breadCrumbs?.length - 1]
@@ -53,7 +55,7 @@ const link = computed(() => {
     }`;
   } else if (sectionsController.breadCrumbs?.length !== 1) {
     return `${teamController.activeTeamSlug}/sections/${
-      sectionsController.isArticle
+      elemController.type === 'article'
         ? sectionsController.breadCrumbs[
             sectionsController.breadCrumbs?.length - 1
           ]?.id

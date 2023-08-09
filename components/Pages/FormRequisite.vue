@@ -47,7 +47,7 @@
 import { useTeamStore } from '~/stores/TeamContoller';
 import { useFormValidation } from '~/hooks/useFormValidation';
 import { useCustomFetch } from '~/hooks/useCustomFetch';
-import { RequisiteSchema } from '~/utils/validation';
+import { RequisiteScheme } from '~/utils/validation';
 import { useRequisitesStore } from '~/stores/RequisitesController';
 
 /**
@@ -88,11 +88,11 @@ const inputAddress = ref('');
  * Получение данных ----------------
  */
 if (props.type === 'edit') {
-  inputName.value = requisitesController.requisites?.name;
-  inputBIN.value = requisitesController.requisites?.BIN;
-  inputBIK.value = requisitesController.requisites?.BIK;
-  inputAccount.value = requisitesController.requisites?.account;
-  inputAddress.value = requisitesController.requisites?.address;
+  inputName.value = requisitesController.requisites?.requisites.name || '';
+  inputBIN.value = requisitesController.requisites?.requisites.BIN || '';
+  inputBIK.value = requisitesController.requisites?.requisites.BIK || '';
+  inputAccount.value = requisitesController.requisites?.requisites.account || '';
+  inputAddress.value = requisitesController.requisites?.requisites.address || '';
 }
 
 /**
@@ -111,7 +111,7 @@ const onAddOrEdit = async () => {
   };
 
   // Валидируем данные
-  const isValid = await validateForm(dto, RequisiteSchema);
+  const isValid = await validateForm(dto, RequisiteScheme);
   if (!isValid) return false;
 
   // Добавить или изменить реквизиты

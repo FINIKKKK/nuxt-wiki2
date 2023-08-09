@@ -2,10 +2,7 @@ import { useTeamStore } from '~/stores/TeamContoller';
 import { useCustomFetch } from '~/hooks/useCustomFetch';
 import { TArticleData } from '~/utils/types/article';
 import { useElemStore } from '~/stores/ElemController';
-import { TSectionData } from '~/utils/types/secton';
-import { useSectionsStore } from '~/stores/SectionsController';
 import { useCommentsStore } from '~/stores/CommentsController';
-import { useRequestStore } from '~/stores/RequestController';
 
 /**
  * ------------------------------------------------------------
@@ -41,9 +38,6 @@ export default defineNuxtRouteMiddleware(async (to, from) => {
     commentsController.setComments(article.article.comments);
     elemController.changeTypeElem('article');
     elemController.setArticle(article);
-
-    console.log('error');
-    console.log(error);
 
     // Данные статьи
     const { data: articleEdit } = await useCustomFetch<TArticleData>(

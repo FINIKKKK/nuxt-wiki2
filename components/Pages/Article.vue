@@ -2,11 +2,11 @@
   <NuxtLayout
     name="elem"
     type="article"
-    :data="elemController.article.article"
-    :properties="elemController.article.properties"
+    :data="elemController.article?.article"
+    :properties="elemController.article?.properties"
   >
     <!-- Вкладки -->
-    <ElemPageTabs :tabs="elemController.tabs" />
+    <ElemPageTabs :tabs="elemController.tabs || []" />
 
     <!-- Дополнительный функционал -->
     <div class="footer">
@@ -46,10 +46,9 @@
 import { useTeamStore } from '~/stores/TeamContoller';
 import { useSectionsStore } from '~/stores/sectionsController';
 import { useCustomFetch } from '~/hooks/useCustomFetch';
-import { TArticleData } from '~/utils/types/article';
-import { TSectionData } from '~/utils/types/secton';
-import { useCommentsStore } from '~/stores/CommentsController';
+import { TSection } from '~/utils/types/secton';
 import { useElemStore } from '~/stores/ElemController';
+import {TTabParse} from "~/utils/types/article";
 
 /**
  * Пропсы ----------------
@@ -78,37 +77,16 @@ const $t = await useTranslate('elem');
  */
 // Разделы
 if (!elemController.section) {
-  const { data: section } = await useCustomFetch<TSectionData>(
-      `team/section`,
-      {
-        query: {
-          team_id: teamController.activeTeamId,
-          section_id: elemController.article.article.section.id,
-        },
-      },
-  );
+  const { data: section } = await useCustomFetch<TSection>(`team/section`, {
+    query: {
+      team_id: teamController.activeTeamId,
+      section_id: elemController.article?.article.section.id,
+    },
+  });
   // Сохраняем в хранилище
   elemController.setSection(section.section);
   sectionsController.setBreadCrumbs(section.section.breadcrumbs);
 }
-
-// Данные статьи
-const { data: article, error } = await useCustomFetch<TArticleData>(
-    `team/article`,
-    {
-      query: {
-        team_id: teamController.activeTeamId,
-        article_id: route.params.id,
-      },
-    },
-);
-// Сохраняем в хранилище
-// commentsController.setComments(article.article.comments);
-elemController.changeTypeElem('article');
-elemController.setArticle(article);
-
-console.log('error');
-console.log(error);
 
 /**
  * Методы ----------------

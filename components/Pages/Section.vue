@@ -4,12 +4,12 @@
       Элементы раздела
     ---------------------------------------->
     <Item
-      v-for="item in elemController.section.child"
+      v-for="item in elemController.section?.child"
       :data="item"
       type="section"
       :key="item.id"
     />
-    <template v-for="item in elemController.section.items">
+    <template v-for="item in elemController.section?.items">
       <Item
         :data="item"
         type="article"

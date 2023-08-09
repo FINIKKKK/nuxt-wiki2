@@ -78,7 +78,7 @@ const $t = await useTranslate('sidebar');
  * Вычисляемое ----------------
  */
 // Показывать ли статью в поиске?
-const isShowItem = computed(() => (creatorId, statusId) => {
+const isShowItem = computed(() => (creatorId: number, statusId: number) => {
   if (statusId === 1) {
     return userController.user?.id === creatorId;
   } else if (statusId === 2) {

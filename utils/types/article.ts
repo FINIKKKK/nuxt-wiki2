@@ -22,6 +22,7 @@ export interface TArticle extends TBase {
     id: number;
     code: string;
   };
+  public: number;
 }
 
 export interface TTab {
@@ -34,6 +35,7 @@ export interface TTabParse {
   id: number;
   name: string;
   content: string;
+  comments: TComment[]
 }
 
 export interface TArticleEdit {

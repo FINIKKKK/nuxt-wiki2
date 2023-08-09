@@ -8,7 +8,7 @@
         v-for="(letter, index) in alphabet"
         :key="index"
         class="letter"
-        :class="index === activeLetter"
+        :class="index === activeLetter?.index"
         @click="() => setActiveLetter(index, letter)"
       >
         {{ letter }}
@@ -54,7 +54,7 @@ definePageMeta({
 const userController = useUserStore();
 const teamController = useTeamStore();
 const tagsController = useTagsStore();
-const activeLetter = ref<{ index: number; letter: number } | null>(null);
+const activeLetter = ref<{ index: number; letter: string } | null>(null);
 const $t = await useTranslate('tags');
 
 // Вывод русских букв
@@ -90,7 +90,7 @@ const { data } = await useCustomFetch<TTag[]>(`team/settings/tags`, {
  * Методы ----------------
  */
 // Установить активную букву
-const setActiveLetter = async (index, letter) => {
+const setActiveLetter = async (index: number, letter: string) => {
   activeLetter.value = {
     index,
     letter,
@@ -100,7 +100,7 @@ const setActiveLetter = async (index, letter) => {
   const { data } = await useCustomFetch<TTag[]>(`team/settings/tags/find`, {
     query: {
       team_id: teamController.activeTeamId,
-      query: activeLetter.value.letter.toLowerCase(),
+      query: activeLetter.value?.letter.toLowerCase(),
     },
   });
   tagsController.setTags(data);

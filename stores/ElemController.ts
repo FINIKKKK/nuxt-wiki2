@@ -1,10 +1,9 @@
 import { defineStore } from 'pinia';
-import { TArticleData, TTab } from '~/utils/types/article';
-import { OutputBlockData } from '@editorjs/editorjs';
-import { TSectionData } from '~/utils/types/secton';
+import { TArticleData, TTab, TTabParse } from '~/utils/types/article';
+import { BlockId, OutputBlockData } from '@editorjs/editorjs';
+import { TSection } from '~/utils/types/secton';
 import { TAbilities, TAbility } from '~/utils/types/team';
 import { TUser } from '~/utils/types/account';
-import { values } from 'lodash';
 
 /**
  * --------------------------------
@@ -16,7 +15,6 @@ export const useElemStore = defineStore('elemController', () => {
    * Переменные ----------------
    */
   const router = useRouter();
-  const route = useRoute();
 
   /**
    * Свойства ----------------
@@ -25,8 +23,8 @@ export const useElemStore = defineStore('elemController', () => {
   const isOpenAccess: Ref<boolean> = ref(false);
   const isOpenShare: Ref<boolean> = ref(false);
   const article: Ref<TArticleData | null> = ref(null);
-  const section: Ref<TSectionData | null> = ref(null);
-  const activeTitle: Ref<any> = ref(null);
+  const section: Ref<TSection | null> = ref(null);
+  const activeTitle: Ref<BlockId | null> = ref(null);
   const activeTab = ref<{ index: number; id: number | null }>({
     index: 0,
     id: null,
@@ -36,7 +34,7 @@ export const useElemStore = defineStore('elemController', () => {
   const blockId = ref<any>(null);
   const abilities = ref<TAbility[]>([]);
   const currentAbility = ref<TAbility | null>(null);
-  const tabs = ref<TTab[]>([]);
+  const tabs = ref<TTabParse[]>([]);
 
   /**
    * Методы ----------------
@@ -65,13 +63,13 @@ export const useElemStore = defineStore('elemController', () => {
   const setArticle = (value: TArticleData | null) => {
     article.value = value;
   };
-  const setSection = (value: TSectionData | null) => {
+  const setSection = (value: TSection | null) => {
     section.value = value;
   };
-  const changeActiveTitle = (value: any) => {
+  const changeActiveTitle = (value: BlockId) => {
     activeTitle.value = value;
     const url = `#${value}`;
-    router.replace({ query: route.query, hash: url });
+    router.replace({ query: { tab: activeTab.value.index }, hash: url });
   };
   const openComments = () => {
     isOpenComments.value = true;
@@ -84,7 +82,7 @@ export const useElemStore = defineStore('elemController', () => {
   };
   const setActiveTab = (index: number, id: number) => {
     activeTab.value = { index, id };
-    router.replace({ query: { tab: index }, hash: route.hash });
+    router.replace({ query: { tab: index } });
   };
   const setActiveBlockId = (value: any) => {
     blockId.value = value;
@@ -104,7 +102,7 @@ export const useElemStore = defineStore('elemController', () => {
   const setCurrentAbility = (value: TAbility | null) => {
     currentAbility.value = value;
   };
-  const setTabs = (value: TTab[]) => {
+  const setTabs = (value: TTabParse[]) => {
     tabs.value = value;
   };
 

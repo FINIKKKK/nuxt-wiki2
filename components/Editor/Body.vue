@@ -42,7 +42,9 @@
             v-else-if="obj.type === 'header' && obj.data.level === 2"
             class="title"
             :id="obj.id"
-            v-observe="() => elemController.changeActiveTitle(obj.id)"
+            v-observe="
+              () => elemController.changeActiveTitle(obj.id)
+            "
           >
             {{ obj.data.text }}
           </h2>
@@ -118,7 +120,7 @@
 </template>
 
 <script lang="ts" setup>
-import { OutputBlockData } from '@editorjs/editorjs';
+import { BlockId, OutputBlockData } from '@editorjs/editorjs';
 import { useElemStore } from '~/stores/ElemController';
 import { TComment } from '~/utils/types/comment';
 import { useCommentsStore } from '~/stores/CommentsController';
@@ -143,8 +145,12 @@ const commentsController = useCommentsStore();
  * Вычисляемое ----------------
  */
 // Комментарии у блока
-const activeComments = (id: any) => {
-  return props.comments?.filter((comment) => comment.block_id === id) || null;
+const activeComments = (id: BlockId) => {
+  return (
+    props.comments?.filter(
+      (comment: TComment) => comment.block_id === Number(id),
+    ) || []
+  );
 };
 
 /**
@@ -155,7 +161,7 @@ const setActiveBlock = (obj: OutputBlockData) => {
   elemController.openComments();
   elemController.setActiveCommentBlock(obj);
   elemController.setActiveBlockId(obj.id);
-  commentsController.setCommentsPopup(activeComments(obj.id));
+  if (obj.id) commentsController.setCommentsPopup(activeComments(obj.id));
 };
 </script>
 

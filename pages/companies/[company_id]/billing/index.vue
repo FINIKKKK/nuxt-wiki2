@@ -49,8 +49,8 @@
 import { useCustomFetch } from '~/hooks/useCustomFetch';
 import { useTeamStore } from '~/stores/TeamContoller';
 import { useUserStore } from '~/stores/UserController';
-import { TMyBilling, TPlan } from '~/utils/types/plan';
 import { useRequestStore } from '~/stores/RequestController';
+import { TPlan } from '~/utils/types/billing';
 
 /**
  * Мета ----------------

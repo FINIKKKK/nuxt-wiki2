@@ -20,45 +20,48 @@
           v-show="index === elemController.activeTab.index"
           :comments="
             !isHistory
-              ? elemController.article.article.tabs[index].comments
-              : null
+              ? elemController.article?.article.tabs[index].comments
+              : []
           "
           :is-history="props.isHistory ? props.isHistory : false"
         />
       </div>
     </div>
 
-    <!--    <template v-for="(tab, index) in props.tabs" v-if="!isHistory">-->
-    <!--      <div-->
-    <!--        class="map"-->
-    <!--        v-if="-->
-    <!--          index === elemController.activeTab.index &&-->
-    <!--          JSON.parse(tab.content).filter((obj: OutputBlockData) => obj.type === 'header')?.length-->
-    <!--        "-->
-    <!--      >-->
-    <!--        <a href="#title" class="caption">-->
-    <!--          <i class="fa-regular fa-align-left" />-->
-    <!--          <p>{{ $t.titles }}</p>-->
-    <!--        </a>-->
-    <!--        <a-->
-    <!--          :href="`#${item.id}`"-->
-    <!--          v-for="item in JSON.parse(tab.content).filter(-->
-    <!--            (obj: OutputBlockData) => obj.type === 'header',-->
-    <!--          )"-->
-    <!--          :key="item.id"-->
-    <!--          class="item"-->
-    <!--          :class="{-->
-    <!--            child: item.data.level === 3,-->
-    <!--            active: elemController.activeTitle === item.id,-->
-    <!--          }"-->
-    <!--        >-->
-    <!--          <i class="fa-regular fa-minus" v-if="item.data.level === 3" />-->
-    <!--          <p>-->
-    <!--            {{ item.data.text }}-->
-    <!--          </p>-->
-    <!--        </a>-->
-    <!--      </div>-->
-    <!--    </template>-->
+    <!--------------------------------------
+     Карта заголовков
+    ---------------------------------------->
+    <template v-for="(tab, index) in props.tabs" v-if="!isHistory">
+      <div
+        class="map"
+        v-if="
+              index === elemController.activeTab.index &&
+              JSON.parse(tab.content).filter((obj: OutputBlockData) => obj.type === 'header')?.length
+            "
+      >
+        <a href="#title" class="caption">
+          <i class="fa-regular fa-align-left" />
+          <p>{{ $t?.titles }}</p>
+        </a>
+        <a
+          :href="`#${item.id}`"
+          v-for="item in JSON.parse(tab.content).filter(
+                (obj: OutputBlockData) => obj.type === 'header',
+              )"
+          :key="item.id"
+          class="item"
+          :class="{
+            child: item.data.level === 3,
+            active: elemController.activeTitle === item.id,
+          }"
+        >
+          <i class="fa-regular fa-minus" v-if="item.data.level === 3" />
+          <p>
+            {{ item.data.text }}
+          </p>
+        </a>
+      </div>
+    </template>
   </div>
 </template>
 
@@ -100,7 +103,6 @@ if (tabIndex) {
 } else {
   elemController.setActiveTab(0, props.tabs[0].id);
 }
-const hash = route.hash;
 
 /**
  * Методы ----------------

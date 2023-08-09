@@ -78,7 +78,11 @@ const createElemController = useCreateElemStore();
 const tabNameValue = ref('');
 const addTab = () => {
   if (tabNameValue.value) {
-    createElemController.addTab({ name: tabNameValue.value, content: [] });
+    createElemController.addTab({
+      name: tabNameValue.value,
+      content: [],
+      comments: [],
+    });
     tabNameValue.value = '';
   }
 };

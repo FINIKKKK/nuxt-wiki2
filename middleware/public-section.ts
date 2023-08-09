@@ -1,6 +1,6 @@
 import { useCustomFetch } from '~/hooks/useCustomFetch';
 import { useElemStore } from '~/stores/ElemController';
-import { TSectionData } from '~/utils/types/secton';
+import { TSection } from '~/utils/types/secton';
 import { useSectionsStore } from '~/stores/SectionsController';
 
 /**
@@ -20,15 +20,12 @@ export default defineNuxtRouteMiddleware(async (to, from) => {
    */
   try {
     // Данные раздела
-    const { data: section } = await useCustomFetch<TSectionData>(
-      `team/section`,
-      {
-        query: {
-          team_id: to.params.company_id,
-          section_id: to.params.id,
-        },
+    const { data: section } = await useCustomFetch<TSection>(`team/section`, {
+      query: {
+        team_id: to.params.company_id,
+        section_id: to.params.id,
       },
-    );
+    });
     // Сохраняем в хранилище
     elemController.setSection(section.section);
     sectionsController.setBreadCrumbs(section.section.breadcrumbs);

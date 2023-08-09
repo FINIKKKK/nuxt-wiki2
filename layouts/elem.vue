@@ -121,8 +121,8 @@ const nav = [
 ];
 const isPublic =
   elemController.type === 'section'
-    ? Boolean(elemController.section.public)
-    : Boolean(elemController.article.article.public);
+    ? Boolean(elemController.section?.public)
+    : Boolean(elemController.article?.article.public);
 
 /**
  * Методы ----------------

@@ -6,23 +6,23 @@
         <tbody>
           <tr>
             <th>{{ $t.table.name }}</th>
-            <th>{{ requisitesController.requisites.requisites?.name }}</th>
+            <th>{{ requisitesController.requisites?.requisites.name }}</th>
           </tr>
           <tr>
             <th>{{ $t.table.bin }}</th>
-            <th>{{ requisitesController.requisites.requisites?.BIN }}</th>
+            <th>{{ requisitesController.requisites?.requisites.BIN }}</th>
           </tr>
           <tr>
             <th>{{ $t.table.bik }}</th>
-            <th>{{ requisitesController.requisites.requisites?.BIK }}</th>
+            <th>{{ requisitesController.requisites?.requisites.BIK }}</th>
           </tr>
           <tr>
             <th>{{ $t.table.account }}</th>
-            <th>{{ requisitesController.requisites.requisites?.account }}</th>
+            <th>{{ requisitesController.requisites?.requisites.account }}</th>
           </tr>
           <tr>
             <th>{{ $t.table.address }}</th>
-            <th>{{ requisitesController.requisites.requisites?.address }}</th>
+            <th>{{ requisitesController.requisites?.requisites.address }}</th>
           </tr>
           <tr>
             <th>{{ $t.table.person }}</th>
@@ -46,7 +46,7 @@
         <tbody>
           <tr>
             <th>{{ $t.table.person }}</th>
-            <th>{{ userController.user?.fullname }}</th>
+            <th></th>
           </tr>
           <tr>
             <th>{{ $t.table.email }}</th>

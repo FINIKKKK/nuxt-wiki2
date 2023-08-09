@@ -102,7 +102,7 @@ onMounted(async () => {
               // Данные
               const formData = new FormData();
               formData.append('image', file);
-              formData.append('team_id', teamController.activeTeamId);
+              formData.append('team_id', String(teamController.activeTeamId));
 
               // Обновляем аватарку
               const { data } = await useCustomFetch<{ url: string }>(

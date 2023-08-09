@@ -95,7 +95,7 @@ const getEmployees = async () => {
       query: {
         team_id: teamController.activeTeamId,
         limit: 15,
-        offset: teamController.employees.employees.length,
+        offset: teamController.employees?.employees?.length,
         order_by: 'created_at',
         order_sort: 'DESC',
       },

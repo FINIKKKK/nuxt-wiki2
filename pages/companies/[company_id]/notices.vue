@@ -149,7 +149,7 @@ const addNotice = (id: number) => {
 
   if (!notice?.read_at) {
     readNotices.value.push(id);
-    notice.read_at = new Date().toString();
+    if (notice) notice.read_at = new Date().toString();
     onReadNotices();
   }
 };

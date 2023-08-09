@@ -129,7 +129,7 @@ const cursorPosition = ref(0);
  *  ----------------
  */
 
-const getInputCursorPosition = (input) => {
+const getInputCursorPosition = (input: any) => {
   const position = commentsController.fieldValue.indexOf('@');
   if (position !== -1) {
     const inputRect = input.getBoundingClientRect();
@@ -157,7 +157,7 @@ const handleInput = (e: any) => {
   commentsController.fieldValue = e.target.textContent;
 
   const selection = window.getSelection();
-  cursorPosition.value = selection.anchorOffset;
+  cursorPosition.value = selection?.anchorOffset;
 
   const inputLength = e.data ? e.data.length : 0;
   if (inputLength > 0) {

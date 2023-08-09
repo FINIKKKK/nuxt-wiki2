@@ -9,14 +9,17 @@ export interface TSection extends TBase {
   description: string;
   parent_id: number | null;
   parent: TSection | null;
-  section?: TSection;
   creator: TUser;
-  child: TSection[];
   children: TSection[];
-  items: TArticle[];
   team?: TTeam;
   breadcrumbs: TParent[];
   status_id?: number;
+  section: TSection;
+  child: TSection[];
+  items: TArticle[];
+  canEdit: boolean;
+  canShare: boolean;
+  public: number;
 }
 
 export interface TSectionEdit {
@@ -24,14 +27,6 @@ export interface TSectionEdit {
   abilities: {
     users: TAbility[];
   };
-  canEdit: boolean;
-  canShare: boolean;
-}
-
-export interface TSectionData {
-  section: TSection;
-  child: TSection[];
-  items: TArticle[];
   canEdit: boolean;
   canShare: boolean;
 }

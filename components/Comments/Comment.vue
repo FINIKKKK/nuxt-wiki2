@@ -12,7 +12,7 @@
     <p class="text" v-html="commentText(props.data.text)" />
 
     <!-- Попап с кнопками -->
-    <div class="extra" tabindex="2" @blur="isShowPopup">
+    <div class="extra" ref="refPopup">
       <i class="fa-regular fa-ellipsis-h" @click="isShowPopup = !isShowPopup" />
 
       <ul class="popup" v-if="isShowPopup">
@@ -37,6 +37,7 @@ import { useCustomFetch } from '~/hooks/useCustomFetch';
 import { useTeamStore } from '~/stores/TeamContoller';
 import { useCommentsStore } from '~/stores/CommentsController';
 import { useUserStore } from '~/stores/UserController';
+import { useOutsideClick } from '~/hooks/useOutsideClick';
 
 /**
  * Пропсы ----------------
@@ -54,6 +55,12 @@ const teamController = useTeamStore();
 const commentsController = useCommentsStore();
 const userController = useUserStore();
 const $t = await useTranslate('comments');
+const refPopup = ref(null);
+
+/**
+ * Получение данных ----------------
+ */
+useOutsideClick(refPopup, isShowPopup);
 
 //
 const commentText = computed(() => (text: string) => {

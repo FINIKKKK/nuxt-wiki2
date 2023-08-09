@@ -1,6 +1,6 @@
 <template>
   <div class="base">
-    <div class="main">
+    <div class="main" v-if="elemController.article">
       <!-- Warning -->
       <UIWarning
         v-if="successMessage"
@@ -13,7 +13,7 @@
       ---------------------------------------->
       <div class="elem__header">
         <!-- Заголовок -->
-        <h1 class="title">{{ elemController.article.article.name }}</h1>
+        <h1 class="title">{{ elemController.article?.article.name }}</h1>
       </div>
 
       <!--------------------------------------
@@ -22,8 +22,8 @@
       <ul class="elem__info">
         <!-- Автор -->
         <li class="elem__info-item">
-          {{ $t.author }}:
-          <span>{{ `${history.creator.fullname}` }}</span>
+          {{ $t?.author }}:
+          <span>{{ `${history?.creator.fullname}` }}</span>
         </li>
         <!-- Время -->
         <li
@@ -42,7 +42,7 @@
         Вкладки
       ---------------------------------------->
       <ElemPageTabs
-        :tabs="elemController.article.article.tabs"
+        :tabs="elemController.article?.article.tabs || []"
         :isHistory="true"
         @activeTab="setActiveTab"
       />
@@ -61,10 +61,10 @@
             <div class="author">{{ activeHistory.creator.fullname }}</div>
           </div>
           <div class="btn btn2 tag" v-if="true">
-            <p>{{ $t.popup.current }}</p>
+            <p>{{ $t?.popup.current }}</p>
           </div>
           <div class="btn btn2" v-else @click="onRollback">
-            <p>{{ $t.popup.recover }}</p>
+            <p>{{ $t?.popup.recover }}</p>
             <i class="fa-regular fa-refresh" />
           </div>
         </li>
@@ -83,7 +83,7 @@ import { THistory } from '~/utils/types/article';
 import { useDateString } from '~/hooks/useDateString';
 import { useUserStore } from '~/stores/UserController';
 import { useFormatDate } from '~/hooks/useFormatData';
-import {useCreateElemStore} from "~/stores/CreateElemController";
+import { useCreateElemStore } from '~/stores/CreateElemController';
 
 /**
  * Мета ----------------
@@ -103,7 +103,7 @@ const activeTab = ref<{ index: number; id: number | null }>({
   index: 0,
   id: null,
 });
-const activeHistory = ref(null);
+const activeHistory = ref<THistory | null>(null);
 const $t = await useTranslate('history');
 const elemController = useCreateElemStore();
 
@@ -117,7 +117,7 @@ const { data: history } = await useCustomFetch<THistory>(
   {
     query: {
       team_id: teamController.activeTeamId,
-      tab_id: elemController.article.article.tabs[0].id,
+      tab_id: elemController.article?.article.tabs[0].id,
     },
   },
 );
@@ -127,7 +127,7 @@ activeHistory.value = history;
  * Методы ----------------
  */
 // Сменить активную вкладку (событие)
-const setActiveTab = async ({ index, id }) => {
+const setActiveTab = async ({ index, id }: { index: number; id: number }) => {
   activeTab.value.index = index;
   activeTab.value.id = id;
 
@@ -152,7 +152,7 @@ const onRollback = async () => {
         body: {
           team_id: teamController.activeTeamId,
           tab_id: activeTab.value.id,
-          history_id: activeHistory.value.id,
+          history_id: activeHistory.value?.id,
         },
         method: 'POST',
       },

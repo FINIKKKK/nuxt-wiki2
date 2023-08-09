@@ -6,7 +6,7 @@
       v-if="
         elemController.type === 'article' &&
         teamController.isAccessEdit &&
-        elemController.article.article.status_id === 2
+        elemController.article?.article.status_id === 2
       "
       @click="onPublicArticle"
       :title="$t.controls.moder"
@@ -125,7 +125,7 @@ const isAccessEdit = computed(() => {
       ? elemController.article?.article?.creator.id
       : elemController.section?.creator.id;
 
-  return userController.user.id === typeElem || teamController.isAccessEdit;
+  return userController.user?.id === typeElem || teamController.isAccessEdit;
 });
 
 /**

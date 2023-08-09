@@ -103,7 +103,7 @@ sectionsController.setSections(sections);
  */
 // Ошибки
 const errors = computed(() => {
-  return createElemController.errors.map((obj) => $t2[obj]);
+  return createElemController.errors.map((obj: any) => $t2[obj]);
 });
 
 // Конвертировать массив разделов
