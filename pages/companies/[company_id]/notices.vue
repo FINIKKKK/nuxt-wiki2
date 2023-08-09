@@ -1,14 +1,14 @@
 <template>
   <NuxtLayout name="main" :title="$t.title" :nav="nav">
     <!--------------------------------------
-     Табдица уведомлений
+     Табдица
     ---------------------------------------->
     <table class="table" v-if="notificationsList.length">
       <thead>
         <tr>
           <th>{{ $t.user }}</th>
           <th>{{ $t.action }}</th>
-          <th>{{ $t.date }}</th>
+          <th>{{ $t?.date }}</th>
           <th>{{ $t.status }}</th>
         </tr>
       </thead>
@@ -31,11 +31,11 @@
           </th>
           <th>{{ useFormatDate(notice.created_at, userController.lang) }}</th>
           <th class="status">
-            <p v-if="notice.read_at">{{ $t.status_read }}</p>
+            <p v-if="notice.read_at">{{ $t?.status_read }}</p>
             {{
               notice.read_at
                 ? useFormatDate(notice.read_at, userController.lang)
-                : $t.status_unread
+                : $t?.status_unread
             }}
           </th>
         </tr>
@@ -43,13 +43,14 @@
     </table>
 
     <!-- Сообщение, если нету элементов -->
-    <p v-else>{{ $t.no_notices }}</p>
+    <p v-else>{{ $t?.no_notices }}</p>
 
     <!-- Loading -->
     <LoadingTableItem
       v-if="requestController.loading[url]"
       v-for="(item, index) in Array(10)"
       :key="index"
+      :count="4"
     />
 
     <div v-observe="() => getNotices()"></div>
@@ -89,7 +90,6 @@ const { data: notifications } = await useCustomFetch<TNotifications>(url, {
   query: { team_id: teamController.activeTeamId, limit: 15, offset: 0 },
 });
 notificationsList.value.push(...notifications.notifications);
-console.log(notifications);
 
 /**
  * Вычисляемое ----------------

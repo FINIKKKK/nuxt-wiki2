@@ -28,6 +28,11 @@ export default defineNuxtRouteMiddleware(async (to, from) => {
         query: { team_id: id },
       });
 
+      // Прокидываем ошибку, если нет данного польователя в команде
+      if (data.team && !data.role) {
+        throw createError({ statusCode: 403 });
+      }
+
       if (data) {
         // Сохраняем в хранилище данные команды
         teamController.setActiveTeam(data);

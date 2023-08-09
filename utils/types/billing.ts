@@ -35,3 +35,10 @@ export interface TMyBilling {
   balance: number;
   plan: TPlan;
 }
+
+export interface TInvoice extends TBase {
+  amount: number;
+  status: string;
+  payment_type: string;
+  type: string
+}
