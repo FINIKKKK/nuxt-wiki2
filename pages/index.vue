@@ -14,7 +14,7 @@
         <Team :data="team" />
       </template>
 
-      <nuxt-link to="companies/75/sections/public/261">section</nuxt-link>
+      <nuxt-link to="companies/75/sections/public/261">sections/public/261</nuxt-link>
     </ul>
   </NuxtLayout>
 </template>

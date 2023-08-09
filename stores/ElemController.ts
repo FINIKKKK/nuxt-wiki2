@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia';
-import { TArticleData } from '~/utils/types/article';
+import { TArticleData, TTab } from '~/utils/types/article';
 import { OutputBlockData } from '@editorjs/editorjs';
 import { TSectionData } from '~/utils/types/secton';
 import { TAbilities, TAbility } from '~/utils/types/team';
@@ -36,6 +36,7 @@ export const useElemStore = defineStore('elemController', () => {
   const blockId = ref<any>(null);
   const abilities = ref<TAbility[]>([]);
   const currentAbility = ref<TAbility | null>(null);
+  const tabs = ref<TTab[]>([]);
 
   /**
    * Методы ----------------
@@ -103,6 +104,9 @@ export const useElemStore = defineStore('elemController', () => {
   const setCurrentAbility = (value: TAbility | null) => {
     currentAbility.value = value;
   };
+  const setTabs = (value: TTab[]) => {
+    tabs.value = value;
+  };
 
   // Возращаем данные
   return {
@@ -136,5 +140,7 @@ export const useElemStore = defineStore('elemController', () => {
     setAbilities,
     currentAbility,
     setCurrentAbility,
+    tabs,
+    setTabs,
   };
 });

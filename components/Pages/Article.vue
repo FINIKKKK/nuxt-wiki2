@@ -2,11 +2,11 @@
   <NuxtLayout
     name="elem"
     type="article"
-    :data="article.article"
-    :properties="article.properties"
+    :data="elemController.article.article"
+    :properties="elemController.article.properties"
   >
     <!-- Вкладки -->
-    <ElemPageTabs :tabs="articleEdit.article.tabs" />
+    <ElemPageTabs :tabs="elemController.tabs" />
 
     <!-- Дополнительный функционал -->
     <div class="footer">
@@ -64,7 +64,6 @@ const props = defineProps<{
 const route = useRoute();
 const teamController = useTeamStore();
 const sectionsController = useSectionsStore();
-const commentsController = useCommentsStore();
 const elemController = useElemStore();
 const isRated = ref<number | null>(null);
 const smiles = [
@@ -77,44 +76,39 @@ const $t = await useTranslate('elem');
 /**
  * Получение данных ----------------
  */
-// Данные статьи
-const { data: article } = await useCustomFetch<TArticleData>(`team/article`, {
-  query: {
-    team_id: teamController.activeTeamId,
-    article_id: route.params.id,
-  },
-});
-// Сохраняем комментарии в хранилище
-commentsController.setComments(article.article.comments);
-elemController.changeTypeElem('article');
-elemController.setArticle(article);
-
-// Данные статьи
-const { data: articleEdit } = await useCustomFetch<TArticleData>(
-  `team/article/edit`,
-  {
-    query: {
-      team_id: teamController.activeTeamId,
-      article_id: route.params.id,
-    },
-  },
-);
-elemController.changeAbilities([]);
-elemController.setAbilities(articleEdit.abilities);
-elemController.setCurrentAbility(null);
-
 // Разделы
 if (!elemController.section) {
-  const { data: section } = await useCustomFetch<TSectionData>(`team/section`, {
-    query: {
-      team_id: teamController.activeTeamId,
-      section_id: article.article.section.id,
-    },
-  });
+  const { data: section } = await useCustomFetch<TSectionData>(
+      `team/section`,
+      {
+        query: {
+          team_id: teamController.activeTeamId,
+          section_id: elemController.article.article.section.id,
+        },
+      },
+  );
   // Сохраняем в хранилище
   elemController.setSection(section.section);
   sectionsController.setBreadCrumbs(section.section.breadcrumbs);
 }
+
+// Данные статьи
+const { data: article, error } = await useCustomFetch<TArticleData>(
+    `team/article`,
+    {
+      query: {
+        team_id: teamController.activeTeamId,
+        article_id: route.params.id,
+      },
+    },
+);
+// Сохраняем в хранилище
+// commentsController.setComments(article.article.comments);
+elemController.changeTypeElem('article');
+elemController.setArticle(article);
+
+console.log('error');
+console.log(error);
 
 /**
  * Методы ----------------
