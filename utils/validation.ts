@@ -132,10 +132,17 @@ export const GroupScheme = yup.object().shape({
 /**
  * Создание реквизита
  */
-export const RequisiteSchema = yup.object().shape({
+export const RequisiteScheme = yup.object().shape({
   name: yup.string().required('required'),
   BIN: yup.string().required('required').length(12, 'bin_length'),
   BIK: yup.string().required('required').length(9, 'bik_length'),
   account: yup.string().required('required'),
   address: yup.string().required('required'),
+});
+
+/**
+ * Создание счета
+ */
+export const InvoiceScheme = yup.object().shape({
+  amount: yup.number().required('required').min(9, 'amount_min'),
 });

@@ -1,5 +1,5 @@
 <template>
-  <div class="billing" tabindex="1" @blur="isOpenPopup = false">
+  <div class="billing" ref="refPopup">
     <!-- Баланс -->
     <div class="balance" @click="isOpenPopup = !isOpenPopup">
       <i class="fa-regular fa-tenge" />
@@ -25,6 +25,7 @@
 <script lang="ts" setup>
 import { useTeamStore } from '~/stores/TeamContoller';
 import { useUserStore } from '~/stores/UserController';
+import { useOutsideClick } from '~/hooks/useOutsideClick';
 
 /**
  * Переменные ----------------
@@ -33,6 +34,12 @@ const teamController = useTeamStore();
 const userController = useUserStore();
 const isOpenPopup = ref(false);
 const $t = await useTranslate('billing');
+const refPopup = ref(null);
+
+/**
+ * Хуки ----------------
+ */
+useOutsideClick(refPopup, isOpenPopup);
 </script>
 
 <!-- ----------------------------------------------------- -->

@@ -13,7 +13,6 @@
       <!-- Поле ввода -->
       <label>
         {{ props.label }}
-        <svg-icon v-if="props.type === 'address'" name="tooltip" />
       </label>
 
       <div class="flex">
@@ -36,9 +35,7 @@
         />
         <input
           v-else
-          :type="
-            props.type === 'password' && !isShowPassword ? 'password' : 'text'
-          "
+          :type="inputType"
           v-model="model"
           :maxlength="props.limit ? props.limit : 200"
           @focus="isFocus = true"
@@ -70,8 +67,8 @@
 
       <!-- Кнопка для показа или скрытия пароля -->
       <div v-if="props.type === 'password'" class="showPassword">
-        <svg-icon
-          :name="isShowPassword ? 'noeye' : 'eye'"
+        <i
+          :class="`fa-regular fa-${isShowPassword ? 'eye-slash' : 'eye'}`"
           v-if="model"
           @click="isShowPassword = !isShowPassword"
         />
@@ -97,7 +94,7 @@ const props = defineProps<{
   label: string;
   modelValue: string;
   errors?: string[];
-  type?: 'password' | 'address' | 'phone';
+  type?: 'password' | 'address' | 'phone' | 'number';
   limit?: number;
   isRead?: boolean;
   message?: string;
@@ -157,6 +154,17 @@ if (props.type_input === 'textarea') {
     }
   });
 }
+
+// Тип у input
+const inputType = computed(() => {
+  if (!isShowPassword.value) {
+    return 'password';
+  } else if (props.type === 'number') {
+    return 'number';
+  } else {
+    return 'text';
+  }
+});
 </script>
 
 <!-- ----------------------------------------------------- -->
@@ -255,16 +263,11 @@ if (props.type_input === 'textarea') {
   }
   .showPassword {
     position: absolute;
-    bottom: 10px;
+    bottom: 12px;
     right: 15px;
     cursor: pointer;
     opacity: 0.5;
     transition: 0.3s;
-    svg {
-      fill: $blue;
-      width: 20px;
-      height: 18px;
-    }
     &:hover {
       opacity: 1;
     }

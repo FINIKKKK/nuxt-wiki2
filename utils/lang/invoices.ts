@@ -11,7 +11,12 @@ export default {
       date: 'Дата',
       status: 'Статус',
     },
-    no_invoices: 'У вас нет списка счетов',
+    no_invoices: 'Список счетов пуст',
+    create: {
+      title: 'Пополнить баланс',
+      input: 'Сумма, которую вы хотите пополнить',
+      btn: 'Пополнить',
+    },
   },
   en: {
     title: 'List of invoices',
@@ -25,6 +30,11 @@ export default {
       date: 'Date',
       status: 'Status',
     },
-    no_invoices: "You don't have a list of accounts",
+    no_invoices: 'The list of accounts is empty',
+    create: {
+      title: 'Top up your balance',
+      input: 'The amount you want to top up',
+      btn: 'Top up',
+    },
   },
 };

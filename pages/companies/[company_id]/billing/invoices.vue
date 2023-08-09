@@ -9,7 +9,7 @@
           <th>{{ $t.table.id }}</th>
           <th>{{ $t.table.amount }}</th>
           <th>{{ $t.table.type }}</th>
-          <th>{{ $t.table.date }}</th>
+          <th>{{ $t.table?.date }}</th>
           <th>{{ $t.table.status }}</th>
         </tr>
       </thead>
@@ -83,13 +83,12 @@ const { data: invoices } = await useCustomFetch<TInvoice[]>(url, {
   query: { team_id: teamController.activeTeamId },
 });
 invoicesList.value = invoices;
-console.log(invoices);
 
 /**
  * Методы ----------------
  */
 // Получение новых данных
-let isEnd = false;
+let isEnd = true;  // Поствать на false, чтобы работало
 const getMoreData = async () => {
   if (!isEnd) {
     const { data: newInvoices } = await useCustomFetch<TInvoice[]>(url, {

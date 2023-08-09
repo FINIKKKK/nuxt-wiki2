@@ -110,7 +110,7 @@ const innerItems: TInnerItem[] = [
       {
         icon: 'dollar-circle',
         label: $t.bank.plans,
-        link: `${teamController.activeTeamSlug}/billing/plans`,
+        link: `${teamController.activeTeamSlug}/billing`,
       },
       {
         icon: 'book-copy',

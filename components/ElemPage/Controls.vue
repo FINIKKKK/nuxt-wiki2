@@ -49,7 +49,7 @@
     <!-- Доступ пользователей и групп -->
     <div
       class="control"
-      v-if="isAccessEdit  && elemController.type === 'article'"
+      v-if="isAccessEdit && elemController.type === 'article'"
       @click="elemController.openAccess()"
       :title="$t.controls.access"
     >
