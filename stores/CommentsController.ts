@@ -31,6 +31,11 @@ export const useCommentsStore = defineStore('commentsController', () => {
       obj.id === value.id ? value : obj,
     );
   };
+  const updateCommentsPopup = (value: TComment) => {
+    commentsPopup.value = commentsPopup.value.map((obj) =>
+        obj.id === value.id ? value : obj,
+    );
+  };
   const removeComment = (id: number) => {
     comments.value = comments.value.filter((obj) => obj.id !== id);
   };
@@ -46,11 +51,12 @@ export const useCommentsStore = defineStore('commentsController', () => {
   const changeFieldValuePopup = (value: string) => {
     fieldValuePopup.value = value;
   };
-  const clearInput = () => {
+  const clearInput = (isBlocks: boolean) => {
     const divInput = document.querySelector('.div_input');
-    if (divInput instanceof HTMLElement) {
-      divInput.innerHTML = '';
-    }
+    const divInput2 = document.querySelector('.div_input2');
+
+    if (isBlocks) divInput2.innerHTML = '';
+    else divInput.innerHTML = '';
   };
   const addCommentPopup = (value: TComment) => {
     commentsPopup.value = [...commentsPopup.value, value];
@@ -61,8 +67,7 @@ export const useCommentsStore = defineStore('commentsController', () => {
   const removeCommentPopup = (id: number) => {
     commentsPopup.value = commentsPopup.value.filter((obj) => obj.id !== id);
   };
-  const onFocus = () => {
-    const divInput = document.querySelector('.div_input');
+  const onFocus = (divInput: HTMLElement) => {
     const selection = window.getSelection();
     const range = document.createRange();
 
@@ -93,6 +98,7 @@ export const useCommentsStore = defineStore('commentsController', () => {
     changeEditCommentPopup,
     removeCommentPopup,
     onFocus,
-    clearInput
+    clearInput,
+    updateCommentsPopup
   };
 });

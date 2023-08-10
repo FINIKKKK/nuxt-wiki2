@@ -11,7 +11,7 @@
             v-if="obj.type === 'paragraph'"
             class="el text"
             v-html="obj.data.text"
-          ></p>
+          />
 
           <!-- list -->
           <ul
@@ -78,7 +78,7 @@
               :checked="obj.data.items[0].checked"
             />
             <label :for="obj.data.items[0].text">{{
-              obj.data.items[0].text
+              obj.data.items[0]?.text
             }}</label>
           </div>
 
@@ -148,7 +148,7 @@ const commentsController = useCommentsStore();
 const activeComments = (id: BlockId) => {
   return (
     props.comments?.filter(
-      (comment: TComment) => comment.block_id === Number(id),
+      (comment: TComment) => comment.block_id === String(id),
     ) || []
   );
 };

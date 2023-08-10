@@ -10,25 +10,7 @@
       type="mini"
     />
 
-    <UIInput
-      :label="$t.input"
-      v-model="commentsController.fieldValuePopup"
-      btnType="fill"
-      :isTextarea="true"
-      @keydown.enter.prevent
-      @btnClick="onAddComment"
-    >
-      <template #btn2 v-if="commentsController.fieldValuePopup">
-        <i class="fa-regular fa-paper-plane" />
-      </template>
-    </UIInput>
-
-    <template
-      v-for="comment in commentsController.commentsPopup"
-      :key="comment"
-    >
-      <CommentsComment :data="comment" />
-    </template>
+    <Comments :isBlocks="true" />
   </Popup>
 </template>
 

@@ -26,7 +26,7 @@
         />
         <div
           v-if="type_input === 'div'"
-          class="div_input"
+          :class="props.className"
           contenteditable
           :maxlength="props.limit ? props.limit : 250"
           @focus="isFocus = true"
@@ -100,6 +100,7 @@ const props = defineProps<{
   message?: string;
   btnType?: 'fill';
   type_input?: 'textarea' | 'div';
+  className?: 'div_input' | 'div_input2';
 }>();
 
 // Значение
@@ -193,7 +194,8 @@ const inputType = computed(() => {
     }
     input,
     textarea,
-    .div_input {
+    .div_input,
+    .div_input2 {
       width: 100%;
       padding: 16px 24px;
       border-radius: 2px;

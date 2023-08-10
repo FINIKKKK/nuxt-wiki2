@@ -44,7 +44,7 @@ import { useOutsideClick } from '~/hooks/useOutsideClick';
  */
 const props = defineProps<{
   data: TComment;
-  type?: 'block';
+  isBlocks?: boolean;
 }>();
 
 /**
@@ -85,7 +85,7 @@ const onRemoveComment = async () => {
     });
 
     if (message) {
-      if (props.type !== 'block') {
+      if (props.isBlocks) {
         // Удаляем комментарий из массива
         commentsController.removeComment(props.data.id);
       } else {
@@ -101,14 +101,29 @@ const onRemoveComment = async () => {
 // Установить редактирование комментария
 const setEditComment = () => {
   const divInput = document.querySelector('.div_input');
-  if (divInput instanceof HTMLElement) {
-    // Вставляем текст комментария в поле ввода
-    divInput.innerHTML = JSON.parse(props.data.text);
+  const divInput2 = document.querySelector('.div_input2');
+  console.log(divInput2.innerHTML);
+
+  if (!props.isBlocks) {
+    if (divInput instanceof HTMLElement) {
+      // Вставляем текст комментария в поле ввода
+      divInput.innerHTML = JSON.parse(props.data.text);
+    }
+    // Изменяем комментарий в массиве
+    commentsController.changeEditComment(props.data);
+    // Устанавливаем фокус в поле ввода
+    commentsController.onFocus(divInput);
+  } else {
+    if (divInput2 instanceof HTMLElement) {
+      // Вставляем текст комментария в поле ввода
+      divInput2.innerHTML = JSON.parse(props.data.text);
+      console.log(JSON.parse(props.data.text));
+    }
+    // Изменяем комментарий в массиве
+    commentsController.changeEditCommentPopup(props.data);
+    // Устанавливаем фокус в поле ввода
+    commentsController.onFocus(divInput2);
   }
-  // Изменяем комментарий в массиве
-  commentsController.changeEditComment(props.data);
-  // Устанавливаем фокус в поле ввода
-  commentsController.onFocus();
   // Убраем попап
   isShowPopup.value = false;
 };

@@ -12,25 +12,29 @@
         class="comment_input"
         @input="handleInput"
         type_input="div"
+        :className="props.isBlocks ? 'div_input2' : 'div_input'"
         @handleInput="handleInput"
         @keydown.enter.prevent="false"
-        v-model="commentsController.fieldValue"
+        v-model="model"
         ref="refInput"
       >
-        <template
-          #btn2
-          v-if="commentsController.fieldValue"
-          title="Редактировать комментарий"
-        >
+        <template #btn2 v-if="model" title="Редактировать комментарий">
           <i
             :class="`fa-regular fa-${
-              commentsController.editComment ? 'edit' : 'paper-plane'
+              commentsController.editComment ||
+              commentsController.editCommentPopup
+                ? 'edit'
+                : 'paper-plane'
             } ${'disabled' && requestController.loading[url]}`"
           />
         </template>
         <template
           #btn3
-          v-if="commentsController.editComment"
+          v-if="
+            props.isBlocks
+              ? commentsController.editCommentPopup
+              : commentsController.editComment
+          "
           title="Отменить редактирование"
         >
           <i
@@ -45,7 +49,6 @@
      Список пользователей
     ---------------------------------------->
     <div class="users popup" v-if="isShowUsers" ref="refPopup">
-      {{ (popupTop, popupLeft) }}
       <User
         v-for="user in teamController.teamEmployees"
         :key="user.id"
@@ -69,6 +72,14 @@ import { TComment } from '~/utils/types/comment';
 import { TUser } from '~/utils/types/account';
 import { useCommentsStore } from '~/stores/CommentsController';
 import { TEmployees } from '~/utils/types/team';
+import { useElemStore } from '~/stores/ElemController';
+
+/**
+ * Пропсы ----------------
+ */
+const props = defineProps<{
+  isBlocks?: boolean;
+}>();
 
 /**
  * Переменные ----------------
@@ -80,7 +91,8 @@ const commentsController = useCommentsStore();
 const url = 'team/comment/add';
 const isShowUsers = ref(false);
 const refInput = ref(null);
-const refPopup = ref();
+const refPopup = ref(null);
+const elemController = useElemStore();
 
 /**
  * Получение данных ----------------
@@ -97,40 +109,72 @@ if (!teamController.employees) {
 }
 
 /**
+ * Вычисляемое ----------------
+ */
+// Значение поля
+const model = computed(() => {
+  return props.isBlocks
+    ? commentsController.fieldValuePopup
+    : commentsController.fieldValue;
+});
+
+/**
  * Методы ----------------
  */
 // Выбрать пользователя из списка
 const selectUser = (user: TUser) => {
-  const divInput = document.querySelector('.div_input');
-  const currentValue = divInput.childNodes;
-
-  // Удаляем последний символ, если он символ "@"
-  if (currentValue.length > 0) {
-    const lastNode = currentValue[currentValue.length - 1];
-    if (lastNode.nodeType === Node.TEXT_NODE) {
-      lastNode.textContent = lastNode.textContent.slice(0, -1);
-    }
-  }
-
   // Добавляем новый span
   const newSpan = document.createElement('span');
   newSpan.textContent = `@${user.fullname} `;
   newSpan.classList.add('input-span');
   newSpan.contentEditable = 'false';
-  divInput.appendChild(newSpan);
 
-  // Сохраняем в хранилище
-  commentsController.changeFieldValue(divInput.innerHTML);
+  if (props.isBlocks) {
+    const divInput2 = document.querySelector('.div_input2');
+    const currentValue2 = divInput2.childNodes;
 
-  // Убираем попап и ставим фокус
+    // Удаляем последний символ, если он символ "@"
+    if (currentValue2.length > 0) {
+      const lastNode = currentValue2[currentValue2.length - 1];
+      if (lastNode.nodeType === Node.TEXT_NODE) {
+        lastNode.textContent = lastNode.textContent.slice(0, -1);
+      }
+    }
+    // Добавляем новый span
+    divInput2.appendChild(newSpan);
+    // Сохраняем в хранилище
+    commentsController.changeFieldValuePopup(divInput2.innerHTML);
+    // Ставим фокус
+    commentsController.onFocus(divInput2);
+  } else {
+    const divInput = document.querySelector('.div_input');
+    const currentValue = divInput.childNodes;
+
+    // Удаляем последний символ, если он символ "@"
+    if (currentValue.length > 0) {
+      const lastNode = currentValue[currentValue.length - 1];
+      if (lastNode.nodeType === Node.TEXT_NODE) {
+        lastNode.textContent = lastNode.textContent.slice(0, -1);
+      }
+    }
+    // Добавляем новый span
+    divInput.appendChild(newSpan);
+    // Сохраняем в хранилище
+    commentsController.changeFieldValue(divInput.innerHTML);
+    // Ставим фокус
+    commentsController.onFocus(divInput);
+  }
+
+  // Убираем попап
   isShowUsers.value = false;
-  commentsController.onFocus();
 };
 
 // Показывать popup при вводе специльных символов
 const handleInput = (e: any) => {
   if (e && e.target) {
-    commentsController.changeFieldValue(e.target?.innerHTML);
+    props.isBlocks
+      ? commentsController.changeFieldValuePopup(e.target?.innerHTML)
+      : commentsController.changeFieldValue(e.target?.innerHTML);
 
     if (e.target?.textContent?.slice(-2) === ' @') {
       isShowUsers.value = true;
@@ -151,6 +195,10 @@ const createOrEditComment = async () => {
     ...(commentsController.editComment && {
       comment_id: commentsController.editComment?.id,
     }),
+    ...(props.isBlocks && {
+      tab_id: elemController.activeTab.id,
+      block_id: elemController.blockId,
+    }),
   };
 
   // ------------------------------------
@@ -164,9 +212,10 @@ const createOrEditComment = async () => {
 
     if (data) {
       // Очищаем поле
-      commentsController.clearInput();
+      commentsController.clearInput(props.isBlocks);
       // Добавляем в массив комментарий
-      commentsController.addComment(data);
+      if (props.isBlocks) commentsController.addCommentPopup(data);
+      else commentsController.addComment(data);
     }
   }
   // ------------------------------------
@@ -181,9 +230,10 @@ const createOrEditComment = async () => {
 
     if (data) {
       // Очищаем поле
-      commentsController.clearInput();
+      commentsController.clearInput(props.isBlocks);
       // Изменяем комментарий в массиве
-      commentsController.updateComments(data);
+      if (props.isBlocks) commentsController.updateComments(data);
+      else commentsController.updateCommentsPopup(data);
     }
   }
 };
@@ -191,7 +241,7 @@ const createOrEditComment = async () => {
 // Отменить редактирование
 const cancelEdit = () => {
   commentsController.changeEditComment(null);
-  commentsController.clearInput();
+  commentsController.clearInput(props.isBlocks);
 };
 </script>
 
