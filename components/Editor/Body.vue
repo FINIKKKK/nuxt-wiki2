@@ -42,9 +42,7 @@
             v-else-if="obj.type === 'header' && obj.data.level === 2"
             class="title"
             :id="obj.id"
-            v-observe="
-              () => elemController.changeActiveTitle(obj.id)
-            "
+            v-observe="() => elemController.changeActiveTitle(obj.id)"
           >
             {{ obj.data.text }}
           </h2>
@@ -86,11 +84,13 @@
 
           <!-- table -->
           <table v-else-if="obj.type === 'table'" class="el table">
-            <tr v-for="(row, index) in obj.data.content" :key="index">
-              <td v-for="(str, index) in row" :key="index">
-                {{ str }}
-              </td>
-            </tr>
+            <tbody>
+              <tr v-for="(row, index) in obj.data.content" :key="index">
+                <td v-for="(str, index) in row" :key="index">
+                  {{ str }}
+                </td>
+              </tr>
+            </tbody>
           </table>
         </div>
 

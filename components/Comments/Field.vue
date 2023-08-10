@@ -45,7 +45,7 @@
      Список пользователей
     ---------------------------------------->
     <div class="users popup" v-if="isShowUsers" ref="refPopup">
-      <!--      :style="{ top: popupTop, left: popupLeft }"-->
+      {{ (popupTop, popupLeft) }}
       <User
         v-for="user in teamController.teamEmployees"
         :key="user.id"
@@ -80,8 +80,6 @@ const commentsController = useCommentsStore();
 const url = 'team/comment/add';
 const isShowUsers = ref(false);
 const refInput = ref(null);
-const popupTop = ref(40);
-const popupLeft = ref(20);
 const refPopup = ref();
 
 /**
@@ -207,24 +205,6 @@ const cancelEdit = () => {
 }
 
 .input {
-  position: relative;
-  .btns {
-    position: absolute;
-    top: 10px;
-    right: 10px;
-  }
-  .svg-btn {
-    width: 30px;
-    height: 30px;
-    background-color: rgba($blue, 0.1);
-    padding: 8px;
-    transition: 0.3s;
-    cursor: pointer;
-    border-radius: 2px;
-    &:hover {
-      background-color: rgba($blue, 0.2);
-    }
-  }
   .close {
     margin-left: 8px;
   }
@@ -233,9 +213,8 @@ const cancelEdit = () => {
 .users {
   max-width: 200px;
   max-height: 200px;
-  top: 40px;
-  right: auto;
-  left: 20px;
+  top: -70px;
+  right: 0;
 }
 </style>
 
