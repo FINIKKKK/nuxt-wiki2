@@ -1,5 +1,8 @@
 <template>
   <div class="field">
+    <!--------------------------------------
+     Поле ввода
+    ---------------------------------------->
     <div class="input">
       <UIInput
         label="Добавить комментарий"
@@ -11,6 +14,7 @@
         type_input="div"
         @handleInput="handleInput"
         @keydown.enter.prevent="false"
+        v-model="commentsController.fieldValue"
         ref="refInput"
       >
         <template
@@ -37,6 +41,9 @@
       </UIInput>
     </div>
 
+    <!--------------------------------------
+     Список пользователей
+    ---------------------------------------->
     <div class="users popup" v-if="isShowUsers" ref="refPopup">
       <!--      :style="{ top: popupTop, left: popupLeft }"-->
       <User
@@ -72,7 +79,6 @@ const teamController = useTeamStore();
 const commentsController = useCommentsStore();
 const url = 'team/comment/add';
 const isShowUsers = ref(false);
-const refDivContent = ref(null);
 const refInput = ref(null);
 const popupTop = ref(40);
 const popupLeft = ref(20);
@@ -116,57 +122,51 @@ const selectUser = (user: TUser) => {
   divInput.appendChild(newSpan);
 
   // Сохраняем в хранилище
-  const newFieldValue = `${commentsController.fieldValue} <span class="input-span">@${user.fullname} </span>`;
-  commentsController.changeFieldValue(newFieldValue);
+  commentsController.changeFieldValue(divInput.innerHTML);
 
   // Убираем попап и ставим фокус
   isShowUsers.value = false;
-  onFocus();
+  commentsController.onFocus();
 };
-
-// Установить фокус
-const onFocus = () => {
-  const selection = window.getSelection();
-  const range = document.createRange();
-  const div = document.querySelector('.div_input');
-  range.selectNodeContents(div);
-  range.collapse(false);
-  selection.removeAllRanges();
-  selection.addRange(range);
-  div.focus();
-};
-
-/**
- *  ----------------
- */
 
 // Показывать popup при вводе специльных символов
 const handleInput = (e: any) => {
-  if (e.target.textContent.slice(-2) === ' @') {
-    isShowUsers.value = true;
-  } else {
-    isShowUsers.value = false;
+  if (e && e.target) {
+    commentsController.changeFieldValue(e.target?.innerHTML);
+
+    if (e.target?.textContent?.slice(-2) === ' @') {
+      isShowUsers.value = true;
+    } else {
+      isShowUsers.value = false;
+    }
   }
 };
 
+// Создать или изменить комментарий
 const createOrEditComment = async () => {
+  // Данные
+  const dto = {
+    team_id: teamController.activeTeamId,
+    entity_type: 'article',
+    entity_id: route.params.id,
+    comment: JSON.stringify(commentsController.fieldValue),
+    ...(commentsController.editComment && {
+      comment_id: commentsController.editComment?.id,
+    }),
+  };
+
   // ------------------------------------
   // Создаем комментарий
   // ------------------------------------
   if (!commentsController.editComment) {
     const { data } = await useCustomFetch<TComment>(url, {
-      body: {
-        team_id: teamController.activeTeamId,
-        entity_type: 'article',
-        entity_id: route.params.id,
-        comment: JSON.stringify(document.querySelector('.div_input').innerHTML),
-      },
+      body: dto,
       method: 'POST',
     });
 
     if (data) {
       // Очищаем поле
-      commentsController.changeFieldValue('');
+      commentsController.clearInput();
       // Добавляем в массив комментарий
       commentsController.addComment(data);
     }
@@ -176,27 +176,24 @@ const createOrEditComment = async () => {
   // ------------------------------------
   else {
     const { data } = await useCustomFetch<TComment>('team/comment/edit', {
-      body: {
-        team_id: teamController.activeTeamId,
-        comment_id: commentsController.editComment?.id,
-        comment: JSON.stringify(refDivContent.value.innerHTML),
-      },
+      body: dto,
       method: 'POST',
     });
     console.log(data);
 
     if (data) {
       // Очищаем поле
-      commentsController.changeFieldValue('');
+      commentsController.clearInput();
       // Изменяем комментарий в массиве
       commentsController.updateComments(data);
     }
   }
 };
 
+// Отменить редактирование
 const cancelEdit = () => {
   commentsController.changeEditComment(null);
-  commentsController.changeFieldValue('');
+  commentsController.clearInput();
 };
 </script>
 

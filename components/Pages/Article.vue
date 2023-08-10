@@ -48,7 +48,6 @@ import { useSectionsStore } from '~/stores/sectionsController';
 import { useCustomFetch } from '~/hooks/useCustomFetch';
 import { TSection } from '~/utils/types/secton';
 import { useElemStore } from '~/stores/ElemController';
-import {TTabParse} from "~/utils/types/article";
 
 /**
  * Пропсы ----------------

@@ -46,6 +46,12 @@ export const useCommentsStore = defineStore('commentsController', () => {
   const changeFieldValuePopup = (value: string) => {
     fieldValuePopup.value = value;
   };
+  const clearInput = () => {
+    const divInput = document.querySelector('.div_input');
+    if (divInput instanceof HTMLElement) {
+      divInput.innerHTML = '';
+    }
+  };
   const addCommentPopup = (value: TComment) => {
     commentsPopup.value = [...commentsPopup.value, value];
   };
@@ -54,6 +60,17 @@ export const useCommentsStore = defineStore('commentsController', () => {
   };
   const removeCommentPopup = (id: number) => {
     commentsPopup.value = commentsPopup.value.filter((obj) => obj.id !== id);
+  };
+  const onFocus = () => {
+    const divInput = document.querySelector('.div_input');
+    const selection = window.getSelection();
+    const range = document.createRange();
+
+    range.selectNodeContents(divInput);
+    range.collapse(false);
+    selection.removeAllRanges();
+    selection.addRange(range);
+    divInput.focus();
   };
 
   // Возращаем данные
@@ -75,5 +92,7 @@ export const useCommentsStore = defineStore('commentsController', () => {
     addCommentPopup,
     changeEditCommentPopup,
     removeCommentPopup,
+    onFocus,
+    clearInput
   };
 });

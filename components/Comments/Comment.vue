@@ -9,7 +9,7 @@
     </div>
 
     <!-- Текст комментария -->
-    <p class="text" v-html="commentText(props.data.text)" />
+    <p class="text" v-html="commentText" />
 
     <!-- Попап с кнопками -->
     <div class="extra" ref="refPopup">
@@ -62,12 +62,15 @@ const refPopup = ref(null);
  */
 useOutsideClick(refPopup, isShowPopup);
 
-//
-const commentText = computed(() => (text: string) => {
+/**
+ * Вычисляемое ----------------
+ */
+// Текст комментария
+const commentText = computed(() => {
   try {
-    return JSON.parse(text);
+    return JSON.parse(props.data.text);
   } catch (error) {
-    return text;
+    return props.data.text;
   }
 });
 
@@ -97,17 +100,15 @@ const onRemoveComment = async () => {
 
 // Установить редактирование комментария
 const setEditComment = () => {
-  if (props.type !== 'block') {
+  const divInput = document.querySelector('.div_input');
+  if (divInput instanceof HTMLElement) {
     // Вставляем текст комментария в поле ввода
-    commentsController.changeFieldValue(props.data.text);
-    // Изменяем комментарий в массиве
-    commentsController.changeEditComment(props.data);
-  } else {
-    // Вставляем текст комментария в поле ввода
-    commentsController.changeFieldValuePopup(props.data.text);
-    // Изменяем комментарий в массиве
-    commentsController.changeEditCommentPopup(props.data);
+    divInput.innerHTML = JSON.parse(props.data.text);
   }
+  // Изменяем комментарий в массиве
+  commentsController.changeEditComment(props.data);
+  // Устанавливаем фокус в поле ввода
+  commentsController.onFocus();
   // Убраем попап
   isShowPopup.value = false;
 };
