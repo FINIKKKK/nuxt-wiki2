@@ -4,7 +4,6 @@
       <UIInput
         label="Добавить комментарий"
         :limit="350"
-        v-model="commentsController.fieldValue"
         @btnClick="createOrEditComment"
         @btnClick2="cancelEdit"
         class="comment_input"
@@ -38,18 +37,15 @@
       </UIInput>
     </div>
 
-    <div
-      class="users popup"
-      v-if="isShowUsers"
-      ref="refPopup"
-    >
-<!--      :style="{ top: popupTop, left: popupLeft }"-->
+    <div class="users popup" v-if="isShowUsers" ref="refPopup">
+      <!--      :style="{ top: popupTop, left: popupLeft }"-->
       <User
         v-for="user in teamController.teamEmployees"
         :key="user.id"
         :data="user"
         className="comment"
         @click="() => selectUser(user)"
+        @keydown.enter="() => selectUser(user)"
       />
     </div>
   </div>
@@ -75,7 +71,7 @@ const requestController = useRequestStore();
 const teamController = useTeamStore();
 const commentsController = useCommentsStore();
 const url = 'team/comment/add';
-const isShowUsers = ref(true);
+const isShowUsers = ref(false);
 const refDivContent = ref(null);
 const refInput = ref(null);
 const popupTop = ref(40);
@@ -99,81 +95,60 @@ if (!teamController.employees) {
 /**
  * Методы ----------------
  */
+// Выбрать пользователя из списка
 const selectUser = (user: TUser) => {
+  const divInput = document.querySelector('.div_input');
+  const currentValue = divInput.childNodes;
+
+  // Удаляем последний символ, если он символ "@"
+  if (currentValue.length > 0) {
+    const lastNode = currentValue[currentValue.length - 1];
+    if (lastNode.nodeType === Node.TEXT_NODE) {
+      lastNode.textContent = lastNode.textContent.slice(0, -1);
+    }
+  }
+
+  // Добавляем новый span
   const newSpan = document.createElement('span');
   newSpan.textContent = `@${user.fullname} `;
   newSpan.classList.add('input-span');
   newSpan.contentEditable = 'false';
-  document.querySelector('.div_input').appendChild(newSpan);
+  divInput.appendChild(newSpan);
 
-  commentsController.changeFieldValue(
-    `${commentsController.fieldValue} <span class="input-span">\`@${user.fullname} \`</span>`,
-  );
-  placeCursorAtEnd();
+  // Сохраняем в хранилище
+  const newFieldValue = `${commentsController.fieldValue} <span class="input-span">@${user.fullname} </span>`;
+  commentsController.changeFieldValue(newFieldValue);
+
+  // Убираем попап и ставим фокус
+  isShowUsers.value = false;
+  onFocus();
 };
 
-const placeCursorAtEnd = () => {
+// Установить фокус
+const onFocus = () => {
   const selection = window.getSelection();
   const range = document.createRange();
-  const div = refDivContent.value;
+  const div = document.querySelector('.div_input');
   range.selectNodeContents(div);
   range.collapse(false);
   selection.removeAllRanges();
   selection.addRange(range);
   div.focus();
 };
-const lastInputCharacter = ref('');
-const cursorPosition = ref(0);
 
 /**
  *  ----------------
  */
 
-const getInputCursorPosition = (input: any) => {
-  const position = commentsController.fieldValue.indexOf('@');
-  if (position !== -1) {
-    const inputRect = input.getBoundingClientRect();
-    const inputStyle = window.getComputedStyle(input);
-    const left = inputRect.left + inputStyle.paddingLeft;
-    const top =
-        inputRect.top + inputRect.height + parseInt(inputStyle.paddingTop, 10);
-
-    return { top, left };
-  }
-  return null;
-};
-
-
+// Показывать popup при вводе специльных символов
 const handleInput = (e: any) => {
-  const popup = refPopup.value;
-  const position = getInputCursorPosition(popup);
-  console.log('position', position);
-  // const { top, left } = position;
-  //
-  // // Устанавливаем координаты позиции для popup
-  // popup.style.top = `${top}px`;
-  // popup.style.left = `${left}px`;
-
-  commentsController.fieldValue = e.target.textContent;
-
-  const selection = window.getSelection();
-  cursorPosition.value = selection?.anchorOffset;
-
-  const inputLength = e.data ? e.data.length : 0;
-  if (inputLength > 0) {
-    lastInputCharacter.value = e.data.charAt(inputLength - 1);
-    if (lastInputCharacter.value === '@') {
-      isShowUsers.value = true;
-    } else {
-      isShowUsers.value = false;
-    }
+  if (e.target.textContent.slice(-2) === ' @') {
+    isShowUsers.value = true;
   } else {
-    lastInputCharacter.value = '';
     isShowUsers.value = false;
   }
-
-  // Функция для получения позиции текущего символа @
 };
+
 const createOrEditComment = async () => {
   // ------------------------------------
   // Создаем комментарий
@@ -218,6 +193,7 @@ const createOrEditComment = async () => {
     }
   }
 };
+
 const cancelEdit = () => {
   commentsController.changeEditComment(null);
   commentsController.changeFieldValue('');
