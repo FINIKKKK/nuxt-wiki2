@@ -88,6 +88,18 @@ if (!elemController.section) {
 }
 
 /**
+ * Вычисляемое ----------------
+ */
+onMounted(() => {
+  window.Echo.channel(`article.${elemController.article?.article.id}`).listen(
+      'ArticleEvent',
+      (e: any) => {
+        console.log('ArticleEvent:', e);
+      },
+  );
+})
+
+/**
  * Методы ----------------
  */
 // Изменить рейтинг

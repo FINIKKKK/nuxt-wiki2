@@ -33,7 +33,7 @@ export const useCommentsStore = defineStore('commentsController', () => {
   };
   const updateCommentsPopup = (value: TComment) => {
     commentsPopup.value = commentsPopup.value.map((obj) =>
-        obj.id === value.id ? value : obj,
+      obj.id === value.id ? value : obj,
     );
   };
   const removeComment = (id: number) => {
@@ -55,8 +55,8 @@ export const useCommentsStore = defineStore('commentsController', () => {
     const divInput = document.querySelector('.div_input');
     const divInput2 = document.querySelector('.div_input2');
 
-    if (isBlocks) divInput2.innerHTML = '';
-    else divInput.innerHTML = '';
+    if (isBlocks && divInput2) divInput2.innerHTML = '';
+    if (divInput) divInput.innerHTML = '';
   };
   const addCommentPopup = (value: TComment) => {
     commentsPopup.value = [...commentsPopup.value, value];
@@ -67,15 +67,18 @@ export const useCommentsStore = defineStore('commentsController', () => {
   const removeCommentPopup = (id: number) => {
     commentsPopup.value = commentsPopup.value.filter((obj) => obj.id !== id);
   };
-  const onFocus = (divInput: HTMLElement) => {
+  const onFocus = (divInput: HTMLDivElement) => {
     const selection = window.getSelection();
-    const range = document.createRange();
 
-    range.selectNodeContents(divInput);
-    range.collapse(false);
-    selection.removeAllRanges();
-    selection.addRange(range);
-    divInput.focus();
+    if (selection) {
+      const range = document.createRange();
+
+      range.selectNodeContents(divInput);
+      range.collapse(false);
+      selection.removeAllRanges();
+      selection.addRange(range);
+      divInput.focus();
+    }
   };
 
   // Возращаем данные
@@ -99,6 +102,6 @@ export const useCommentsStore = defineStore('commentsController', () => {
     removeCommentPopup,
     onFocus,
     clearInput,
-    updateCommentsPopup
+    updateCommentsPopup,
   };
 });

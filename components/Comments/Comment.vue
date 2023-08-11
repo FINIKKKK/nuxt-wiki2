@@ -106,7 +106,6 @@ const onRemoveComment = async () => {
 const setEditComment = () => {
   const divInput = document.querySelector('.div_input');
   const divInput2 = document.querySelector('.div_input2');
-  console.log(divInput2.innerHTML);
 
   if (!props.isBlocks) {
     if (divInput instanceof HTMLElement) {
@@ -116,7 +115,7 @@ const setEditComment = () => {
     // Изменяем комментарий в массиве
     commentsController.changeEditComment(props.data);
     // Устанавливаем фокус в поле ввода
-    commentsController.onFocus(divInput);
+    commentsController.onFocus(divInput as HTMLDivElement );
   } else {
     if (divInput2 instanceof HTMLElement) {
       // Вставляем текст комментария в поле ввода
@@ -126,7 +125,7 @@ const setEditComment = () => {
     // Изменяем комментарий в массиве
     commentsController.changeEditCommentPopup(props.data);
     // Устанавливаем фокус в поле ввода
-    commentsController.onFocus(divInput2);
+    commentsController.onFocus(divInput2 as HTMLDivElement);
   }
   // Убраем попап
   isShowPopup.value = false;

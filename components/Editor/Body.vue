@@ -145,12 +145,16 @@ const commentsController = useCommentsStore();
  * Вычисляемое ----------------
  */
 // Комментарии у блока
-const activeComments = (id: BlockId) => {
-  return (
-    props.comments?.filter(
-      (comment: TComment) => comment.block_id === String(id),
-    ) || []
-  );
+const activeComments = (id: BlockId | undefined) => {
+  if (id) {
+    return (
+      props.comments?.filter(
+        // @ts-ignore
+        (comment: TComment) => comment.block_id === String(id),
+      ) || []
+    );
+  }
+  return [];
 };
 
 /**

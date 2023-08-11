@@ -66,10 +66,12 @@ export const useElemStore = defineStore('elemController', () => {
   const setSection = (value: TSection | null) => {
     section.value = value;
   };
-  const changeActiveTitle = (value: BlockId) => {
-    activeTitle.value = value;
-    const url = `#${value}`;
-    router.replace({ query: { tab: activeTab.value.index }, hash: url });
+  const changeActiveTitle = (value: BlockId | undefined) => {
+    if (value) {
+      activeTitle.value = value;
+      const url = `#${value}`;
+      router.replace({ query: { tab: activeTab.value.index }, hash: url });
+    }
   };
   const openComments = () => {
     isOpenComments.value = true;

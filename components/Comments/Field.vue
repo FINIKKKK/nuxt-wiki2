@@ -73,6 +73,7 @@ import { TUser } from '~/utils/types/account';
 import { useCommentsStore } from '~/stores/CommentsController';
 import { TEmployees } from '~/utils/types/team';
 import { useElemStore } from '~/stores/ElemController';
+import Echo from 'laravel-echo';
 
 /**
  * Пропсы ----------------
@@ -131,13 +132,15 @@ const selectUser = (user: TUser) => {
 
   if (props.isBlocks) {
     const divInput2 = document.querySelector('.div_input2');
+    if (!divInput2) return false;
     const currentValue2 = divInput2.childNodes;
 
     // Удаляем последний символ, если он символ "@"
     if (currentValue2.length > 0) {
       const lastNode = currentValue2[currentValue2.length - 1];
       if (lastNode.nodeType === Node.TEXT_NODE) {
-        lastNode.textContent = lastNode.textContent.slice(0, -1);
+        if (lastNode.textContent)
+          lastNode.textContent = lastNode.textContent.slice(0, -1);
       }
     }
     // Добавляем новый span
@@ -145,16 +148,18 @@ const selectUser = (user: TUser) => {
     // Сохраняем в хранилище
     commentsController.changeFieldValuePopup(divInput2.innerHTML);
     // Ставим фокус
-    commentsController.onFocus(divInput2);
+    divInput2 && commentsController.onFocus(divInput2 as HTMLDivElement);
   } else {
     const divInput = document.querySelector('.div_input');
+    if (!divInput) return false;
     const currentValue = divInput.childNodes;
 
     // Удаляем последний символ, если он символ "@"
     if (currentValue.length > 0) {
       const lastNode = currentValue[currentValue.length - 1];
       if (lastNode.nodeType === Node.TEXT_NODE) {
-        lastNode.textContent = lastNode.textContent.slice(0, -1);
+        if (lastNode.textContent)
+          lastNode.textContent = lastNode.textContent.slice(0, -1);
       }
     }
     // Добавляем новый span
@@ -162,7 +167,7 @@ const selectUser = (user: TUser) => {
     // Сохраняем в хранилище
     commentsController.changeFieldValue(divInput.innerHTML);
     // Ставим фокус
-    commentsController.onFocus(divInput);
+    divInput && commentsController.onFocus(divInput as HTMLDivElement);
   }
 
   // Убираем попап
@@ -209,6 +214,13 @@ const createOrEditComment = async () => {
       body: dto,
       method: 'POST',
     });
+
+    window.Echo.channel(`comment.${data.id}`).listen(
+      'CommentEvent',
+      (e: any) => {
+        console.log('CommentEvent:', e);
+      },
+    );
 
     if (data) {
       // Очищаем поле
