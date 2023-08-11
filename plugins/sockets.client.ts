@@ -1,13 +1,16 @@
 import Echo from 'laravel-echo';
+import Pusher from 'pusher-js';
 
 export default defineNuxtPlugin(() => {
   const config = useRuntimeConfig();
+  window.Pusher = Pusher;
 
-  // window.Pusher = require('pusher-js');
-  // window.Echo = new Echo({
-  //   broadcaster: 'pusher',
-  //   key: process.env.PUSHER_APP_KEY,
-  //   cluster: process.env.PUSHER_APP_CLUSTER,
-  //   forceTLS: true,
-  // });
+  window.Echo = new Echo({
+    broadcaster: 'pusher',
+    key: config.public.pusher_key,
+    cluster: config.public.pusher_cluster,
+    forceTLS: true,
+    disableStats: true,
+    encrypted: true,
+  });
 });

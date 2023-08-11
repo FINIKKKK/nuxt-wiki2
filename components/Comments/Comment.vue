@@ -12,7 +12,7 @@
     <p class="text" v-html="commentText" />
 
     <!-- Попап с кнопками -->
-    <div class="extra" ref="refPopup">
+    <div class="extra" ref="refPopup" v-if="isAccess">
       <i class="fa-regular fa-ellipsis-h" @click="isShowPopup = !isShowPopup" />
 
       <ul class="popup" v-if="isShowPopup">
@@ -72,6 +72,10 @@ const commentText = computed(() => {
   } catch (error) {
     return props.data.text;
   }
+});
+// Есть ли доступ для редактирования
+const isAccess = computed(() => {
+    return teamController.isAccessEdit || userController.user?.id === props.data.user_id
 });
 
 /**

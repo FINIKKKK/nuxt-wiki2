@@ -20,15 +20,8 @@ export default defineNuxtConfig({
     public: {
       url: 'http://localhost:3000',
       apiUrl: 'https://api.wiki.itl.systems/',
+      pusher_key: process.env.PUSHER_APP_KEY,
+      pusher_cluster: process.env.PUSHER_APP_CLUSTER,
     },
   },
-  // websockets: {
-  //   path: '/ws',
-  //   sockets: [
-  //     {
-  //       name: 'local',
-  //       url: 'https://api.wiki.itl.systems/',
-  //     },
-  //   ],
-  // },
 });
