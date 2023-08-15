@@ -91,8 +91,8 @@ if (!elemController.section) {
  * Вычисляемое ----------------
  */
 onMounted(() => {
-  window.Echo.channel(`article.${elemController.article?.article.id}`).listen(
-      'ArticleEvent',
+  window.Echo.private(`article.${elemController.article?.article.id}`).listen(
+      'App\Events\Comments\Added',
       (e: any) => {
         console.log('ArticleEvent:', e);
       },

@@ -20,7 +20,7 @@ export default defineNuxtRouteMiddleware(async (to, from) => {
    */
   try {
     // Данные раздела
-    const { data: section } = await useCustomFetch<TSection>(`team/section`, {
+    const { data: section, error } = await useCustomFetch<TSection>(`team/section`, {
       query: {
         team_id: to.params.company_id,
         section_id: to.params.id,
@@ -37,6 +37,6 @@ export default defineNuxtRouteMiddleware(async (to, from) => {
     }
   } catch (err) {
     // Прокидываем ошибку, если нет доступа
-    throw createError({ statusCode: 403 });
+    // throw createError({ statusCode: 403 });
   }
 });

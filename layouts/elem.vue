@@ -127,9 +127,22 @@ const isPublic =
 /**
  * Методы ----------------
  */
+const flag = ref(true);
+// let flag = false;
+
+watch(flag, () => {
+  console.log('flag', flag.value);
+});
+
+// flag.value = true;
 watch(
   () => elemController.abilities,
   async () => {
+    if (flag.value) {
+      flag.value = false;
+      return false;
+    }
+
     const isEdit = elemController.abilities.find(
       (obj) => obj.user.id === elemController.currentAbility?.user.id,
     );
@@ -152,21 +165,13 @@ watch(
       }),
     };
 
-    if (isEdit) {
-      const { data } = await useCustomFetch(`team/abilities/edit`, {
-        body: dto,
-        method: 'POST',
-      });
-    } else {
-      const { data } = await useCustomFetch(`team/abilities/add`, {
-        body: dto,
-        method: 'POST',
-      });
-    }
+    await useCustomFetch(`team/abilities/${isEdit ? 'edit' : 'add'}`, {
+      body: dto,
+      method: 'POST',
+    });
   },
   { deep: true },
 );
-
 /**
  * Методы ----------------
  */

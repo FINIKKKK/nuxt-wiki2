@@ -33,16 +33,25 @@
           @blur="isFocus = false"
           @input="emits('handleInput')"
         />
-        <input
-          v-else
-          :type="inputType"
-          v-model="model"
-          :maxlength="props.limit ? props.limit : 200"
-          @focus="isFocus = true"
-          @blur="isFocus = false"
-          v-custom-mask="mask"
-          :readonly="props.isRead"
-        />
+        <template v-else>
+          <input
+            v-if="props.type === 'phone'"
+            type="text"
+            v-model="model"
+            @focus="isFocus = true"
+            @blur="isFocus = false"
+            v-custom-mask="mask"
+          />
+          <input
+            v-else
+            :type="inputType"
+            :maxlength="props.limit ? props.limit : 200"
+            @focus="isFocus = true"
+            @blur="isFocus = false"
+            :readonly="props.isRead"
+            v-model="model"
+          />
+        </template>
 
         <div @click="emits('btnClick')" v-if="slots.btn" class="btn">
           <slot name="btn"></slot>
@@ -158,12 +167,14 @@ if (props.type_input === 'textarea') {
 
 // Тип у input
 const inputType = computed(() => {
-  if (!isShowPassword.value) {
-    return 'password';
-  } else if (props.type === 'number') {
+  if (props.type === 'number') {
     return 'number';
   } else {
-    return 'text';
+    if (props.type === 'password' && !isShowPassword.value) {
+      return 'password';
+    } else {
+      return 'text';
+    }
   }
 });
 </script>

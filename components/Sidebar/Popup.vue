@@ -2,8 +2,8 @@
   <div
     class="sidebar__popup"
     :class="{
-      active: sidebarController.isOpen, // Если сайдбар открыт
-      search: sidebarController.activeItem === 'search', // Если открыт поиск
+      active: sidebarController.isOpen,
+      search: sidebarController.activeItem === 'search'
     }"
   >
     <div class="inner">
@@ -20,7 +20,7 @@
       ---------------------------------------->
       <template v-if="isShow">
         <div class="items" v-if="sectionsController.sections?.length">
-          <h3>{{ $t.home.sections }}</h3>
+          <h3>{{ $t?.home.sections }}</h3>
           <ul>
             <template
               v-for="section in sectionsController.sections"

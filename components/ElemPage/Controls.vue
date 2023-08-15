@@ -164,7 +164,7 @@ const onDelete = async () => {
 
     if (message) {
       // Перенаправляем пользователя
-      await router.push(`${teamController.activeTeamId}/activity`);
+      await router.push(`${teamController.activeTeamSlug}/activity`);
     }
   } else {
     // Закрываем попап

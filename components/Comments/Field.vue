@@ -215,8 +215,8 @@ const createOrEditComment = async () => {
       method: 'POST',
     });
 
-    window.Echo.channel(`comment.${data.id}`).listen(
-      'CommentEvent',
+    window.Echo.private(`comment.${data.id}`).listen(
+      'App\Events\Comments\Added',
       (e: any) => {
         console.log('CommentEvent:', e);
       },
